@@ -1,0 +1,189 @@
+.post_area {
+  height: 95%;
+}
+.post_main {
+  height: 100%;
+}
+
+.post_div {
+  padding-left: 8rem;
+  padding-right: 8rem;
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  height: 91%;
+}
+
+.post_title_created {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #efefef !important;
+}
+
+.post_title {
+  font-weight: normal;
+  font-size: 34px;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.post_created {
+  font-size: 13px;
+  color: #a7a7a7;
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+.post_created a {
+  text-decoration: none;
+  color: #a7a7a7;
+}
+
+.post_content {
+  font-size: 15px;
+  color: #555;
+  overflow: auto;
+  height: 83%;
+  word-break: break-all;
+}
+
+.post_title_input {
+  border: none;
+  border-bottom: 0px solid #efefef;
+  font-size: 30px;
+  padding-bottom: 15px;
+  font-family: 'Spoqa Han Sans Neo';
+  outline: none;
+}
+
+.post_content_textarea {
+  border: none;
+  margin-top: 20px;
+  height: 76%;
+  resize: none;
+  font-family: 'Spoqa Han Sans Neo';
+  margin-bottom: 10px;
+}
+
+.mg-r-10 {
+  margin-right: 10px;
+}
+
+.mg-l-10 {
+  margin-left: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.post_btn_div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.post_submit_btn {
+  border-radius: 20px;
+  border: none;
+  width: 61px;
+  height: 30px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 200;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.post_cancel_btn {
+  border-radius: 20px;
+  border: 1px solid #d0d0d0;
+  width: 61px;
+  height: 30px;
+  margin-right: 10px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 200;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+}
+
+.post_header {
+  display: none;
+}
+
+div:has(> .toastui-editor-defaultUI) {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+pre:has(> code) {
+  background-color: #f4f7f8;
+  line-height: 40px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .post_div {
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
+    padding-top: 1.5rem !important;
+    height: 94%;
+  }
+  .post_header {
+    display: inherit;
+    width: 100%;
+    height: 5%;
+    text-align: center;
+    border-bottom: 1px solid #efefef;
+    line-height: 40px;
+  }
+  .post_header_title {
+    color: #5c5c5c;
+    font-size: 15px;
+    font-weight: normal;
+  }
+
+  .post_main {
+    height: 95%;
+  }
+
+  .post_title {
+    font-size: 25px;
+  }
+
+  .post_created {
+    font-size: 10px;
+  }
+
+  .post_content {
+    font-size: 13px;
+    height: 86%;
+  }
+
+  .post_back_arrow {
+    color: #5c5c5c;
+    position: absolute;
+    left: 15px;
+    cursor: pointer;
+  }
+  .post_title_input {
+    font-size: 25px !important;
+  }
+
+  .post_content_textarea {
+    font-size: 13px !important;
+  }
+
+  .toastui-editor-popup {
+    left: 50vw !important;
+  }
+
+  .toastui-editor-file-name {
+    width: 48% !important;
+  }
+
+  .toastui-editor-file-select-button {
+    width: 40% !important;
+  }
+}
