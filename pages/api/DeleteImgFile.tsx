@@ -4,7 +4,7 @@ import { ObjectStorageClient } from 'oci-objectstorage';
 export default async function DeletesImgFile(request: NextApiRequest, response: NextApiResponse) {
   const param = request.body.removedImg;
   const path = require('path');
-  const ociConfigFilePath = path.join(process.cwd(), 'config');
+  const ociConfigFilePath = path.join(process.cwd(), '/api_config/config');
 
   const common = require('oci-common');
 

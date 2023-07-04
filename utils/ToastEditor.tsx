@@ -1,7 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import '../styles/Post.css';
 import axios from 'axios';
 
 //Toast UI
@@ -9,10 +8,10 @@ import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 
 //이미지 파일 업로드
-import { onUploadImage } from '@/app/utils/CommonUtils';
+import { onUploadImage } from '@/utils/CommonUtils';
 
 //시간포맷변경
-import timeToString from '@/app/utils/CommonUtils';
+import timeToString from '@/utils/CommonUtils';
 
 const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) => {
   const [title, setTitle] = useState('');

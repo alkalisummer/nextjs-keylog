@@ -1,4 +1,9 @@
 @import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
+#__next {
+  width: 100%;
+  height: 100%;
+}
+
 html {
   width: 100%;
   height: 100%;

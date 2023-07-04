@@ -4,8 +4,9 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { timeFormat } from './utils/CommonUtils';
-import '../styles/Home.css';
+import { timeFormat } from '@/utils/CommonUtils';
+import homeStyle from '../styles/Home.module.css';
+import cx from 'classnames';
 
 const HomePage = () => {
   const [currentNum, setCurrentNum] = useState(1);
@@ -48,19 +49,19 @@ const HomePage = () => {
   const totalPostsArr = getTotalPostsArr();
 
   return (
-    <div className='home_div'>
-      <div className='home_header_div'>
-        <span className='home_header_title'>{`kyuuun`}</span>
+    <div className={homeStyle.home_div}>
+      <div className={homeStyle.home_header_div}>
+        <span className={homeStyle.home_header_title}>{`kyuuun`}</span>
       </div>
-      <div className='home_post'>
-        <div className='home_header'>
-          <span className='home_post_cnt'>{`전체 글(${posts.items.length})`}</span>
-          <div className='home_header_btn'>
-            <Link href={'/chatgpt'}>
-              <button className='chatgpt_btn'>ChatGPT</button>
+      <div className={homeStyle.home_post}>
+        <div className={homeStyle.home_header}>
+          <span className={homeStyle.home_post_cnt}>{`전체 글(${posts.items.length})`}</span>
+          <div className={homeStyle.home_header_btn}>
+            <Link href={'/chatGpt'}>
+              <button className={homeStyle.chatgpt_btn}>ChatGPT</button>
             </Link>
             <Link href={'/posts/create'}>
-              <button className='create_btn'>글쓰기</button>
+              <button className={homeStyle.create_btn}>글쓰기</button>
             </Link>
           </div>
         </div>
@@ -73,26 +74,26 @@ const HomePage = () => {
           );
         })}
       </div>
-      <div className='home_page_nav'>
+      <div className={homeStyle.home_page_nav}>
         <span
-          className='home_page_nav_prev'
+          className={homeStyle.home_page_nav_prev}
           onClick={(e) => handlePagination(currentNum - 1)}>
-          <span className='home_page_nav_arr'>&lt;</span> &nbsp;&nbsp;Prev
+          <span className={homeStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
         </span>
         {totalPostsArr.map((obj: number, idx: number) => {
           return (
             <span
               key={idx}
-              className={`home_page_num ${currentNum === idx + 1 ? 'home_page_slct_num' : ''}`}
+              className={currentNum === idx + 1 ? cx(homeStyle.home_page_num, homeStyle.home_page_slct_num) : homeStyle.home_page_slct_num}
               onClick={(e) => handlePagination(e.currentTarget.textContent)}>
               {obj}
             </span>
           );
         })}
         <span
-          className='home_page_nav_next'
+          className={homeStyle.home_page_nav_next}
           onClick={(e) => handlePagination(currentNum + 1)}>
-          Next&nbsp;&nbsp; <span className='home_page_nav_arr'>&gt;</span>
+          Next&nbsp;&nbsp; <span className={homeStyle.home_page_nav_arr}>&gt;</span>
         </span>
       </div>
     </div>
@@ -108,20 +109,19 @@ const PostItem = ({ post }: any) => {
   const $ = cheerio.load(htmlCntn);
   const imageTags = $('img');
   const thumbImageArr = imageTags.map((index: number, el: any) => $(el).attr('src')).get()[0];
-
   return (
-    <div className='home_post_title_content'>
+    <div className={homeStyle.home_post_title_content}>
       <Link href={`/posts/detail/${POST_ID}`}>
         {thumbImageArr ? (
-          <div className='home_post_thumb'>
-            <div className='home_thumb_content'>
-              <span className='home_post_title'>{POST_TITLE}</span>
-              <p className='home_post_content'>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
-              <span className='home_post_created'>{timeFormat(AMNT_DTTM)}</span>
+          <div className={homeStyle.home_post_thumb}>
+            <div className={homeStyle.home_thumb_content}>
+              <span className={homeStyle.home_post_title}>{POST_TITLE}</span>
+              <p className={homeStyle.home_post_content}>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
+              <span className={homeStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
             </div>
-            <div className='home_thumb_img_div'>
+            <div className={homeStyle.home_thumb_img_div}>
               <img
-                className='home_thumb_img'
+                className={homeStyle.home_thumb_img}
                 src={thumbImageArr}
                 alt='thumbImg'
               />
@@ -129,9 +129,9 @@ const PostItem = ({ post }: any) => {
           </div>
         ) : (
           <div>
-            <span className='home_post_title'>{POST_TITLE}</span>
-            <p className='home_post_content'>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
-            <span className='home_post_created'>{timeFormat(AMNT_DTTM)}</span>
+            <span className={homeStyle.home_post_title}>{POST_TITLE}</span>
+            <p className={homeStyle.home_post_content}>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
+            <span className={homeStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
           </div>
         )}
       </Link>

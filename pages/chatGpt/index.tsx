@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import '../../styles/chat.css';
 
 const ChatGpt = () => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);

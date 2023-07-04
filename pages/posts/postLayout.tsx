@@ -1,10 +1,12 @@
-'use client';
-import '../../styles/Post.css';
-import { useRouter } from 'next/navigation';
+import React, { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const PostLayout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
-
   return (
     <div className='post_area'>
       <div className='post_header'>
@@ -18,4 +20,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <div className='post_main'>{children}</div>
     </div>
   );
-}
+};
+
+export default PostLayout;
