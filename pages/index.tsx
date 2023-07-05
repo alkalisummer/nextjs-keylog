@@ -9,10 +9,11 @@ import { GetServerSideProps } from 'next';
 
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
   const router = useRouter();
+  let totalPageNum: number;
 
   const getTotalPostsArr = () => {
     const totalPostCnt = posts.totalItems;
-    const totalPageNum = totalPostCnt % 6 > 0 ? totalPostCnt / 6 + 1 : totalPostCnt / 6;
+    totalPageNum = totalPostCnt % 6 > 0 ? totalPostCnt / 6 + 1 : totalPostCnt / 6;
     let arr = [];
 
     for (let i = 1; i <= totalPageNum; i++) {
@@ -24,7 +25,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
 
   const handlePagination = (pageNum: number) => {
     const selectNum = pageNum ?? null;
-    if (selectNum) {
+    if (selectNum && selectNum <= totalPageNum) {
       router.push(`/?pageNum=${pageNum}`);
     }
   };
@@ -125,7 +126,6 @@ const PostItem = ({ post }: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // console.log(context.query.pageNum);
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   let posts = {};
 
