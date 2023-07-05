@@ -1,24 +1,14 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import { timeFormat } from '@/utils/CommonUtils';
 import homeStyle from '../styles/Home.module.css';
 import cx from 'classnames';
+import { GetServerSideProps } from 'next';
 
-const HomePage = () => {
-  const [currentNum, setCurrentNum] = useState(1);
-  const [posts, setPosts] = useState({ totalItems: 0, items: [] });
-
-  useEffect(() => {
-    getPost({ type: 'list', perPage: 6, currPageNum: 1 }).then((res) => {
-      setPosts(res.data);
-    });
-  }, []);
-
-  const getPost = (param: any) => {
-    return axios.get('/api/HandlePost', { params: param });
-  };
+const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
+  const router = useRouter();
 
   const getTotalPostsArr = () => {
     const totalPostCnt = posts.totalItems;
@@ -32,15 +22,10 @@ const HomePage = () => {
     return arr;
   };
 
-  const handlePagination = async (pageNum: any) => {
+  const handlePagination = (pageNum: number) => {
     const selectNum = pageNum ?? null;
     if (selectNum) {
-      await getPost({ type: 'list', perPage: 6, currPageNum: selectNum }).then((res) => {
-        if (res.data.items && res.data.items.length > 0) {
-          setPosts(res.data);
-          setCurrentNum(parseInt(selectNum));
-        }
-      });
+      router.push(`/?pageNum=${pageNum}`);
     }
   };
 
@@ -75,22 +60,22 @@ const HomePage = () => {
       <div className={homeStyle.home_page_nav}>
         <span
           className={homeStyle.home_page_nav_prev}
-          onClick={(e) => handlePagination(currentNum - 1)}>
+          onClick={(e) => handlePagination(Number(pageNum) - 1)}>
           <span className={homeStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
         </span>
         {totalPostsArr.map((obj: number, idx: number) => {
           return (
             <span
               key={idx}
-              className={currentNum === idx + 1 ? cx(homeStyle.home_page_num, homeStyle.home_page_slct_num) : homeStyle.home_page_slct_num}
-              onClick={(e) => handlePagination(e.currentTarget.textContent)}>
+              className={Number(pageNum) === idx + 1 ? cx(homeStyle.home_page_num, homeStyle.home_page_slct_num) : homeStyle.home_page_num}
+              onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
               {obj}
             </span>
           );
         })}
         <span
           className={homeStyle.home_page_nav_next}
-          onClick={(e) => handlePagination(currentNum + 1)}>
+          onClick={(e) => handlePagination(Number(pageNum) + 1)}>
           Next&nbsp;&nbsp; <span className={homeStyle.home_page_nav_arr}>&gt;</span>
         </span>
       </div>
@@ -137,6 +122,25 @@ const PostItem = ({ post }: any) => {
       </Link>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // console.log(context.query.pageNum);
+  const pageNum = context.query.pageNum ? context.query.pageNum : 1;
+  let posts = {};
+
+  const param = { type: 'list', perPage: 6, currPageNum: pageNum ? pageNum : 1 };
+
+  await axios.get('http://localhost:3000/api/HandlePost', { params: param }).then((res) => {
+    posts = res.data;
+  });
+
+  return {
+    props: {
+      posts,
+      pageNum: pageNum,
+    },
+  };
 };
 
 export default HomePage;

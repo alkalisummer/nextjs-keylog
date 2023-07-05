@@ -10,7 +10,6 @@ const conn = {
 };
 
 export default async function HandlePost(request: NextApiRequest, response: NextApiResponse) {
-  console.log('탔다!');
   const mysql = require('mysql');
   const connection = mysql.createConnection(conn);
   let params;

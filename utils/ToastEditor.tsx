@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 
 //Toast UI
@@ -105,7 +105,6 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       .then((response) => response.data)
       .then(function (res) {
         setTitle('');
-        router.refresh();
         if (mode === 'insert') {
           router.push(`/posts/detail/${res.postId}`);
         } else {
