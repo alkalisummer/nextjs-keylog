@@ -1,8 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
-'use client';
-
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import { timeFormat } from '@/utils/CommonUtils';
 import homeStyle from '../styles/Home.module.css';
@@ -120,10 +118,12 @@ const PostItem = ({ post }: any) => {
               <span className={homeStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
             </div>
             <div className={homeStyle.home_thumb_img_div}>
-              <img
+              <Image
                 className={homeStyle.home_thumb_img}
                 src={thumbImageArr}
                 alt='thumbImg'
+                width={150}
+                height={150}
               />
             </div>
           </div>
