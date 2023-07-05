@@ -39,7 +39,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
       </div>
       <div className={homeStyle.home_post}>
         <div className={homeStyle.home_header}>
-          <span className={homeStyle.home_post_cnt}>{`전체 글(${posts.items.length})`}</span>
+          <span className={homeStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
           <div className={homeStyle.home_header_btn}>
             <Link href={'/chatGpt'}>
               <button className={homeStyle.chatgpt_btn}>ChatGPT</button>
