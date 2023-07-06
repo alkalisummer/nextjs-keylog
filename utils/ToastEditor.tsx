@@ -12,7 +12,7 @@ import { onUploadImage } from '@/utils/CommonUtils';
 //시간포맷변경
 import timeToString from '@/utils/CommonUtils';
 
-const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) => {
+const ToastEditor = ({ mode, postId, oriPost }: { mode: string; postId: string | null; oriPost: any }) => {
   const [title, setTitle] = useState('');
   const editorRef = useRef<Editor>(null);
 
@@ -28,31 +28,20 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
   useEffect(() => {
     // 수정 화면에서 수정 전 데이터를 세팅
     if (mode === 'update') {
-      const param = {
-        type: '',
-        postId: postId,
-      };
+      setTitle(oriPost.post_title);
 
-      const getPost = async () => {
-        param.type = 'read';
-        await axios.get('/api/HandlePost', { params: param }).then((res) => {
-          setTitle(res.data.items[0].post_title);
+      //html 데이터 추출
+      const htmlCntn = Buffer.from(oriPost.post_html_cntn).toString();
+      const $ = cheerio.load(htmlCntn);
 
-          //html 데이터 추출
-          const htmlCntn = Buffer.from(res.data.items[0].post_html_cntn).toString();
-          const $ = cheerio.load(htmlCntn);
+      //기존 이미지 파일 이름 추출
+      const imageTags = $('img');
+      const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
 
-          //기존 이미지 파일 이름 추출
-          const imageTags = $('img');
-          const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+      setImgFileArr(currImgArr);
+      setOriImgArr(currImgArr);
 
-          setImgFileArr(currImgArr);
-          setOriImgArr(currImgArr);
-
-          editorRef.current?.getInstance().setHTML(htmlCntn);
-        });
-      };
-      getPost();
+      editorRef.current?.getInstance().setHTML(htmlCntn);
     }
   }, [mode, postId, cheerio]);
 

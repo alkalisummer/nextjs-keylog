@@ -6,6 +6,7 @@ import { timeFormat } from '@/utils/CommonUtils';
 import homeStyle from '../styles/Home.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
+import GetPost from '@/utils/GetPost';
 
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
   const router = useRouter();
@@ -129,10 +130,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   let posts = {};
 
-  const param = { type: 'list', perPage: 6, currPageNum: pageNum ? pageNum : 1 };
+  const params = { type: 'list', perPage: 6, currPageNum: pageNum ? pageNum : 1 };
 
-  await axios.get('http://localhost:3000/api/HandlePost', { params: param }).then((res) => {
-    posts = res.data;
+  await GetPost({ params }).then((res) => {
+    posts = JSON.parse(res);
   });
 
   return {

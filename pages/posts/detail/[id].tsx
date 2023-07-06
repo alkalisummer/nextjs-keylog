@@ -6,22 +6,29 @@ import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import PostLayout from '../postLayout';
 import { GetServerSideProps } from 'next';
+import GetPost from '@/utils/GetPost';
 
-const PostDetailPage = ({ post }: any, { imgFileArr }: any) => {
+interface post {
+  post_title: string;
+  post_html_cntn: string;
+  amnt_dttm: string;
+}
+
+const PostDetailPage = ({ post, imgFileArr }: { post: post; imgFileArr: [] }) => {
   const router = useRouter();
   const { id } = router.query;
 
   //html data 추출
-  const htmlData = Buffer.from(post.post_html_cntn.data).toString();
+  const htmlData = Buffer.from(post.post_html_cntn).toString();
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: id };
+    console.log(imgFileArr);
     await axios.get('/api/HandlePost', { params: param }).then(() => {
       // 해당 게시글 이미지 삭제
       let removedImg = imgFileArr;
+      console.log(imgFileArr);
       axios.post('/api/DeleteImgFile', { removedImg });
-
-      //router.refresh();
       router.push('/');
     });
   };
@@ -57,14 +64,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const cheerio = require('cheerio');
 
-  const param = {
+  const params = {
     type: 'read',
     postId: context.query.id,
   };
-  await axios.get('http://localhost:3000/api/HandlePost', { params: param }).then((res) => {
-    post = res.data.items[0];
+  await GetPost({ params }).then((res) => {
+    const result = JSON.parse(res);
+    post = result.items[0];
     //html 데이터 추출
-    const htmlCntn = Buffer.from(res.data.items[0].post_html_cntn).toString();
+    const htmlCntn = Buffer.from(result.items[0].post_html_cntn).toString();
     const $ = cheerio.load(htmlCntn);
     //기존 이미지 파일 이름 추출
     const imageTags = $('img');

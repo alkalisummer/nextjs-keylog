@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 const conn = {
   // mysql 접속 설정
   host: process.env.CLOUD_MYSQL_HOST,
@@ -9,10 +7,9 @@ const conn = {
   database: process.env.CLOUD_MYSQL_DATABASE_NM,
 };
 
-export default async function HandlePost(request: NextApiRequest, response: NextApiResponse) {
+export default async function GetPost({ params }: any) {
   const mysql = require('mysql');
-  const connection = mysql.createConnection(conn);
-  let params;
+  const connection = await mysql.createConnection(conn);
   let sql = '';
   let post;
   let postId;
@@ -21,15 +18,21 @@ export default async function HandlePost(request: NextApiRequest, response: Next
     items: [],
     postId: '',
   };
-  if (request.method === 'GET') {
-    params = request.query;
-  } else if (request.method === 'POST') {
-    params = request.body.postData;
-  }
 
   await connection.connect();
 
   switch (params.type) {
+    case 'list':
+      const perPage = params.perPage;
+      const currPageNum = params.currPageNum;
+      const sttRowNum = perPage * (currPageNum - 1) + 1;
+      const eddRowNum = perPage * currPageNum;
+      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_HTML_CNTN, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
+      break;
+    case 'read':
+      postId = params.postId;
+      sql = `SELECT * FROM POST WHERE POST_ID = ${postId}`;
+      break;
     case 'insert':
       post = params.post;
       sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title}', '${post.post_cntn}','${post.post_html_cntn}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
@@ -44,7 +47,7 @@ export default async function HandlePost(request: NextApiRequest, response: Next
       break;
   }
 
-  await new Promise((resolve, reject) => {
+  const queryResult = await new Promise((resolve, reject) => {
     connection.query(sql, (error: any, data: any, fields: any) => {
       if (error) {
         console.error(error);
@@ -60,10 +63,14 @@ export default async function HandlePost(request: NextApiRequest, response: Next
           result.totalItems = rowArr[0].TOTAL_ITEMS || rowArr.length;
           result.items = rowArr;
         }
-        resolve(response.status(200).json(result));
+        resolve(result);
       }
     });
+  }).then((res) => {
+    return JSON.stringify(res);
   });
 
   connection.end();
+
+  return queryResult;
 }
