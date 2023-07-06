@@ -30,6 +30,17 @@ export default async function HandlePost(request: NextApiRequest, response: Next
   await connection.connect();
 
   switch (params.type) {
+    case 'list':
+      const perPage = params.perPage;
+      const currPageNum = params.currPageNum;
+      const sttRowNum = perPage * (currPageNum - 1) + 1;
+      const eddRowNum = perPage * currPageNum;
+      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_HTML_CNTN, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
+      break;
+    case 'read':
+      postId = params.postId;
+      sql = `SELECT * FROM POST WHERE POST_ID = ${postId}`;
+      break;
     case 'insert':
       post = params.post;
       sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title}', '${post.post_cntn}','${post.post_html_cntn}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;

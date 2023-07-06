@@ -1,7 +1,6 @@
 import PostLayout from '../postLayout';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import GetPost from '@/utils/GetPost';
 import dynamic from 'next/dynamic';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
@@ -17,25 +16,9 @@ const EditPost = ({ post }: { post: post }) => {
       <ToastEditor
         mode={'update'}
         postId={id as string}
-        oriPost={post}
       />
     </PostLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let post: {} = {};
-
-  const params = {
-    type: 'read',
-    postId: context.query.id,
-  };
-  await GetPost({ params }).then((res) => {
-    const result = JSON.parse(res);
-    post = result.items[0];
-  });
-
-  return { props: { post } };
 };
 
 export default EditPost;

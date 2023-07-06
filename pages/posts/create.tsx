@@ -8,7 +8,6 @@ const CreatePost = () => {
       <ToastEditor
         mode={'insert'}
         postId={''}
-        oriPost={null}
       />
     </PostLayout>
   );

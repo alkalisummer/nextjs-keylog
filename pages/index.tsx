@@ -1,19 +1,29 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { timeFormat } from '@/utils/CommonUtils';
 import homeStyle from '../styles/Home.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
-import GetPost from '@/utils/GetPost';
+import React, { useEffect, useState } from 'react';
 
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
+  const [currPosts, setCurrPosts] = useState(posts);
   const router = useRouter();
+  debugger;
   let totalPageNum: number;
 
+  useEffect(() => {
+    if (Object.keys(posts).length === 0) {
+      axios.get('/api/HandlePost', { params: { type: 'list', perPage: 6, currPageNum: pageNum } }).then((res) => {
+        setCurrPosts(res.data);
+      });
+    }
+  }, [pageNum, posts]);
+
   const getTotalPostsArr = () => {
-    const totalPostCnt = posts.totalItems;
+    const totalPostCnt = currPosts.totalItems;
     totalPageNum = totalPostCnt % 6 > 0 ? totalPostCnt / 6 + 1 : totalPostCnt / 6;
     let arr = [];
 
@@ -40,7 +50,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
       </div>
       <div className={homeStyle.home_post}>
         <div className={homeStyle.home_header}>
-          <span className={homeStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
+          <span className={homeStyle.home_post_cnt}>{`전체 글(${currPosts.totalItems})`}</span>
           <div className={homeStyle.home_header_btn}>
             <Link href={'/chatGpt'}>
               <button className={homeStyle.chatgpt_btn}>ChatGPT</button>
@@ -50,7 +60,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
             </Link>
           </div>
         </div>
-        {posts.items?.map((post: any) => {
+        {currPosts.items?.map((post: any) => {
           return (
             <PostItem
               key={post.POST_ID}
@@ -105,12 +115,10 @@ const PostItem = ({ post }: any) => {
               <span className={homeStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
             </div>
             <div className={homeStyle.home_thumb_img_div}>
-              <Image
+              <img
                 className={homeStyle.home_thumb_img}
                 src={thumbImageArr}
                 alt='thumbImg'
-                width={150}
-                height={150}
               />
             </div>
           </div>
@@ -130,11 +138,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   let posts = {};
 
-  const params = { type: 'list', perPage: 6, currPageNum: pageNum ? pageNum : 1 };
+  if (!context.query.pageNum) {
+    const param = { type: 'list', perPage: 6, currPageNum: pageNum };
 
-  await GetPost({ params }).then((res) => {
-    posts = JSON.parse(res);
-  });
+    await axios.get('http://localhost:3000/api/HandlePost', { params: param }).then((res) => {
+      posts = res.data;
+    });
+  }
 
   return {
     props: {

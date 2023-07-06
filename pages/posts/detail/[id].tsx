@@ -5,8 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import PostLayout from '../postLayout';
-import { GetServerSideProps } from 'next';
-import GetPost from '@/utils/GetPost';
+import { useEffect, useState } from 'react';
 
 interface post {
   post_title: string;
@@ -14,12 +13,36 @@ interface post {
   amnt_dttm: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr }: { post: post; imgFileArr: [] }) => {
+const PostDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
   //html data 추출
-  const htmlData = Buffer.from(post.post_html_cntn).toString();
+  const cheerio = require('cheerio');
+
+  const [post, setPost] = useState({ post_title: '', post_cntn: '', post_html_cntn: { data: [] }, amnt_dttm: '' });
+  const [imgFileArr, setImgFileArr] = useState<string[]>([]);
+
+  useEffect(() => {
+    const param = { type: 'read', postId: id };
+    const getPost = async () => {
+      param.type = 'read';
+      await axios.get('/api/HandlePost', { params: param }).then((res) => {
+        setPost(res.data.items[0]);
+
+        //html 데이터 추출
+        const htmlCntn = Buffer.from(res.data.items[0].post_html_cntn).toString();
+        const $ = cheerio.load(htmlCntn);
+
+        //기존 이미지 파일 이름 추출
+        const imageTags = $('img');
+        const currImageArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+
+        setImgFileArr(currImageArr);
+      });
+    };
+    getPost();
+  }, [id, cheerio]);
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: id };
@@ -52,34 +75,10 @@ const PostDetailPage = ({ post, imgFileArr }: { post: post; imgFileArr: [] }) =>
         </div>
         <div
           className='toastui-editor-contents post_content'
-          dangerouslySetInnerHTML={{ __html: htmlData }}></div>
+          dangerouslySetInnerHTML={{ __html: Buffer.from(post.post_html_cntn.data).toString() }}></div>
       </div>
     </PostLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let post: {} = {};
-  let imgFileArr: string[] = [];
-
-  const cheerio = require('cheerio');
-
-  const params = {
-    type: 'read',
-    postId: context.query.id,
-  };
-  await GetPost({ params }).then((res) => {
-    const result = JSON.parse(res);
-    post = result.items[0];
-    //html 데이터 추출
-    const htmlCntn = Buffer.from(result.items[0].post_html_cntn).toString();
-    const $ = cheerio.load(htmlCntn);
-    //기존 이미지 파일 이름 추출
-    const imageTags = $('img');
-    imgFileArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
-  });
-
-  return { props: { post, imgFileArr } };
 };
 
 export default PostDetailPage;
