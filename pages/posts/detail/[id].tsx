@@ -46,11 +46,9 @@ const PostDetailPage = () => {
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: id };
-    console.log(imgFileArr);
     await axios.get('/api/HandlePost', { params: param }).then(() => {
       // 해당 게시글 이미지 삭제
       let removedImg = imgFileArr;
-      console.log(imgFileArr);
       axios.post('/api/DeleteImgFile', { removedImg });
       router.push('/');
     });

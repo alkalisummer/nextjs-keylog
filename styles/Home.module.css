@@ -112,6 +112,7 @@
   height: 150px;
   margin-left: 15px;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .home_thumb_img_div {

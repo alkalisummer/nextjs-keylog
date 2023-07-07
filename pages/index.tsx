@@ -11,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
   const [currPosts, setCurrPosts] = useState(posts);
   const router = useRouter();
-  debugger;
   let totalPageNum: number;
 
   useEffect(() => {
