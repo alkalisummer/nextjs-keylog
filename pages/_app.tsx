@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import '@/styles/globals.css';
 import '@/styles/Post.css';
@@ -8,6 +9,9 @@ import '@/styles/ChatGpt.css';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className='main_area'>
+      <Head>
+        <title> kyuuun </title>
+      </Head>
       <div className='left_area'>
         <Link href={'/'}>
           <span className='left_area_title'>{`kyuuun`}</span>
