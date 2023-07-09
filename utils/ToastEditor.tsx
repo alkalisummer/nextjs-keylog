@@ -36,10 +36,10 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       const getPost = async () => {
         param.type = 'read';
         await axios.get('/api/HandlePost', { params: param }).then((res) => {
-          setTitle(res.data.items[0].post_title);
+          setTitle(res.data.items[0].POST_TITLE);
 
           //html 데이터 추출
-          const htmlCntn = Buffer.from(res.data.items[0].post_html_cntn).toString();
+          const htmlCntn = Buffer.from(res.data.items[0].POST_HTML_CNTN).toString();
           const $ = cheerio.load(htmlCntn);
 
           //기존 이미지 파일 이름 추출
@@ -75,6 +75,10 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
     //현재 이미지 파일 이름 추출
     const imageTags = $('img');
     const currImageArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+
+    //썸네일 이미지 URL 추출(첫번째 이미지)
+    const thmbImgUrl = $(imageTags[0])?.attr('src');
+
     // 지워진 이미지
     let removedImg = [];
 
@@ -96,6 +100,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
         post_title: title,
         post_cntn: plainText,
         post_html_cntn: htmlCntn,
+        post_thmb_img_url: thmbImgUrl ? thmbImgUrl : '',
         rgsn_dttm: currentTime,
         amnt_dttm: currentTime,
       },

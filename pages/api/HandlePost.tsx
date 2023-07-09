@@ -9,23 +9,18 @@ const conn = {
   database: process.env.CLOUD_MYSQL_DATABASE_NM,
 };
 
-export default async function HandlePost(request: NextApiRequest, response: NextApiResponse) {
+export const handleMySql = async (params: any) => {
   const mysql = require('mysql');
   const connection = mysql.createConnection(conn);
-  let params;
-  let sql = '';
+
   let post;
   let postId;
+  let sql = '';
   let result: { totalItems: number; items: any[]; postId: string } = {
     totalItems: 0,
     items: [],
     postId: '',
   };
-  if (request.method === 'GET') {
-    params = request.query;
-  } else if (request.method === 'POST') {
-    params = request.body.postData;
-  }
 
   await connection.connect();
 
@@ -35,19 +30,19 @@ export default async function HandlePost(request: NextApiRequest, response: Next
       const currPageNum = params.currPageNum;
       const sttRowNum = perPage * (currPageNum - 1) + 1;
       const eddRowNum = perPage * currPageNum;
-      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_HTML_CNTN, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
+      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
       break;
     case 'read':
       postId = params.postId;
-      sql = `SELECT * FROM POST WHERE POST_ID = ${postId}`;
+      sql = `SELECT POST_ID, POST_TITLE, POST_HTML_CNTN, AMNT_DTTM FROM POST WHERE POST_ID = ${postId}`;
       break;
     case 'insert':
       post = params.post;
-      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title}', '${post.post_cntn}','${post.post_html_cntn}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title}', '${post.post_cntn}','${post.post_html_cntn}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;
-      sql = `UPDATE POST SET POST_TITLE = '${post.post_title}', POST_CNTN = '${post.post_cntn}', POST_HTML_CNTN = '${post.post_html_cntn}', AMNT_DTTM='${post.amnt_dttm}' WHERE POST_ID='${post.post_id}'`;
+      sql = `UPDATE POST SET POST_TITLE = '${post.post_title}', POST_CNTN = '${post.post_cntn}', POST_HTML_CNTN = '${post.post_html_cntn}', POST_THMB_IMG_URL= '${post.post_thmb_img_url}', AMNT_DTTM='${post.amnt_dttm}' WHERE POST_ID='${post.post_id}'`;
       break;
     case 'delete':
       postId = params.postId;
@@ -71,10 +66,24 @@ export default async function HandlePost(request: NextApiRequest, response: Next
           result.totalItems = rowArr[0].TOTAL_ITEMS || rowArr.length;
           result.items = rowArr;
         }
-        resolve(response.status(200).json(result));
+        resolve(result);
       }
     });
   });
 
   connection.end();
+  return result;
+};
+
+export default async function HandlePost(request: NextApiRequest, response: NextApiResponse) {
+  let params;
+
+  if (request.method === 'GET') {
+    params = request.query;
+  } else if (request.method === 'POST') {
+    params = request.body.postData;
+  }
+  const result = await handleMySql(params);
+
+  response.status(200).json(result);
 }

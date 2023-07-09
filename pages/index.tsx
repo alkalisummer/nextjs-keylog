@@ -7,22 +7,14 @@ import homeStyle from '../styles/Home.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
+import { handleMySql } from './api/HandlePost';
 
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
-  const [currPosts, setCurrPosts] = useState(posts);
   const router = useRouter();
   let totalPageNum: number;
 
-  useEffect(() => {
-    if (Object.keys(posts).length === 0) {
-      axios.get('/api/HandlePost', { params: { type: 'list', perPage: 6, currPageNum: pageNum } }).then((res) => {
-        setCurrPosts(res.data);
-      });
-    }
-  }, [pageNum, posts]);
-
   const getTotalPostsArr = () => {
-    const totalPostCnt = currPosts.totalItems;
+    const totalPostCnt = posts.totalItems;
     totalPageNum = totalPostCnt % 6 > 0 ? totalPostCnt / 6 + 1 : totalPostCnt / 6;
     let arr = [];
 
@@ -49,7 +41,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
       </div>
       <div className={homeStyle.home_post}>
         <div className={homeStyle.home_header}>
-          <span className={homeStyle.home_post_cnt}>{`전체 글(${currPosts.totalItems})`}</span>
+          <span className={homeStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
           <div className={homeStyle.home_header_btn}>
             <Link href={'/chatGpt'}>
               <button className={homeStyle.chatgpt_btn}>ChatGPT</button>
@@ -59,7 +51,7 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
             </Link>
           </div>
         </div>
-        {currPosts.items?.map((post: any) => {
+        {posts.items?.map((post: any) => {
           return (
             <PostItem
               key={post.POST_ID}
@@ -95,18 +87,11 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
 };
 
 const PostItem = ({ post }: any) => {
-  const { POST_ID, POST_TITLE, POST_CNTN, POST_HTML_CNTN, AMNT_DTTM } = post || {};
-
-  //html data 에서 이미지를 추출
-  const cheerio = require('cheerio');
-  const htmlCntn = Buffer.from(POST_HTML_CNTN).toString();
-  const $ = cheerio.load(htmlCntn);
-  const imageTags = $('img');
-  const thumbImageArr = imageTags.map((index: number, el: any) => $(el).attr('src')).get()[0];
+  const { POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM } = post || {};
   return (
     <div className={homeStyle.home_post_title_content}>
       <Link href={`/posts/detail/${POST_ID}`}>
-        {thumbImageArr ? (
+        {POST_THMB_IMG_URL ? (
           <div className={homeStyle.home_post_thumb}>
             <div className={homeStyle.home_thumb_content}>
               <span className={homeStyle.home_post_title}>{POST_TITLE}</span>
@@ -116,7 +101,7 @@ const PostItem = ({ post }: any) => {
             <div className={homeStyle.home_thumb_img_div}>
               <img
                 className={homeStyle.home_thumb_img}
-                src={thumbImageArr}
+                src={POST_THMB_IMG_URL}
                 alt='thumbImg'
               />
             </div>
@@ -137,13 +122,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   let posts = {};
 
-  if (!context.query.pageNum) {
-    const param = { type: 'list', perPage: 6, currPageNum: pageNum };
+  const param = { type: 'list', perPage: 6, currPageNum: pageNum };
 
-    await axios.get('http://localhost:3000/api/HandlePost', { params: param }).then((res) => {
-      posts = res.data;
+  await handleMySql(param)
+    .then((res) => JSON.stringify(res))
+    .then((res) => {
+      posts = JSON.parse(res);
     });
-  }
 
   return {
     props: {
