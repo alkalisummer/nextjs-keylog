@@ -67,6 +67,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     postId: context.query.id,
   };
 
+  console.log(context);
+
   await handleMySql(params)
     .then((res) => JSON.stringify(res))
     .then((res) => {

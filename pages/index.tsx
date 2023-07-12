@@ -1,12 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { timeFormat } from '@/utils/CommonUtils';
 import homeStyle from '../styles/Home.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
-import React, { useEffect, useState } from 'react';
 import { handleMySql } from './api/HandlePost';
 
 const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number }) => {
@@ -37,6 +35,11 @@ const HomePage = ({ posts, pageNum }: { posts: { totalItems: number; items: any[
   return (
     <div className={homeStyle.home_div}>
       <div className={homeStyle.home_header_div}>
+        <img
+          src='/icon/myImg.jpeg'
+          className={homeStyle.home_profile_img}
+          alt='profile img'
+        />
         <span className={homeStyle.home_header_title}>{`kyuuun`}</span>
       </div>
       <div className={homeStyle.home_post}>
