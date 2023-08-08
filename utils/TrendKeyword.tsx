@@ -1,12 +1,21 @@
 import React from 'react';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 function TrendKeyword() {
-  axios.get('/api/HandleKeyword').then((res) => {
-    const keywordData = JSON.parse(res.data);
-    debugger;
-    console.log();
-  });
+  let dailyTrend;
+
+  const getDailyTrend = () => axios.get('/api/HandleKeyword');
+
+  const { status, data, error } = useQuery(['dailyTrend'], getDailyTrend);
+
+  if (status === 'success') {
+    dailyTrend = JSON.parse(data.data);
+  }
+
+  if (status === 'error') {
+    console.log(error);
+  }
 
   return <div>TrendKeyword</div>;
 }
