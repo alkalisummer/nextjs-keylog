@@ -20,6 +20,7 @@
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.5",
     "formidable": "^3.4.0",
+    "google-trends-api": "^4.9.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.4.5",
     "net": "^1.0.2",

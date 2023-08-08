@@ -92,7 +92,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
     axios.post('/api/DeleteImgFile', { removedImg });
 
     const currentTime = timeToString(new Date());
-
+    debugger;
     const postData = {
       type: mode,
       post: {
