@@ -126,13 +126,57 @@ pre:has(> code) {
   border-radius: 10px;
 }
 
+.post_word_cloud_div {
+  display: flex;
+  padding-left: 8rem;
+  padding-right: 8rem;
+  justify-content: space-between;
+}
+
 .post_word_cloud_title {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 30px;
   font-weight: 500;
   color: #009bf2;
-  padding-left: 128px;
   line-height: 5rem;
+}
+
+.post_base_date {
+  font-size: 12px;
+  color: #009bf2;
+  line-height: 5rem;
+  font-weight: 500;
+}
+
+.post_articles_div {
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+
+.post_articles_title_div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post_articles_title {
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 30px;
+  font-weight: 500;
+  color: hsl(35, 100%, 57%);
+  line-height: 5rem;
+}
+
+.post_articles_fold_btn {
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 15px;
+  color: hsl(35, 100%, 57%);
+  line-height: 5.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.post_articles {
 }
 
 @media (max-width: 768px) {

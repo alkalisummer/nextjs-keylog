@@ -33,10 +33,14 @@ export function timeFormat(currTime: string) {
   const year = currTime.slice(0, 4);
   const month = currTime.slice(4, 6);
   const date = currTime.slice(6, 8);
-  const hour = currTime.slice(8, 10);
-  const min = currTime.slice(10, 12);
-
-  const fullTimeFormat = `${year}. ${month}. ${date}. ${hour}:${min}`;
+  let fullTimeFormat;
+  if (currTime.length > 12) {
+    const hour = currTime.slice(8, 10);
+    const min = currTime.slice(10, 12);
+    fullTimeFormat = `${year}. ${month}. ${date}. ${hour}:${min}`;
+  } else {
+    fullTimeFormat = `${year}. ${month}. ${date}`;
+  }
 
   return fullTimeFormat;
 }
