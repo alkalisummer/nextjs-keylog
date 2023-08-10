@@ -27,18 +27,15 @@ function TrendKeyword() {
 
     for (let dateData of res) {
       dateData.trendingSearches.map((obj: any) => {
-        //traffic 한글 포맷을 숫자포맷으로 변경(ex: '1천' -> 1000)
-        const trfficStr = obj.formattedTraffic;
-        const num = parseInt(trfficStr.substr(0, 1));
-        const formatNum = trfficStr.substr(1, 1) === '만' ? 10000 : 1000;
-        const newFormatNum = num * formatNum;
-        obj.formattedTraffic = newFormatNum;
-
+        //wordcloud value 사용을 위한 traffic format 간소화(ex: 200K+ -> 200)
+        const trafficStr = obj.formattedTraffic;
+        const reduceNum = parseInt(trafficStr.substr(0, trafficStr.length - 2));
+        obj.formattedTraffic = reduceNum;
         trendKeyData.push(obj);
       });
     }
 
-    keyArr = trendKeyData.map((obj) => ({ name: obj.title.query, value: obj.formattedTraffic }));
+    keyArr = trendKeyData.map((obj) => ({ name: obj.title.query.replaceAll("'", ''), value: obj.formattedTraffic }));
     if (chartDom.current) {
       let myChart = echarts.getInstanceByDom(chartDom.current);
       if (!myChart) {
@@ -48,9 +45,9 @@ function TrendKeyword() {
         series: [
           {
             type: 'wordCloud',
-            shape: 'pentagon',
+            shape: 'star',
             left: 'center',
-            top: -50,
+            top: 0,
             width: '70%',
             height: '80%',
             right: null,
@@ -60,10 +57,10 @@ function TrendKeyword() {
             rotationStep: 45,
             gridSize: 14,
             drawOutOfBound: false,
-            shrinkToFit: false,
+            shrinkToFit: true,
             layoutAnimation: true,
             textStyle: {
-              fontFamily: 'sans-serif',
+              fontFamily: 'Spoqa Han Sans Neo',
               fontWeight: 'bold',
               // Color can be a callback function or a color string
               color: function () {
@@ -75,7 +72,7 @@ function TrendKeyword() {
               focus: 'self',
               textStyle: {
                 textShadowBlur: 10,
-                textShadowColor: '#333',
+                textShadowColor: '#368fc0',
               },
             },
             data: keyArr,

@@ -4,7 +4,7 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
   const googleTrends = require('google-trends-api');
   let res;
 
-  await googleTrends.dailyTrends({ geo: 'KR', hl: 'ko-KR' }, function (err: any, results: any) {
+  await googleTrends.dailyTrends({ geo: 'KR' }, function (err: any, results: any) {
     res = results;
   });
 
