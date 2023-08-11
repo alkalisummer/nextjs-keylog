@@ -1,21 +1,43 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
-import { timeFormat } from './CommonUtils';
+import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
+import Link from 'next/link';
 
 function TrendKeyword() {
   const chartDom = useRef(null);
   const [showArticles, setShowArticles] = useState(false);
+  const [selectedKey, setSelectedKey] = useState<seletedKey>();
+  const [articles, setArticles] = useState([]);
   const [baseDate, setBaseDate] = useState('');
+
+  interface keyword {
+    name: string;
+    value: number;
+    articles: [];
+  }
+
+  interface article {
+    image: {
+      imageUrl: string;
+      newsUrl: string;
+      source: string;
+    };
+    snippet: string;
+    source: string;
+    timeAgo: string;
+    title: string;
+    url: string;
+  }
+
+  interface seletedKey {
+    name: string;
+    cnt: string;
+  }
 
   useEffect(() => {
     import('echarts-wordcloud');
-
-    interface keyword {
-      name: string;
-      value: number;
-      articles: [];
-    }
 
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
@@ -79,7 +101,9 @@ function TrendKeyword() {
         };
         myChart.setOption(chartOpt);
         myChart.on('click', (params) => {
-          const articles = JSON.parse(JSON.stringify(params.data)).articles;
+          setSelectedKey({ name: params.name, cnt: params.value as string });
+          const articleData = JSON.parse(JSON.stringify(params.data)).articles;
+          setArticles(articleData.filter((obj: any) => obj.image));
           if (!showArticles) {
             setShowArticles(true);
           }
@@ -97,7 +121,7 @@ function TrendKeyword() {
       <div
         id='wordcloud'
         ref={chartDom}
-        style={{ width: '100%', height: '360px' }}></div>
+        style={{ width: '600px', height: '360px' }}></div>
       <div className='post_articles_div'>
         <div className='post_articles_title_div'>
           <span className='post_articles_title'>Articles</span>
@@ -107,7 +131,49 @@ function TrendKeyword() {
             {showArticles ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
-        <div className='post_articles'></div>
+        {showArticles ? (
+          <div className='post_articles'>
+            {selectedKey ? (
+              <div className='post_selected_div'>
+                <span className='post_selected_key'>{selectedKey.name}</span>
+                <span className='post_selected_cnt'>{`(검색 횟수: ${selectedKey.cnt}K+)`}</span>
+              </div>
+            ) : (
+              ''
+            )}
+            {articles.map((article: article, idx: number) => {
+              return (
+                <div
+                  className='post_article'
+                  key={idx}>
+                  <Link
+                    href={article.url}
+                    target='_blank'>
+                    <div className='post_article_detail'>
+                      <div className='post_article_content'>
+                        <div className='post_article_content_detail'>
+                          <span className='post_article_title'>{replaceSymbol(article.title)}</span>
+                          <pre>{replaceSymbol(article.snippet)}</pre>
+                          <div className='post_article_summary'>
+                            <span>{article.source}</span>
+                            <span>•{timeAgoFormat(article.timeAgo)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='post_article_img'>
+                        <img
+                          alt='article img'
+                          src={article.image.imageUrl}></img>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

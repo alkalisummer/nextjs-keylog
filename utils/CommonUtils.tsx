@@ -45,6 +45,16 @@ export function timeFormat(currTime: string) {
   return fullTimeFormat;
 }
 
+export function replaceSymbol(str: string) {
+  const replaceStr = str.replaceAll('&nbsp;', ' ').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&').replaceAll('&quot;', '"').replaceAll('&#035;', '#').replaceAll('&#35;', '#').replaceAll('&#039;', "'").replaceAll('&#39;', "'");
+  return replaceStr;
+}
+
+export function timeAgoFormat(str: string) {
+  const replaceTimeAgo = str.replaceAll('h', '시간').replaceAll('d', '일').replaceAll('m', '분').replaceAll('s', '초').replaceAll('ago', '전');
+  return replaceTimeAgo;
+}
+
 export async function onUploadImage(imgFile: any) {
   //반환 이미지 url
   const imgURL = API_KEY.CLOUD_BUCKET_URL;

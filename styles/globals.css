@@ -96,6 +96,10 @@ body {
   color: #6bacce;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 @media (max-width: 768px) {
   .left_area {
     display: none;
