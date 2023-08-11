@@ -66,10 +66,10 @@ function TrendKeyword() {
             {
               type: 'wordCloud',
               shape: 'pentagon',
-              left: 'center',
+              left: 0,
               top: 0,
-              width: '70%',
-              height: '80%',
+              width: '95%',
+              height: '95%',
               right: null,
               bottom: null,
               sizeRange: [20, 90],
@@ -114,14 +114,17 @@ function TrendKeyword() {
 
   return (
     <div>
-      <div className='post_word_cloud_div'>
-        <span className='post_word_cloud_title'>Daily Keyword</span>
+      <div className='post_daily_keyword_div'>
+        <span className='post_daily_keyword_title'>Daily Keyword</span>
         <span className='post_base_date'>{baseDate}</span>
       </div>
-      <div
-        id='wordcloud'
-        ref={chartDom}
-        style={{ width: '600px', height: '360px' }}></div>
+      <div className='post_wordcloud_div'>
+        <div
+          id='wordcloud'
+          ref={chartDom}
+          style={{ width: '50%', height: '400px' }}></div>
+        <div className='post_linkage'></div>
+      </div>
       <div className='post_articles_div'>
         <div className='post_articles_title_div'>
           <span className='post_articles_title'>Articles</span>

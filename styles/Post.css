@@ -126,26 +126,41 @@ pre:has(> code) {
   border-radius: 10px;
 }
 
-.post_word_cloud_div {
+.post_daily_keyword_div {
   display: flex;
-  padding-left: 8rem;
-  padding-right: 8rem;
+  margin-left: 8rem;
+  margin-right: 8rem;
   justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  border-bottom: 2px solid #009bf2;
 }
 
-.post_word_cloud_title {
+.post_daily_keyword_title {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 30px;
   font-weight: 500;
   color: #009bf2;
-  line-height: 5rem;
 }
 
 .post_base_date {
   font-size: 12px;
   color: #009bf2;
-  line-height: 5rem;
   font-weight: 500;
+  padding-top: 20px;
+}
+
+.post_wordcloud_div {
+  display: flex;
+  justify-content: space-between;
+
+  margin-left: 8rem;
+  margin-right: 8rem;
+  margin-bottom: 20px;
+}
+
+.post_linkage {
 }
 
 .post_articles_div {
@@ -156,6 +171,8 @@ pre:has(> code) {
 .post_articles_title_div {
   display: flex;
   justify-content: space-between;
+  border-bottom: 2px solid hsl(35, 100%, 57%);
+  margin-bottom: 15px;
 }
 
 .post_articles_title {
@@ -163,20 +180,16 @@ pre:has(> code) {
   font-size: 30px;
   font-weight: 500;
   color: hsl(35, 100%, 57%);
-  line-height: 5rem;
 }
 
 .post_articles_fold_btn {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 12px;
   color: hsl(35, 100%, 57%);
-  line-height: 5.5rem;
+  padding-top: 20px;
   background: none;
   border: none;
   cursor: pointer;
-}
-
-.post_article {
 }
 
 .post_article {
@@ -204,6 +217,7 @@ pre:has(> code) {
   font-size: 12px;
   font-weight: 500;
   color: hsl(0deg 0% 72.93%);
+  padding-top: 10px;
 }
 
 .post_article_detail {
