@@ -1,12 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
-  const googleTrends = require('google-trends-api');
+  const type = request.query.type;
   let res;
 
-  await googleTrends.dailyTrends({ geo: 'KR' }, function (err: any, results: any) {
-    res = results;
-  });
+  switch (type) {
+    case 'dailyTrends':
+      const googleTrends = require('google-trends-api');
+      res = await googleTrends.dailyTrends({ geo: 'KR' });
+      break;
+    case 'relatedQueries':
+      const googleSuggests = require('get-google-suggestions');
+      const searchKeyword = request.query.keyword;
+      res = await googleSuggests(searchKeyword);
+      break;
+  }
 
   return response.status(200).json(res);
 }

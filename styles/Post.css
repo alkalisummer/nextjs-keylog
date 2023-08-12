@@ -160,7 +160,29 @@ pre:has(> code) {
   margin-bottom: 20px;
 }
 
-.post_linkage {
+.post_linkage_div {
+  width: 50%;
+  padding-left: 10px;
+}
+
+.post_linkage_title {
+  color: #009bf2;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.post_linkage_tag_div {
+}
+
+.post_linkage_tag {
+  margin-right: 10px;
+  line-height: 3rem;
+  padding: 10px;
+  background-color: #a2a2a2;
+  color: white;
+  border-radius: 15px;
+  word-break: keep-all;
+  white-space: nowrap;
 }
 
 .post_articles_div {

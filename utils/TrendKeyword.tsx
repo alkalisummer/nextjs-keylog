@@ -8,6 +8,7 @@ import Link from 'next/link';
 function TrendKeyword() {
   const chartDom = useRef(null);
   const [showArticles, setShowArticles] = useState(false);
+  const [linkage, setLinkage] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState([]);
   const [baseDate, setBaseDate] = useState('');
@@ -33,7 +34,7 @@ function TrendKeyword() {
 
   interface seletedKey {
     name: string;
-    cnt: string;
+    cnt: number;
   }
 
   useEffect(() => {
@@ -42,7 +43,8 @@ function TrendKeyword() {
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
 
-    axios.get('/api/HandleKeyword').then((result) => {
+    const dailyTrendsparam = { type: 'dailyTrends' };
+    axios.get('/api/HandleKeyword', { params: dailyTrendsparam }).then((result) => {
       const res = JSON.parse(result.data).default.trendingSearchesDays;
       setBaseDate(`(기준일: ${timeFormat(res[res.length - 1].date)} - ${timeFormat(res[0].date)})`);
       for (let dateData of res) {
@@ -101,7 +103,12 @@ function TrendKeyword() {
         };
         myChart.setOption(chartOpt);
         myChart.on('click', (params) => {
-          setSelectedKey({ name: params.name, cnt: params.value as string });
+          const queryParams = { type: 'relatedQueries', keyword: params.name };
+          axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
+            const res = result.data;
+            setLinkage(res);
+          });
+          setSelectedKey({ name: params.name, cnt: params.value as number });
           const articleData = JSON.parse(JSON.stringify(params.data)).articles;
           setArticles(articleData.filter((obj: any) => obj.image));
           if (!showArticles) {
@@ -123,7 +130,20 @@ function TrendKeyword() {
           id='wordcloud'
           ref={chartDom}
           style={{ width: '50%', height: '400px' }}></div>
-        <div className='post_linkage'></div>
+        <div className='post_linkage_div'>
+          <span className='post_linkage_title'>연관 검색어</span>
+          <div className='post_linkage_tag_div'>
+            {linkage.map((obj, idx) => {
+              return (
+                <span
+                  key={idx}
+                  className='post_linkage_tag'>
+                  {obj}
+                </span>
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className='post_articles_div'>
         <div className='post_articles_title_div'>
