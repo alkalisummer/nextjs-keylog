@@ -172,6 +172,7 @@ pre:has(> code) {
 }
 
 .post_linkage_tag_div {
+  margin-top: 10px;
 }
 
 .post_linkage_tag {
@@ -280,6 +281,37 @@ pre:has(> code) {
 .post_article_summary span {
   color: #ababab;
   font-size: 12px;
+}
+
+.post_auto_div {
+}
+
+.post_auto_title_div {
+  display: flex;
+  margin-left: 8rem;
+  margin-right: 8rem;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  border-bottom: 2px solid hsl(35, 100%, 57%);
+}
+
+.post_auto_title {
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 30px;
+  font-weight: 500;
+  color: hsl(35, 100%, 57%);
+}
+
+.post_auto_fold_btn {
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 12px;
+  color: hsl(35, 100%, 57%);
+  padding-top: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .post_article_img {

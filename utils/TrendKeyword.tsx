@@ -8,6 +8,7 @@ import Link from 'next/link';
 function TrendKeyword() {
   const chartDom = useRef(null);
   const [showArticles, setShowArticles] = useState(false);
+  const [showAutoPost, setShowAutoPost] = useState(false);
   const [linkage, setLinkage] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState([]);
@@ -39,7 +40,7 @@ function TrendKeyword() {
 
   useEffect(() => {
     import('echarts-wordcloud');
-
+    console.log('리렌더링');
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
 
@@ -62,59 +63,59 @@ function TrendKeyword() {
         let myChart = echarts.getInstanceByDom(chartDom.current);
         if (!myChart) {
           myChart = echarts.init(chartDom.current);
-        }
-        const chartOpt = {
-          series: [
-            {
-              type: 'wordCloud',
-              shape: 'pentagon',
-              left: 0,
-              top: 0,
-              width: '95%',
-              height: '95%',
-              right: null,
-              bottom: null,
-              sizeRange: [20, 90],
-              rotationRange: [-90, 90],
-              rotationStep: 45,
-              gridSize: 14,
-              drawOutOfBound: false,
-              shrinkToFit: true,
-              layoutAnimation: true,
-              textStyle: {
-                fontFamily: 'Spoqa Han Sans Neo',
-                fontWeight: 'bold',
-                // Color can be a callback function or a color string
-                color: function () {
-                  // Random color
-                  return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
-                },
-              },
-              emphasis: {
-                focus: 'self',
+          const chartOpt = {
+            series: [
+              {
+                type: 'wordCloud',
+                shape: 'pentagon',
+                left: 0,
+                top: 0,
+                width: '95%',
+                height: '95%',
+                right: null,
+                bottom: null,
+                sizeRange: [20, 90],
+                rotationRange: [-90, 90],
+                rotationStep: 45,
+                gridSize: 14,
+                drawOutOfBound: false,
+                shrinkToFit: true,
+                layoutAnimation: true,
                 textStyle: {
-                  textShadowBlur: 0,
-                  textShadowColor: '#fffff',
+                  fontFamily: 'Spoqa Han Sans Neo',
+                  fontWeight: 'bold',
+                  // Color can be a callback function or a color string
+                  color: function () {
+                    // Random color
+                    return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
+                  },
                 },
+                emphasis: {
+                  focus: 'self',
+                  textStyle: {
+                    textShadowBlur: 0,
+                    textShadowColor: '#fffff',
+                  },
+                },
+                data: keyArr,
               },
-              data: keyArr,
-            },
-          ],
-        };
-        myChart.setOption(chartOpt);
-        myChart.on('click', (params) => {
-          const queryParams = { type: 'relatedQueries', keyword: params.name };
-          axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
-            const res = result.data;
-            setLinkage(res);
+            ],
+          };
+          myChart.setOption(chartOpt);
+          myChart.on('click', (params) => {
+            const queryParams = { type: 'relatedQueries', keyword: params.name };
+            axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
+              const res = result.data;
+              setLinkage(res);
+            });
+            setSelectedKey({ name: params.name, cnt: params.value as number });
+            const articleData = JSON.parse(JSON.stringify(params.data)).articles;
+            setArticles(articleData.filter((obj: any) => obj.image));
+            if (!showArticles) {
+              setShowArticles(true);
+            }
           });
-          setSelectedKey({ name: params.name, cnt: params.value as number });
-          const articleData = JSON.parse(JSON.stringify(params.data)).articles;
-          setArticles(articleData.filter((obj: any) => obj.image));
-          if (!showArticles) {
-            setShowArticles(true);
-          }
-        });
+        }
       }
     });
   }, []);
@@ -135,11 +136,12 @@ function TrendKeyword() {
           <div className='post_linkage_tag_div'>
             {linkage.map((obj, idx) => {
               return (
-                <span
+                <Link
                   key={idx}
-                  className='post_linkage_tag'>
-                  {obj}
-                </span>
+                  href={`https://www.google.com/search?q=${obj}`}
+                  target='_blank'>
+                  <span className='post_linkage_tag'>{obj}</span>
+                </Link>
               );
             })}
           </div>
@@ -197,6 +199,17 @@ function TrendKeyword() {
         ) : (
           ''
         )}
+      </div>
+      <div className='post_auto_div'>
+        <div className='post_auto_title_div'>
+          <span className='post_auto_title'>Auto Posting</span>
+          <button
+            className='post_auto_fold_btn'
+            onClick={() => setShowAutoPost(!showAutoPost)}>
+            {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
+          </button>
+        </div>
+        <div className='post_auto_'></div>
       </div>
     </div>
   );
