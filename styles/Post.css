@@ -186,26 +186,27 @@ pre:has(> code) {
   white-space: nowrap;
 }
 
-.post_articles_div {
+.post_sub_div {
   padding-left: 8rem;
   padding-right: 8rem;
+  margin-bottom: 20px;
 }
 
-.post_articles_title_div {
+.post_sub_title_div {
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid hsl(35, 100%, 57%);
   margin-bottom: 15px;
 }
 
-.post_articles_title {
+.post_sub_title {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 30px;
   font-weight: 500;
   color: hsl(35, 100%, 57%);
 }
 
-.post_articles_fold_btn {
+.post_fold_btn {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 12px;
   color: hsl(35, 100%, 57%);
@@ -283,35 +284,14 @@ pre:has(> code) {
   font-size: 12px;
 }
 
-.post_auto_div {
-}
-
-.post_auto_title_div {
-  display: flex;
-  margin-left: 8rem;
-  margin-right: 8rem;
-  justify-content: space-between;
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  border-bottom: 2px solid hsl(35, 100%, 57%);
-}
-
-.post_auto_title {
+.post_sub_title {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 30px;
   font-weight: 500;
   color: hsl(35, 100%, 57%);
 }
 
-.post_auto_fold_btn {
-  font-family: 'Spoqa Han Sans Neo';
-  font-size: 12px;
-  color: hsl(35, 100%, 57%);
-  padding-top: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
+.post_line_chart_div {
 }
 
 .post_article_img {

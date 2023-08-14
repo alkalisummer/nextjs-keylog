@@ -2,14 +2,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
+import WordCloudOpt, { LineChartOpt } from './ChartOpt';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
 import Link from 'next/link';
 
 function TrendKeyword() {
-  const chartDom = useRef(null);
+  const wChartDom = useRef(null);
+  const lChartDom = useRef(null);
   const [showArticles, setShowArticles] = useState(false);
   const [showAutoPost, setShowAutoPost] = useState(false);
+  const [showLineChart, setShowLineChart] = useState(false);
   const [linkage, setLinkage] = useState<string[]>([]);
+
+  const [lineKeyword, setLineKeyword] = useState<string[]>([]);
+
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState([]);
   const [baseDate, setBaseDate] = useState('');
@@ -40,7 +46,6 @@ function TrendKeyword() {
 
   useEffect(() => {
     import('echarts-wordcloud');
-    console.log('리렌더링');
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
 
@@ -59,54 +64,17 @@ function TrendKeyword() {
       }
 
       keyArr = trendKeyData.map((obj) => ({ name: obj.title.query.replaceAll("'", ''), value: obj.formattedTraffic, articles: obj.articles }));
-      if (chartDom.current) {
-        let myChart = echarts.getInstanceByDom(chartDom.current);
-        if (!myChart) {
-          myChart = echarts.init(chartDom.current);
-          const chartOpt = {
-            series: [
-              {
-                type: 'wordCloud',
-                shape: 'pentagon',
-                left: 0,
-                top: 0,
-                width: '95%',
-                height: '95%',
-                right: null,
-                bottom: null,
-                sizeRange: [20, 90],
-                rotationRange: [-90, 90],
-                rotationStep: 45,
-                gridSize: 14,
-                drawOutOfBound: false,
-                shrinkToFit: true,
-                layoutAnimation: true,
-                textStyle: {
-                  fontFamily: 'Spoqa Han Sans Neo',
-                  fontWeight: 'bold',
-                  // Color can be a callback function or a color string
-                  color: function () {
-                    // Random color
-                    return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
-                  },
-                },
-                emphasis: {
-                  focus: 'self',
-                  textStyle: {
-                    textShadowBlur: 0,
-                    textShadowColor: '#fffff',
-                  },
-                },
-                data: keyArr,
-              },
-            ],
-          };
-          myChart.setOption(chartOpt);
-          myChart.on('click', (params) => {
+      if (wChartDom.current) {
+        let wordCloud = echarts.getInstanceByDom(wChartDom.current);
+        if (!wordCloud) {
+          wordCloud = echarts.init(wChartDom.current);
+          wordCloud.setOption(WordCloudOpt(keyArr));
+          wordCloud.on('click', (params) => {
+            setLineKeyword([params.name]);
             const queryParams = { type: 'relatedQueries', keyword: params.name };
             axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
-              const res = result.data;
-              setLinkage(res);
+              const suggestRes = result.data;
+              setLinkage(suggestRes);
             });
             setSelectedKey({ name: params.name, cnt: params.value as number });
             const articleData = JSON.parse(JSON.stringify(params.data)).articles;
@@ -120,8 +88,59 @@ function TrendKeyword() {
     });
   }, []);
 
+  useEffect(() => {
+    if (lineKeyword.length > 0) {
+      if (!showLineChart) {
+        setShowLineChart(true);
+      }
+      const queryParams = { type: 'interestOverTime', keyword: ['손흥민'] };
+      axios.post('/api/HandleKeyword', { params: queryParams }).then((result) => {
+        const interestRes = JSON.parse(result.data);
+        let lineChartDate: string[] = [];
+        let lineChartValueArr = [];
+
+        const randomColor = () => {
+          return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
+        };
+
+        const timeLineData = (num: number) => {
+          let res = [];
+          for (let data of interestRes.default.timelineData) {
+            res.push(data.value[num]);
+            if (lineChartDate.length !== interestRes.default.timelineData.length) {
+              lineChartDate.push(data.formattedAxisTime);
+            }
+          }
+          return res;
+        };
+
+        for (let i = 0; i < lineKeyword.length; i++) {
+          lineChartValueArr.push({
+            name: lineKeyword[i],
+            type: 'line',
+            symbol: 'none',
+            sampling: 'lttb',
+            itemStyle: {
+              color: randomColor(),
+            },
+            data: timeLineData(i),
+          });
+        }
+        if (lChartDom.current) {
+          let lineChart = echarts.getInstanceByDom(lChartDom.current);
+          if (!lineChart) {
+            lineChart = echarts.init(lChartDom.current);
+            const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr });
+            lineChart.setOption(lineChartOpt);
+          }
+        }
+      });
+    }
+  }, [lineKeyword]);
+
   return (
     <div>
+      {/* WordCloud  */}
       <div className='post_daily_keyword_div'>
         <span className='post_daily_keyword_title'>Daily Keyword</span>
         <span className='post_base_date'>{baseDate}</span>
@@ -129,7 +148,7 @@ function TrendKeyword() {
       <div className='post_wordcloud_div'>
         <div
           id='wordcloud'
-          ref={chartDom}
+          ref={wChartDom}
           style={{ width: '50%', height: '400px' }}></div>
         <div className='post_linkage_div'>
           <span className='post_linkage_title'>연관 검색어</span>
@@ -147,11 +166,35 @@ function TrendKeyword() {
           </div>
         </div>
       </div>
-      <div className='post_articles_div'>
-        <div className='post_articles_title_div'>
-          <span className='post_articles_title'>Articles</span>
+      {/* /WordCloud  */}
+      {/* Interest Over Time */}
+      <div className='post_sub_div'>
+        <div className='post_sub_title_div'>
+          <span className='post_sub_title'>Interest Change Chart</span>
           <button
-            className='post_articles_fold_btn'
+            className='post_fold_btn'
+            onClick={() => setShowLineChart(!showLineChart)}>
+            {showLineChart ? '접기 ▲' : '펼치기 ▼'}
+          </button>
+        </div>
+        {showLineChart ? (
+          <div className='post_line_chart_div'>
+            <div
+              id='lineChart'
+              ref={lChartDom}
+              style={{ width: '50%', height: '400px' }}></div>
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+      {/* /Interest Over Time */}
+      {/* Article  */}
+      <div className='post_sub_div'>
+        <div className='post_sub_title_div'>
+          <span className='post_sub_title'>Articles</span>
+          <button
+            className='post_fold_btn'
             onClick={() => setShowArticles(!showArticles)}>
             {showArticles ? '접기 ▲' : '펼치기 ▼'}
           </button>
@@ -200,17 +243,20 @@ function TrendKeyword() {
           ''
         )}
       </div>
-      <div className='post_auto_div'>
-        <div className='post_auto_title_div'>
-          <span className='post_auto_title'>Auto Posting</span>
+      {/* /Article  */}
+      {/* AutoPosting  */}
+      <div className='post_sub_div'>
+        <div className='post_sub_title_div'>
+          <span className='post_sub_title'>Auto Posting</span>
           <button
-            className='post_auto_fold_btn'
+            className='post_fold_btn'
             onClick={() => setShowAutoPost(!showAutoPost)}>
             {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
         <div className='post_auto_'></div>
       </div>
+      {/* /AutoPosting  */}
     </div>
   );
 }
