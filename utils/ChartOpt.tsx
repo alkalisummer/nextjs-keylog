@@ -52,28 +52,30 @@ const WordCloudOpt = (dataArr: wDataArr[]) => {
 interface lineChartData {
   dateArr: string[];
   valueArr: {}[];
+  legendArr: string[];
 }
 
 export const LineChartOpt = (params: lineChartData) => {
   const chartOpt = {
     tooltip: {
       trigger: 'axis',
-      position: function (pt: any) {
-        return [pt[0], '10%'];
-      },
     },
     title: {
-      left: 'center',
-      text: 'Large Area Chart',
+      text: '시간흐름에 따른 관심도 변화',
+    },
+    legend: {
+      data: params.legendArr,
     },
     toolbox: {
       feature: {
-        dataZoom: {
-          yAxisIndex: 'none',
-        },
-        restore: {},
         saveAsImage: {},
       },
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
     },
     xAxis: {
       type: 'category',
@@ -82,19 +84,7 @@ export const LineChartOpt = (params: lineChartData) => {
     },
     yAxis: {
       type: 'value',
-      boundaryGap: [0, '100%'],
     },
-    dataZoom: [
-      {
-        type: 'inside',
-        start: 0,
-        end: 10,
-      },
-      {
-        start: 0,
-        end: 10,
-      },
-    ],
     series: params.valueArr,
   };
   return chartOpt;

@@ -294,6 +294,29 @@ pre:has(> code) {
 .post_line_chart_div {
 }
 
+.post_line_keyword_div {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.post_line_keyword {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 15px;
+  border: 1px solid #e3e3e3;
+  border-radius: 15px;
+  background-color: transparent;
+  font-size: 15px;
+  margin-right: 5px;
+}
+
+.post_line_keyword_div button {
+  cursor: pointer;
+}
+
+.post_line_keyword_div input {
+  width: 75px;
+}
+
 .post_article_img {
 }
 

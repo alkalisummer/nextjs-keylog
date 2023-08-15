@@ -12,9 +12,11 @@ function TrendKeyword() {
   const [showArticles, setShowArticles] = useState(false);
   const [showAutoPost, setShowAutoPost] = useState(false);
   const [showLineChart, setShowLineChart] = useState(false);
+  const [showAddterm, setShowAddterm] = useState(true);
   const [linkage, setLinkage] = useState<string[]>([]);
 
   const [lineKeyword, setLineKeyword] = useState<string[]>([]);
+  const [newKeyword, setNewKeyword] = useState('');
 
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState([]);
@@ -93,7 +95,7 @@ function TrendKeyword() {
       if (!showLineChart) {
         setShowLineChart(true);
       }
-      const queryParams = { type: 'interestOverTime', keyword: ['손흥민'] };
+      const queryParams = { type: 'interestOverTime', keyword: lineKeyword };
       axios.post('/api/HandleKeyword', { params: queryParams }).then((result) => {
         const interestRes = JSON.parse(result.data);
         let lineChartDate: string[] = [];
@@ -130,13 +132,37 @@ function TrendKeyword() {
           let lineChart = echarts.getInstanceByDom(lChartDom.current);
           if (!lineChart) {
             lineChart = echarts.init(lChartDom.current);
-            const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr });
-            lineChart.setOption(lineChartOpt);
           }
+          const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineKeyword });
+          lineChart.setOption(lineChartOpt);
         }
       });
     }
   }, [lineKeyword]);
+
+  const addTerm = () => {
+    setShowAddterm(false);
+    const parentDiv = document.querySelector('.post_line_keyword_div');
+    const keywordInput = document.createElement('input');
+
+    keywordInput.className = 'post_line_keyword';
+    keywordInput.placeholder = '검색어 추가';
+    keywordInput.value = newKeyword;
+    keywordInput.onchange = (e: Event) => {
+      setNewKeyword((e.target as HTMLInputElement).value);
+    };
+    keywordInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        setShowAddterm(true);
+        setLineKeyword((prev) => [...prev, keywordInput.value]);
+        if (keywordInput.parentNode) {
+          keywordInput.parentNode.removeChild(keywordInput);
+        }
+        setNewKeyword('');
+      }
+    });
+    parentDiv?.append(keywordInput);
+  };
 
   return (
     <div>
@@ -177,16 +203,36 @@ function TrendKeyword() {
             {showLineChart ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
-        {showLineChart ? (
-          <div className='post_line_chart_div'>
-            <div
-              id='lineChart'
-              ref={lChartDom}
-              style={{ width: '50%', height: '400px' }}></div>
+        <div
+          className='post_line_chart_div'
+          style={{ display: showLineChart ? '' : 'none' }}>
+          <div className='post_line_keyword_div'>
+            {lineKeyword.map((obj: string, idx: number) => {
+              return (
+                <span
+                  key={idx}
+                  className='post_line_keyword'>
+                  {obj}
+                </span>
+              );
+            })}
+            {lineKeyword.length !== 5 && showAddterm ? (
+              <button
+                id='addTerm'
+                className='post_line_keyword'
+                onClick={() => addTerm()}>
+                + 비교 추가
+              </button>
+            ) : (
+              ''
+            )}
           </div>
-        ) : (
-          ''
-        )}
+
+          <div
+            id='lineChart'
+            ref={lChartDom}
+            style={{ width: '100%', height: '400px' }}></div>
+        </div>
       </div>
       {/* /Interest Over Time */}
       {/* Article  */}
