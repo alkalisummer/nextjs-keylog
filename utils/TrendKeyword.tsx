@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import * as echarts from 'echarts';
 import WordCloudOpt, { LineChartOpt } from './ChartOpt';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
@@ -197,7 +198,13 @@ function TrendKeyword() {
       {/* Interest Over Time */}
       <div className='post_sub_div'>
         <div className='post_sub_title_div'>
-          <span className='post_sub_title'>Interest Change Chart</span>
+          <span className='post_sub_title'>
+            Interest Change Chart
+            <i
+              className='fa-regular fa-circle-question tooltip'
+              data-tooltip-id='line-tooltip'></i>
+          </span>
+
           <button
             className='post_fold_btn'
             onClick={() => setShowLineChart(!showLineChart)}>
@@ -304,6 +311,11 @@ function TrendKeyword() {
         <div className='post_auto_'></div>
       </div>
       {/* /AutoPosting  */}
+      <ReactTooltip
+        id='line-tooltip'
+        place='bottom'
+        content='복수의 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 관심도 비교시 수치가 달라질 수 있습니다.'
+      />
     </div>
   );
 }

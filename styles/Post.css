@@ -209,7 +209,7 @@ pre:has(> code) {
 .post_fold_btn {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 12px;
-  color: hsl(35, 100%, 57%);
+  color: rgb(255, 164, 36);
   padding-top: 20px;
   background: none;
   border: none;
@@ -318,6 +318,11 @@ pre:has(> code) {
 }
 
 .post_article_img {
+}
+
+.tooltip {
+  font-size: 19px;
+  margin-left: 5px;
 }
 
 @media (max-width: 768px) {

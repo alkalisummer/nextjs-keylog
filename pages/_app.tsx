@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable @next/next/no-img-element */
 import type { AppProps } from 'next/app';
 import Link from 'next/link';
@@ -12,6 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <div className='main_area'>
       <Head>
         <title> kyuuun </title>
+        <script
+          src='https://kit.fontawesome.com/25678e103e.js'
+          crossOrigin='anonymous'></script>
       </Head>
       <div className='left_area'>
         <Link href={'/'}>
