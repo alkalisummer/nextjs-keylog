@@ -134,6 +134,7 @@ function TrendKeyword() {
             lineChart = echarts.init(lChartDom.current);
           }
           const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineKeyword });
+          lineChart.clear();
           lineChart.setOption(lineChartOpt);
         }
       });
