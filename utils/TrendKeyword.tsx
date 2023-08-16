@@ -8,6 +8,7 @@ import WordCloudOpt, { LineChartOpt } from './ChartOpt';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
 import ArticlePrompt from './ChatGptPrompt';
 import Link from 'next/link';
+import { Box, Typography } from '@material-ui/core';
 
 function TrendKeyword() {
   const wChartDom = useRef(null);
@@ -26,6 +27,7 @@ function TrendKeyword() {
   const [baseDate, setBaseDate] = useState('');
 
   const [currTab, setCurrTab] = useState('1');
+  const [isLoading, setIsLoading] = useState(false);
 
   interface keyword {
     name: string;
@@ -180,10 +182,12 @@ function TrendKeyword() {
   };
 
   const autoPostDaily = () => {
+    setIsLoading(true);
     const articlesSummary = ArticlePrompt(articles, selectedKey!.name);
     axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: articlesSummary }).then((res) => {
+      setIsLoading(false);
       const contentDiv = document.querySelector('.post_auto_daily_content');
-      contentDiv!.innerHTML = res.data.chatGptRes.content as string;
+      contentDiv!.innerHTML = res.data.chatGptRes.content;
     });
   };
 
@@ -368,6 +372,17 @@ function TrendKeyword() {
                       <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
                     </button>
                   </div>
+                  {isLoading ? (
+                    <Box
+                      display='flex'
+                      justifyContent='center'
+                      alignItems='center'>
+                      <CircularProgress color='secondary' />
+                      <Typography>글 생성중...</Typography>
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
                   <div className='post_auto_daily_content'></div>
                 </div>
               ) : (

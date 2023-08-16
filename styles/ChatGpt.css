@@ -145,18 +145,18 @@
   margin-top: 17px;
 }
 
-.MuiCircularProgress-root {
+.chat_div .MuiCircularProgress-root {
   position: absolute !important;
   top: 50% !important;
   right: 38% !important;
 }
 
-.MuiCircularProgress-colorPrimary {
+.chat_div .MuiCircularProgress-colorPrimary {
   color: #ffffff !important;
 }
 
 @media (max-width: 768px) {
-  .MuiCircularProgress-root {
+  .chat_div .MuiCircularProgress-root {
     position: absolute !important;
     top: 50% !important;
     right: 45% !important;
