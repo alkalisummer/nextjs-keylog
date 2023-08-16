@@ -53,7 +53,7 @@ const ChatGpt = () => {
     const userMsg = { role: 'user', content: userInput };
     tmpChat.push(userMsg);
 
-    axios.post('/api/ChatGptHandle', { chatContent: tmpChat }).then((res) => {
+    axios.post('/api/ChatGptHandle', { type: 'common', chatContent: tmpChat }).then((res) => {
       tmpChat.push(res.data.chatGptRes);
       setChatContent(tmpChat);
       const gptCntnDiv = document.createElement('div');

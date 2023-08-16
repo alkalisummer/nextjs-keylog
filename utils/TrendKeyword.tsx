@@ -2,9 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as echarts from 'echarts';
 import WordCloudOpt, { LineChartOpt } from './ChartOpt';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
+import ArticlePrompt from './ChatGptPrompt';
 import Link from 'next/link';
 
 function TrendKeyword() {
@@ -22,6 +24,8 @@ function TrendKeyword() {
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState([]);
   const [baseDate, setBaseDate] = useState('');
+
+  const [currTab, setCurrTab] = useState('1');
 
   interface keyword {
     name: string;
@@ -72,9 +76,11 @@ function TrendKeyword() {
         if (!wordCloud) {
           wordCloud = echarts.init(wChartDom.current);
           wordCloud.setOption(WordCloudOpt(keyArr));
+          //wordcloud 키워드 클릭 이벤트
           wordCloud.on('click', (params) => {
             setLineKeyword([params.name]);
             const queryParams = { type: 'relatedQueries', keyword: params.name };
+            //선택한 키워드의 연관 검색어
             axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
               const suggestRes = result.data;
               setLinkage(suggestRes);
@@ -84,6 +90,9 @@ function TrendKeyword() {
             setArticles(articleData.filter((obj: any) => obj.image));
             if (!showArticles) {
               setShowArticles(true);
+            }
+            if (!showAutoPost) {
+              setShowAutoPost(true);
             }
           });
         }
@@ -166,6 +175,22 @@ function TrendKeyword() {
     parentDiv?.append(keywordInput);
   };
 
+  const clickTab = (tabId: string) => {
+    setCurrTab(tabId);
+  };
+
+  const autoPostDaily = () => {
+    const articlesSummary = ArticlePrompt(articles, selectedKey!.name);
+    axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: articlesSummary }).then((res) => {
+      const contentDiv = document.querySelector('.post_auto_daily_content');
+      contentDiv!.innerHTML = res.data.chatGptRes.content as string;
+    });
+  };
+
+  const clearPost = () => {
+    document.querySelector('.post_auto_daily_content')!.innerHTML = '';
+  };
+
   return (
     <div>
       {/* WordCloud  */}
@@ -235,7 +260,6 @@ function TrendKeyword() {
               ''
             )}
           </div>
-
           <div
             id='lineChart'
             ref={lChartDom}
@@ -308,13 +332,68 @@ function TrendKeyword() {
             {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
-        <div className='post_auto_'></div>
+        {showAutoPost ? (
+          <div className='post_auto_div'>
+            <div className='post_auto_tab'>
+              <span
+                className={`post_auto_tab_title ${currTab === '1' ? 'post_focus_tab' : ''}`}
+                onClick={() => clickTab('1')}>
+                Daily Keyword
+                <i
+                  className='fa-regular fa-circle-question small_tooltip'
+                  data-tooltip-id='daily-tooltip'></i>
+              </span>
+              <span
+                className={`post_auto_tab_title ${currTab === '2' ? 'post_focus_tab' : ''}`}
+                onClick={() => clickTab('2')}>
+                Custom Keyword
+                <i
+                  className='fa-regular fa-circle-question small_tooltip'
+                  data-tooltip-id='custom-tooltip'></i>
+              </span>
+            </div>
+            <div className='post_auto_tab_div'>
+              {currTab === '1' && selectedKey ? (
+                <div className='post_auto_daily_div'>
+                  <div className='post_auto_btn_div'>
+                    <button
+                      className='post_auto_button'
+                      onClick={() => autoPostDaily()}>
+                      <i className='fa-solid fa-pen'></i>&nbsp;
+                      {` '${selectedKey.name}'`} 글 생성하기
+                    </button>
+                    <button
+                      className='post_auto_button'
+                      onClick={() => clearPost()}>
+                      <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
+                    </button>
+                  </div>
+                  <div className='post_auto_daily_content'></div>
+                </div>
+              ) : (
+                <div className='post_auto_custom_div'></div>
+              )}
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       {/* /AutoPosting  */}
       <ReactTooltip
         id='line-tooltip'
         place='bottom'
         content='복수의 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 관심도 비교시 수치가 달라질 수 있습니다.'
+      />
+      <ReactTooltip
+        id='daily-tooltip'
+        place='bottom'
+        content='Word Cloud에서 선택한 키워드를 기반으로 게시글을 작성합니다.'
+      />
+      <ReactTooltip
+        id='custom-tooltip'
+        place='bottom'
+        content='원하는 키워드를 입력하여 블로그 주제를 추천받고 선택한 주제를 기반으로 게시글을 작성합니다.'
       />
     </div>
   );
