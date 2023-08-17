@@ -348,6 +348,9 @@ pre:has(> code) {
   justify-content: space-between;
 }
 
+.post_auto_left_btn {
+}
+
 .post_auto_button {
   margin-left: 10px;
   margin-top: 10px;
@@ -394,6 +397,10 @@ pre:has(> code) {
 .small_tooltip {
   font-size: 12px;
   margin-left: 5px;
+}
+
+.css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root {
+  min-width: 150px !important;
 }
 
 @media (max-width: 768px) {

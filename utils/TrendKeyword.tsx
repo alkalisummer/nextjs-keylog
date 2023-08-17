@@ -1,22 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import * as echarts from 'echarts';
-import WordCloudOpt, { LineChartOpt } from './ChartOpt';
+import Link from 'next/link';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
 import ArticlePrompt from './ChatGptPrompt';
-import Link from 'next/link';
+
+//echart - wordcloud, linechart
+import * as echarts from 'echarts';
+import WordCloudOpt, { LineChartOpt } from './ChartOpt';
+
+//react-tooltip
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { Box, Typography } from '@material-ui/core';
+
+//clipboard 복사
+import ClipboardJS from 'clipboard';
+
+//mui progressbar(원형)
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+//mui notification
+import Snackbar from '@mui/material/Snackbar';
 
 function TrendKeyword() {
   const wChartDom = useRef(null);
   const lChartDom = useRef(null);
+
   const [showArticles, setShowArticles] = useState(false);
   const [showAutoPost, setShowAutoPost] = useState(false);
   const [showLineChart, setShowLineChart] = useState(false);
   const [showAddterm, setShowAddterm] = useState(true);
+  const [showNoti, setShowNoti] = useState(false);
+
   const [linkage, setLinkage] = useState<string[]>([]);
 
   const [lineKeyword, setLineKeyword] = useState<string[]>([]);
@@ -55,6 +70,7 @@ function TrendKeyword() {
 
   useEffect(() => {
     import('echarts-wordcloud');
+    new ClipboardJS('#clipboard_copy_btn');
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
 
@@ -193,6 +209,17 @@ function TrendKeyword() {
 
   const clearPost = () => {
     document.querySelector('.post_auto_daily_content')!.innerHTML = '';
+  };
+
+  const openNoti = () => {
+    setShowNoti(true);
+  };
+
+  const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowNoti(false);
   };
 
   return (
@@ -360,12 +387,21 @@ function TrendKeyword() {
               {currTab === '1' && selectedKey ? (
                 <div className='post_auto_daily_div'>
                   <div className='post_auto_btn_div'>
-                    <button
-                      className='post_auto_button'
-                      onClick={() => autoPostDaily()}>
-                      <i className='fa-solid fa-pen'></i>&nbsp;
-                      {` '${selectedKey.name}'`} 글 생성하기
-                    </button>
+                    <div className='post_auto_left_btn'>
+                      <button
+                        className='post_auto_button'
+                        onClick={() => autoPostDaily()}>
+                        <i className='fa-solid fa-pen'></i>&nbsp;
+                        {` '${selectedKey.name}'`} 글 생성하기
+                      </button>
+                      <button
+                        id='clipboard_copy_btn'
+                        className='post_auto_button'
+                        data-clipboard-target='.post_auto_daily_content'
+                        onClick={() => openNoti()}>
+                        <i className='fa-regular fa-copy'></i>&nbsp; 클립보드 복사
+                      </button>
+                    </div>
                     <button
                       className='post_auto_button'
                       onClick={() => clearPost()}>
@@ -410,6 +446,12 @@ function TrendKeyword() {
         place='bottom'
         content='원하는 키워드를 입력하여 블로그 주제를 추천받고 선택한 주제를 기반으로 게시글을 작성합니다.'
       />
+      <Snackbar
+        open={showNoti}
+        autoHideDuration={1500}
+        message='클립보드에 복사되었습니다.'
+        onClose={closeNoti}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}></Snackbar>
     </div>
   );
 }
