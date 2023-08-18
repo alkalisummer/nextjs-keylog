@@ -3,6 +3,7 @@
 import type { AppProps } from 'next/app';
 import Link from 'next/link';
 import Head from 'next/head';
+import Script from 'next/script';
 
 import '@/styles/globals.css';
 import '@/styles/Post.css';
@@ -11,11 +12,12 @@ import '@/styles/ChatGpt.css';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className='main_area'>
+      <Script
+        src='https://kit.fontawesome.com/25678e103e.js'
+        crossOrigin='anonymous'
+      />
       <Head>
         <title> kyuuun </title>
-        <script
-          src='https://kit.fontawesome.com/25678e103e.js'
-          crossOrigin='anonymous'></script>
       </Head>
       <div className='left_area'>
         <Link href={'/'}>

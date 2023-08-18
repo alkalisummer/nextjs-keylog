@@ -27,7 +27,6 @@
     "eslint-config-next": "13.4.5",
     "formidable": "^3.4.0",
     "get-google-suggestions": "^1.0.2",
-    "google-news": "^1.4.6",
     "google-trends-api": "^4.9.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.4.5",

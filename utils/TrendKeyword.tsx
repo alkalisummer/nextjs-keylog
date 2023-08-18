@@ -38,7 +38,7 @@ function TrendKeyword() {
   const [newKeyword, setNewKeyword] = useState('');
 
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<article[]>([]);
   const [baseDate, setBaseDate] = useState('');
 
   const [currTab, setCurrTab] = useState('1');
@@ -200,7 +200,7 @@ function TrendKeyword() {
   const autoPostDaily = () => {
     setIsLoading(true);
     const articlesSummary = ArticlePrompt(articles, selectedKey!.name);
-    axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: articlesSummary }).then((res) => {
+    axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: articlesSummary, keyword: selectedKey!.name }).then((res) => {
       setIsLoading(false);
       const contentDiv = document.querySelector('.post_auto_daily_content');
       contentDiv!.innerHTML = res.data.chatGptRes.content;

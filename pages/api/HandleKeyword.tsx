@@ -1,4 +1,56 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'axios';
+
+interface naverArticle {
+  title: string;
+  originallink: string;
+  link: string;
+  description: string;
+  pubDate: string;
+}
+
+interface article {
+  title: string;
+  content: string;
+}
+
+export const getArticles = async (keyword: string) => {
+  const cheerio = require('cheerio');
+  let naverArticles: naverArticle[] = [];
+  let articles: article[] = [];
+
+  const searchParams = {
+    params: { query: keyword, display: 30 },
+    headers: {
+      'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
+      'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
+    },
+  };
+
+  //해당 키워드를 포함하고 네이버 뉴스에 제공된 기사만 parsing
+  await axios.get('https://openapi.naver.com/v1/search/news.json', searchParams).then((res) => {
+    const result = res.data.items;
+    naverArticles = result.filter((article: naverArticle) => article.title.indexOf(keyword) !== -1 && article.link.indexOf('naver.com') !== -1);
+  });
+
+  //네이버 뉴스 카테고리별(일반, 연예, 스포츠)로 분류하여 크롤링
+  for (let article of naverArticles) {
+    await axios.get(article.link).then((res) => {
+      console.log(res.data);
+      if (article.link.indexOf('n.news.naver.com') !== -1) {
+        // 일반기사
+      } else if (article.link.indexOf('entertain.naver.com') !== -1) {
+        // 연예기사
+      } else if (article.link.indexOf('sports.news.naver.com') !== -1) {
+        // 스포츠기사
+      }
+    });
+    //3개의 기사만 크롤링
+    if (articles.length === 3) {
+      break;
+    }
+  }
+};
 
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
   const googleTrends = require('google-trends-api');
