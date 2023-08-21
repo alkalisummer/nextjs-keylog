@@ -118,6 +118,17 @@ function TrendKeyword() {
         }
       }
     });
+
+    window.addEventListener('resize', () => {
+      let wordCloud = echarts.init(wChartDom.current);
+      let lineChart = echarts.init(lChartDom.current);
+      if (wordCloud) {
+        wordCloud.resize();
+      }
+      if (lineChart) {
+        lineChart.resize();
+      }
+    });
   }, []);
 
   useEffect(() => {
