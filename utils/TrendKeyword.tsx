@@ -21,6 +21,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 //mui notification
 import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
 
 function TrendKeyword() {
   const wChartDom = useRef(null);
@@ -31,6 +32,7 @@ function TrendKeyword() {
   const [showLineChart, setShowLineChart] = useState(false);
   const [showAddterm, setShowAddterm] = useState(true);
   const [showNoti, setShowNoti] = useState(false);
+  const [notiMsg, setNotiMsg] = useState('');
 
   const [linkage, setLinkage] = useState<string[]>([]);
 
@@ -200,6 +202,12 @@ function TrendKeyword() {
   const autoPostDaily = async () => {
     setIsLoading(true);
     const chatMsg = await ArticlePrompt(selectedKey!.name);
+    if (Object.keys(chatMsg).length === 0) {
+      setShowNoti(true);
+      setNotiMsg('글 작성을 위한 데이터가 부족합니다.');
+      setIsLoading(false);
+      return;
+    }
     await axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: chatMsg }).then((res) => {
       setIsLoading(false);
       const contentDiv = document.querySelector('.post_auto_daily_content');
@@ -213,6 +221,12 @@ function TrendKeyword() {
 
   const openNoti = () => {
     setShowNoti(true);
+    const autoPostContent = document.querySelector('.post_auto_daily_content')?.innerHTML;
+    if (autoPostContent) {
+      setNotiMsg('클립보드에 복사되었습니다.');
+    } else {
+      setNotiMsg('복사할 내용이 없습니다.');
+    }
   };
 
   const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -437,7 +451,7 @@ function TrendKeyword() {
       <ReactTooltip
         id='line-tooltip'
         place='bottom'
-        content='복수의 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 관심도 비교시 수치가 달라질 수 있습니다.'
+        content='복수의 키워드 비교는 최대 5개까지 가능하며 상대적인 수치로 표출되기 때문에 다른 키워드로 관심도 비교시 수치가 달라질 수 있습니다.'
       />
       <ReactTooltip
         id='daily-tooltip'
@@ -451,10 +465,20 @@ function TrendKeyword() {
       />
       <Snackbar
         open={showNoti}
-        autoHideDuration={1500}
-        message='클립보드에 복사되었습니다.'
+        autoHideDuration={6000}
+        message={notiMsg}
         onClose={closeNoti}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}></Snackbar>
+        action={
+          <React.Fragment>
+            <Button
+              color='primary'
+              size='small'
+              onClick={closeNoti}>
+              확인
+            </Button>
+          </React.Fragment>
+        }
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}></Snackbar>
     </div>
   );
 }
