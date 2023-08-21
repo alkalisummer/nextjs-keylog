@@ -197,10 +197,10 @@ function TrendKeyword() {
     setCurrTab(tabId);
   };
 
-  const autoPostDaily = () => {
+  const autoPostDaily = async () => {
     setIsLoading(true);
-    const articlesSummary = ArticlePrompt(articles, selectedKey!.name);
-    axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: articlesSummary, keyword: selectedKey!.name }).then((res) => {
+    const chatMsg = await ArticlePrompt(selectedKey!.name);
+    await axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: chatMsg }).then((res) => {
       setIsLoading(false);
       const contentDiv = document.querySelector('.post_auto_daily_content');
       contentDiv!.innerHTML = res.data.chatGptRes.content;
@@ -414,7 +414,10 @@ function TrendKeyword() {
                       justifyContent='center'
                       alignItems='center'>
                       <CircularProgress color='secondary' />
-                      <Typography>글 생성중...</Typography>
+                      <Typography>
+                        글 생성중입니다. <br />
+                        1-2분정도 시간이 소요될 수 있습니다.
+                      </Typography>
                     </Box>
                   ) : (
                     <></>

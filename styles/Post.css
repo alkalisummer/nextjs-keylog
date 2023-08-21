@@ -379,14 +379,18 @@ pre:has(> code) {
 /* progress 바 관련 */
 .post_auto_daily_div .MuiBox-root {
   position: absolute;
+  width: 100%;
   top: 50%;
-  left: 50%;
-  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   text-align: center;
   color: #8d8d8d;
 }
 .post_auto_daily_div .MuiCircularProgress-colorSecondary {
   color: #009bf2;
+  margin-bottom: 10px;
 }
 
 .tooltip {
