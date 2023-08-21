@@ -21,6 +21,7 @@
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.2",
     "clipboard": "^2.0.11",
+    "crawler": "^1.4.0",
     "echarts": "^5.4.3",
     "echarts-wordcloud": "^2.1.0",
     "eslint": "8.42.0",

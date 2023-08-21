@@ -61,7 +61,7 @@ export const LineChartOpt = (params: lineChartData) => {
       trigger: 'axis',
     },
     title: {
-      text: '시간흐름에 따른 관심도 변화',
+      text: '관심도 변화',
     },
     legend: {
       data: params.legendArr,

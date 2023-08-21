@@ -202,6 +202,7 @@ function TrendKeyword() {
   const autoPostDaily = async () => {
     setIsLoading(true);
     const chatMsg = await ArticlePrompt(selectedKey!.name);
+
     if (Object.keys(chatMsg).length === 0) {
       setShowNoti(true);
       setNotiMsg('글 작성을 위한 데이터가 부족합니다.');

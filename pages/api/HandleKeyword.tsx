@@ -15,9 +15,13 @@ interface article {
 }
 
 const getArticles = async (keyword: string) => {
+  const Crawler = require('crawler');
   const cheerio = require('cheerio');
+
   let naverArticles: naverArticle[] = [];
   let articles: article[] = [];
+
+  keyword = '따릉이';
 
   const searchParams = {
     params: { query: keyword, display: 100 },
@@ -27,14 +31,33 @@ const getArticles = async (keyword: string) => {
     },
   };
 
+  const c = new Crawler({
+    maxConnections: 10,
+    callback: (error: Error, res: any, done: any) => {
+      if (error) {
+        console.log(error);
+      } else {
+        const $ = res.$;
+        const sTitle = $('h2.end_tit').text();
+        const sContent = $('#articeBody').text();
+        console.log(sTitle);
+        console.log(sContent);
+        if (sTitle && sContent) {
+          articles.push({ title: sTitle, content: sContent });
+        }
+      }
+      done();
+    },
+  });
+
   //해당 키워드를 포함하고 네이버 뉴스에 제공된 기사만 parsing
-  await axios.get('https://openapi.naver.com/v1/search/news.json', searchParams).then((res) => {
+  await axios.get('https://openapi.naver.com/v1/search/news.json', searchParams).then(async (res) => {
     const result = res.data.items;
     let keywordArr = [];
     if (keyword.indexOf(' ') !== -1) {
       let resultArr = [];
 
-      keywordArr = keyword.split(' ');
+      keywordArr = keyword.replaceAll(' ', '').split('');
       resultArr = result.filter((article: naverArticle) => article.link.indexOf('naver.com') !== -1 && article.originallink.indexOf('nocutnews') === -1);
 
       for (let article of resultArr) {
@@ -52,7 +75,6 @@ const getArticles = async (keyword: string) => {
     }
   });
 
-  //네이버 뉴스 카테고리별(일반, 연예, 스포츠)로 분류하여 크롤링
   for (let article of naverArticles) {
     await axios.get(article.link).then(async (res) => {
       const $ = cheerio.load(res.data);
@@ -68,10 +90,12 @@ const getArticles = async (keyword: string) => {
           break;
         case 'entertain.naver.com':
           const url = 'https://' + host + path;
-          await axios.get(url).then((result) => {
-            const $ = cheerio.load(result.data);
-            title = $('h2.end_tit').text();
-            content = $('#articeBody').text();
+          await new Promise<void>((resolve, reject) => {
+            console.log(article.link);
+            c.queue(url);
+            c.on('drain', () => {
+              resolve();
+            });
           });
           break;
         case 'sports.news.naver.com':
@@ -98,6 +122,7 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
 
   let res;
   let type = '';
+
   if (request.method === 'GET') {
     type = request.query.type as string;
   } else if (request.method === 'POST') {
@@ -117,8 +142,8 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
     case 'interestOverTime':
       const keyWordArr = request.body.params.keyword;
       const today = new Date();
-      const startTm = today.setDate(today.getDate() - 3);
-      const interestRes = await googleTrends.interestOverTime({ keyword: keyWordArr, geo: 'KR', hl: 'ko', granularTimeResolution: true, startTime: new Date(startTm) });
+      const startTm = new Date(today.setDate(today.getDate() - 3));
+      const interestRes = await googleTrends.interestOverTime({ keyword: keyWordArr, geo: 'KR', hl: 'ko', granularTimeResolution: true, startTime: startTm });
       res = interestRes;
       break;
     case 'articlePrompt':

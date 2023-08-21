@@ -15,7 +15,7 @@ const ArticlePrompt = async (keyword: string) => {
   });
 
   if (articles.length > 0) {
-    const articlesText = JSON.stringify(articles).replaceAll('\\n', '').replaceAll('\\t', '');
+    const articlesText = JSON.stringify(articles).replaceAll('\\n', '').replaceAll('\\t', '').replaceAll('\t', '').replaceAll('\n', '');
 
     const promptMsg = `You are tasked with analyzing a collection of news articles that share a same keyword. The goal is to identify the central themes that are prevalent across these articles and create a concise and informative blog post summarizing these common key themes.'.
       I'll give you news article data written with the keyword '${keyword}'. This data is an array of JSON objects with title and content as properties.
