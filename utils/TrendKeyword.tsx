@@ -46,6 +46,8 @@ function TrendKeyword() {
   const [currTab, setCurrTab] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [autoKeyword, setAutoKeyword] = useState('');
+
   interface keyword {
     name: string;
     value: number;
@@ -108,6 +110,7 @@ function TrendKeyword() {
             setSelectedKey({ name: params.name, cnt: params.value as number });
             const articleData = JSON.parse(JSON.stringify(params.data)).articles;
             setArticles(articleData.filter((obj: any) => obj.image));
+            setAutoKeyword(params.name);
             if (!showArticles) {
               setShowArticles(true);
             }
@@ -118,7 +121,7 @@ function TrendKeyword() {
         }
       }
     });
-
+    //word-cloud, line-chart 화면사이즈 변경시 resize
     window.addEventListener('resize', () => {
       let wordCloud = echarts.init(wChartDom.current);
       let lineChart = echarts.init(lChartDom.current);
@@ -211,8 +214,14 @@ function TrendKeyword() {
   };
 
   const autoPostDaily = async () => {
+    if (!autoKeyword) {
+      setShowNoti(true);
+      setNotiMsg('키워드를 입력해주세요.');
+      return;
+    }
+
     setIsLoading(true);
-    const chatMsg = await ArticlePrompt(selectedKey!.name);
+    const chatMsg = await ArticlePrompt(autoKeyword);
 
     if (Object.keys(chatMsg).length === 0) {
       setShowNoti(true);
@@ -414,11 +423,17 @@ function TrendKeyword() {
                 <div className='post_auto_daily_div'>
                   <div className='post_auto_btn_div'>
                     <div className='post_auto_left_btn'>
+                      <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
+                      <input
+                        type='text'
+                        className='post_auto_input'
+                        value={autoKeyword}
+                        onChange={(e) => setAutoKeyword(e.target.value)}
+                      />
                       <button
                         className='post_auto_button'
                         onClick={() => autoPostDaily()}>
-                        <i className='fa-solid fa-pen'></i>&nbsp;
-                        {` '${selectedKey.name}'`} 글 생성하기
+                        <i className='fa-solid fa-pen'></i>&nbsp; 글 생성하기
                       </button>
                       <button
                         id='clipboard_copy_btn'
