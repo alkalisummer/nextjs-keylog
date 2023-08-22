@@ -56,6 +56,7 @@ function TrendKeyword() {
   const [ref, inView] = useInView();
   const [imgArr, setImgArr] = useState<imgData[]>([]);
   const [pageNum, setPageNum] = useState(1);
+  const [selectedImgUrl, setSelectedImgUrl] = useState('');
 
   interface keyword {
     name: string;
@@ -261,6 +262,7 @@ function TrendKeyword() {
 
   const clearImage = () => {
     document.querySelector('.post_img_div')!.innerHTML = '';
+    setSelectedImgUrl('');
   };
 
   const openNoti = (type: string) => {
@@ -275,7 +277,11 @@ function TrendKeyword() {
     } else if (type === 'autoPost') {
       setNotiMsg('글 작성을 위한 데이터가 부족합니다.');
     } else if (type === 'imageCopy') {
-      setNotiMsg('이미지 주소를 복사였습니다.');
+      if (selectedImgUrl) {
+        setNotiMsg('이미지 주소를 복사였습니다.');
+      } else {
+        setNotiMsg('이미지를 선택해주세요.');
+      }
     }
   };
 
@@ -314,6 +320,18 @@ function TrendKeyword() {
       setPageNum((prev) => prev + 1);
     }
   }, [inView]);
+
+  const selectImg = (eTarget: any) => {
+    const imgUrl = eTarget.getAttribute('src');
+    setSelectedImgUrl(imgUrl);
+
+    // 이미지 클릭시 css 효과 적용
+    const selectedImg = document.querySelector('.post_img_focus');
+    if (selectedImg) {
+      selectedImg.classList.remove('post_img_focus');
+    }
+    eTarget.setAttribute('class', 'post_img post_img_focus');
+  };
 
   return (
     <div>
@@ -552,7 +570,7 @@ function TrendKeyword() {
                 <button
                   id='clipboard_copy_btn'
                   className='post_auto_button'
-                  data-clipboard-target='.post_auto_daily_content'
+                  data-clipboard-text={selectedImgUrl}
                   onClick={() => openNoti('imageCopy')}>
                   <i className='fa-regular fa-copy'></i>&nbsp; 이미지 URL 복사
                 </button>
@@ -570,12 +588,14 @@ function TrendKeyword() {
                     <img
                       ref={ref}
                       className='post_img'
+                      onClick={(e) => selectImg(e.target)}
                       src={img.link}
                       alt='검색 이미지'
                     />
                   ) : (
                     <img
                       className='post_img'
+                      onClick={(e) => selectImg(e.target)}
                       src={img.link}
                       alt='검색 이미지'
                     />

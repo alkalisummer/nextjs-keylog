@@ -127,7 +127,7 @@ const getArticles = async (keyword: string) => {
 const getImages = async (keyword: string, pageNum: number) => {
   let images: imgData[] = [];
   const searchParams = {
-    params: { query: keyword, display: 30, sort: 'date', start: pageNum },
+    params: { query: keyword, display: 30, start: pageNum },
     headers: {
       'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
       'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,

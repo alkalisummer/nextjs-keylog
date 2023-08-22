@@ -410,6 +410,14 @@ pre:has(> code) {
   width: 100%;
 }
 
+.post_img:hover {
+  border: 3px solid #009bf2;
+}
+
+.post_img_focus {
+  border: 3px solid #009bf2;
+}
+
 .tooltip {
   font-size: 19px;
   margin-left: 5px;
