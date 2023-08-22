@@ -419,6 +419,28 @@ pre:has(> code) {
   min-width: 150px !important;
 }
 
+@media (max-width: 1200px) {
+  .post_div {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
+
+  .post_daily_keyword_div {
+    margin-left: 4rem;
+    margin-right: 4rem;
+  }
+
+  .post_wordcloud_div {
+    margin-left: 4rem;
+    margin-right: 4rem;
+  }
+
+  .post_sub_div {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
 @media (max-width: 768px) {
   .post_div {
     padding-left: 1.2rem !important;
