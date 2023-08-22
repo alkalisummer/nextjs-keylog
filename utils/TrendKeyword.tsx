@@ -351,7 +351,8 @@ function TrendKeyword() {
             Interest Change Chart
             <i
               className='fa-regular fa-circle-question tooltip'
-              data-tooltip-id='line-tooltip'></i>
+              data-tooltip-id='line-tooltip'
+              data-tooltip-html={'복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 비교시 수치가 달라질 수 있습니다.'}></i>
           </span>
 
           <button
@@ -453,7 +454,8 @@ function TrendKeyword() {
             Auto Posting
             <i
               className='fa-regular fa-circle-question tooltip'
-              data-tooltip-id='daily-tooltip'></i>
+              data-tooltip-id='daily-tooltip'
+              data-tooltip-html={'입력한 키워드를 기반으로 게시글을 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
           </span>
           <button
             className='post_fold_btn'
@@ -515,7 +517,13 @@ function TrendKeyword() {
       {/* Image  */}
       <div className='post_sub_div'>
         <div className='post_sub_title_div'>
-          <span className='post_sub_title'>Image</span>
+          <span className='post_sub_title'>
+            Image
+            <i
+              className='fa-regular fa-circle-question tooltip'
+              data-tooltip-id='image-tooltip'
+              data-tooltip-html={'입력한 키워드의 이미지를 검색합니다.<br/> 게시글에 이미지를 삽입해보세요.'}></i>
+          </span>
           <button
             className='post_fold_btn'
             onClick={() => setShowImage(!showImage)}>
@@ -584,17 +592,14 @@ function TrendKeyword() {
       <ReactTooltip
         id='line-tooltip'
         place='bottom'
-        content='복수의 키워드 비교는 최대 5개까지 가능하며 상대적인 수치로 표출되기 때문에 다른 키워드로 관심도 비교시 수치가 달라질 수 있습니다.'
       />
       <ReactTooltip
         id='daily-tooltip'
         place='bottom'
-        content='입력한 키워드를 기반으로 게시글을 작성합니다.'
       />
       <ReactTooltip
         id='image-tooltip'
         place='bottom'
-        content='입력한 키워드의 이미지를 검색합니다.'
       />
       <Snackbar
         open={showNoti}

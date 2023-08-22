@@ -391,7 +391,7 @@ pre:has(> code) {
 .post_img_div {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(20%, auto));
-  width: 100%;
+  width: calc(100% - 10px);
   row-gap: 5px;
   column-gap: 10px;
   grid-auto-flow: dense;
