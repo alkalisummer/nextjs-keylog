@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
+import { error } from 'console';
 
 interface naverArticle {
   title: string;
@@ -14,6 +15,14 @@ interface article {
   content: string;
 }
 
+interface imgData {
+  link: string;
+  sizeheight: string;
+  sizewidth: string;
+  thumbnail: string;
+  title: string;
+}
+
 const getArticles = async (keyword: string) => {
   const Crawler = require('crawler');
   const cheerio = require('cheerio');
@@ -22,7 +31,7 @@ const getArticles = async (keyword: string) => {
   let articles: article[] = [];
 
   const searchParams = {
-    params: { query: keyword, display: 100 },
+    params: { query: keyword, display: 100, sort: 'date' },
     headers: {
       'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
       'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
@@ -115,14 +124,35 @@ const getArticles = async (keyword: string) => {
   return articles;
 };
 
+const getImages = async (keyword: string, pageNum: number) => {
+  let images: imgData[] = [];
+  const searchParams = {
+    params: { query: keyword, display: 30, sort: 'date', start: pageNum },
+    headers: {
+      'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
+      'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
+    },
+  };
+
+  //해당 키워드와 관련된 이미지를 검색
+  await axios
+    .get('https://openapi.naver.com/v1/search/image', searchParams)
+    .then((res) => {
+      const result = res.data.items;
+      images = result.filter((obj: imgData) => obj.link.indexOf('naver') !== -1);
+    })
+    .catch((error) => console.log());
+  return images;
+};
+
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
   const googleTrends = require('google-trends-api');
 
   let res;
-  let type = '';
+  let type;
 
   if (request.method === 'GET') {
-    type = request.query.type as string;
+    type = request.query.type;
   } else if (request.method === 'POST') {
     type = request.body.params.type;
   }
@@ -148,6 +178,12 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
       const keyword = request.body.params.keyword;
       const articles = await getArticles(keyword);
       res = articles;
+      break;
+    case 'searchImage':
+      const imgKeyword = request.body.params.keyword;
+      const pageNum = request.body.params.pageNum;
+      const images = await getImages(imgKeyword, pageNum);
+      res = images;
       break;
   }
 

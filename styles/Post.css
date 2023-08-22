@@ -291,12 +291,9 @@ pre:has(> code) {
   color: hsl(35, 100%, 57%);
 }
 
-.post_line_chart_div {
-}
-
 .post_line_keyword_div {
-  margin-bottom: 30px;
-  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .post_line_keyword {
@@ -318,19 +315,6 @@ pre:has(> code) {
 }
 
 .post_article_img {
-}
-
-.post_auto_tab {
-  border-bottom: 1px solid #efefef;
-  padding-bottom: 10px;
-}
-
-.post_auto_tab_title {
-  color: #8d8d8d;
-  cursor: pointer;
-  padding: 10px;
-  border: 1px solid #efefef;
-  margin-right: -1px;
 }
 
 .post_focus_tab {
@@ -364,7 +348,6 @@ pre:has(> code) {
 
 .post_auto_button {
   margin-left: 10px;
-  margin-top: 10px;
   font-family: 'Spoqa Han Sans Neo';
   border-radius: 5px;
   background-color: #b4b3b3;
@@ -405,6 +388,28 @@ pre:has(> code) {
   margin-bottom: 10px;
 }
 
+.post_img_div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20%, auto));
+  width: 100%;
+  row-gap: 5px;
+  column-gap: 10px;
+  grid-auto-flow: dense;
+  justify-items: center;
+  align-items: center;
+  margin-top: 20px;
+  height: 600px;
+  overflow-y: auto;
+  border: 1px solid #dfe2e6;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.post_img {
+  border-radius: 10px;
+  width: 100%;
+}
+
 .tooltip {
   font-size: 19px;
   margin-left: 5px;
@@ -417,6 +422,12 @@ pre:has(> code) {
 
 .css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root {
   min-width: 150px !important;
+}
+
+@media (max-width: 1520px) {
+  .post_img_div {
+    grid-template-columns: repeat(auto-fill, minmax(30%, auto));
+  }
 }
 
 @media (max-width: 1200px) {
@@ -438,6 +449,16 @@ pre:has(> code) {
   .post_sub_div {
     padding-left: 4rem;
     padding-right: 4rem;
+  }
+
+  .post_auto_input {
+    width: 110px;
+  }
+}
+
+@media (max-width: 1060px) {
+  .post_img_div {
+    grid-template-columns: repeat(auto-fill, minmax(40%, auto));
   }
 }
 
@@ -600,12 +621,20 @@ pre:has(> code) {
     font-size: 5px;
   }
 
-  .post_auto_tab_title {
-    font-size: 10px;
-  }
-
   .post_auto_button {
     font-size: 10px;
     margin-left: 5px;
+  }
+
+  .post_auto_input {
+    width: 80px;
+    font-size: 10px;
+  }
+  .post_auto_keyword_title {
+    font-size: 10px;
+  }
+
+  .post_img_div {
+    grid-template-columns: repeat(auto-fill, minmax(30%, auto));
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
@@ -23,6 +23,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 
+//image 검색 무한 스크롤
+import { useInView } from 'react-intersection-observer';
+
 function TrendKeyword() {
   const wChartDom = useRef(null);
   const lChartDom = useRef(null);
@@ -30,6 +33,7 @@ function TrendKeyword() {
   const [showArticles, setShowArticles] = useState(false);
   const [showAutoPost, setShowAutoPost] = useState(false);
   const [showLineChart, setShowLineChart] = useState(false);
+  const [showImage, setShowImage] = useState(false);
   const [showAddterm, setShowAddterm] = useState(true);
   const [showNoti, setShowNoti] = useState(false);
   const [notiMsg, setNotiMsg] = useState('');
@@ -43,10 +47,15 @@ function TrendKeyword() {
   const [articles, setArticles] = useState<article[]>([]);
   const [baseDate, setBaseDate] = useState('');
 
-  const [currTab, setCurrTab] = useState('1');
   const [isLoading, setIsLoading] = useState(false);
+  const [imgLoading, setImgLoading] = useState(false);
 
   const [autoKeyword, setAutoKeyword] = useState('');
+  const [imgKeyword, setImgKeyword] = useState('');
+
+  const [ref, inView] = useInView();
+  const [imgArr, setImgArr] = useState<imgData[]>([]);
+  const [pageNum, setPageNum] = useState(1);
 
   interface keyword {
     name: string;
@@ -70,6 +79,14 @@ function TrendKeyword() {
   interface seletedKey {
     name: string;
     cnt: number;
+  }
+
+  interface imgData {
+    link: string;
+    sizeheight: string;
+    sizewidth: string;
+    thumbnail: string;
+    title: string;
   }
 
   useEffect(() => {
@@ -111,11 +128,16 @@ function TrendKeyword() {
             const articleData = JSON.parse(JSON.stringify(params.data)).articles;
             setArticles(articleData.filter((obj: any) => obj.image));
             setAutoKeyword(params.name);
+            setImgKeyword(params.name);
+            setImgLoading(false);
             if (!showArticles) {
               setShowArticles(true);
             }
             if (!showAutoPost) {
               setShowAutoPost(true);
+            }
+            if (!showImage) {
+              setShowImage(true);
             }
           });
         }
@@ -209,10 +231,6 @@ function TrendKeyword() {
     parentDiv?.append(keywordInput);
   };
 
-  const clickTab = (tabId: string) => {
-    setCurrTab(tabId);
-  };
-
   const autoPostDaily = async () => {
     if (!autoKeyword) {
       setShowNoti(true);
@@ -226,8 +244,7 @@ function TrendKeyword() {
     debugger;
 
     if (Object.keys(chatMsg).length === 0) {
-      setShowNoti(true);
-      setNotiMsg('글 작성을 위한 데이터가 부족합니다.');
+      openNoti('autoPost');
       setIsLoading(false);
       return;
     }
@@ -242,13 +259,23 @@ function TrendKeyword() {
     document.querySelector('.post_auto_daily_content')!.innerHTML = '';
   };
 
-  const openNoti = () => {
+  const clearImage = () => {
+    document.querySelector('.post_img_div')!.innerHTML = '';
+  };
+
+  const openNoti = (type: string) => {
     setShowNoti(true);
-    const autoPostContent = document.querySelector('.post_auto_daily_content')?.innerHTML;
-    if (autoPostContent) {
-      setNotiMsg('클립보드에 복사되었습니다.');
-    } else {
-      setNotiMsg('복사할 내용이 없습니다.');
+    if (type === 'clipboard') {
+      const autoPostContent = document.querySelector('.post_auto_daily_content')?.innerHTML;
+      if (autoPostContent) {
+        setNotiMsg('클립보드에 복사되었습니다.');
+      } else {
+        setNotiMsg('복사할 내용이 없습니다.');
+      }
+    } else if (type === 'autoPost') {
+      setNotiMsg('글 작성을 위한 데이터가 부족합니다.');
+    } else if (type === 'imageCopy') {
+      setNotiMsg('이미지 주소를 복사였습니다.');
     }
   };
 
@@ -258,6 +285,35 @@ function TrendKeyword() {
     }
     setShowNoti(false);
   };
+
+  const searchImg = async () => {
+    if (imgKeyword) {
+      setImgLoading(true);
+      const imgParams = {
+        type: 'searchImage',
+        keyword: imgKeyword,
+        pageNum: pageNum,
+      };
+      await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
+        const imgArr = result.data;
+        console.log('이미지 호출');
+        if (imgArr.length > 0) {
+          setImgArr((prev) => [...prev, ...imgArr]);
+        }
+      });
+      setImgLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    searchImg();
+  }, [pageNum]);
+
+  useEffect(() => {
+    if (inView && !imgLoading) {
+      setPageNum((prev) => prev + 1);
+    }
+  }, [inView]);
 
   return (
     <div>
@@ -393,7 +449,12 @@ function TrendKeyword() {
       {/* AutoPosting  */}
       <div className='post_sub_div'>
         <div className='post_sub_title_div'>
-          <span className='post_sub_title'>Auto Posting</span>
+          <span className='post_sub_title'>
+            Auto Posting
+            <i
+              className='fa-regular fa-circle-question tooltip'
+              data-tooltip-id='daily-tooltip'></i>
+          </span>
           <button
             className='post_fold_btn'
             onClick={() => setShowAutoPost(!showAutoPost)}>
@@ -401,82 +462,125 @@ function TrendKeyword() {
           </button>
         </div>
         {showAutoPost ? (
-          <div className='post_auto_div'>
-            <div className='post_auto_tab'>
-              <span
-                className={`post_auto_tab_title ${currTab === '1' ? 'post_focus_tab' : ''}`}
-                onClick={() => clickTab('1')}>
-                Daily Keyword
-                <i
-                  className='fa-regular fa-circle-question small_tooltip'
-                  data-tooltip-id='daily-tooltip'></i>
-              </span>
-              <span
-                className={`post_auto_tab_title ${currTab === '2' ? 'post_focus_tab' : ''}`}
-                onClick={() => clickTab('2')}>
-                Custom Keyword
-                <i
-                  className='fa-regular fa-circle-question small_tooltip'
-                  data-tooltip-id='custom-tooltip'></i>
-              </span>
+          <div className='post_auto_daily_div'>
+            <div className='post_auto_btn_div'>
+              <div className='post_auto_left_btn'>
+                <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
+                <input
+                  type='text'
+                  className='post_auto_input'
+                  value={autoKeyword}
+                  onChange={(e) => setAutoKeyword(e.target.value)}
+                />
+                <button
+                  className='post_auto_button'
+                  onClick={() => autoPostDaily()}>
+                  <i className='fa-solid fa-pen'></i>&nbsp; 글 생성하기
+                </button>
+                <button
+                  id='clipboard_copy_btn'
+                  className='post_auto_button'
+                  data-clipboard-target='.post_auto_daily_content'
+                  onClick={() => openNoti('clipboard')}>
+                  <i className='fa-regular fa-copy'></i>&nbsp; 클립보드 복사
+                </button>
+              </div>
+              <button
+                className='post_auto_button'
+                onClick={() => clearPost()}>
+                <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
+              </button>
             </div>
-            <div className='post_auto_tab_div'>
-              {currTab === '1' && selectedKey ? (
-                <div className='post_auto_daily_div'>
-                  <div className='post_auto_btn_div'>
-                    <div className='post_auto_left_btn'>
-                      <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
-                      <input
-                        type='text'
-                        className='post_auto_input'
-                        value={autoKeyword}
-                        onChange={(e) => setAutoKeyword(e.target.value)}
-                      />
-                      <button
-                        className='post_auto_button'
-                        onClick={() => autoPostDaily()}>
-                        <i className='fa-solid fa-pen'></i>&nbsp; 글 생성하기
-                      </button>
-                      <button
-                        id='clipboard_copy_btn'
-                        className='post_auto_button'
-                        data-clipboard-target='.post_auto_daily_content'
-                        onClick={() => openNoti()}>
-                        <i className='fa-regular fa-copy'></i>&nbsp; 클립보드 복사
-                      </button>
-                    </div>
-                    <button
-                      className='post_auto_button'
-                      onClick={() => clearPost()}>
-                      <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
-                    </button>
-                  </div>
-                  {isLoading ? (
-                    <Box
-                      display='flex'
-                      justifyContent='center'
-                      alignItems='center'>
-                      <CircularProgress color='secondary' />
-                      <Typography>
-                        글 생성중입니다. <br />
-                        1-2분정도 시간이 소요될 수 있습니다.
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <></>
-                  )}
-                  <div className='post_auto_daily_content'></div>
-                </div>
-              ) : (
-                <div className='post_auto_custom_div'></div>
-              )}
-            </div>
+            {isLoading ? (
+              <Box
+                display='flex'
+                justifyContent='center'
+                alignItems='center'>
+                <CircularProgress color='secondary' />
+                <Typography>
+                  글 생성중입니다. <br />
+                  1-2분정도 시간이 소요될 수 있습니다.
+                </Typography>
+              </Box>
+            ) : (
+              <></>
+            )}
+            <div className='post_auto_daily_content'></div>
           </div>
         ) : (
           ''
         )}
       </div>
       {/* /AutoPosting  */}
+      {/* Image  */}
+      <div className='post_sub_div'>
+        <div className='post_sub_title_div'>
+          <span className='post_sub_title'>Image</span>
+          <button
+            className='post_fold_btn'
+            onClick={() => setShowImage(!showImage)}>
+            {showImage ? '접기 ▲' : '펼치기 ▼'}
+          </button>
+        </div>
+        {showImage ? (
+          <div className='post_auto_daily_div'>
+            <div className='post_auto_btn_div'>
+              <div className='post_auto_left_btn'>
+                <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
+                <input
+                  type='text'
+                  className='post_auto_input'
+                  value={imgKeyword}
+                  onChange={(e) => setImgKeyword(e.target.value)}
+                />
+                <button
+                  className='post_auto_button'
+                  onClick={() => {
+                    clearImage();
+                    searchImg();
+                  }}>
+                  <i className='fa-regular fa-image'></i>&nbsp; 이미지 검색
+                </button>
+                <button
+                  id='clipboard_copy_btn'
+                  className='post_auto_button'
+                  data-clipboard-target='.post_auto_daily_content'
+                  onClick={() => openNoti('imageCopy')}>
+                  <i className='fa-regular fa-copy'></i>&nbsp; 이미지 URL 복사
+                </button>
+              </div>
+              <button
+                className='post_auto_button'
+                onClick={() => clearImage()}>
+                <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
+              </button>
+            </div>
+            <div className='post_img_div'>
+              {imgArr.map((img, idx) => (
+                <React.Fragment key={idx}>
+                  {imgArr.length - 1 === idx ? (
+                    <img
+                      ref={ref}
+                      className='post_img'
+                      src={img.link}
+                      alt='검색 이미지'
+                    />
+                  ) : (
+                    <img
+                      className='post_img'
+                      src={img.link}
+                      alt='검색 이미지'
+                    />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+      {/* /Image */}
       <ReactTooltip
         id='line-tooltip'
         place='bottom'
@@ -485,12 +589,12 @@ function TrendKeyword() {
       <ReactTooltip
         id='daily-tooltip'
         place='bottom'
-        content='Word Cloud에서 선택한 키워드를 기반으로 게시글을 작성합니다.'
+        content='입력한 키워드를 기반으로 게시글을 작성합니다.'
       />
       <ReactTooltip
-        id='custom-tooltip'
+        id='image-tooltip'
         place='bottom'
-        content='원하는 키워드를 입력하여 블로그 주제를 추천받고 선택한 주제를 기반으로 게시글을 작성합니다.'
+        content='입력한 키워드의 이미지를 검색합니다.'
       />
       <Snackbar
         open={showNoti}
@@ -512,4 +616,4 @@ function TrendKeyword() {
   );
 }
 
-export default TrendKeyword;
+export default React.memo(TrendKeyword);
