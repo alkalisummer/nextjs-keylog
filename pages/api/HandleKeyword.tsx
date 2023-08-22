@@ -21,8 +21,6 @@ const getArticles = async (keyword: string) => {
   let naverArticles: naverArticle[] = [];
   let articles: article[] = [];
 
-  keyword = '따릉이';
-
   const searchParams = {
     params: { query: keyword, display: 100 },
     headers: {

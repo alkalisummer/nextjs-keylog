@@ -220,8 +220,10 @@ function TrendKeyword() {
       return;
     }
 
+    clearPost();
     setIsLoading(true);
     const chatMsg = await ArticlePrompt(autoKeyword);
+    debugger;
 
     if (Object.keys(chatMsg).length === 0) {
       setShowNoti(true);
