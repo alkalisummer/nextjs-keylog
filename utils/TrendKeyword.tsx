@@ -242,7 +242,6 @@ function TrendKeyword() {
     clearPost();
     setIsLoading(true);
     const chatMsg = await ArticlePrompt(autoKeyword);
-    debugger;
 
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');

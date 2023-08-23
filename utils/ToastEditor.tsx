@@ -5,6 +5,9 @@ import axios from 'axios';
 //Toast UI
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 //이미지 파일 업로드
 import { onUploadImage } from '@/utils/CommonUtils';
@@ -92,7 +95,6 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
     axios.post('/api/DeleteImgFile', { removedImg });
 
     const currentTime = timeToString(new Date());
-    debugger;
     const postData = {
       type: mode,
       post: {
@@ -168,6 +170,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
           ['ul', 'ol', 'task'],
           ['code', 'codeblock'],
         ]}
+        plugins={[colorSyntax]}
         hooks={{
           addImageBlobHook: (imgFile, callBack) => {
             onUploadImage(imgFile).then((res) => {

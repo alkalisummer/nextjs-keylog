@@ -38,11 +38,11 @@ export const handleMySql = async (params: any) => {
       break;
     case 'insert':
       post = params.post;
-      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title}', '${post.post_cntn}','${post.post_html_cntn}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${connection.escape(post.post_cntn.replaceAll("'", "''"))}','${connection.escape(post.post_html_cntn.replaceAll("'", "''"))}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;
-      sql = `UPDATE POST SET POST_TITLE = '${post.post_title}', POST_CNTN = '${post.post_cntn}', POST_HTML_CNTN = '${post.post_html_cntn}', POST_THMB_IMG_URL= '${post.post_thmb_img_url}', AMNT_DTTM='${post.amnt_dttm}' WHERE POST_ID='${post.post_id}'`;
+      sql = `UPDATE POST SET POST_TITLE = '${post.post_title.replaceAll("'", "''")}', POST_CNTN = '${post.post_cntn.replaceAll("'", "''")}', POST_HTML_CNTN = '${post.post_html_cntn.replaceAll("'", "''")}', POST_THMB_IMG_URL= '${post.post_thmb_img_url}', AMNT_DTTM='${post.amnt_dttm}' WHERE POST_ID='${post.post_id}'`;
       break;
     case 'delete':
       postId = params.postId;
