@@ -47,8 +47,6 @@ const getArticles = async (keyword: string) => {
         const $ = res.$;
         const sTitle = $('h2.end_tit').text();
         const sContent = $('#articeBody').text();
-        console.log(sTitle);
-        console.log(sContent);
         if (sTitle && sContent) {
           articles.push({ title: sTitle, content: sContent });
         }
@@ -98,7 +96,6 @@ const getArticles = async (keyword: string) => {
         case 'entertain.naver.com':
           const url = 'https://' + host + path;
           await new Promise<void>((resolve, reject) => {
-            console.log(article.link);
             c.queue(url);
             c.on('drain', () => {
               resolve();

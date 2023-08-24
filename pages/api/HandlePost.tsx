@@ -38,7 +38,7 @@ export const handleMySql = async (params: any) => {
       break;
     case 'insert':
       post = params.post;
-      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${connection.escape(post.post_cntn.replaceAll("'", "''"))}','${connection.escape(post.post_html_cntn.replaceAll("'", "''"))}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;

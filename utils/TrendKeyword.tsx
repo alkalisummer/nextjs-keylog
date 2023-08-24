@@ -11,13 +11,9 @@ import WordCloudOpt, { LineChartOpt } from './ChartOpt';
 
 //react-tooltip
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { Box, Typography } from '@material-ui/core';
 
 //clipboard 복사
 import ClipboardJS from 'clipboard';
-
-//mui progressbar(원형)
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 //mui notification
 import Snackbar from '@mui/material/Snackbar';
@@ -25,6 +21,9 @@ import Button from '@mui/material/Button';
 
 //image 검색 무한 스크롤
 import { useInView } from 'react-intersection-observer';
+
+//ChatGpt
+import ChatGptHandle from '@/utils/ChatGptHandle';
 
 function TrendKeyword() {
   const wChartDom = useRef(null);
@@ -47,7 +46,6 @@ function TrendKeyword() {
   const [articles, setArticles] = useState<article[]>([]);
   const [baseDate, setBaseDate] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
 
   const [autoKeyword, setAutoKeyword] = useState('');
@@ -240,19 +238,24 @@ function TrendKeyword() {
     }
 
     clearPost();
-    setIsLoading(true);
     const chatMsg = await ArticlePrompt(autoKeyword);
 
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');
-      setIsLoading(false);
       return;
     }
-    await axios.post('/api/ChatGptHandle', { type: 'auto-post', chatContent: chatMsg }).then((res) => {
-      setIsLoading(false);
-      const contentDiv = document.querySelector('.post_auto_daily_content');
-      contentDiv!.innerHTML = res.data.chatGptRes.content;
-    });
+
+    const chatCompletion = await ChatGptHandle('auto-post', chatMsg);
+    const contentDiv = document.querySelector('.post_auto_daily_content');
+    let gptMsg = '';
+
+    for await (const chunk of chatCompletion) {
+      const chunkText = chunk.choices[0].delta.content;
+      if (chunkText) {
+        gptMsg += chunkText;
+        contentDiv!.innerHTML = gptMsg;
+      }
+    }
   };
 
   const clearPost = () => {
@@ -301,7 +304,6 @@ function TrendKeyword() {
       };
       await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
         const imgArr = result.data;
-        console.log('이미지 호출');
         if (imgArr.length > 0) {
           setImgArr((prev) => [...prev, ...imgArr]);
         }
@@ -510,20 +512,6 @@ function TrendKeyword() {
                 <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
               </button>
             </div>
-            {isLoading ? (
-              <Box
-                display='flex'
-                justifyContent='center'
-                alignItems='center'>
-                <CircularProgress color='secondary' />
-                <Typography>
-                  글 생성중입니다. <br />
-                  1-2분정도 시간이 소요될 수 있습니다.
-                </Typography>
-              </Box>
-            ) : (
-              <></>
-            )}
             <div className='post_auto_daily_content'></div>
           </div>
         ) : (

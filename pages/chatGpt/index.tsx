@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import ChatGptHandle from '@/utils/ChatGptHandle';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 
 const ChatGpt = () => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +26,7 @@ const ChatGpt = () => {
     if (userInput.replaceAll(' ', '').length === 0) {
       return;
     }
-    setIsLoading(true);
+    //setIsLoading(true);
     setUserInput('');
 
     const tmpChat = chatContent.map((obj) => obj);
@@ -53,18 +51,29 @@ const ChatGpt = () => {
     const userMsg = { role: 'user', content: userInput };
     tmpChat.push(userMsg);
 
-    axios.post('/api/ChatGptHandle', { type: 'common', chatContent: tmpChat }).then((res) => {
-      tmpChat.push(res.data.chatGptRes);
-      setChatContent(tmpChat);
-      const gptCntnDiv = document.createElement('div');
-      gptCntnDiv.innerHTML = `<div class='gpt_cntn_div'>
-                                <img class='gpt_img' src='/icon/gptIcon.png' alt='gptimg'>
-                                <span class = 'gpt_cntn_text'>${res.data.chatGptRes.content}</span>
-                              </div>`;
-      document.querySelector('.chat_content_div')?.append(gptCntnDiv);
-      userInputEl.disabled = false;
-      setIsLoading(false);
-    });
+    const gptCntnDiv = document.createElement('div');
+    gptCntnDiv.innerHTML = `<div class='gpt_cntn_div'>
+    <img class='gpt_img' src='/icon/gptIcon.png' alt='gptimg'>
+    <span class = 'gpt_cntn_text'></span>
+    </div>`;
+    document.querySelector('.chat_content_div')?.append(gptCntnDiv);
+
+    const chatCompletion = await ChatGptHandle('common', tmpChat);
+    const gptTextEl = document.querySelectorAll('.gpt_cntn_text');
+    const gptTextSpan = document.querySelectorAll('.gpt_cntn_text')[gptTextEl.length - 1];
+    let gptMsg = '';
+
+    for await (const chunk of chatCompletion) {
+      const chunkText = chunk.choices[0].delta.content;
+      if (chunkText) {
+        gptMsg += chunkText;
+        gptTextSpan!.innerHTML = gptMsg;
+      } else {
+        tmpChat.push({ role: 'assistant', content: gptMsg });
+        setChatContent(tmpChat);
+        userInputEl.disabled = false;
+      }
+    }
   };
 
   const clearChat = () => {
@@ -88,7 +97,6 @@ const ChatGpt = () => {
           className='char_clear_btn'
           onClick={clearChat}></button>
       </div>
-      {isLoading ? <CircularProgress color='primary' /> : <></>}
       <div className='chat_content_div'></div>
       <div className='user_input_div'>
         <input

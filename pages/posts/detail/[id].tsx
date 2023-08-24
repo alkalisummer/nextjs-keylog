@@ -16,15 +16,12 @@ interface post {
 
 const PostDetailPage = ({ post, imgFileArr, htmlCntn }: { post: post; imgFileArr: []; htmlCntn: string }) => {
   const router = useRouter();
-  console.log(post);
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };
-    console.log(imgFileArr);
     await axios.get('/api/HandlePost', { params: param }).then(() => {
       // 해당 게시글 이미지 삭제
       let removedImg = imgFileArr;
-      console.log(imgFileArr);
       axios.post('/api/DeleteImgFile', { removedImg });
       router.push('/');
     });
@@ -66,8 +63,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     type: 'read',
     postId: context.query.id,
   };
-
-  console.log(context);
 
   await handleMySql(params)
     .then((res) => JSON.stringify(res))
