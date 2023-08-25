@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
@@ -160,49 +160,60 @@ function TrendKeyword() {
       if (!showLineChart) {
         setShowLineChart(true);
       }
-      const queryParams = { type: 'interestOverTime', keyword: lineKeyword };
-      axios.post('/api/HandleKeyword', { params: queryParams }).then((result) => {
-        const interestRes = JSON.parse(result.data);
-        let lineChartDate: string[] = [];
-        let lineChartValueArr = [];
+      const getLineChart = async () => {
+        const queryParams = { type: 'interestOverTime', keyword: lineKeyword };
+        await axios.post('/api/HandleKeyword', { params: queryParams }).then((result) => {
+          let interestRes: any;
+          try {
+            interestRes = JSON.parse(result.data);
+          } catch (error) {
+            console.log(error);
+            getLineChart();
+          }
 
-        const randomColor = () => {
-          return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
-        };
+          let lineChartDate: string[] = [];
+          let lineChartValueArr = [];
 
-        const timeLineData = (num: number) => {
-          let res = [];
-          for (let data of interestRes.default.timelineData) {
-            res.push(data.value[num]);
-            if (lineChartDate.length !== interestRes.default.timelineData.length) {
-              lineChartDate.push(data.formattedAxisTime);
+          const randomColor = () => {
+            return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
+          };
+
+          const timeLineData = (num: number) => {
+            let res = [];
+            for (let data of interestRes.default.timelineData) {
+              res.push(data.value[num]);
+              if (lineChartDate.length !== interestRes.default.timelineData.length) {
+                lineChartDate.push(data.formattedAxisTime);
+              }
             }
-          }
-          return res;
-        };
+            return res;
+          };
 
-        for (let i = 0; i < lineKeyword.length; i++) {
-          lineChartValueArr.push({
-            name: lineKeyword[i],
-            type: 'line',
-            symbol: 'none',
-            sampling: 'lttb',
-            itemStyle: {
-              color: randomColor(),
-            },
-            data: timeLineData(i),
-          });
-        }
-        if (lChartDom.current) {
-          let lineChart = echarts.getInstanceByDom(lChartDom.current);
-          if (!lineChart) {
-            lineChart = echarts.init(lChartDom.current);
+          for (let i = 0; i < lineKeyword.length; i++) {
+            lineChartValueArr.push({
+              name: lineKeyword[i],
+              type: 'line',
+              symbol: 'none',
+              sampling: 'lttb',
+              itemStyle: {
+                color: randomColor(),
+              },
+              data: timeLineData(i),
+            });
           }
-          const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineKeyword });
-          lineChart.clear();
-          lineChart.setOption(lineChartOpt);
-        }
-      });
+          if (lChartDom.current) {
+            let lineChart = echarts.getInstanceByDom(lChartDom.current);
+            if (!lineChart) {
+              lineChart = echarts.init(lChartDom.current);
+            }
+            const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineKeyword });
+            lineChart.clear();
+            lineChart.setOption(lineChartOpt);
+          }
+        });
+      };
+
+      getLineChart();
     }
   }, [lineKeyword]);
 
