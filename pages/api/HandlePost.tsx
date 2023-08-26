@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { hashPassword } from '@/utils/Bcypt';
 
 const conn = {
   // mysql 접속 설정
@@ -48,6 +49,16 @@ export const handleMySql = async (params: any) => {
       postId = params.postId;
       sql = `DELETE FROM POST WHERE POST_ID = ${postId}`;
       break;
+    case 'login':
+      const userEmail = params.userEmail;
+      sql = `SELECT USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE ${userEmail}`;
+
+    case 'signup':
+      const email = params.email;
+      const nickname = params.nickname;
+      const thumbImgUrl = params.thumbImgUrl;
+      const password = hashPassword(params.passord);
+      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_THUMB_IMG_URL, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${email}', '${nickname}', '${thumbImgUrl}', '${password}')`;
   }
 
   await new Promise((resolve, reject) => {
@@ -81,7 +92,7 @@ export default async function HandlePost(request: NextApiRequest, response: Next
   if (request.method === 'GET') {
     params = request.query;
   } else if (request.method === 'POST') {
-    params = request.body.postData;
+    params = request.body.data;
   }
   const result = await handleMySql(params);
 

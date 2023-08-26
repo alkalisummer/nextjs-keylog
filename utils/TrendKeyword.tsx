@@ -7,7 +7,7 @@ import ArticlePrompt from './ChatGptPrompt';
 
 //echart - wordcloud, linechart
 import * as echarts from 'echarts';
-import WordCloudOpt, { LineChartOpt } from './ChartOpt';
+import { WordCloudOpt, LineChartOpt } from './ChartOpt';
 
 //react-tooltip
 import { Tooltip as ReactTooltip } from 'react-tooltip';

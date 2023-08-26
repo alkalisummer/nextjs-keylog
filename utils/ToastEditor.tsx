@@ -13,7 +13,7 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { onUploadImage } from '@/utils/CommonUtils';
 
 //시간포맷변경
-import timeToString from '@/utils/CommonUtils';
+import { timeToString } from '@/utils/CommonUtils';
 
 const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) => {
   const [title, setTitle] = useState('');
@@ -108,7 +108,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       },
     };
     await axios
-      .post('/api/HandlePost', { postData })
+      .post('/api/HandlePost', { data: postData })
       .then((response) => response.data)
       .then(function (res) {
         setTitle('');
