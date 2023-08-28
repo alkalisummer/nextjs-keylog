@@ -1,4 +1,5 @@
 @import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400&display=swap');
 #__next {
   width: 100%;
   height: 100%;
@@ -98,6 +99,26 @@ body {
 
 a {
   text-decoration: none !important;
+}
+
+.bb {
+  border-bottom: 1px solid #dfe2e6 !important;
+}
+
+.btlr {
+  border-top-left-radius: 15px;
+}
+
+.btrr {
+  border-top-right-radius: 15px;
+}
+
+.bblr {
+  border-bottom-left-radius: 15px;
+}
+
+.bbrr {
+  border-bottom-right-radius: 15px;
 }
 
 @media (max-width: 768px) {

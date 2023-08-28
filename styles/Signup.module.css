@@ -1,0 +1,87 @@
+.signup_div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6rem;
+}
+
+.signup_title {
+  font-family: 'Fira Code', monospace;
+  font-size: 35px;
+  margin-bottom: 30px;
+}
+
+.signup_form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 15rem;
+}
+
+.signup_input_div {
+  display: flex;
+}
+
+.signup_input_text {
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 16px;
+  border: 1px solid #dfe2e6;
+  background: transparent;
+  padding: 15px;
+  border-bottom: none;
+  border-left: none;
+  width: 90%;
+}
+
+.signup_input_text:focus {
+  outline: none;
+}
+
+.signup_input_text:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #fff inset;
+  -webkit-text-fill-color: #000;
+}
+.signup_input_text:-webkit-autofill,
+.signup_input_text:-webkit-autofill:hover,
+.signup_input_text:-webkit-autofill:focus,
+.signup_input_text:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.signup_emoji {
+  padding-left: 15px;
+  border: 1px solid #dfe2e6;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: none;
+  border-right: none;
+}
+
+.signup_btn {
+  margin-top: 3rem;
+  border-radius: 10px;
+  border: none;
+  padding: 15px;
+  font-size: 15px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: bold;
+  color: white;
+  background-color: #c4c4c4;
+  cursor: pointer;
+}
+
+.validateErr {
+  color: red !important;
+  -webkit-text-fill-color: red !important;
+}
+
+.validateErrMsg {
+  margin-top: 10px;
+  font-size: 13px;
+  color: red;
+}

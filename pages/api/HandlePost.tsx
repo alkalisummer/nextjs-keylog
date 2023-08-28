@@ -52,13 +52,15 @@ export const handleMySql = async (params: any) => {
     case 'login':
       const userEmail = params.userEmail;
       sql = `SELECT USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE ${userEmail}`;
-
+      break;
     case 'signup':
       const email = params.email;
       const nickname = params.nickname;
-      const thumbImgUrl = params.thumbImgUrl;
-      const password = hashPassword(params.passord);
-      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_THUMB_IMG_URL, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${email}', '${nickname}', '${thumbImgUrl}', '${password}')`;
+      const password = await hashPassword(params.password);
+      const rgsn_dttm = params.rgsn_dttm;
+      const amnt_dttm = params.amnt_dttm;
+      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${email}', '${nickname}', '${password}', '${rgsn_dttm}', '${amnt_dttm}')`;
+      break;
   }
 
   await new Promise((resolve, reject) => {
