@@ -16,22 +16,24 @@ const Signup = () => {
   const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
 
   const [nickname, setNickname] = useState('');
+  const [nicknameValidate, setNicknameValidate] = useState<boolean>(true);
 
   const [showNoti, setShowNoti] = useState(false);
 
   const router = useRouter();
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     //email, password 유효성 검사
-    if (!emailCheck(email)) {
+    if (!(await emailCheck(email))) {
       return;
     } else if (!passwordCheck(password)) {
       return;
+    } else if (!nicknameCheck(nickname)) {
+      return;
     }
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', email: email, nickname: nickname, password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
+    const params = { type: 'signup', email: email, nickname: nickname.replaceAll(' ', ''), password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
 
     axios.post('/api/HandlePost', { data: params }).then((res) => {
       setShowNoti(true);
@@ -79,6 +81,18 @@ const Signup = () => {
     return isValidate;
   };
 
+  const nicknameCheck = (nickname: string) => {
+    const isValidate = nickname.replaceAll(' ', '').length === 0 ? false : true;
+    if (!isValidate) {
+      setNicknameValidate(false);
+      document.querySelector('.nicknameErrMsg')!.innerHTML = '<span>닉네임을 입력해주세요.</span>';
+    } else {
+      setNicknameValidate(true);
+      document.querySelector('.nicknameErrMsg')!.innerHTML = '';
+    }
+    return isValidate;
+  };
+
   const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -122,19 +136,23 @@ const Signup = () => {
             }}></input>
         </div>
         <div className={signupStyle.signup_input_div}>
-          <div className={`${signupStyle.signup_emoji} bb bblr`}>
+          <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
             <i className={'fa-solid fa-user'}></i>
           </div>
           <input
             type='text'
             value={nickname}
-            className={`${signupStyle.signup_input_text} bb bbrr`}
+            className={`${signupStyle.signup_input_text} ${nicknameValidate ? '' : signupStyle.validateErr} bb bbrr`}
             maxLength={20}
             placeholder='닉네임'
-            onChange={(e) => setNickname(e.target.value)}></input>
+            onChange={(e) => {
+              setNickname(e.target.value);
+              nicknameCheck(e.target.value);
+            }}></input>
         </div>
         <div className={`emailErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`passwordErrMsg ${signupStyle.validateErrMsg}`}></div>
+        <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <button
           type='submit'
           className={signupStyle.signup_btn}>
