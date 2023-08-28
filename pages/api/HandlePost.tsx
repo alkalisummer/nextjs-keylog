@@ -49,9 +49,9 @@ export const handleMySql = async (params: any) => {
       postId = params.postId;
       sql = `DELETE FROM POST WHERE POST_ID = ${postId}`;
       break;
-    case 'login':
-      const userEmail = params.userEmail;
-      sql = `SELECT USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE ${userEmail}`;
+    case 'getUser':
+      const userEmail = params.email;
+      sql = `SELECT USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_EMAIL = '${userEmail}'`;
       break;
     case 'signup':
       const email = params.email;
