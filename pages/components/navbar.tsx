@@ -12,12 +12,16 @@ const Navbar = () => {
 
   return (
     <div className='nav_div'>
+      <span className='nav_logo_btn'>keylog</span>
       {status === 'authenticated' ? (
         <button onClick={() => signOut()}>로그아웃</button>
       ) : (
         <div>
-          <Link href={'/api/auth/signin'}>로그인</Link>
-          <Link href={'/signup'}>회원가입</Link>
+          <Link
+            href={'/api/auth/signin'}
+            className='nav_login_btn'>
+            로그인
+          </Link>
         </div>
       )}
     </div>

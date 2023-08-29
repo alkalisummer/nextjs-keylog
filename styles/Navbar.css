@@ -1,0 +1,26 @@
+.nav_div {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav_logo_btn {
+  font-family: 'Fira Mono', monospace;
+  font-size: 1.325rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav_login_btn {
+  color: white;
+  background-color: black;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 100;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}

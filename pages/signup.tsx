@@ -116,6 +116,8 @@ const Signup = () => {
             value={email}
             className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr} btrr`}
             placeholder='이메일'
+            autoComplete='off'
+            required
             onChange={(e) => {
               setEmail(e.target.value);
               emailCheck(e.target.value);
@@ -130,6 +132,8 @@ const Signup = () => {
             value={password}
             className={`${signupStyle.signup_input_text} ${passwordValidate ? '' : signupStyle.validateErr}`}
             placeholder='비밀번호'
+            required
+            autoComplete='off'
             onChange={(e) => {
               setPassword(e.target.value);
               passwordCheck(e.target.value);
@@ -145,6 +149,8 @@ const Signup = () => {
             className={`${signupStyle.signup_input_text} ${nicknameValidate ? '' : signupStyle.validateErr} bb bbrr`}
             maxLength={20}
             placeholder='닉네임'
+            required
+            autoComplete='off'
             onChange={(e) => {
               setNickname(e.target.value);
               nicknameCheck(e.target.value);

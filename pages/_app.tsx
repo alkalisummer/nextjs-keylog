@@ -5,6 +5,8 @@ import Head from 'next/head';
 import Script from 'next/script';
 
 import '@/styles/globals.css';
+import '@/styles/Navbar.css';
+import '@/styles/Index.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

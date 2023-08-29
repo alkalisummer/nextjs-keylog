@@ -6,7 +6,7 @@ interface wDataArr {
   articles: [];
 }
 
-const WordCloudOpt = (dataArr: wDataArr[]) => {
+export const WordCloudOpt = (dataArr: wDataArr[]) => {
   const chartOpt = {
     series: [
       {
@@ -89,5 +89,3 @@ export const LineChartOpt = (params: lineChartData) => {
   };
   return chartOpt;
 };
-
-export default WordCloudOpt;
