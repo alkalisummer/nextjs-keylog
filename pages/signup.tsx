@@ -9,15 +9,19 @@ import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 
 const Signup = () => {
+  //이메일
   const [email, setEmail] = useState('');
   const [emailValidate, setEmailValidate] = useState<boolean>(true);
-
+  //비밀번호
   const [password, setPassword] = useState('');
   const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
-
+  //비밀번호 확인
+  const [pwDoubleCheckText, setPwDoubleCheckText] = useState('');
+  const [pwDoubleValidate, setPwDoubleValidate] = useState<boolean>(true);
+  //닉네임
   const [nickname, setNickname] = useState('');
   const [nicknameValidate, setNicknameValidate] = useState<boolean>(true);
-
+  //notification 팝업
   const [showNoti, setShowNoti] = useState(false);
 
   const router = useRouter();
@@ -28,6 +32,8 @@ const Signup = () => {
     if (!(await emailCheck(email))) {
       return;
     } else if (!passwordCheck(password)) {
+      return;
+    } else if (!passwordDoubleCheck(pwDoubleCheckText)) {
       return;
     } else if (!nicknameCheck(nickname)) {
       return;
@@ -47,14 +53,14 @@ const Signup = () => {
 
     if (!isValidate) {
       setEmailValidate(false);
-      document.querySelector('.emailErrMsg')!.innerHTML = '<span>이메일 형식이 올바르지 않습니다.</span>';
+      document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이메일 형식이 올바르지 않습니다.</div>';
     } else {
       //Email 중복검사
       await axios.post('/api/HandlePost', { data: params }).then((res) => {
         const userCnt = res.data.totalItems;
         if (userCnt > 0) {
           isValidate = false;
-          document.querySelector('.emailErrMsg')!.innerHTML = '<span>이미 가입되어 있는 이메일입니다.</span>';
+          document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이미 가입되어 있는 이메일입니다.</div>';
         } else {
           setEmailValidate(true);
           document.querySelector('.emailErrMsg')!.innerHTML = '';
@@ -72,7 +78,7 @@ const Signup = () => {
 
     if (!isValidate) {
       setPasswordValidate(false);
-      document.querySelector('.passwordErrMsg')!.innerHTML = '<span>비밀번호: 8~16자의 영문 대/소문자, 숫자를 사용해 주세요.</span>';
+      document.querySelector('.passwordErrMsg')!.innerHTML = '<div class="mt5">비밀번호: 8~16자의 영문 대/소문자, 숫자를 사용해 주세요.</div>';
     } else {
       setPasswordValidate(true);
       document.querySelector('.passwordErrMsg')!.innerHTML = '';
@@ -81,11 +87,23 @@ const Signup = () => {
     return isValidate;
   };
 
+  const passwordDoubleCheck = (passwordText: string) => {
+    const isValidate = password === passwordText ? true : false;
+    if (!isValidate) {
+      setPwDoubleValidate(false);
+      document.querySelector('.pwDobleCheckErrMsg')!.innerHTML = '<div class="mt5">비밀번호가 일치하지 않습니다.</div>';
+    } else {
+      setPwDoubleValidate(true);
+      document.querySelector('.pwDobleCheckErrMsg')!.innerHTML = '';
+    }
+    return isValidate;
+  };
+
   const nicknameCheck = (nickname: string) => {
     const isValidate = nickname.replaceAll(' ', '').length === 0 ? false : true;
     if (!isValidate) {
       setNicknameValidate(false);
-      document.querySelector('.nicknameErrMsg')!.innerHTML = '<span>닉네임을 입력해주세요.</span>';
+      document.querySelector('.nicknameErrMsg')!.innerHTML = '<div class="mt5">닉네임을 입력해주세요.</div>';
     } else {
       setNicknameValidate(true);
       document.querySelector('.nicknameErrMsg')!.innerHTML = '';
@@ -140,6 +158,22 @@ const Signup = () => {
             }}></input>
         </div>
         <div className={signupStyle.signup_input_div}>
+          <div className={`${signupStyle.signup_emoji} ${pwDoubleValidate ? '' : signupStyle.validateErr}`}>
+            <i className='fa-solid fa-check'></i>
+          </div>
+          <input
+            type='password'
+            value={pwDoubleCheckText}
+            className={`${signupStyle.signup_input_text} ${pwDoubleValidate ? '' : signupStyle.validateErr}`}
+            placeholder='비밀번호 확인'
+            required
+            autoComplete='off'
+            onChange={(e) => {
+              setPwDoubleCheckText(e.target.value);
+              passwordDoubleCheck(e.target.value);
+            }}></input>
+        </div>
+        <div className={`${signupStyle.signup_input_div} mb10`}>
           <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
             <i className={'fa-solid fa-user'}></i>
           </div>
@@ -158,6 +192,7 @@ const Signup = () => {
         </div>
         <div className={`emailErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`passwordErrMsg ${signupStyle.validateErrMsg}`}></div>
+        <div className={`pwDobleCheckErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <button
           type='submit'
