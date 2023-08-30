@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import loginStyle from '../styles/Login.module.css';
-import { useSession, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [saveId, setSaveId] = useState(true);
+  const [cookies, setCookies] = useCookies(['userId']);
+
   const router = useRouter();
-  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (cookies.userId && saveId) {
+      setEmail(cookies.userId);
+    }
+  }, [cookies.userId, saveId]);
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +34,11 @@ const Login = () => {
       password: password,
     }).then((res) => {
       if (!res?.error) {
+        if (saveId) {
+          setCookies('userId', email, { maxAge: 60 * 60 * 24 * 7 }); //아이디 저장 체크시 일주일동안 쿠키에 저장
+        } else {
+          setCookies('userId', '', { maxAge: 0 }); // 쿠키삭제
+        }
         router.replace('/');
       } else {
         document.querySelector('.loginErrMsg')!.innerHTML = '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
@@ -66,6 +80,14 @@ const Login = () => {
               setPassword(e.target.value);
             }}></input>
         </div>
+        <label className={loginStyle.login_label}>
+          <input
+            type='checkbox'
+            className={loginStyle.login_checkbox}
+            checked={saveId}
+            onChange={() => setSaveId(!saveId)}></input>
+          아이디 저장
+        </label>
         <div className={`loginErrMsg ${loginStyle.validateErrMsg}`}></div>
         <button
           type='submit'
@@ -73,6 +95,7 @@ const Login = () => {
           로그인
         </button>
         <div className={loginStyle.signup_btn_div}>
+          아직 회원이 아니신가요? &nbsp;
           <span
             className={loginStyle.signup_btn}
             onClick={() => router.push('/signup')}>
