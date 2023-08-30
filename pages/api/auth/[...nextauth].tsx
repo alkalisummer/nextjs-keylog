@@ -25,9 +25,7 @@ export default NextAuth({
           return res.items[0];
         });
         const isValid = await verifyPassword(password!, user.USER_PASSWORD);
-        console.log(isValid);
         if (user && isValid) {
-          console.log('탔다');
           return { id: user.USER_ID, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THUMB_IMG_URL ? user.USER_THUMB_IMG_URL : '' };
         } else {
           return null;

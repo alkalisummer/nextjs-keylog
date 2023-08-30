@@ -1,4 +1,4 @@
-.signup_div {
+.login_div {
   width: 100%;
   height: auto;
   display: flex;
@@ -8,24 +8,23 @@
   margin-top: 6rem;
 }
 
-.signup_title {
+.login_title {
   font-family: 'Fira Mono', monospace;
   font-size: 35px;
   margin-bottom: 30px;
 }
 
-.signup_form {
+.login_form {
   display: flex;
   flex-direction: column;
   width: 500px;
-  height: 15rem;
 }
 
-.signup_input_div {
+.login_input_div {
   display: flex;
 }
 
-.signup_input_text {
+.login_input_text {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 16px;
   border: 1px solid #dfe2e6;
@@ -36,22 +35,22 @@
   width: 90%;
 }
 
-.signup_input_text:focus {
+.login_input_text:focus {
   outline: none;
 }
 
-.signup_input_text:-webkit-autofill {
+.login_input_text:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px #fff inset;
   -webkit-text-fill-color: #000;
 }
-.signup_input_text:-webkit-autofill,
-.signup_input_text:-webkit-autofill:hover,
-.signup_input_text:-webkit-autofill:focus,
-.signup_input_text:-webkit-autofill:active {
+.login_input_text:-webkit-autofill,
+.login_input_text:-webkit-autofill:hover,
+.login_input_text:-webkit-autofill:focus,
+.login_input_text:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-.signup_emoji {
+.login_emoji {
   padding-left: 15px;
   border: 1px solid #dfe2e6;
   color: #c4c4c4;
@@ -63,8 +62,8 @@
   border-right: none;
 }
 
-.signup_btn {
-  margin-top: 3rem;
+.login_btn {
+  margin-top: 20px;
   border-radius: 10px;
   border: none;
   padding: 15px;
@@ -76,12 +75,19 @@
   cursor: pointer;
 }
 
-.validateErr {
-  color: red !important;
-  -webkit-text-fill-color: red !important;
+.signup_btn_div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signup_btn {
+  font-size: 13px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: gray;
 }
 
 .validateErrMsg {
-  font-size: 13px;
+  font-size: 12px;
   color: red;
 }

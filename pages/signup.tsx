@@ -116,7 +116,7 @@ const Signup = () => {
       return;
     }
     setShowNoti(false);
-    router.push('/login');
+    router.replace('/login');
   };
 
   return (
