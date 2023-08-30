@@ -98,7 +98,7 @@ const Signup = () => {
       return;
     }
     setShowNoti(false);
-    router.push('/');
+    router.push('/login');
   };
 
   return (

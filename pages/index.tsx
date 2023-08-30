@@ -1,7 +1,10 @@
 import React from 'react';
 import Navbar from './components/navbar';
+import { useSession } from 'next-auth/react';
 
 const HomePage = () => {
+  const session = useSession();
+
   return (
     <div className='index_div'>
       <Navbar></Navbar>

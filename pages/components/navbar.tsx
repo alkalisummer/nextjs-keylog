@@ -18,7 +18,7 @@ const Navbar = () => {
       ) : (
         <div>
           <Link
-            href={'/api/auth/signin'}
+            href={'/login'}
             className='nav_login_btn'>
             로그인
           </Link>

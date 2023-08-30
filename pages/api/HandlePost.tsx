@@ -51,7 +51,7 @@ export const handleMySql = async (params: any) => {
       break;
     case 'getUser':
       const userEmail = params.email;
-      sql = `SELECT USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_EMAIL = '${userEmail}'`;
+      sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_EMAIL = '${userEmail}'`;
       break;
     case 'signup':
       const email = params.email;
