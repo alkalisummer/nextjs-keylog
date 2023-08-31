@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { hashPassword } from '@/utils/Bcypt';
 
 const conn = {
   // mysql 접속 설정
@@ -48,18 +47,6 @@ export const handleMySql = async (params: any) => {
     case 'delete':
       postId = params.postId;
       sql = `DELETE FROM POST WHERE POST_ID = ${postId}`;
-      break;
-    case 'getUser':
-      const userEmail = params.email;
-      sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_EMAIL = '${userEmail}'`;
-      break;
-    case 'signup':
-      const email = params.email;
-      const nickname = params.nickname;
-      const password = await hashPassword(params.password);
-      const rgsn_dttm = params.rgsn_dttm;
-      const amnt_dttm = params.amnt_dttm;
-      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${email}', '${nickname}', '${password}', '${rgsn_dttm}', '${amnt_dttm}')`;
       break;
   }
 

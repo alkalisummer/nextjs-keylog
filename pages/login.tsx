@@ -46,6 +46,10 @@ const Login = () => {
     });
   };
 
+  const forgotPassword = async () => {
+    router.push('/forgotPassword');
+  };
+
   return (
     <div className={loginStyle.login_div}>
       <span className={loginStyle.login_title}>keylog</span>
@@ -80,14 +84,21 @@ const Login = () => {
               setPassword(e.target.value);
             }}></input>
         </div>
-        <label className={loginStyle.login_label}>
-          <input
-            type='checkbox'
-            className={loginStyle.login_checkbox}
-            checked={saveId}
-            onChange={() => setSaveId(!saveId)}></input>
-          아이디 저장
-        </label>
+        <div className={loginStyle.login_sub_div}>
+          <label className={loginStyle.login_label}>
+            <input
+              type='checkbox'
+              className={loginStyle.login_checkbox}
+              checked={saveId}
+              onChange={() => setSaveId(!saveId)}></input>
+            아이디 저장
+          </label>
+          <span
+            className={loginStyle.login_forgot_pw_btn}
+            onClick={() => forgotPassword()}>
+            비밀번호 찾기
+          </span>
+        </div>
         <div className={`loginErrMsg ${loginStyle.validateErrMsg}`}></div>
         <button
           type='submit'

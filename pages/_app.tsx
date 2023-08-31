@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <title> keylog </title>
           <meta
-            http-equiv='Content-Security-Policy'
+            httpEquiv='Content-Security-Policy'
             content='upgrade-insecure-requests'></meta>
         </Head>
         <Component {...pageProps} />

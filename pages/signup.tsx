@@ -41,7 +41,7 @@ const Signup = () => {
     const currentTime = timeToString(new Date());
     const params = { type: 'signup', email: email, nickname: nickname.replaceAll(' ', ''), password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
 
-    axios.post('/api/HandlePost', { data: params }).then((res) => {
+    await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);
     });
   };
@@ -56,7 +56,7 @@ const Signup = () => {
       document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이메일 형식이 올바르지 않습니다.</div>';
     } else {
       //Email 중복검사
-      await axios.post('/api/HandlePost', { data: params }).then((res) => {
+      await axios.post('/api/HandleUser', { data: params }).then((res) => {
         const userCnt = res.data.totalItems;
         if (userCnt > 0) {
           isValidate = false;

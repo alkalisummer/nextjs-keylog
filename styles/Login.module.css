@@ -98,6 +98,7 @@
   color: gray;
   display: flex;
   align-items: center;
+  width: 90px;
 }
 
 .login_checkbox {
@@ -123,4 +124,22 @@
   text-align: center;
   line-height: 13px;
   color: white;
+}
+
+.login_sub_div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login_forgot_pw_btn {
+  font-size: 12px;
+  color: gray;
+  cursor: pointer;
+}
+
+.login_forgot_pw_infoText {
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: gray;
 }

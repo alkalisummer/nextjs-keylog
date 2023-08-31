@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { handleMySql } from '../HandlePost';
+import { handleMySql } from '../HandleUser';
 import { verifyPassword } from '@/utils/Bcypt';
 
 export default NextAuth({

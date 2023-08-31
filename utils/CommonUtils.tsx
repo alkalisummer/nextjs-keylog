@@ -74,3 +74,20 @@ export async function onUploadImage(imgFile: any) {
 
   return { imgName: imgName, imgUrl: `${imgURL}/${newImgFile.name}` };
 }
+
+export function generateTempPassword(passwordLength: number) {
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numbers = '0123456789';
+  const symbols = '!@#$%^&*()_+[]{}|;:,.<>?';
+
+  const allCharacters = lowercase + uppercase + numbers + symbols;
+  let tempPassword = '';
+
+  for (let i = 0; i < passwordLength; i++) {
+    const randomIndex = Math.floor(Math.random() * allCharacters.length);
+    tempPassword += allCharacters[randomIndex];
+  }
+
+  return tempPassword;
+}
