@@ -102,7 +102,7 @@ a {
 }
 
 .bb {
-  border-bottom: 1px solid #dfe2e6 !important;
+  border-bottom: 1px solid #009bf2 !important;
 }
 
 .btlr {
@@ -135,6 +135,10 @@ a {
 
 .mb15 {
   margin-bottom: 15px !important;
+}
+
+.dn {
+  display: none;
 }
 
 @media (max-width: 768px) {

@@ -11,11 +11,12 @@
   font-size: 1.325rem;
   font-weight: 500;
   cursor: pointer;
+  color: #009bf2;
 }
 
 .nav_login_btn {
   color: white;
-  background-color: black;
+  background-color: #009bf2;
   border-radius: 30px;
   font-size: 12px;
   font-weight: 100;
@@ -23,4 +24,122 @@
   padding-bottom: 5px;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.nav_login_btn:hover {
+  background-color: #4ebeff;
+}
+
+/*로그인시 우측 상단 토글*/
+.nav_menu_div {
+  color: #009bf2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.nav_menu_div:hover {
+  color: #4ebeff;
+}
+
+.nav_menu_img {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.MuiMenuItem-root {
+  color: #009bf2 !important;
+}
+
+.nav_menu_item_ico {
+  margin-right: 15px;
+  width: 15px;
+}
+
+/*계정 정보 모달*/
+.nav_modal_div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: flex;
+  flex-direction: column;
+
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px 0px;
+}
+
+.MuiBackdrop-root {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.nav_modal_profile {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav_profile_img_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  padding-right: 20px;
+  border-right: 1px solid #d0d0d0;
+}
+
+.nav_profile_img {
+  width: 128px;
+  height: 128px;
+  margin-bottom: 15px;
+}
+
+.nav_modal_nickname {
+  width: 65%;
+}
+
+.nav_img_upload_btn {
+  width: 130px;
+  background-color: #009bf2;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.nav_img_upload_btn:hover {
+  background-color: #4ebeff;
+}
+
+.nav_img_del_btn {
+  width: 170px;
+  font-size: 15px;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  color: #009bf2;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.nav_img_del_btn:hover {
+  background-color: rgb(238, 238, 238);
 }
