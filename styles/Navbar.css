@@ -42,9 +42,14 @@
   color: #4ebeff;
 }
 
-.nav_menu_img {
-  width: 30px;
+#nav_menu_img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
   margin-right: 10px;
+  object-fit: cover;
+  transition: all 0.125s ease-in 0s;
+  box-shadow: rgba(0, 0, 0, 0.086) 0px 0px 8px;
 }
 
 .MuiMenuItem-root {
@@ -61,14 +66,13 @@
   position: absolute;
   top: 50%;
   left: 50%;
-
   display: flex;
   flex-direction: column;
-
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
   padding: 20px;
+  padding-top: 45px;
   background-color: white;
   border-radius: 10px;
   border: none;
@@ -77,6 +81,19 @@
 
 .MuiBackdrop-root {
   background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.nav_modal_close_btn {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  font-size: 20px;
+  color: gray;
+  cursor: pointer;
 }
 
 .nav_modal_profile {
@@ -94,10 +111,12 @@
   border-right: 1px solid #d0d0d0;
 }
 
-.nav_profile_img {
-  width: 128px;
-  height: 128px;
+#nav_profile_img {
+  width: 8rem;
+  height: 8rem;
   margin-bottom: 15px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .nav_modal_nickname {

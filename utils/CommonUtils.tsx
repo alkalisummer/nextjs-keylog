@@ -91,3 +91,29 @@ export function generateTempPassword(passwordLength: number) {
 
   return tempPassword;
 }
+
+export function getEmailId(email: string) {
+  const regex = /^[^@]+/;
+  const match = email.match(regex);
+  let userId;
+
+  if (match) {
+    userId = match[0];
+  } else {
+    console.log('이메일 주소 형식이 잘못되었습니다.');
+  }
+  return userId;
+}
+
+export function getImgName(imgUrl: string) {
+  const regex = /\/([^\/]+)$/;
+  const match = imgUrl.match(regex);
+  let imgName;
+
+  if (match) {
+    imgName = match[1];
+  } else {
+    console.log('URL에서 파일 이름을 추출할 수 없습니다.');
+  }
+  return imgName;
+}

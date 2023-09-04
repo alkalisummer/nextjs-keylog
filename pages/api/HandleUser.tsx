@@ -21,27 +21,42 @@ export const handleMySql = async (params: any) => {
     userId: '',
   };
 
+  let userEmail: string;
+  let userPassword: string;
+  let userNickname: string;
+  let userThmbImgUrl: string;
+  let rgsnDttm: string;
+  let amntDttm: string;
+
   await connection.connect();
 
   switch (params.type) {
     case 'getUser':
-      const userEmail = params.email;
+      userEmail = params.email;
       sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_EMAIL = '${userEmail}'`;
       break;
     case 'signup':
-      const email = params.email;
-      const nickname = params.nickname;
-      const password = await hashPassword(params.password);
-      const rgsn_dttm = params.rgsn_dttm;
-      const amnt_dttm = params.amnt_dttm;
-      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${email}', '${nickname}', '${password}', '${rgsn_dttm}', '${amnt_dttm}')`;
+      userEmail = params.email;
+      userNickname = params.nickname;
+      userPassword = await hashPassword(params.password);
+      rgsnDttm = params.rgsn_dttm;
+      amntDttm = params.amnt_dttm;
+      sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${userEmail}', '${userNickname}', '${userPassword}', '${rgsnDttm}', '${amntDttm}')`;
       break;
     case 'resetPassword':
-      const tmpPassword = await hashPassword(params.tmpPassword);
-      const targetMail = params.email;
-      const amntDttm = params.amntDttm;
-      sql = `UPDATE USER SET USER_PASSWORD = '${tmpPassword}', AMNT_DTTM = '${amntDttm}' WHERE USER_EMAIL = '${targetMail}'`;
-      console.log(sql);
+      userPassword = await hashPassword(params.tmpPassword);
+      userEmail = params.email;
+      amntDttm = params.amntDttm;
+      sql = `UPDATE USER SET USER_PASSWORD = '${userPassword}', AMNT_DTTM = '${amntDttm}' WHERE USER_EMAIL = '${userEmail}'`;
+      break;
+    case 'uploadUserImg':
+      userThmbImgUrl = params.imgUrl;
+      userEmail = params.email;
+      sql = `UPDATE USER SET USER_THMB_IMG_URL = '${userThmbImgUrl}' WHERE USER_EMAIL = '${userEmail}'`;
+      break;
+    case 'deleteUserImg':
+      userEmail = params.email;
+      sql = `UPDATE USER SET USER_THMB_IMG_URL = '' WHERE USER_EMAIL = '${userEmail}'`;
       break;
   }
 

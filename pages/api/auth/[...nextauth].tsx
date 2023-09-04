@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { handleMySql } from '../HandleUser';
 import { verifyPassword } from '@/utils/Bcypt';
+import { getEmailId } from '@/utils/CommonUtils';
 
 export default NextAuth({
   session: {
@@ -26,7 +27,7 @@ export default NextAuth({
         });
         const isValid = await verifyPassword(password!, user.USER_PASSWORD);
         if (user && isValid) {
-          return { id: user.USER_ID, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THUMB_IMG_URL ? user.USER_THUMB_IMG_URL : '' };
+          return { id: getEmailId(user.USER_EMAIL) as string, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THMB_IMG_URL ? user.USER_THMB_IMG_URL : '' };
         } else {
           return null;
         }
@@ -35,10 +36,32 @@ export default NextAuth({
   ],
   secret: process.env.SECRET,
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.picture = user.image;
+        token.name = user.name;
+      }
+      if (trigger === 'update') {
+        if (session.type === 'uploadImg' && session.imgUrl) {
+          token.picture = session.imgUrl;
+        }
+        if (session.type === 'deleteImg') {
+          token.picture = '';
+        }
+        if (session.nickname) {
+          token.name = session.nickname;
+        }
+      }
       return token;
     },
-    session({ session, token, user }) {
+    session({ session, token, user }: { session: any; token: any; user: any }) {
+      session.user.id = token.id;
+      session.user.name = token.name;
+      session.user.email = token.email;
+      session.user.image = token.picture;
+
       return session; // The return type will match the one returned in `useSession()`
     },
   },
