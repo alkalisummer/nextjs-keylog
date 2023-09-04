@@ -141,6 +141,10 @@ a {
   display: none;
 }
 
+.lh25 {
+  line-height: 2.5rem;
+}
+
 @media (max-width: 768px) {
   .left_area {
     display: none;

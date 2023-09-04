@@ -119,8 +119,52 @@
   object-fit: cover;
 }
 
-.nav_modal_nickname {
+.nav_profile_detail_div {
   width: 65%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav_modal_nickname_div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#nav_modal_nickname {
+  font-size: 30px;
+  font-weight: 400;
+}
+
+#nav_modal_nickname_input {
+  width: 80%;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  height: 30px;
+  padding-left: 10px;
+}
+
+#nav_modal_nickname_update_btn {
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #009bf2;
+}
+
+#nav_modal_nickname_save_btn {
+  background-color: #009bf2;
+  font-family: 'Spoqa Han Sans Neo';
+  color: white;
+  border: none;
+  width: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.nav_modal_email {
+  font-size: 15px;
+  color: gray;
 }
 
 .nav_img_upload_btn {

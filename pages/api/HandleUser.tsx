@@ -58,6 +58,11 @@ export const handleMySql = async (params: any) => {
       userEmail = params.email;
       sql = `UPDATE USER SET USER_THMB_IMG_URL = '' WHERE USER_EMAIL = '${userEmail}'`;
       break;
+    case 'updateNickname':
+      userNickname = params.nickname;
+      userEmail = params.email;
+      sql = `UPDATE USER SET USER_NICKNAME = '${userNickname}' WHERE USER_EMAIL = '${userEmail}'`;
+      break;
   }
 
   await new Promise((resolve, reject) => {
