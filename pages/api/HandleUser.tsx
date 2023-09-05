@@ -43,8 +43,8 @@ export const handleMySql = async (params: any) => {
       amntDttm = params.amnt_dttm;
       sql = `INSERT INTO USER (USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${userEmail}', '${userNickname}', '${userPassword}', '${rgsnDttm}', '${amntDttm}')`;
       break;
-    case 'resetPassword':
-      userPassword = await hashPassword(params.tmpPassword);
+    case 'updatePassword':
+      userPassword = await hashPassword(params.password);
       userEmail = params.email;
       amntDttm = params.amntDttm;
       sql = `UPDATE USER SET USER_PASSWORD = '${userPassword}', AMNT_DTTM = '${amntDttm}' WHERE USER_EMAIL = '${userEmail}'`;
@@ -63,6 +63,9 @@ export const handleMySql = async (params: any) => {
       userEmail = params.email;
       sql = `UPDATE USER SET USER_NICKNAME = '${userNickname}' WHERE USER_EMAIL = '${userEmail}'`;
       break;
+    case 'getCurrentPassword':
+      userEmail = params.email;
+      sql = `SELECT USER_PASSWORD FROM USER WHERE USER_EMAIL = '${userEmail}'`;
   }
 
   await new Promise((resolve, reject) => {

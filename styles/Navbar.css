@@ -74,7 +74,7 @@
   padding: 20px;
   padding-top: 45px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px 0px;
 }
@@ -99,6 +99,7 @@
 .nav_modal_profile {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 40px;
 }
 
 .nav_profile_img_div {
@@ -135,6 +136,7 @@
 #nav_modal_nickname {
   font-size: 30px;
   font-weight: 400;
+  color: #333;
 }
 
 #nav_modal_nickname_input {
@@ -175,8 +177,8 @@
   padding-bottom: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
   font-weight: 500;
   text-align: center;
@@ -189,13 +191,13 @@
 
 .nav_img_del_btn {
   width: 170px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   background: none;
   border: none;
   color: #009bf2;
@@ -205,4 +207,77 @@
 
 .nav_img_del_btn:hover {
   background-color: rgb(238, 238, 238);
+}
+
+.nav_modal_sub_div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.nav_modal_sub_title {
+  padding-left: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  width: 35%;
+}
+
+.nav_modal_sub {
+  width: 65%;
+}
+
+.nav_modal_password_btn {
+  width: 130px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #009bf2;
+  color: white;
+  border: none;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.nav_modal_password_btn:hover {
+  background-color: #4ebeff;
+}
+
+.nav_modal_pw_div {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav_modal_pw_input {
+  font-family: 'Spoqa Han Sans Neo';
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  height: 30px;
+  padding-left: 10px;
+}
+
+.nav_modal_pw_save_btn {
+}
+
+.nav_modal_leave_btn {
+  width: 130px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f43636;
+  color: white;
+  border: none;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.nav_modal_leave_btn:hover {
+  background-color: #f75555;
 }

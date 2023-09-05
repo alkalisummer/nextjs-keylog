@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import axios from 'axios';
 
-import { onUploadImage, getImgName } from '@/utils/CommonUtils';
+import { onUploadImage, getImgName, timeToString } from '@/utils/CommonUtils';
 
 //로그인시 우측 상단메뉴 토글
 import Menu from '@mui/material/Menu';
@@ -29,11 +29,17 @@ const Navbar = () => {
   const [showNameInput, setShowNameInput] = useState(false);
 
   //비밀번호
-  const [password, setPassword] = useState('');
+  const [currPassword, setcurrPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+  const [showPwInput, setShowPwInput] = useState(false);
 
-  if (status === 'authenticated') {
-    console.log('session', session);
-  }
+  useEffect(() => {
+    // 세션이 만료된경우 계정관리창 닫기
+    if (status === 'unauthenticated') {
+      setOpenModal(false);
+    }
+  }, [status]);
 
   const openToggle = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +50,7 @@ const Navbar = () => {
 
   const uploadImg = async (event: ChangeEvent<HTMLInputElement>) => {
     const fileInput = event.target.files?.[0];
-    if (fileInput) {
+    if (fileInput && status === 'authenticated') {
       //기존 이미지가 있다면 오라클클라우드 버킷에서 삭제
       deleteImg();
       //오라클 클라우드에 이미지 업로드 후 url 반환
@@ -60,7 +66,7 @@ const Navbar = () => {
   };
 
   const deleteImg = async () => {
-    if (session!.user?.image) {
+    if (status === 'authenticated' && session!.user?.image) {
       const imgUrl = getImgName(session!.user!.image!);
       const userEmail = session?.user?.email;
 
@@ -75,13 +81,71 @@ const Navbar = () => {
   };
 
   const updateNickname = async () => {
-    if (nickname) {
+    if (status === 'authenticated' && nickname) {
       const userEmail = session?.user?.email;
       const params = { type: 'updateNickname', nickname: nickname, email: userEmail };
       await axios.get('/api/HandleUser', { params: params });
       await update({ nickname });
     }
     setShowNameInput(false);
+  };
+
+  const passwordCheck = async () => {
+    if (!currPassword) {
+      alert('현재 비밀번호를 입력하세요.');
+      return false;
+    }
+    //8~16자의 영문 대/소문자, 숫자를 반드시 포함하여 구성(특수문자도 포함가능)
+    const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,16}$/;
+    let isValidate = passwordRegEx.test(newPassword);
+
+    if (!isValidate) {
+      alert('비밀번호는 8~16자의 영문 대/소문자, 숫자가 포함되어야 합니다.');
+      return isValidate;
+    }
+
+    //현재 비밀번호 일치유무 확인
+    const params = { password: currPassword, email: session?.user?.email };
+    await axios.post('/api/CheckCurrentPassword', { data: params }).then((res) => {
+      const result = res.data.isValid;
+      if (!result) {
+        isValidate = false;
+        alert('현재 비밀번호가 일치하지 않습니다.');
+        return isValidate;
+      }
+    });
+    return isValidate;
+  };
+
+  const passwordDoubleCheck = () => {
+    const isValidate = newPassword === checkPassword && checkPassword.length > 0 ? true : false;
+
+    if (checkPassword.length === 0) {
+      alert('새 비밀번호 확인을 입력하세요');
+      return isValidate;
+    }
+
+    if (!isValidate) {
+      alert('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      return isValidate;
+    }
+
+    return isValidate;
+  };
+
+  const updatePassword = async () => {
+    if (!(await passwordCheck())) {
+      return;
+    } else if (!passwordDoubleCheck()) {
+      return;
+    }
+    const email = session?.user?.email;
+    const amntDttm = timeToString(new Date());
+    const params = { type: 'updatePassword', password: newPassword, email: email, amntDttm: amntDttm };
+    axios.post('/api/HandleUser', { data: params }).then((res) => {
+      alert('비밀번호가 변경되었습니다.');
+      setShowPwInput(false);
+    });
   };
 
   return (
@@ -159,7 +223,8 @@ const Navbar = () => {
                 id='fileInput'
                 accept='image/*'
                 onChange={(e) => uploadImg(e)}
-                className='dn'></input>
+                className='dn'
+              />
               <button
                 className='nav_img_del_btn'
                 onClick={() => deleteImg()}>
@@ -187,7 +252,8 @@ const Navbar = () => {
                       id='nav_modal_nickname_input'
                       type='text'
                       value={nickname ? nickname : ''}
-                      onChange={(e) => setNickname(e.target.value)}></input>
+                      onChange={(e) => setNickname(e.target.value)}
+                    />
                     <button
                       id='nav_modal_nickname_save_btn'
                       onClick={() => updateNickname()}>
@@ -201,8 +267,53 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-          <div className='nav_modal_password'></div>
-          <div className='nav_modal_leave'></div>
+          <div className='nav_modal_sub_div'>
+            <span className='nav_modal_sub_title'>비밀번호</span>
+            <div className='nav_modal_sub'>
+              {!showPwInput ? (
+                <button
+                  className='nav_modal_password_btn'
+                  onClick={() => setShowPwInput(true)}>
+                  비밀번호 변경
+                </button>
+              ) : (
+                <div className='nav_modal_pw_div'>
+                  <input
+                    type='password'
+                    value={currPassword}
+                    placeholder='현재 비밀번호'
+                    className='nav_modal_pw_input mb15'
+                    onChange={(e) => setcurrPassword(e.target.value)}
+                  />
+                  <input
+                    type='password'
+                    value={newPassword}
+                    placeholder='새 비밀번호'
+                    className='nav_modal_pw_input mb5'
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <input
+                    type='password'
+                    value={checkPassword}
+                    placeholder='새 비밀번호 확인'
+                    className='nav_modal_pw_input mb5'
+                    onChange={(e) => setCheckPassword(e.target.value)}
+                  />
+                  <button
+                    className='nav_modal_password_btn mt10 wa'
+                    onClick={() => updatePassword()}>
+                    확인
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='nav_modal_sub_div'>
+            <span className='nav_modal_sub_title'>회원 탈퇴</span>
+            <div className='nav_modal_sub'>
+              <button className='nav_modal_leave_btn'>회원 탈퇴</button>
+            </div>
+          </div>
         </div>
       </Modal>
     </div>

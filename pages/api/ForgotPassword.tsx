@@ -32,8 +32,8 @@ export default async function ForgotPassword(request: NextApiRequest, response: 
 
     try {
       await transporter.sendMail(mailOptions);
-      params.tmpPassword = tmpPassword;
-      params.type = 'resetPassword';
+      params.password = tmpPassword;
+      params.type = 'updatePassword';
       params.amntDttm = timeToString(new Date());
       await handleMySql(params);
     } catch (error) {

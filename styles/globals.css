@@ -129,6 +129,10 @@ a {
   margin-top: 10px;
 }
 
+.mb5 {
+  margin-bottom: 5px;
+}
+
 .mb10 {
   margin-bottom: 10px;
 }
@@ -143,6 +147,10 @@ a {
 
 .lh25 {
   line-height: 2.5rem;
+}
+
+.wa {
+  width: auto !important;
 }
 
 @media (max-width: 768px) {
