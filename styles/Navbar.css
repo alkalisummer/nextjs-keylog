@@ -228,6 +228,8 @@
 
 .nav_modal_sub {
   width: 65%;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav_modal_password_btn {
@@ -261,14 +263,11 @@
   padding-left: 10px;
 }
 
-.nav_modal_pw_save_btn {
-}
-
 .nav_modal_leave_btn {
   width: 130px;
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #f43636;
+  background-color: hsl(35, 100%, 57%);
   color: white;
   border: none;
   font-family: 'Spoqa Han Sans Neo';
@@ -279,5 +278,11 @@
 }
 
 .nav_modal_leave_btn:hover {
-  background-color: #f75555;
+  background-color: hsl(35, 93%, 68%);
+}
+
+.nav_modal_leave_text {
+  font-size: 13px;
+  color: gray;
+  margin-top: 10px;
 }

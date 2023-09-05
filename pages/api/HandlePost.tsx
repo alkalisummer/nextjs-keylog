@@ -15,6 +15,7 @@ export const handleMySql = async (params: any) => {
 
   let post;
   let postId;
+  let rgsrId;
   let sql = '';
   let result: { totalItems: number; items: any[]; postId: string } = {
     totalItems: 0,
@@ -48,6 +49,9 @@ export const handleMySql = async (params: any) => {
       postId = params.postId;
       sql = `DELETE FROM POST WHERE POST_ID = ${postId}`;
       break;
+    case 'dropOut':
+      rgsrId = params.email;
+      sql = `DELETE FROM POST WHERE RGSR_ID = '${rgsrId}'`;
   }
 
   await new Promise((resolve, reject) => {

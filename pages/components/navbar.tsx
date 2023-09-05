@@ -13,6 +13,10 @@ import MenuItem from '@mui/material/MenuItem';
 //계정정보 수정 모달
 import Modal from '@mui/material/Modal';
 
+//mui notification
+import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
+
 const Navbar = () => {
   //사용자 세션
   const { data: session, status, update } = useSession();
@@ -29,10 +33,13 @@ const Navbar = () => {
   const [showNameInput, setShowNameInput] = useState(false);
 
   //비밀번호
-  const [currPassword, setcurrPassword] = useState('');
+  const [currPassword, setCurrPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [checkPassword, setCheckPassword] = useState('');
   const [showPwInput, setShowPwInput] = useState(false);
+
+  //notification 팝업
+  const [showNoti, setShowNoti] = useState(false);
 
   useEffect(() => {
     // 세션이 만료된경우 계정관리창 닫기
@@ -148,6 +155,32 @@ const Navbar = () => {
     });
   };
 
+  const cancelPwUpdate = () => {
+    setShowPwInput(false);
+    setCurrPassword('');
+    setNewPassword('');
+    setCheckPassword('');
+  };
+
+  //회원탈퇴
+  const dropOut = async () => {
+    const email = session?.user?.email;
+    const params = { type: 'dropOut', email: email };
+
+    await axios.post('/api/HandleUser', { data: params }).then((res) => {
+      setOpenModal(false);
+      signOut();
+    });
+  };
+
+  //mui notification 닫기
+  const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowNoti(false);
+  };
+
   return (
     <div className='nav_div'>
       <span className='nav_logo_btn'>keylog</span>
@@ -204,6 +237,7 @@ const Navbar = () => {
             onClick={() => {
               setOpenModal(false);
               setShowNameInput(false);
+              cancelPwUpdate();
             }}>
             ✕
           </button>
@@ -283,7 +317,7 @@ const Navbar = () => {
                     value={currPassword}
                     placeholder='현재 비밀번호'
                     className='nav_modal_pw_input mb15'
-                    onChange={(e) => setcurrPassword(e.target.value)}
+                    onChange={(e) => setCurrPassword(e.target.value)}
                   />
                   <input
                     type='password'
@@ -300,7 +334,7 @@ const Navbar = () => {
                     onChange={(e) => setCheckPassword(e.target.value)}
                   />
                   <button
-                    className='nav_modal_password_btn mt10 wa'
+                    className='nav_modal_password_btn wa mt10'
                     onClick={() => updatePassword()}>
                     확인
                   </button>
@@ -308,14 +342,40 @@ const Navbar = () => {
               )}
             </div>
           </div>
-          <div className='nav_modal_sub_div'>
-            <span className='nav_modal_sub_title'>회원 탈퇴</span>
+          <div className='nav_modal_sub_div bbn'>
+            <span className='nav_modal_sub_title mb25'>회원 탈퇴</span>
             <div className='nav_modal_sub'>
-              <button className='nav_modal_leave_btn'>회원 탈퇴</button>
+              <button
+                className='nav_modal_leave_btn'
+                onClick={() => setShowNoti(true)}>
+                회원 탈퇴
+              </button>
+              <span className='nav_modal_leave_text'>※ 탈퇴시 작성하신 포스트가 모두 삭제되어 복구되지 않습니다.</span>
             </div>
           </div>
         </div>
       </Modal>
+      <Snackbar
+        open={showNoti}
+        message='정말로 탈퇴하시겠습니까?'
+        onClose={closeNoti}
+        action={
+          <React.Fragment>
+            <Button
+              color='primary'
+              size='small'
+              onClick={dropOut}>
+              확인
+            </Button>
+            <Button
+              color='inherit'
+              size='small'
+              onClick={closeNoti}>
+              취소
+            </Button>
+          </React.Fragment>
+        }
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}></Snackbar>
     </div>
   );
 };

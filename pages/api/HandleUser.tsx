@@ -66,6 +66,11 @@ export const handleMySql = async (params: any) => {
     case 'getCurrentPassword':
       userEmail = params.email;
       sql = `SELECT USER_PASSWORD FROM USER WHERE USER_EMAIL = '${userEmail}'`;
+      break;
+    case 'dropOut':
+      userEmail = params.email;
+      sql = `DELETE FROM USER WHERE USER_EMAIL = '${userEmail}'`;
+      break;
   }
 
   await new Promise((resolve, reject) => {

@@ -105,6 +105,10 @@ a {
   border-bottom: 1px solid #009bf2 !important;
 }
 
+.bbn {
+  border-bottom: none !important;
+}
+
 .btlr {
   border-top-left-radius: 15px;
 }
@@ -139,6 +143,10 @@ a {
 
 .mb15 {
   margin-bottom: 15px !important;
+}
+
+.mb25 {
+  margin-bottom: 25px !important;
 }
 
 .dn {
