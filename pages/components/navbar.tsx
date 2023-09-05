@@ -171,6 +171,8 @@ const Navbar = () => {
       setOpenModal(false);
       signOut();
     });
+
+    await axios.post('/api/HandlePost', { data: params });
   };
 
   //mui notification 닫기
