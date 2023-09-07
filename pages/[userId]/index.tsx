@@ -15,13 +15,6 @@ interface user {
   nickname: string;
 }
 const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number; userInfo: user }) => {
-  //const dispatch = useCustomDispatch();
-
-  // useEffect(() => {
-  //   console.log(userInfo);
-  //   dispatch(setUser(userInfo));
-  // }, [userInfo, dispatch]);
-
   const router = useRouter();
   const { userId } = router.query;
 

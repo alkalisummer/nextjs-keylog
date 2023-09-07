@@ -8,7 +8,7 @@ import { timeFormat } from '@/utils/CommonUtils';
 import PostLayout from '../postLayout';
 import { GetServerSideProps } from 'next';
 import { handleMySql } from '@/pages/api/HandlePost';
-
+import CheckAuth from '@/utils/CheckAuth';
 interface post {
   POST_ID: string;
   POST_TITLE: string;
@@ -42,16 +42,23 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
           <div className='post_title_created'>
             <span className='post_title'>{post.POST_TITLE}</span>
             <div className='post_created'>
-              <span className='mg-r-10 pointer'>{timeFormat(post.AMNT_DTTM)}</span>|
-              <Link href={`/${userId}/posts/edit/${post.POST_ID}`}>
-                <span className='mg-r-10 mg-l-10'>수정</span>
-              </Link>
-              |
-              <span
-                className='mg-l-10 pointer'
-                onClick={() => handleDelete()}>
-                삭제
-              </span>
+              <span className='mg-r-10 pointer'>{timeFormat(post.AMNT_DTTM)}</span>
+              {CheckAuth() ? (
+                <>
+                  |
+                  <Link href={`/${userId}/posts/edit/${post.POST_ID}`}>
+                    <span className='mg-r-10 mg-l-10'>수정</span>
+                  </Link>
+                  |
+                  <span
+                    className='mg-l-10 pointer'
+                    onClick={() => handleDelete()}>
+                    삭제
+                  </span>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <div

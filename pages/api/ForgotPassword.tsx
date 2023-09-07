@@ -25,7 +25,7 @@ export default async function ForgotPassword(request: NextApiRequest, response: 
 
     const mailOptions = {
       from: 'verify@keylog.io',
-      to: params.email,
+      to: user.items[0].USER_EMAIL,
       subject: 'Keylog 임시비밀번호 발급',
       text: `Keylog 임시비밀번호는 ${tmpPassword} 입니다. 로그인 후 비밀번호를 반드시 변경해주세요.`,
     };
