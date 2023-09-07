@@ -7,12 +7,13 @@ interface LayoutProps {
 
 const PostLayout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
+  const { userId } = router.query;
   return (
     <div className='post_area'>
       <div className='post_header'>
         <span
           className='post_back_arrow'
-          onClick={() => router.push('/')}>
+          onClick={() => router.push(`/${userId}`)}>
           &lt;
         </span>
         <span className='post_header_title'>kyuuun</span>

@@ -27,11 +27,12 @@ export const handleMySql = async (params: any) => {
 
   switch (params.type) {
     case 'list':
+      rgsrId = params.id;
       const perPage = params.perPage;
       const currPageNum = params.currPageNum;
       const sttRowNum = perPage * (currPageNum - 1) + 1;
       const eddRowNum = perPage * currPageNum;
-      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
+      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST WHERE RGSR_ID = '${rgsrId}' ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
       break;
     case 'read':
       postId = params.postId;
@@ -39,7 +40,7 @@ export const handleMySql = async (params: any) => {
       break;
     case 'insert':
       post = params.post;
-      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}', '${post.post_thmb_img_url}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSR_ID, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}', '${post.post_thmb_img_url}','${post.rgsr_id}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;

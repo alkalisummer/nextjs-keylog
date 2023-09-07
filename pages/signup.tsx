@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useDebounce } from '@/hooks/useDebounce';
 import signupStyle from '../styles/Signup.module.css';
 import { timeToString } from '@/utils/CommonUtils';
 import axios from 'axios';
@@ -9,15 +10,18 @@ import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 
 const Signup = () => {
-  //이메일
-  const [email, setEmail] = useState('');
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  //아이디
+  const [id, setId] = useState('');
+  const [idValidate, setIdValidate] = useState<boolean>(true);
   //비밀번호
   const [password, setPassword] = useState('');
   const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
   //비밀번호 확인
   const [pwDoubleCheckText, setPwDoubleCheckText] = useState('');
   const [pwDoubleValidate, setPwDoubleValidate] = useState<boolean>(true);
+  //이메일
+  const [email, setEmail] = useState('');
+  const [emailValidate, setEmailValidate] = useState<boolean>(true);
   //닉네임
   const [nickname, setNickname] = useState('');
   const [nicknameValidate, setNicknameValidate] = useState<boolean>(true);
@@ -26,10 +30,20 @@ const Signup = () => {
 
   const router = useRouter();
 
+  // 타이핑할때마다 아이디 중복검사 무분별한 api 호출을 막기위해 0.5초 딜레이를 두고 딜레이안에 다른 값이 들어오면 딜레이 초기화
+  const debouncedSearchTerm = useDebounce(id, 500);
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      idCheck(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
+
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //email, password 유효성 검사
-    if (!(await emailCheck(email))) {
+    if (!(await idCheck(id))) {
+      return;
+    } else if (!emailCheck(email)) {
       return;
     } else if (!passwordCheck(password)) {
       return;
@@ -39,33 +53,47 @@ const Signup = () => {
       return;
     }
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', email: email, nickname: nickname.replaceAll(' ', ''), password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
+    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', ''), password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);
     });
   };
 
+  const idCheck = async (id: string) => {
+    const idRegEx = /^[a-z0-9]{5,20}$/;
+    let isValidate = idRegEx.test(id);
+    const params = { type: 'getUser', id: id };
+
+    if (!isValidate) {
+      setIdValidate(false);
+      document.querySelector('.idErrMsg')!.innerHTML = '<div class="mt5">아이디는 5-20자의 영문 소문자, 숫자만 사용 가능합니다. </div>';
+    } else {
+      //ID 중복검사
+      await axios.post('/api/HandleUser', { data: params }).then((res) => {
+        const userCnt = res.data.totalItems;
+        if (userCnt > 0) {
+          isValidate = false;
+          document.querySelector('.idErrMsg')!.innerHTML = '<div class="mt5">이미 가입되어 있는 아이디입니다.</div>';
+        } else {
+          setIdValidate(true);
+          document.querySelector('.idErrMsg')!.innerHTML = '';
+        }
+      });
+    }
+    return isValidate;
+  };
+
   const emailCheck = async (email: string) => {
     const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let isValidate = emailRegEx.test(email);
-    const params = { type: 'getUser', email: email };
 
     if (!isValidate) {
       setEmailValidate(false);
       document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이메일 형식이 올바르지 않습니다.</div>';
     } else {
-      //Email 중복검사
-      await axios.post('/api/HandleUser', { data: params }).then((res) => {
-        const userCnt = res.data.totalItems;
-        if (userCnt > 0) {
-          isValidate = false;
-          document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이미 가입되어 있는 이메일입니다.</div>';
-        } else {
-          setEmailValidate(true);
-          document.querySelector('.emailErrMsg')!.innerHTML = '';
-        }
-      });
+      setEmailValidate(true);
+      document.querySelector('.emailErrMsg')!.innerHTML = '';
     }
 
     return isValidate;
@@ -126,19 +154,18 @@ const Signup = () => {
         onSubmit={submitHandler}
         className={signupStyle.signup_form}>
         <div className={signupStyle.signup_input_div}>
-          <div className={`${signupStyle.signup_emoji} ${emailValidate ? '' : signupStyle.validateErr} btlr`}>
-            <i className={'fa-solid fa-envelope'}></i>
+          <div className={`${signupStyle.signup_emoji} ${idValidate ? '' : signupStyle.validateErr} btlr`}>
+            <i className={'fa-solid fa-user'}></i>
           </div>
           <input
             type='text'
-            value={email}
-            className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr} btrr`}
-            placeholder='이메일'
+            value={id}
+            className={`${signupStyle.signup_input_text} ${idValidate ? '' : signupStyle.validateErr} btrr`}
+            placeholder='아이디'
             autoComplete='off'
             required
             onChange={(e) => {
-              setEmail(e.target.value);
-              emailCheck(e.target.value);
+              setId(e.target.value);
             }}></input>
         </div>
         <div className={signupStyle.signup_input_div}>
@@ -173,9 +200,25 @@ const Signup = () => {
               passwordDoubleCheck(e.target.value);
             }}></input>
         </div>
+        <div className={signupStyle.signup_input_div}>
+          <div className={`${signupStyle.signup_emoji} ${emailValidate ? '' : signupStyle.validateErr}`}>
+            <i className={'fa-solid fa-envelope'}></i>
+          </div>
+          <input
+            type='text'
+            value={email}
+            className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr}`}
+            placeholder='이메일'
+            autoComplete='off'
+            required
+            onChange={(e) => {
+              setEmail(e.target.value);
+              emailCheck(e.target.value);
+            }}></input>
+        </div>
         <div className={`${signupStyle.signup_input_div} mb10`}>
           <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
-            <i className={'fa-solid fa-user'}></i>
+            <i className='fa-solid fa-address-card'></i>
           </div>
           <input
             type='text'
@@ -190,6 +233,7 @@ const Signup = () => {
               nicknameCheck(e.target.value);
             }}></input>
         </div>
+        <div className={`idErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`emailErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`passwordErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`pwDobleCheckErrMsg ${signupStyle.validateErrMsg}`}></div>

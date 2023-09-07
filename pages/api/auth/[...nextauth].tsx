@@ -14,20 +14,20 @@ export default NextAuth({
       // 로그인 방식명
       name: 'EMAIL, PW',
       credentials: {
-        email: { label: '이메일', type: 'email', placeholder: '이메일을 입력하세요.' },
+        id: { label: '아이디', type: 'text', placeholder: '아이디를 입력하세요.' },
         password: { label: '비밀번호', type: 'password' },
       },
       async authorize(credentials, req) {
-        const email = credentials?.email;
+        const id = credentials?.id;
         const password = credentials?.password;
 
-        const params = { type: 'getUser', email: email };
+        const params = { type: 'getUser', id: id };
         const user = await handleMySql(params).then((res) => {
           return res.items[0];
         });
         const isValid = await verifyPassword(password!, user.USER_PASSWORD);
         if (user && isValid) {
-          return { id: getEmailId(user.USER_EMAIL) as string, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THMB_IMG_URL ? user.USER_THMB_IMG_URL : '' };
+          return { id: user.USER_ID, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THMB_IMG_URL ? user.USER_THMB_IMG_URL : '' };
         } else {
           return null;
         }

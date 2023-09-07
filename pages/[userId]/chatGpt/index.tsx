@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import BlogLayout from '../blogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { useRouter } from 'next/navigation';
 
-const ChatGpt = () => {
+interface user {
+  id: string;
+  email: string;
+  image: string;
+  nickname: string;
+}
+
+const ChatGpt = ({ userInfo }: { userInfo: user }) => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
@@ -82,37 +90,39 @@ const ChatGpt = () => {
   };
 
   return (
-    <form
-      className='chat_div'
-      onSubmit={handleSubmit}>
-      <div className='chat_header_div'>
-        <span
-          className='chat_back_arrow'
-          onClick={() => router.push('/')}>
-          &lt;
-        </span>
-        <span className='chat_header_title'>ChatGPT</span>
-        <button
-          type='button'
-          className='char_clear_btn'
-          onClick={clearChat}></button>
-      </div>
-      <div className='chat_content_div'></div>
-      <div className='user_input_div'>
-        <input
-          type='text'
-          className='user_input'
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder='Send a message'
-        />
-        <div className='chat_submit_btn_div'>
+    <BlogLayout userInfo={userInfo}>
+      <form
+        className='chat_div'
+        onSubmit={handleSubmit}>
+        <div className='chat_header_div'>
+          <span
+            className='chat_back_arrow'
+            onClick={() => router.push('/')}>
+            &lt;
+          </span>
+          <span className='chat_header_title'>ChatGPT</span>
           <button
-            type='submit'
-            className='chat_submit_btn'></button>
+            type='button'
+            className='char_clear_btn'
+            onClick={clearChat}></button>
         </div>
-      </div>
-    </form>
+        <div className='chat_content_div'></div>
+        <div className='user_input_div'>
+          <input
+            type='text'
+            className='user_input'
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder='Send a message'
+          />
+          <div className='chat_submit_btn_div'>
+            <button
+              type='submit'
+              className='chat_submit_btn'></button>
+          </div>
+        </div>
+      </form>
+    </BlogLayout>
   );
 };
 

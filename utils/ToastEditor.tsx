@@ -2,6 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
+//사용자 세션
+import { useSession } from 'next-auth/react';
+
 //Toast UI
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -16,6 +19,9 @@ import { onUploadImage } from '@/utils/CommonUtils';
 import { timeToString } from '@/utils/CommonUtils';
 
 const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) => {
+  //사용자 세션
+  const { data: session, status } = useSession();
+
   const [title, setTitle] = useState('');
   const editorRef = useRef<Editor>(null);
 
@@ -24,6 +30,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
   const [oriImgArr, setOriImgArr] = useState<string[]>([]);
 
   const router = useRouter();
+  const { userId } = router.query;
 
   //html data 추출
   const cheerio = require('cheerio');
@@ -62,62 +69,68 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    //html 추출 및 제거
-    const htmlCntn = editorRef.current?.getInstance().getHTML();
-    const $ = cheerio.load(htmlCntn);
-    const plainText = $.text();
+    if (status === 'authenticated') {
+      //html 추출 및 제거
+      const htmlCntn = editorRef.current?.getInstance().getHTML();
+      const $ = cheerio.load(htmlCntn);
+      const plainText = $.text();
 
-    if (title.replaceAll(' ', '').length === 0) {
-      alert('제목을 입력하세요.');
-      return;
-    } else if (plainText.replaceAll(' ', '').length === 0) {
-      alert('내용을 입력하세요.');
-      return;
-    }
-
-    //현재 이미지 파일 이름 추출
-    const imageTags = $('img');
-    const currImageArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
-
-    //썸네일 이미지 URL 추출(첫번째 이미지)
-    const thmbImgUrl = $(imageTags[0])?.attr('src');
-
-    // 지워진 이미지
-    let removedImg = [];
-
-    // 현재 이미지에서 지워진 이미지 파일 이름 추출
-    for (let originImg of imgFileArr) {
-      if (currImageArr.indexOf(originImg) === -1) {
-        removedImg.push(originImg);
+      if (title.replaceAll(' ', '').length === 0) {
+        alert('제목을 입력하세요.');
+        return;
+      } else if (plainText.replaceAll(' ', '').length === 0) {
+        alert('내용을 입력하세요.');
+        return;
       }
-    }
 
-    axios.post('/api/DeleteImgFile', { removedImg });
+      //현재 이미지 파일 이름 추출
+      const imageTags = $('img');
+      const currImageArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
 
-    const currentTime = timeToString(new Date());
-    const postData = {
-      type: mode,
-      post: {
-        post_id: postId,
-        post_title: title,
-        post_cntn: plainText,
-        post_html_cntn: htmlCntn,
-        post_thmb_img_url: thmbImgUrl ? thmbImgUrl : '',
-        rgsn_dttm: currentTime,
-        amnt_dttm: currentTime,
-      },
-    };
-    await axios
-      .post('/api/HandlePost', { data: postData })
-      .then((response) => response.data)
-      .then(function (res) {
-        setTitle('');
-        if (mode === 'insert') {
-          router.push(`/posts/detail/${res.postId}`);
-        } else {
-          router.push(`/posts/detail/${postId}`);
+      //썸네일 이미지 URL 추출(첫번째 이미지)
+      const thmbImgUrl = $(imageTags[0])?.attr('src');
+
+      // 지워진 이미지
+      let removedImg = [];
+
+      // 현재 이미지에서 지워진 이미지 파일 이름 추출
+      for (let originImg of imgFileArr) {
+        if (currImageArr.indexOf(originImg) === -1) {
+          removedImg.push(originImg);
         }
-      });
+      }
+
+      axios.post('/api/DeleteImgFile', { removedImg });
+
+      const currentTime = timeToString(new Date());
+      const postData = {
+        type: mode,
+        post: {
+          post_id: postId,
+          post_title: title,
+          post_cntn: plainText,
+          post_html_cntn: htmlCntn,
+          post_thmb_img_url: thmbImgUrl ? thmbImgUrl : '',
+          rgsr_id: session?.user?.id,
+          rgsn_dttm: currentTime,
+          amnt_dttm: currentTime,
+        },
+      };
+      await axios
+        .post('/api/HandlePost', { data: postData })
+        .then((response) => response.data)
+        .then(function (res) {
+          setTitle('');
+          if (mode === 'insert') {
+            router.push(`/${userId}/posts/detail/${res.postId}`);
+          } else {
+            router.push(`/${userId}/posts/detail/${postId}`);
+          }
+        });
+    } else {
+      alert('세션이 만료되어 로그아웃 되었습니다.');
+      router.push(`/${userId}`);
+    }
   };
 
   const hadleCancel = async () => {
@@ -127,8 +140,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
         const removedImg = imgFileArr;
         await axios.post('/api/DeleteImgFile', { removedImg });
       }
-
-      router.push(`/`);
+      router.push(`/${userId}`);
     } else {
       // 지워진 이미지
       let removedImg = [];
@@ -141,7 +153,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       }
 
       await axios.post('/api/DeleteImgFile', { removedImg });
-      router.push(`/posts/detail/${postId}`);
+      router.push(`/${userId}/posts/detail/${postId}`);
     }
   };
 

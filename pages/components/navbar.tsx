@@ -64,9 +64,9 @@ const Navbar = () => {
       const image = await onUploadImage(fileInput);
 
       const imgUrl = image.imgUrl;
-      const userEmail = session!.user?.email;
+      const userId = session!.user?.id;
 
-      const params = { type: 'uploadUserImg', imgUrl: imgUrl, email: userEmail };
+      const params = { type: 'uploadUserImg', imgUrl: imgUrl, id: userId };
       await axios.get('/api/HandleUser', { params: params });
       await update({ type: 'uploadImg', imgUrl });
     }
@@ -75,12 +75,12 @@ const Navbar = () => {
   const deleteImg = async () => {
     if (status === 'authenticated' && session!.user?.image) {
       const imgUrl = getImgName(session!.user!.image!);
-      const userEmail = session?.user?.email;
+      const userId = session?.user?.id;
 
       let removedImg = [];
       removedImg.push(imgUrl);
 
-      const params = { type: 'deleteUserImg', email: userEmail };
+      const params = { type: 'deleteUserImg', id: userId };
       await axios.get('/api/HandleUser', { params: params });
       await axios.post('/api/DeleteImgFile', { removedImg });
       await update({ type: 'deleteImg' });
@@ -89,8 +89,8 @@ const Navbar = () => {
 
   const updateNickname = async () => {
     if (status === 'authenticated' && nickname) {
-      const userEmail = session?.user?.email;
-      const params = { type: 'updateNickname', nickname: nickname, email: userEmail };
+      const userId = session?.user?.id;
+      const params = { type: 'updateNickname', nickname: nickname, id: userId };
       await axios.get('/api/HandleUser', { params: params });
       await update({ nickname });
     }
@@ -112,7 +112,7 @@ const Navbar = () => {
     }
 
     //현재 비밀번호 일치유무 확인
-    const params = { password: currPassword, email: session?.user?.email };
+    const params = { password: currPassword, id: session?.user?.id };
     await axios.post('/api/CheckCurrentPassword', { data: params }).then((res) => {
       const result = res.data.isValid;
       if (!result) {
@@ -146,9 +146,9 @@ const Navbar = () => {
     } else if (!passwordDoubleCheck()) {
       return;
     }
-    const email = session?.user?.email;
+    const userId = session?.user?.id;
     const amntDttm = timeToString(new Date());
-    const params = { type: 'updatePassword', password: newPassword, email: email, amntDttm: amntDttm };
+    const params = { type: 'updatePassword', password: newPassword, id: userId, amntDttm: amntDttm };
     axios.post('/api/HandleUser', { data: params }).then((res) => {
       alert('비밀번호가 변경되었습니다.');
       setShowPwInput(false);
@@ -164,8 +164,8 @@ const Navbar = () => {
 
   //회원탈퇴
   const dropOut = async () => {
-    const email = session?.user?.email;
-    const params = { type: 'dropOut', email: email };
+    const userId = session?.user?.id;
+    const params = { type: 'dropOut', id: userId };
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setOpenModal(false);
@@ -212,8 +212,10 @@ const Navbar = () => {
               }}>
               <i className='fa-solid fa-user nav_menu_item_ico'></i>계정관리
             </MenuItem>
-            <MenuItem onClick={closeToggle}>
-              <i className='fa-solid fa-key nav_menu_item_ico'></i>내 키로그
+            <MenuItem>
+              <Link href={`/${session.user?.id}`}>
+                <i className='fa-solid fa-key nav_menu_item_ico'></i>내 키로그
+              </Link>
             </MenuItem>
             <MenuItem onClick={() => signOut()}>
               <i className='fa-solid fa-right-from-bracket nav_menu_item_ico'></i>로그아웃

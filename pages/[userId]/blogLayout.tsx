@@ -1,44 +1,48 @@
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable @next/next/no-img-element */
-import type { AppProps } from 'next/app';
+import React, { ReactNode, useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Head from 'next/head';
 
-import '@/styles/Post.css';
-import '@/styles/ChatGpt.css';
+interface LayoutProps {
+  children: ReactNode;
+  userInfo: any;
+}
 
-export default function App({ Component, pageProps }: AppProps) {
+const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo }) => {
+  const router = useRouter();
+  const { userId } = router.query;
+
   return (
     <div className='main_area'>
-      <Head>
-        <title> kyuuun </title>
-      </Head>
       <div className='left_area'>
-        <Link href={'/'}>
+        <Link href={`/${userId}`}>
           <img
-            src='/icon/myImg.jpeg'
+            src={userInfo.image}
             className='left_profile_icon'
             alt='profile img'
           />
         </Link>
-        <Link href={'/'}>
-          <span className='left_area_title'>{`kyuuun`}</span>
+        <Link href={`/${userId}`}>
+          <span className='left_area_title'>{userInfo.nickname}</span>
         </Link>
         <div className='left_area_btn_div'>
-          <Link href={'/posts/create'}>
+          <Link href={`/${userId}/posts/create`}>
             <button className='create_btn'></button>
           </Link>
-          <Link href={'/chatGpt'}>
+          <Link href={`/${userId}/chatGpt`}>
             <button className='chatgpt_btn'></button>
           </Link>
         </div>
       </div>
       <div className='right_area'>
-        <Component {...pageProps} />
+        {children}
         <div className='right_footer'>
           This app is built with &nbsp;<span className='right_footer_text'>Next.js</span>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(BlogLayout);

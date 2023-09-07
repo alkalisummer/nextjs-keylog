@@ -56,6 +56,10 @@
   color: #009bf2 !important;
 }
 
+.MuiMenuItem-root a {
+  color: #009bf2 !important;
+}
+
 .nav_menu_item_ico {
   margin-right: 15px;
   width: 15px;

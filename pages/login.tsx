@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
   const [saveId, setSaveId] = useState(true);
@@ -15,27 +15,21 @@ const Login = () => {
 
   useEffect(() => {
     if (cookies.userId && saveId) {
-      setEmail(cookies.userId);
+      setId(cookies.userId);
     }
   }, [cookies.userId, saveId]);
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegEx.test(email)) {
-      alert('아이디를 이메일 형식으로 입력해주세요.');
-      return;
-    }
-
     const result = await signIn('credentials', {
       redirect: false,
-      email: email,
+      id: id.replaceAll(' ', ''),
       password: password,
     }).then((res) => {
       if (!res?.error) {
         if (saveId) {
-          setCookies('userId', email, { maxAge: 60 * 60 * 24 * 7 }); //아이디 저장 체크시 일주일동안 쿠키에 저장
+          setCookies('userId', id.replaceAll(' ', ''), { maxAge: 60 * 60 * 24 * 7 }); //아이디 저장 체크시 일주일동안 쿠키에 저장
         } else {
           setCookies('userId', '', { maxAge: 0 }); // 쿠키삭제
         }
@@ -62,12 +56,12 @@ const Login = () => {
           </div>
           <input
             type='text'
-            value={email}
+            value={id}
             className={`${loginStyle.login_input_text} btrr`}
-            placeholder='ID(Email)'
+            placeholder='ID'
             required
             onChange={(e) => {
-              setEmail(e.target.value);
+              setId(e.target.value);
             }}></input>
         </div>
         <div className={`${loginStyle.login_input_div} mb10`}>

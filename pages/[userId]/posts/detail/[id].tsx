@@ -1,4 +1,5 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
+import BlogLayout from '../../blogLayout';
 import Link from 'next/link';
 import axios from 'axios';
 import React from 'react';
@@ -14,8 +15,16 @@ interface post {
   AMNT_DTTM: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn }: { post: post; imgFileArr: []; htmlCntn: string }) => {
+interface user {
+  id: string;
+  email: string;
+  image: string;
+  nickname: string;
+}
+
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; imgFileArr: []; htmlCntn: string; userInfo: user }) => {
   const router = useRouter();
+  const { userId } = router.query;
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };
@@ -27,28 +36,30 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn }: { post: post; imgFileArr
     });
   };
   return (
-    <PostLayout>
-      <div className='post_div'>
-        <div className='post_title_created'>
-          <span className='post_title'>{post.POST_TITLE}</span>
-          <div className='post_created'>
-            <span className='mg-r-10 pointer'>{timeFormat(post.AMNT_DTTM)}</span>|
-            <Link href={`/posts/edit/${post.POST_ID}`}>
-              <span className='mg-r-10 mg-l-10'>수정</span>
-            </Link>
-            |
-            <span
-              className='mg-l-10 pointer'
-              onClick={() => handleDelete()}>
-              삭제
-            </span>
+    <BlogLayout userInfo={userInfo}>
+      <PostLayout>
+        <div className='post_div'>
+          <div className='post_title_created'>
+            <span className='post_title'>{post.POST_TITLE}</span>
+            <div className='post_created'>
+              <span className='mg-r-10 pointer'>{timeFormat(post.AMNT_DTTM)}</span>|
+              <Link href={`/${userId}/posts/edit/${post.POST_ID}`}>
+                <span className='mg-r-10 mg-l-10'>수정</span>
+              </Link>
+              |
+              <span
+                className='mg-l-10 pointer'
+                onClick={() => handleDelete()}>
+                삭제
+              </span>
+            </div>
           </div>
+          <div
+            className='toastui-editor-contents post_content'
+            dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
         </div>
-        <div
-          className='toastui-editor-contents post_content'
-          dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
-      </div>
-    </PostLayout>
+      </PostLayout>
+    </BlogLayout>
   );
 };
 
