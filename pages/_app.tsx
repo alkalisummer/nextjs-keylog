@@ -1,5 +1,5 @@
 import type { AppProps, AppContext } from 'next/app';
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider, getSession } from 'next-auth/react';
 import Head from 'next/head';
 import Script from 'next/script';
 
@@ -10,10 +10,12 @@ import '@/styles/Post.css';
 import '@/styles/ChatGpt.css';
 import '@/styles/Navbar.css';
 import '@/styles/Index.css';
+import '@/styles/Error.css';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { session } = pageProps;
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <div className='main_area'>
         <Script
           src='https://kit.fontawesome.com/25678e103e.js'
@@ -21,9 +23,9 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <Head>
           <title> keylog </title>
-          <meta
+          {/* <meta
             httpEquiv='Content-Security-Policy'
-            content='upgrade-insecure-requests'></meta>
+            content='upgrade-insecure-requests'></meta> */}
         </Head>
         <Component {...pageProps} />
       </div>
@@ -37,6 +39,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
     pageProps = await Component.getInitialProps(ctx);
   }
 
+  const session = await getSession(ctx);
   const userId = ctx.query.userId;
   let userInfo;
 
@@ -54,7 +57,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
     };
   }
 
-  pageProps = { ...pageProps, userInfo };
+  pageProps = { ...pageProps, userInfo, session };
 
   return { pageProps };
 };

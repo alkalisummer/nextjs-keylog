@@ -4,7 +4,6 @@ import React, { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import CheckAuth from '@/utils/CheckAuth';
-import Login from '../../public/icon/person.png';
 
 interface LayoutProps {
   children: ReactNode;

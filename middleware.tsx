@@ -6,10 +6,11 @@ const secret = process.env.SECRET;
 
 export async function middleware(req: NextRequest, event: NextFetchEvent) {
   //로그인이 되어 있을 경우 토큰이 존재
-  const session = await getToken({ req, secret, raw: true });
+  const token = await getToken({ req, secret, raw: true });
+
   const { pathname } = req.nextUrl;
   if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
-    if (session) {
+    if (token) {
       return NextResponse.redirect(new URL('/', req.url));
     }
   }
