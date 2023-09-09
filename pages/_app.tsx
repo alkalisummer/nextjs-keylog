@@ -54,6 +54,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
       email: user.USER_EMAIL,
       image: user.USER_THMB_IMG_URL,
       nickname: user.USER_NICKNAME,
+      blogName: user.USER_BLOG_NAME,
     };
   }
 

@@ -18,13 +18,22 @@ const ChatGpt = ({ userInfo }: { userInfo: user }) => {
   useEffect(() => {
     const footer: any = document.getElementsByClassName('right_footer')[0];
     const leftArea: any = document.getElementsByClassName('left_area')[0];
-    footer.style.display = 'none';
+    const blogName: any = document.getElementsByClassName('left_area_blog_name')[0];
+    const createBtn: any = document.getElementsByClassName('create_btn')[0];
+    const chatGptBtn: any = document.getElementsByClassName('chatgpt_btn')[0];
 
+    footer.style.display = 'none';
     leftArea.style.backgroundColor = '#202123';
+    blogName.style.color = '#d1d1d1';
+    createBtn.style.filter = 'invert(100%) sepia(100%) saturate(0%) hue-rotate(10deg) brightness(103%) contrast(101%)';
+    chatGptBtn.style.filter = 'invert(35%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
 
     return () => {
       footer.style.display = 'flex';
       leftArea.style.backgroundColor = '#009bf2';
+      blogName.style.color = '#5c5c5c';
+      createBtn.style.filter = 'unset';
+      chatGptBtn.style.filter = 'invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
     };
   }, []);
 

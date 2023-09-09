@@ -7,12 +7,14 @@ import listStyle from '../../styles/List.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
+import CheckAuth from '@/utils/CheckAuth';
 
 interface user {
   id: string;
   email: string;
   image: string;
   nickname: string;
+  blogName: string;
 }
 const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number; userInfo: user }) => {
   const router = useRouter();
@@ -46,24 +48,30 @@ const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; i
       <div className={listStyle.home_div}>
         <div className={listStyle.home_header_div}>
           <img
-            src='/icon/myImg.jpeg'
+            src={userInfo.image ? userInfo.image : '../../icon/person.png'}
             className={listStyle.home_profile_img}
             alt='profile img'
           />
-          <span className={listStyle.home_header_title}>{`kyuuun`}</span>
+          <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
+          <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
         </div>
         <div className={listStyle.home_post}>
           <div className={listStyle.home_header}>
             <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
-            <div className={listStyle.home_header_btn}>
-              <Link href={`/${userId}/chatGpt`}>
-                <button className={listStyle.chatgpt_btn}>ChatGPT</button>
-              </Link>
-              <Link href={`/${userId}/posts/create`}>
-                <button className={listStyle.create_btn}>글쓰기</button>
-              </Link>
-            </div>
+            {CheckAuth() ? (
+              <div className={listStyle.home_header_btn}>
+                <Link href={`/${userId}/chatGpt`}>
+                  <button className={listStyle.chatgpt_btn}>ChatGPT</button>
+                </Link>
+                <Link href={`/${userId}/posts/create`}>
+                  <button className={listStyle.create_btn}>글쓰기</button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
+
           {posts.items?.map((post: any) => {
             return (
               <PostItem

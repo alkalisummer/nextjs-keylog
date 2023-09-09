@@ -25,8 +25,9 @@ const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo }) => {
           />
         </Link>
         <Link href={`/${userId}`}>
-          <span className='left_area_title'>{userInfo.nickname}</span>
+          <span className='left_area_blog_name'>{userInfo.blogName}</span>
         </Link>
+        <span className='left_area_title'>{userInfo.nickname}</span>
         {CheckAuth() ? (
           <div className='left_area_btn_div'>
             <Link href={`/${userId}/posts/create`}>

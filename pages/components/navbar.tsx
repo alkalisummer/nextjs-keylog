@@ -32,6 +32,9 @@ const Navbar = () => {
   const [nickname, setNickname] = useState(session?.user?.name);
   const [showNameInput, setShowNameInput] = useState(false);
 
+  //블로그 이름
+  const [blogName, setBlogName] = useState(session?.user?.blogName);
+
   //비밀번호
   const [currPassword, setCurrPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -87,12 +90,20 @@ const Navbar = () => {
     }
   };
 
-  const updateNickname = async () => {
-    if (status === 'authenticated' && nickname) {
+  const updateNicknameBlogName = async () => {
+    if (!nickname) {
+      alert('닉네임을 입력하세요.');
+      return;
+    } else if (!blogName) {
+      alert('블로그 이름을 입력하세요.');
+      return;
+    }
+
+    if (status === 'authenticated') {
       const userId = session?.user?.id;
-      const params = { type: 'updateNickname', nickname: nickname, id: userId };
+      const params = { type: 'updateNicknameBlogName', nickname: nickname, blogName: blogName, id: userId };
       await axios.get('/api/HandleUser', { params: params });
-      await update({ nickname });
+      await update({ nickname, blogName });
     }
     setShowNameInput(false);
   };
@@ -272,37 +283,60 @@ const Navbar = () => {
             <div className='nav_profile_detail_div'>
               <div className='nav_modal_nickname_div'>
                 {!showNameInput ? (
-                  <>
-                    <span id='nav_modal_nickname'>{session?.user?.name}</span>
-                    <span
-                      id='nav_modal_nickname_update_btn'
-                      className='lh25'
-                      onClick={() => {
-                        setShowNameInput(true);
-                        setNickname(session?.user?.name);
-                      }}>
-                      수정
-                    </span>
-                  </>
+                  <div className='df fd_c w100'>
+                    <div className='df jc_c w100'>
+                      <span id='nav_modal_nickname'>{session?.user?.name}</span>
+                      <span
+                        id='nav_modal_nickname_update_btn'
+                        className='lh25'
+                        onClick={() => {
+                          setShowNameInput(true);
+                          setNickname(session?.user?.name);
+                        }}>
+                        수정
+                      </span>
+                    </div>
+                    <div className='mb5'>
+                      <span className='nav_modal_email'>{session?.user?.blogName}</span>
+                    </div>
+                  </div>
                 ) : (
-                  <>
+                  <div className='df fd_c w100'>
                     <input
-                      id='nav_modal_nickname_input'
+                      className='nav_modal_input'
                       type='text'
+                      placeholder='닉네임'
                       value={nickname ? nickname : ''}
                       onChange={(e) => setNickname(e.target.value)}
                     />
-                    <button
-                      id='nav_modal_nickname_save_btn'
-                      onClick={() => updateNickname()}>
-                      저장
-                    </button>
-                  </>
+                    <input
+                      className='nav_modal_input'
+                      type='text'
+                      placeholder='블로그 이름'
+                      value={blogName}
+                      onChange={(e) => setBlogName(e.target.value)}
+                    />
+                    <div className='df jc_e'>
+                      <button
+                        className='nav_modal_profile_btn'
+                        onClick={() => updateNicknameBlogName()}>
+                        저장
+                      </button>
+                      <button
+                        className='nav_modal_profile_btn nav_modal_cancel'
+                        onClick={() => setShowNameInput(false)}>
+                        취소
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
-              <div className='nav_modal_email_div'>
-                <span className='nav_modal_email'>{session?.user?.email}</span>
-              </div>
+            </div>
+          </div>
+          <div className='nav_modal_sub_div'>
+            <span className='nav_modal_sub_title'>이메일</span>
+            <div className='nav_modal_sub'>
+              <span className='nav_modal_email'>{session?.user?.email}</span>
             </div>
           </div>
           <div className='nav_modal_sub_div'>

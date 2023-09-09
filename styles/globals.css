@@ -29,18 +29,26 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #009bf2;
+  background-color: #f8f9fa;
   padding-top: 15%;
 }
 
 .left_area a {
   text-decoration: none;
+  margin-top: 10px;
+}
+
+.left_area_blog_name {
+  font-size: 30px;
+  color: #5c5c5c;
+  font-weight: 500;
 }
 
 .left_area_title {
-  font-size: 30px;
-  font-weight: normal;
-  color: white;
+  font-size: 20px;
+  font-weight: 300;
+  color: #98a1a9;
+  margin-top: 10px;
 }
 
 .left_area_btn_div {
@@ -68,7 +76,7 @@ body {
   height: 30px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  filter: invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%);
 }
 
 .chatgpt_btn {
@@ -77,7 +85,7 @@ body {
   height: 30px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  filter: invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%);
 }
 
 .right_footer {
@@ -160,6 +168,30 @@ a {
 
 .wa {
   width: auto !important;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.df {
+  display: flex;
+}
+
+.fd_c {
+  flex-direction: column;
+}
+
+.jc_c {
+  justify-content: space-between;
+}
+
+.jc_e {
+  justify-content: end;
+}
+
+.ai_c {
+  align-items: center;
 }
 
 @media (max-width: 768px) {

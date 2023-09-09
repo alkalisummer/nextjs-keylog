@@ -25,6 +25,10 @@ const Signup = () => {
   //닉네임
   const [nickname, setNickname] = useState('');
   const [nicknameValidate, setNicknameValidate] = useState<boolean>(true);
+  //블로그 이름
+  const [blogName, setBlogName] = useState('');
+  const [blogNameValidate, setBlogNameValidate] = useState<boolean>(true);
+
   //notification 팝업
   const [showNoti, setShowNoti] = useState(false);
 
@@ -49,11 +53,13 @@ const Signup = () => {
       return;
     } else if (!passwordDoubleCheck(pwDoubleCheckText)) {
       return;
+    } else if (!blogNameCheck(blogName)) {
+      return;
     } else if (!nicknameCheck(nickname)) {
       return;
     }
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', ''), password: password, rgsn_dttm: currentTime, amnt_dttm: currentTime };
+    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', ''), password: password, blogName: blogName, rgsnDttm: currentTime, amntDttm: currentTime };
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);
@@ -139,6 +145,18 @@ const Signup = () => {
     return isValidate;
   };
 
+  const blogNameCheck = (blogName: string) => {
+    const isValidate = blogName.replaceAll(' ', '').length === 0 ? false : true;
+    if (!isValidate) {
+      setBlogNameValidate(false);
+      document.querySelector('.blogNameErrMsg')!.innerHTML = '<div class="mt5">블로그 이름을 입력해주세요.</div>';
+    } else {
+      setBlogNameValidate(true);
+      document.querySelector('.blogNameErrMsg')!.innerHTML = '';
+    }
+    return isValidate;
+  };
+
   const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -216,6 +234,23 @@ const Signup = () => {
               emailCheck(e.target.value);
             }}></input>
         </div>
+        <div className={`${signupStyle.signup_input_div}`}>
+          <div className={`${signupStyle.signup_emoji} ${blogNameValidate ? '' : signupStyle.validateErr}`}>
+            <i className='fa-solid fa-star'></i>
+          </div>
+          <input
+            type='text'
+            value={blogName}
+            className={`${signupStyle.signup_input_text} ${blogNameValidate ? '' : signupStyle.validateErr}`}
+            maxLength={30}
+            placeholder='블로그 이름'
+            required
+            autoComplete='off'
+            onChange={(e) => {
+              setBlogName(e.target.value);
+              blogNameCheck(e.target.value);
+            }}></input>
+        </div>
         <div className={`${signupStyle.signup_input_div} mb10`}>
           <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
             <i className='fa-solid fa-address-card'></i>
@@ -238,6 +273,7 @@ const Signup = () => {
         <div className={`passwordErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`pwDobleCheckErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
+        <div className={`blogNameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <button
           type='submit'
           className={signupStyle.signup_btn}>

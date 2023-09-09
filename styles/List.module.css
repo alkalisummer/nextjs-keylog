@@ -158,17 +158,22 @@
   }
   .home_header_div {
     height: 50%;
-    background-color: #009bf2;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    background: #f8f9fa;
   }
-  .home_header_title {
+  .home_blog_name {
     font-weight: 400;
     font-size: 20px;
     margin-top: 0.5rem;
-    color: white;
+    margin-bottom: 0.3rem;
+    color: #5c5c5c;
+  }
+  .home_header_title {
+    font-size: 15px;
+    color: #98a1a9;
   }
 
   .create_btn {

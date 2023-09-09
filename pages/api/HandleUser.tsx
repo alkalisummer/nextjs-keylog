@@ -25,6 +25,7 @@ export const handleMySql = async (params: any) => {
   let userPassword: string;
   let userNickname: string;
   let userThmbImgUrl: string;
+  let userBlogName: string;
   let rgsnDttm: string;
   let amntDttm: string;
 
@@ -33,16 +34,17 @@ export const handleMySql = async (params: any) => {
   switch (params.type) {
     case 'getUser':
       userId = params.id;
-      sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL FROM USER WHERE USER_ID = '${userId}'`;
+      sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL, USER_BLOG_NAME FROM USER WHERE USER_ID = '${userId}'`;
       break;
     case 'signup':
       userId = params.id;
       userEmail = params.email;
       userNickname = params.nickname;
       userPassword = await hashPassword(params.password);
-      rgsnDttm = params.rgsn_dttm;
-      amntDttm = params.amnt_dttm;
-      sql = `INSERT INTO USER (USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, RGSN_DTTM, AMNT_DTTM) VALUES ('${userId}','${userEmail}', '${userNickname}', '${userPassword}', '${rgsnDttm}', '${amntDttm}')`;
+      userBlogName = params.blogName;
+      rgsnDttm = params.rgsnDttm;
+      amntDttm = params.amntDttm;
+      sql = `INSERT INTO USER (USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_BLOG_NAME, RGSN_DTTM, AMNT_DTTM) VALUES ('${userId}','${userEmail}', '${userNickname}', '${userPassword}', '${userBlogName}','${rgsnDttm}', '${amntDttm}')`;
       break;
     case 'updatePassword':
       userPassword = await hashPassword(params.password);
@@ -59,10 +61,16 @@ export const handleMySql = async (params: any) => {
       userId = params.id;
       sql = `UPDATE USER SET USER_THMB_IMG_URL = '' WHERE USER_ID = '${userId}'`;
       break;
-    case 'updateNickname':
+    case 'updateNicknameBlogName':
       userNickname = params.nickname;
+      userBlogName = params.blogName;
       userId = params.id;
-      sql = `UPDATE USER SET USER_NICKNAME = '${userNickname}' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER SET USER_NICKNAME = '${userNickname}', USER_BLOG_NAME = '${userBlogName}' WHERE USER_ID = '${userId}'`;
+      break;
+    case 'updateEmail':
+      userEmail = params.email;
+      userId = params.id;
+      sql = `UPDATE USER SET USER_EMAIL = '${userEmail}' WHERE USER_ID = '${userId}'`;
       break;
     case 'getCurrentPassword':
       userId = params.id;
