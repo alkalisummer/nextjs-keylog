@@ -35,6 +35,10 @@ const Navbar = () => {
   //블로그 이름
   const [blogName, setBlogName] = useState(session?.user?.blogName);
 
+  //이메일
+  const [email, setEmail] = useState(session?.user?.email!);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+
   //비밀번호
   const [currPassword, setCurrPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -194,6 +198,23 @@ const Navbar = () => {
     setShowNoti(false);
   };
 
+  const updateEmail = async () => {
+    const userId = session?.user?.id;
+    const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    let isValidate = emailRegEx.test(email);
+
+    if (!isValidate) {
+      alert('이메일 형식이 올바르지 않습니다.');
+      return;
+    }
+
+    const params = { type: 'updateEmail', id: userId, email: email };
+    await axios.post('/api/HandleUser', { data: params }).then(async (res) => {
+      await update({ email });
+      setShowEmailInput(false);
+    });
+  };
+
   return (
     <div className='nav_div'>
       <span className='nav_logo_btn'>keylog</span>
@@ -284,11 +305,10 @@ const Navbar = () => {
               <div className='nav_modal_nickname_div'>
                 {!showNameInput ? (
                   <div className='df fd_c w100'>
-                    <div className='df jc_c w100'>
+                    <div className='df jc_c w100 mb5'>
                       <span id='nav_modal_nickname'>{session?.user?.name}</span>
                       <span
-                        id='nav_modal_nickname_update_btn'
-                        className='lh25'
+                        className='nav_modal_text_update_btn lh25'
                         onClick={() => {
                           setShowNameInput(true);
                           setNickname(session?.user?.name);
@@ -296,7 +316,7 @@ const Navbar = () => {
                         수정
                       </span>
                     </div>
-                    <div className='mb5'>
+                    <div>
                       <span className='nav_modal_email'>{session?.user?.blogName}</span>
                     </div>
                   </div>
@@ -318,12 +338,12 @@ const Navbar = () => {
                     />
                     <div className='df jc_e'>
                       <button
-                        className='nav_modal_profile_btn'
+                        className='nav_modal_profile_btn h50'
                         onClick={() => updateNicknameBlogName()}>
                         저장
                       </button>
                       <button
-                        className='nav_modal_profile_btn nav_modal_cancel'
+                        className='nav_modal_profile_btn nav_modal_cancel h50'
                         onClick={() => setShowNameInput(false)}>
                         취소
                       </button>
@@ -335,8 +355,35 @@ const Navbar = () => {
           </div>
           <div className='nav_modal_sub_div'>
             <span className='nav_modal_sub_title'>이메일</span>
-            <div className='nav_modal_sub'>
-              <span className='nav_modal_email'>{session?.user?.email}</span>
+
+            <div className='nav_modal_sub fd_i jc_c'>
+              {!showEmailInput ? (
+                <>
+                  <span className='nav_modal_email'>{session?.user?.email}</span>
+                  <span
+                    className='nav_modal_text_update_btn lh19'
+                    onClick={() => {
+                      setShowEmailInput(true);
+                    }}>
+                    수정
+                  </span>
+                </>
+              ) : (
+                <>
+                  <input
+                    type='text'
+                    value={email}
+                    placeholder='이메일을 입력하세요.'
+                    className='nav_modal_input w80 mb0'
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button
+                    className='nav_modal_profile_btn mb0'
+                    onClick={() => updateEmail()}>
+                    저장
+                  </button>
+                </>
+              )}
             </div>
           </div>
           <div className='nav_modal_sub_div'>

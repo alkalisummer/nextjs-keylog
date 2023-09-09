@@ -56,6 +56,9 @@ export default NextAuth({
         if (session.blogName) {
           token.blogName = session.blogName;
         }
+        if (session.email) {
+          token.email = session.email;
+        }
       }
       return token;
     },

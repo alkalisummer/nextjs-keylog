@@ -74,7 +74,7 @@
   flex-direction: column;
   transform: translate(-50%, -50%);
   width: 600px;
-  height: 600px;
+  height: 660px;
   padding: 20px;
   padding-top: 45px;
   background-color: white;
@@ -126,7 +126,7 @@
 
 .nav_profile_detail_div {
   width: 65%;
-  padding: 15px;
+  padding: 15px 0 15px 15px;
   display: flex;
   flex-direction: column;
 }
@@ -152,7 +152,7 @@
   font-family: 'Spoqa Han Sans Neo';
 }
 
-#nav_modal_nickname_update_btn {
+.nav_modal_text_update_btn {
   font-size: 12px;
   cursor: pointer;
   text-decoration: underline;
@@ -165,7 +165,7 @@
   color: white;
   border: none;
   width: 50px;
-  height: 30px;
+  padding: 8px;
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 10px;

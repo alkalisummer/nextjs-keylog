@@ -142,6 +142,10 @@ a {
   margin-top: 10px;
 }
 
+.mb0 {
+  margin-bottom: 0 !important;
+}
+
 .mb5 {
   margin-bottom: 5px;
 }
@@ -165,6 +169,9 @@ a {
 .lh25 {
   line-height: 2.5rem;
 }
+.lh19 {
+  line-height: 1.9rem;
+}
 
 .wa {
   width: auto !important;
@@ -174,12 +181,24 @@ a {
   width: 100%;
 }
 
+.w80 {
+  width: 80%;
+}
+
+.h50 {
+  height: 50px;
+}
+
 .df {
   display: flex;
 }
 
 .fd_c {
   flex-direction: column;
+}
+
+.fd_i {
+  flex-direction: initial !important;
 }
 
 .jc_c {
