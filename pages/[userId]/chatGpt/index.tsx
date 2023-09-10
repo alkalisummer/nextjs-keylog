@@ -21,7 +21,9 @@ const ChatGpt = ({ userInfo }: { userInfo: user }) => {
     const blogName: any = document.getElementsByClassName('left_area_blog_name')[0];
     const createBtn: any = document.getElementsByClassName('create_btn')[0];
     const chatGptBtn: any = document.getElementsByClassName('chatgpt_btn')[0];
+    const rightHeader: any = document.getElementsByClassName('right_header')[0];
 
+    rightHeader.style.display = 'none';
     footer.style.display = 'none';
     leftArea.style.backgroundColor = '#202123';
     blogName.style.color = '#d1d1d1';
@@ -29,6 +31,7 @@ const ChatGpt = ({ userInfo }: { userInfo: user }) => {
     chatGptBtn.style.filter = 'invert(35%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
 
     return () => {
+      rightHeader.style.display = 'flex';
       footer.style.display = 'flex';
       leftArea.style.backgroundColor = '#009bf2';
       blogName.style.color = '#5c5c5c';
@@ -100,34 +103,19 @@ const ChatGpt = ({ userInfo }: { userInfo: user }) => {
 
   return (
     <BlogLayout userInfo={userInfo}>
-      <form
-        className='chat_div'
-        onSubmit={handleSubmit}>
+      <form className='chat_div' onSubmit={handleSubmit}>
         <div className='chat_header_div'>
-          <span
-            className='chat_back_arrow'
-            onClick={() => router.push('/')}>
+          <span className='chat_back_arrow' onClick={() => router.push('/')}>
             &lt;
           </span>
           <span className='chat_header_title'>ChatGPT</span>
-          <button
-            type='button'
-            className='char_clear_btn'
-            onClick={clearChat}></button>
+          <button type='button' className='char_clear_btn' onClick={clearChat}></button>
         </div>
         <div className='chat_content_div'></div>
         <div className='user_input_div'>
-          <input
-            type='text'
-            className='user_input'
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder='Send a message'
-          />
+          <input type='text' className='user_input' value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder='Send a message' />
           <div className='chat_submit_btn_div'>
-            <button
-              type='submit'
-              className='chat_submit_btn'></button>
+            <button type='submit' className='chat_submit_btn'></button>
           </div>
         </div>
       </form>

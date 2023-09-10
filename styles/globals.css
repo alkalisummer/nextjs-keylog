@@ -33,6 +33,16 @@ body {
   padding-top: 15%;
 }
 
+.left_area_logo_btn {
+  font-size: 30px;
+  cursor: pointer;
+  color: #525252;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 15px;
+}
+
 .left_area a {
   text-decoration: none;
   margin-top: 10px;
@@ -70,13 +80,18 @@ body {
   height: 100%;
 }
 
+.right_header {
+  display: flex;
+  justify-content: end;
+  height: 6%;
+}
+
 .create_btn {
   background: url('/icon/edit.png') no-repeat 50% 50%/20px auto;
   width: 30px;
   height: 30px;
   border: none;
   cursor: pointer;
-  filter: invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%);
 }
 
 .chatgpt_btn {
@@ -111,7 +126,7 @@ a {
 }
 
 .bb {
-  border-bottom: 1px solid #009bf2 !important;
+  border-bottom: 1px solid #c7c7c7 !important;
 }
 
 .bbn {
@@ -162,6 +177,14 @@ a {
   margin-bottom: 25px !important;
 }
 
+.mr10 {
+  margin-right: 10px;
+}
+
+.pd15 {
+  padding: 15px;
+}
+
 .dn {
   display: none;
 }
@@ -201,7 +224,7 @@ a {
   flex-direction: initial !important;
 }
 
-.jc_c {
+.jc_sb {
   justify-content: space-between;
 }
 

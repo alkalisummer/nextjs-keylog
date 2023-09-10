@@ -1,9 +1,8 @@
 .nav_div {
-  width: 100%;
-  height: 4rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding-top: 15px;
+  padding-right: 15px;
 }
 
 .nav_logo_btn {
@@ -11,12 +10,12 @@
   font-size: 1.325rem;
   font-weight: 500;
   cursor: pointer;
-  color: #009bf2;
+  color: #525252;
 }
 
 .nav_login_btn {
   color: white;
-  background-color: #009bf2;
+  background-color: #525252;
   border-radius: 30px;
   font-size: 12px;
   font-weight: 100;
@@ -27,19 +26,19 @@
 }
 
 .nav_login_btn:hover {
-  background-color: #4ebeff;
+  background-color: #8f8f8f;
 }
 
 /*로그인시 우측 상단 토글*/
 .nav_menu_div {
-  color: #009bf2;
+  color: #525252;
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
 .nav_menu_div:hover {
-  color: #4ebeff;
+  color: #8f8f8f;
 }
 
 #nav_menu_img {
@@ -53,11 +52,11 @@
 }
 
 .MuiMenuItem-root {
-  color: #009bf2 !important;
+  color: #525252 !important;
 }
 
 .MuiMenuItem-root a {
-  color: #009bf2 !important;
+  color: #525252 !important;
 }
 
 .nav_menu_item_ico {

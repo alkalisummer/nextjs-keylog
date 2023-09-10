@@ -217,16 +217,10 @@ const Navbar = () => {
 
   return (
     <div className='nav_div'>
-      <span className='nav_logo_btn'>keylog</span>
       {status === 'authenticated' ? (
         <div>
-          <div
-            onClick={openToggle}
-            className='nav_menu_div'>
-            <img
-              id='nav_menu_img'
-              src={session.user?.image ? session.user?.image : '/icon/person.png'}
-              alt='userImage'></img>
+          <div onClick={openToggle} className='nav_menu_div'>
+            <img id='nav_menu_img' src={session.user?.image ? session.user?.image : '/icon/person.png'} alt='userImage'></img>
             <div>▾</div>
           </div>
           <Menu
@@ -236,17 +230,19 @@ const Navbar = () => {
             onClose={closeToggle}
             MenuListProps={{
               'aria-labelledby': 'basic-button',
-            }}>
+            }}
+          >
             <MenuItem
               onClick={() => {
                 setOpenModal(true);
                 closeToggle();
-              }}>
+              }}
+            >
               <i className='fa-solid fa-user nav_menu_item_ico'></i>계정관리
             </MenuItem>
             <MenuItem>
               <Link href={`/${session.user?.id}`}>
-                <i className='fa-solid fa-key nav_menu_item_ico'></i>내 키로그
+                <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
               </Link>
             </MenuItem>
             <MenuItem onClick={() => signOut()}>
@@ -256,17 +252,12 @@ const Navbar = () => {
         </div>
       ) : (
         <div>
-          <Link
-            href={'/login'}
-            className='nav_login_btn'>
+          <Link href={'/login'} className='nav_login_btn'>
             로그인
           </Link>
         </div>
       )}
-      <Modal
-        open={openModal}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'>
+      <Modal open={openModal} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
         <div className='nav_modal_div'>
           <button
             className='nav_modal_close_btn'
@@ -274,30 +265,18 @@ const Navbar = () => {
               setOpenModal(false);
               setShowNameInput(false);
               cancelPwUpdate();
-            }}>
+            }}
+          >
             ✕
           </button>
           <div className='nav_modal_profile'>
             <div className='nav_profile_img_div'>
-              <img
-                id='nav_profile_img'
-                src={session?.user?.image ? session.user?.image : '/icon/person.png'}
-                alt='userImage'></img>
-              <label
-                htmlFor='fileInput'
-                className='nav_img_upload_btn'>
+              <img id='nav_profile_img' src={session?.user?.image ? session.user?.image : '/icon/person.png'} alt='userImage'></img>
+              <label htmlFor='fileInput' className='nav_img_upload_btn'>
                 이미지 업로드
               </label>
-              <input
-                type='file'
-                id='fileInput'
-                accept='image/*'
-                onChange={(e) => uploadImg(e)}
-                className='dn'
-              />
-              <button
-                className='nav_img_del_btn'
-                onClick={() => deleteImg()}>
+              <input type='file' id='fileInput' accept='image/*' onChange={(e) => uploadImg(e)} className='dn' />
+              <button className='nav_img_del_btn' onClick={() => deleteImg()}>
                 이미지 삭제
               </button>
             </div>
@@ -305,14 +284,15 @@ const Navbar = () => {
               <div className='nav_modal_nickname_div'>
                 {!showNameInput ? (
                   <div className='df fd_c w100'>
-                    <div className='df jc_c w100 mb5'>
+                    <div className='df jc_sb w100 mb5'>
                       <span id='nav_modal_nickname'>{session?.user?.name}</span>
                       <span
                         className='nav_modal_text_update_btn lh25'
                         onClick={() => {
                           setShowNameInput(true);
                           setNickname(session?.user?.name);
-                        }}>
+                        }}
+                      >
                         수정
                       </span>
                     </div>
@@ -337,14 +317,10 @@ const Navbar = () => {
                       onChange={(e) => setBlogName(e.target.value)}
                     />
                     <div className='df jc_e'>
-                      <button
-                        className='nav_modal_profile_btn h50'
-                        onClick={() => updateNicknameBlogName()}>
+                      <button className='nav_modal_profile_btn' onClick={() => updateNicknameBlogName()}>
                         저장
                       </button>
-                      <button
-                        className='nav_modal_profile_btn nav_modal_cancel h50'
-                        onClick={() => setShowNameInput(false)}>
+                      <button className='nav_modal_profile_btn nav_modal_cancel' onClick={() => setShowNameInput(false)}>
                         취소
                       </button>
                     </div>
@@ -356,7 +332,7 @@ const Navbar = () => {
           <div className='nav_modal_sub_div'>
             <span className='nav_modal_sub_title'>이메일</span>
 
-            <div className='nav_modal_sub fd_i jc_c'>
+            <div className='nav_modal_sub fd_i jc_sb'>
               {!showEmailInput ? (
                 <>
                   <span className='nav_modal_email'>{session?.user?.email}</span>
@@ -364,7 +340,8 @@ const Navbar = () => {
                     className='nav_modal_text_update_btn lh19'
                     onClick={() => {
                       setShowEmailInput(true);
-                    }}>
+                    }}
+                  >
                     수정
                   </span>
                 </>
@@ -377,9 +354,7 @@ const Navbar = () => {
                     className='nav_modal_input w80 mb0'
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <button
-                    className='nav_modal_profile_btn mb0'
-                    onClick={() => updateEmail()}>
+                  <button className='nav_modal_profile_btn mb0' onClick={() => updateEmail()}>
                     저장
                   </button>
                 </>
@@ -390,9 +365,7 @@ const Navbar = () => {
             <span className='nav_modal_sub_title'>비밀번호</span>
             <div className='nav_modal_sub'>
               {!showPwInput ? (
-                <button
-                  className='nav_modal_password_btn'
-                  onClick={() => setShowPwInput(true)}>
+                <button className='nav_modal_password_btn' onClick={() => setShowPwInput(true)}>
                   비밀번호 변경
                 </button>
               ) : (
@@ -418,9 +391,7 @@ const Navbar = () => {
                     className='nav_modal_pw_input mb5'
                     onChange={(e) => setCheckPassword(e.target.value)}
                   />
-                  <button
-                    className='nav_modal_password_btn wa mt10'
-                    onClick={() => updatePassword()}>
+                  <button className='nav_modal_password_btn wa mt10' onClick={() => updatePassword()}>
                     확인
                   </button>
                 </div>
@@ -430,9 +401,7 @@ const Navbar = () => {
           <div className='nav_modal_sub_div bbn'>
             <span className='nav_modal_sub_title mb25'>회원 탈퇴</span>
             <div className='nav_modal_sub'>
-              <button
-                className='nav_modal_leave_btn'
-                onClick={() => setShowNoti(true)}>
+              <button className='nav_modal_leave_btn' onClick={() => setShowNoti(true)}>
                 회원 탈퇴
               </button>
               <span className='nav_modal_leave_text'>※ 탈퇴시 작성하신 포스트가 모두 삭제되어 복구되지 않습니다.</span>
@@ -446,21 +415,16 @@ const Navbar = () => {
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button
-              color='primary'
-              size='small'
-              onClick={dropOut}>
+            <Button color='primary' size='small' onClick={dropOut}>
               확인
             </Button>
-            <Button
-              color='inherit'
-              size='small'
-              onClick={closeNoti}>
+            <Button color='inherit' size='small' onClick={closeNoti}>
               취소
             </Button>
           </React.Fragment>
         }
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}></Snackbar>
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      ></Snackbar>
     </div>
   );
 };

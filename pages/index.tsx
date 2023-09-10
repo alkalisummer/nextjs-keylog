@@ -7,7 +7,10 @@ const HomePage = () => {
 
   return (
     <div className='index_div'>
-      <Navbar></Navbar>
+      <div className='df jc_sb'>
+        <span className='nav_logo_btn'>keylog</span>
+        <Navbar></Navbar>
+      </div>
       <h1>HomePage</h1>
     </div>
   );

@@ -12,7 +12,7 @@
   font-family: 'Fira Mono', monospace;
   font-size: 35px;
   margin-bottom: 30px;
-  color: #009bf2;
+  color: #525252;
 }
 
 .signup_form {
@@ -29,7 +29,7 @@
 .signup_input_text {
   font-family: 'Spoqa Han Sans Neo';
   font-size: 16px;
-  border: 1px solid #009bf2;
+  border: 1px solid #c7c7c7;
   background: transparent;
   padding: 15px;
   border-bottom: none;
@@ -54,8 +54,8 @@
 
 .signup_emoji {
   padding-left: 15px;
-  border: 1px solid #009bf2;
-  color: #009bf2;
+  border: 1px solid #c7c7c7;
+  color: #7f7f7f;
   width: 20px;
   display: flex;
   justify-content: center;
@@ -73,7 +73,7 @@
   font-family: 'Spoqa Han Sans Neo';
   font-weight: bold;
   color: white;
-  background-color: #009bf2;
+  background-color: #7f7f7f;
   cursor: pointer;
 }
 

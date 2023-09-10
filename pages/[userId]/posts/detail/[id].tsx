@@ -50,9 +50,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
                     <span className='mg-r-10 mg-l-10'>수정</span>
                   </Link>
                   |
-                  <span
-                    className='mg-l-10 pointer'
-                    onClick={() => handleDelete()}>
+                  <span className='mg-l-10 pointer' onClick={() => handleDelete()}>
                     삭제
                   </span>
                 </>
@@ -61,11 +59,12 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
               )}
             </div>
           </div>
-          <div
-            className='toastui-editor-contents post_content'
-            dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
+          <div>
+            <div className='toastui-editor-contents post_content' dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
+          </div>
         </div>
       </PostLayout>
+      <div></div>
     </BlogLayout>
   );
 };
