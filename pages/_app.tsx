@@ -17,12 +17,14 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider session={session}>
       <div className='main_area'>
-        <Script
-          src='https://kit.fontawesome.com/25678e103e.js'
-          crossOrigin='anonymous'
-        />
+        <Script src='https://kit.fontawesome.com/25678e103e.js' crossOrigin='anonymous' />
         <Head>
           <title> keylog </title>
+          <meta property='og:type' content='website'></meta>
+          <meta property='og:title' content='Keylog'></meta>
+          <meta property='og:url' content='https://keylog.hopto.org'></meta>
+          <meta property='og:description' content='키워드를 활용한 블로그 포스팅'></meta>
+
           {/* <meta
             httpEquiv='Content-Security-Policy'
             content='upgrade-insecure-requests'></meta> */}

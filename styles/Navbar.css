@@ -1,8 +1,6 @@
 .nav_div {
   display: flex;
   justify-content: space-between;
-  padding-top: 15px;
-  padding-right: 15px;
 }
 
 .nav_logo_btn {
@@ -62,6 +60,7 @@
 .nav_menu_item_ico {
   margin-right: 15px;
   width: 15px;
+  height: auto;
 }
 
 /*계정 정보 모달*/

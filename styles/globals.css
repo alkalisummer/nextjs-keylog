@@ -43,6 +43,10 @@ body {
   padding: 15px;
 }
 
+.left_area_logo_btn:hover {
+  color: #8f8f8f;
+}
+
 .left_area a {
   text-decoration: none;
   margin-top: 10px;
@@ -83,7 +87,7 @@ body {
 .right_header {
   display: flex;
   justify-content: flex-end;
-  height: 6%;
+  height: 5%;
 }
 
 .create_btn {
@@ -181,12 +185,20 @@ a {
   margin-right: 10px;
 }
 
-.pd15 {
-  padding: 15px;
+.pt15 {
+  padding-top: 15px;
+}
+
+.pr15 {
+  padding-right: 15px;
 }
 
 .dn {
   display: none;
+}
+
+.op0 {
+  opacity: 0;
 }
 
 .lh25 {
