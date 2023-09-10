@@ -82,7 +82,7 @@ body {
 
 .right_header {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   height: 6%;
 }
 
@@ -229,7 +229,7 @@ a {
 }
 
 .jc_e {
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .ai_c {
