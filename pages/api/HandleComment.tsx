@@ -77,7 +77,7 @@ export const handleMySql = async (params: any) => {
       commentId = params.commentId;
       sql = `DELETE 
                FROM COMMENT 
-              WHERE COMMENT_ID = '${commentId}'`;
+              WHERE COMMENT_ID = '${commentId}' OR COMMENT_ORIGIN_ID = '${commentId}'`;
       break;
     case 'writeReply':
       postId = params.postId;

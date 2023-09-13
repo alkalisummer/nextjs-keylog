@@ -154,7 +154,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
         return;
       } else if (commentType === 'reply_modify' || commentType === 'comment_modify') {
         params = { type: 'updateComment', postId: postId, commentId: commentId, commentCntn: updateCntn, currentTime: currentTime };
-      } else if (commentType === 'reply_insert') {
+      } else if (commentType === 'reply_insert' || commentType === 'comment_insert') {
         params = { type: 'writeReply', postId: postId, commentId: commentId, commentCntn: updateCntn, rgsrId: rgsrId, currentTime: currentTime };
       }
     }
@@ -164,6 +164,9 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
       setCommentArr(result.refeshList);
       if (commentType === 'comment') {
         setComment('');
+      } else if (commentType === 'comment_insert') {
+        document.getElementById(`${commentType}_${commentId}`)!.style.display = 'none';
+        showReplyHandle(commentId);
       } else {
         showCommentInput(commentId, '', commentType);
       }
@@ -172,30 +175,41 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
 
   const showCommentInput = (commentId: string, commentCntn: string, commentType: string) => {
     const targetComment = document.getElementById(`${commentType}_${commentId}`)!;
-    const targetCommentCntn = targetComment.nextElementSibling as HTMLElement;
-    const targetCommentPrevDiv = targetComment.previousSibling as HTMLElement;
     const targetTextarea = targetComment.children[0] as HTMLTextAreaElement;
+
+    const targetCommentCntn = targetComment.nextElementSibling as HTMLElement;
+
+    const targetCommentPrevDiv = targetComment.previousSibling as HTMLElement;
     const targetCommentBtnDiv = targetCommentPrevDiv.children[1] as HTMLElement;
-    //targetComment.innerHTML = commentCntn;
+
     const showState = targetComment.style.display;
+
     if (!showState || showState === 'none') {
       targetTextarea.value = commentCntn;
       // 기존 표출되던 내용과 버튼은 숨김
-      if (commentType !== 'reply_insert') {
+      if (commentType !== 'reply_insert' && commentType !== 'comment_insert') {
         targetCommentBtnDiv.style.display = 'none';
       }
-      targetCommentCntn.style.display = 'none';
+      if (commentType === 'comment_insert') {
+        targetCommentPrevDiv.innerHTML = `<i class='fa-regular fa-square-minus'></i>&nbsp;&nbsp;숨기기`;
+      } else {
+        targetCommentCntn.style.display = 'none';
+      }
       targetComment.style.display = 'flex';
     } else {
       targetComment.style.display = 'none';
-      targetCommentCntn.style.display = 'initial';
-      if (commentType !== 'reply_insert') {
+      if (commentType === 'comment_insert') {
+        targetCommentPrevDiv.innerHTML = `<i class='fa-regular fa-square-plus'></i>&nbsp;&nbsp;답글 달기`;
+      } else {
+        targetCommentCntn.style.display = 'initial';
+      }
+      if (commentType !== 'reply_insert' && commentType !== 'comment_insert') {
         targetCommentBtnDiv.style.display = 'initial';
       }
     }
   };
 
-  const deleteComment = async (commentId: string) => {
+  const deleteComment = async (commentId: string, originCommentId: string) => {
     if (confirm('정말 삭제하시겠습니까?')) {
       const postId = post.POST_ID;
       const params = { type: 'deleteComment', postId: postId, commentId: commentId };
@@ -203,6 +217,13 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
       await axios.post('/api/HandleComment', { data: params }).then((res) => {
         const result = JSON.parse(JSON.stringify(res.data));
         setCommentArr(result.refeshList);
+        if (originCommentId) {
+          const commentReplyCnt = result.refeshList.filter((comment: { COMMENT_ID: string }) => comment.COMMENT_ID === originCommentId)[0].REPLY_CNT;
+          if (parseInt(commentReplyCnt) === 0) {
+            document.getElementById(`comment_${originCommentId}_reply_div`)!.style.display = 'none';
+            document.querySelector(`#comment_id_${originCommentId}`)!.innerHTML = `<i class='fa-regular fa-square-plus'></i>&nbsp;&nbsp;답글 달기`;
+          }
+        }
       });
     }
   };
@@ -210,7 +231,6 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
   const showReplyHandle = async (commentId: string) => {
     const targetComment = document.getElementById(`comment_${commentId}_reply_div`)!;
     const showState = targetComment.style.display;
-
     if (showState === 'none' || showState === '') {
       targetComment.style.display = 'initial';
       document.querySelector(`#comment_id_${commentId}`)!.innerHTML = `<i class='fa-regular fa-square-minus'></i>&nbsp;&nbsp;숨기기`;
@@ -274,7 +294,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
                 <div key={comment.COMMENT_ID} className={`post_comment ${commentArr.length - 1 === idx ? 'bbn' : 'bb2'}`}>
                   <div className='df jc_sb mb10'>
                     <div className='df jc_sb'>
-                      <img className='post_comment_user_image' src={comment.USER_THMB_IMG_URL} alt='userImage'></img>
+                      <img className='post_comment_user_image' src={comment.USER_THMB_IMG_URL ? comment.USER_THMB_IMG_URL : '../../../../icon/person.png'} alt='user12Image'></img>
                       <div className='df fd_c jc_c ml15'>
                         <span className='post_comment_user_id' onClick={() => router.push(`/${comment.RGSR_ID}`)}>
                           {comment.USER_NICKNAME}
@@ -288,7 +308,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
                           수정
                         </span>
                         &nbsp;&nbsp;&nbsp;
-                        <span className='post_comment_txt' onClick={() => deleteComment(comment.COMMENT_ID)}>
+                        <span className='post_comment_txt' onClick={() => deleteComment(comment.COMMENT_ID, '')}>
                           삭제
                         </span>
                       </div>
@@ -308,10 +328,21 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
                     </div>
                   </div>
                   <p className='post_comment_cntn'>{comment.COMMENT_CNTN}</p>
-                  <span id={`comment_id_${comment.COMMENT_ID}`} className='post_comment_reply' onClick={parseInt(comment.REPLY_CNT) > 0 ? () => showReplyHandle(comment.COMMENT_ID) : () => {}}>
+                  <span id={`comment_id_${comment.COMMENT_ID}`} className='post_comment_reply' onClick={parseInt(comment.REPLY_CNT) > 0 ? () => showReplyHandle(comment.COMMENT_ID) : () => showCommentInput(comment.COMMENT_ID, '', 'comment_insert')}>
                     <i className='fa-regular fa-square-plus'></i>&nbsp;&nbsp;
                     {parseInt(comment.REPLY_CNT) > 0 ? `${comment.REPLY_CNT}개의 답글` : `답글 달기`}
                   </span>
+                  <div id={`comment_insert_${comment.COMMENT_ID}`} className='post_comment_modify_div'>
+                    <textarea className='post_comment_textarea' placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
+                    <div className='df jc_e'>
+                      <button className='post_comment_cancel_btn' onClick={() => showCommentInput(comment.COMMENT_ID, '', 'comment_insert')}>
+                        취소
+                      </button>
+                      <button className='post_comment_save_btn' onClick={() => saveComment('comment_insert', comment.COMMENT_ID)}>
+                        댓글 작성
+                      </button>
+                    </div>
+                  </div>
                   <div id={`comment_${comment.COMMENT_ID}_reply_div`} className='post_reply_div'>
                     {commentArr
                       .filter((reply) => reply.COMMENT_ORIGIN_ID === comment.COMMENT_ID)
@@ -319,7 +350,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
                         <div key={reply.COMMENT_ID} className={`post_reply ${replyList.length - 1 === idx ? 'bbn' : 'bb2'}`}>
                           <div className='df jc_sb'>
                             <div className='df jc_sb'>
-                              <img className='post_comment_user_image' src={reply.USER_THMB_IMG_URL} alt='userImage'></img>
+                              <img className='post_comment_user_image' src={reply.USER_THMB_IMG_URL ? reply.USER_THMB_IMG_URL : '../../../../icon/person.png'} alt='userImage'></img>
                               <div className='df fd_c jc_c ml15'>
                                 <span className='post_comment_user_id' onClick={() => router.push(`/${reply.RGSR_ID}`)}>
                                   {reply.USER_NICKNAME}
@@ -333,7 +364,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
                                   수정
                                 </span>
                                 &nbsp;&nbsp;&nbsp;
-                                <span className='post_comment_txt' onClick={() => deleteComment(reply.COMMENT_ID)}>
+                                <span className='post_comment_txt' onClick={() => deleteComment(reply.COMMENT_ID, comment.COMMENT_ID)}>
                                   삭제
                                 </span>
                               </div>
