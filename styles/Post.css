@@ -313,9 +313,6 @@ pre:has(> code) {
   width: 75px;
 }
 
-.post_article_img {
-}
-
 .post_focus_tab {
   border-bottom: 1px solid white;
   border-top: 2px solid #a3a3a3;
@@ -452,6 +449,175 @@ pre:has(> code) {
 
 .post_scrap_ico:hover {
   background-color: #8f8f8f;
+}
+
+.post_comment_div {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.post_comment_modify_div {
+  display: none;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.post_comment_cnt {
+  color: #525252;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.post_comment_textarea {
+  height: 100px;
+  resize: none;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 15px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  overflow-y: auto;
+}
+
+.post_comment_textarea:focus {
+  outline: none;
+}
+
+.post_comment_save_btn {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px 10px 15px;
+  background-color: #009bf2;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.post_comment_save_btn:hover {
+  background-color: #4ebeff;
+}
+
+.post_comment_cancel_btn {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px 10px 15px;
+  background-color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  color: #009bf2;
+  cursor: pointer;
+}
+
+.post_comment_cancel_btn:hover {
+  background-color: hsl(0, 0%, 94%) !important;
+}
+
+.post_comment_list_div {
+  display: flex;
+  flex-direction: column;
+}
+
+.post_comment {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.post_comment_user_image {
+  width: 3.375rem;
+  height: 3.375rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.post_comment_cntn {
+  margin-bottom: 1.5rem;
+  font-size: 18px;
+  color: #333;
+}
+
+.post_comment_reply {
+  margin-bottom: 20px;
+}
+
+.post_comment_user_id {
+  color: #5c5c5c;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.post_comment_user_id:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.post_comment_rgsn_dttm {
+  color: #98a1a9;
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+.post_comment_txt {
+  color: #98a1a9;
+  font-size: 14px;
+}
+
+.post_comment_txt:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.post_comment_reply {
+  color: #009bf2;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.post_comment_reply:hover {
+  color: #4ebeff;
+  cursor: pointer;
+}
+
+.post_reply_div {
+  display: none;
+  background-color: #fbfbfb;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.post_reply {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.post_reply_btn_div {
+  padding-top: 20px;
+  background-color: #fbfbfb;
+}
+
+.post_reply_btn {
+  padding: 12px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 16px;
+  font-weight: 500;
+  background-color: white;
+  color: #009bf2;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.post_reply_btn:hover {
+  background-color: #009bf2;
+  color: white;
+  cursor: pointer;
 }
 
 @media (max-width: 1520px) {

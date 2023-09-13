@@ -33,7 +33,7 @@ const Login = () => {
         } else {
           setCookies('userId', '', { maxAge: 0 }); // 쿠키삭제
         }
-        router.replace('/');
+        router.back();
       } else {
         document.querySelector('.loginErrMsg')!.innerHTML = '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
       }
@@ -47,9 +47,7 @@ const Login = () => {
   return (
     <div className={loginStyle.login_div}>
       <span className={loginStyle.login_title}>keylog</span>
-      <form
-        onSubmit={login}
-        className={loginStyle.login_form}>
+      <form onSubmit={login} className={loginStyle.login_form}>
         <div className={loginStyle.login_input_div}>
           <div className={`${loginStyle.login_emoji} btlr`}>
             <i className={'fa-solid fa-user'}></i>
@@ -62,7 +60,8 @@ const Login = () => {
             required
             onChange={(e) => {
               setId(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={`${loginStyle.login_input_div} mb10`}>
           <div className={`${loginStyle.login_emoji} bb bblr`}>
@@ -76,34 +75,25 @@ const Login = () => {
             required
             onChange={(e) => {
               setPassword(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={loginStyle.login_sub_div}>
           <label className={loginStyle.login_label}>
-            <input
-              type='checkbox'
-              className={loginStyle.login_checkbox}
-              checked={saveId}
-              onChange={() => setSaveId(!saveId)}></input>
+            <input type='checkbox' className={loginStyle.login_checkbox} checked={saveId} onChange={() => setSaveId(!saveId)}></input>
             아이디 저장
           </label>
-          <span
-            className={loginStyle.login_forgot_pw_btn}
-            onClick={() => forgotPassword()}>
+          <span className={loginStyle.login_forgot_pw_btn} onClick={() => forgotPassword()}>
             비밀번호 찾기
           </span>
         </div>
         <div className={`loginErrMsg ${loginStyle.validateErrMsg}`}></div>
-        <button
-          type='submit'
-          className={loginStyle.login_btn}>
+        <button type='submit' className={loginStyle.login_btn}>
           로그인
         </button>
         <div className={loginStyle.signup_btn_div}>
           아직 회원이 아니신가요? &nbsp;
-          <span
-            className={loginStyle.signup_btn}
-            onClick={() => router.push('/signup')}>
+          <span className={loginStyle.signup_btn} onClick={() => router.push('/signup')}>
             회원가입
           </span>
         </div>

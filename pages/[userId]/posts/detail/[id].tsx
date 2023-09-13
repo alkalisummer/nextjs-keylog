@@ -1,19 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
 import '@toast-ui/editor/dist/toastui-editor.css';
 import BlogLayout from '../../blogLayout';
 import Link from 'next/link';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { timeFormat } from '@/utils/CommonUtils';
+import { timeFormat, timeToString } from '@/utils/CommonUtils';
 import PostLayout from '../postLayout';
 import { GetServerSideProps } from 'next';
-import { handleMySql } from '@/pages/api/HandlePost';
+import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
+import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
 import CheckAuth from '@/utils/CheckAuth';
 import ClipboardJS from 'clipboard';
 
 //mui notification
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
+
+//사용자 세션
+import { useSession } from 'next-auth/react';
 
 interface post {
   POST_ID: string;
@@ -28,11 +33,49 @@ interface user {
   nickname: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; imgFileArr: []; htmlCntn: string; userInfo: user }) => {
+interface comment {
+  COMMENT_ID: string;
+  POST_ID: string;
+  COMMENT_DEPTH: string;
+  COMMENT_ORIGIN_ID: string;
+  COMMENT_CNTN: string;
+  RGSR_ID: string;
+  USER_NICKNAME: string;
+  USER_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+  AMNT_DTTM: string;
+  REPLY_CNT: string;
+}
+
+interface reply {
+  COMMENT_ID: string;
+  COMMENT_ORIGIN_ID: string;
+  COMMENT_CNTN: string;
+  RGSR_ID: string;
+  USER_NICKNAME: string;
+  USER_THMB_IMG_URL: string;
+  AMNT_DTTM: string;
+}
+
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user }) => {
+  //사용자 세션
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { userId } = router.query;
+
+  //링크 복사 - 현재 url 변수
   const [currUrl, setCurrUrl] = useState('');
-  const [showNoti, setShowNoti] = useState(false);
+  const [showClipNoti, setShowClipNoti] = useState(false);
+
+  //댓글 작성 변수
+  const [comment, setComment] = useState('');
+  const [showCommentNoti, setShowCommentNoti] = useState(false);
+
+  //댓글 리스트 변수
+  const [commentArr, setCommentArr] = useState(comments || []);
+
+  //대댓글 리스트
+  const [replyList, setReplyList] = useState<reply[]>([]);
 
   useEffect(() => {
     setCurrUrl(window.location.href);
@@ -55,11 +98,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
         window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank', 'width=600,height=400');
         break;
       case 'twitter':
-        window.open(
-          'http://twitter.com/share?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(post.POST_TITLE),
-          '_blank',
-          'width=600,height=400'
-        );
+        window.open('http://twitter.com/share?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(post.POST_TITLE), '_blank', 'width=600,height=400');
         break;
       case 'cilpboard':
         const clipboard = new ClipboardJS('#post_url_copy');
@@ -71,17 +110,117 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
           e.clearSelection();
         });
 
-        setShowNoti(true);
+        setShowClipNoti(true);
         break;
     }
   };
 
-  const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const closeClipNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-    setShowNoti(false);
+    setShowClipNoti(false);
   };
+
+  const closeCommentNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowCommentNoti(false);
+  };
+
+  const saveComment = async (commentType: string, commentId: string) => {
+    if (status === 'unauthenticated') {
+      setShowCommentNoti(true);
+      return;
+    }
+
+    const postId = post.POST_ID;
+    const rgsrId = session?.user?.id;
+    const currentTime = timeToString(new Date());
+    let params;
+
+    if (commentType === 'comment') {
+      if (comment.length === 0) {
+        alert('댓글 내용을 작성하세요.');
+        return;
+      }
+      params = { type: 'writeComment', postId: postId, commentCntn: comment, rgsrId: rgsrId, currentTime: currentTime };
+    } else {
+      const target = document.getElementById(`${commentType}_${commentId}`)?.children[0] as HTMLTextAreaElement;
+      const updateCntn = target.value;
+      if (updateCntn.replaceAll(' ', '').length === 0) {
+        alert('댓글 내용을 작성하세요.');
+        return;
+      } else if (commentType === 'reply_modify' || commentType === 'comment_modify') {
+        params = { type: 'updateComment', postId: postId, commentId: commentId, commentCntn: updateCntn, currentTime: currentTime };
+      } else if (commentType === 'reply_insert') {
+        params = { type: 'writeReply', postId: postId, commentId: commentId, commentCntn: updateCntn, rgsrId: rgsrId, currentTime: currentTime };
+      }
+    }
+
+    await axios.post('/api/HandleComment', { data: params }).then((res) => {
+      const result = JSON.parse(JSON.stringify(res.data));
+      setCommentArr(result.refeshList);
+      if (commentType === 'comment') {
+        setComment('');
+      } else {
+        showCommentInput(commentId, '', commentType);
+      }
+    });
+  };
+
+  const showCommentInput = (commentId: string, commentCntn: string, commentType: string) => {
+    const targetComment = document.getElementById(`${commentType}_${commentId}`)!;
+    const targetCommentCntn = targetComment.nextElementSibling as HTMLElement;
+    const targetCommentPrevDiv = targetComment.previousSibling as HTMLElement;
+    const targetTextarea = targetComment.children[0] as HTMLTextAreaElement;
+    const targetCommentBtnDiv = targetCommentPrevDiv.children[1] as HTMLElement;
+    //targetComment.innerHTML = commentCntn;
+    const showState = targetComment.style.display;
+    if (!showState || showState === 'none') {
+      targetTextarea.value = commentCntn;
+      // 기존 표출되던 내용과 버튼은 숨김
+      if (commentType !== 'reply_insert') {
+        targetCommentBtnDiv.style.display = 'none';
+      }
+      targetCommentCntn.style.display = 'none';
+      targetComment.style.display = 'flex';
+    } else {
+      targetComment.style.display = 'none';
+      targetCommentCntn.style.display = 'initial';
+      if (commentType !== 'reply_insert') {
+        targetCommentBtnDiv.style.display = 'initial';
+      }
+    }
+  };
+
+  const deleteComment = async (commentId: string) => {
+    if (confirm('정말 삭제하시겠습니까?')) {
+      const postId = post.POST_ID;
+      const params = { type: 'deleteComment', postId: postId, commentId: commentId };
+
+      await axios.post('/api/HandleComment', { data: params }).then((res) => {
+        const result = JSON.parse(JSON.stringify(res.data));
+        setCommentArr(result.refeshList);
+      });
+    }
+  };
+
+  const showReplyHandle = async (commentId: string) => {
+    const targetComment = document.getElementById(`comment_${commentId}_reply_div`)!;
+    const showState = targetComment.style.display;
+
+    if (showState === 'none' || showState === '') {
+      targetComment.style.display = 'initial';
+      document.querySelector(`#comment_id_${commentId}`)!.innerHTML = `<i class='fa-regular fa-square-minus'></i>&nbsp;&nbsp;숨기기`;
+    } else {
+      const replyCnt = commentArr.filter((reply) => reply.COMMENT_ORIGIN_ID === commentId).length;
+      targetComment.style.display = 'none';
+      document.querySelector(`#comment_id_${commentId}`)!.innerHTML = `<i class='fa-regular fa-square-plus'></i>&nbsp;&nbsp;${replyCnt}개의 답글`;
+    }
+  };
+
   return (
     <BlogLayout userInfo={userInfo}>
       <PostLayout>
@@ -119,16 +258,149 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
             </div>
             <input id='currentUrl' className='dn op0' type='text' value={currUrl} readOnly />
           </div>
+          <div className='post_comment_div'>
+            <span className='post_comment_cnt'>{`${commentArr.length}개의 댓글`}</span>
+            <textarea className='post_comment_textarea' value={comment} onChange={(e) => setComment(e.target.value)} placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
+            <div className='df jc_e'>
+              <button className='post_comment_save_btn' onClick={() => saveComment('comment', '')}>
+                댓글 작성
+              </button>
+            </div>
+          </div>
+          <div className='post_comment_list_div'>
+            {commentArr
+              .filter((comment) => parseInt(comment.COMMENT_DEPTH) === 1)
+              .map((comment, idx) => (
+                <div key={comment.COMMENT_ID} className={`post_comment ${commentArr.length - 1 === idx ? 'bbn' : 'bb2'}`}>
+                  <div className='df jc_sb mb10'>
+                    <div className='df jc_sb'>
+                      <img className='post_comment_user_image' src={comment.USER_THMB_IMG_URL} alt='userImage'></img>
+                      <div className='df fd_c jc_c ml15'>
+                        <span className='post_comment_user_id' onClick={() => router.push(`/${comment.RGSR_ID}`)}>
+                          {comment.USER_NICKNAME}
+                        </span>
+                        <span className='post_comment_rgsn_dttm'>{timeFormat(comment.RGSN_DTTM)}</span>
+                      </div>
+                    </div>
+                    {session?.user?.id === comment.RGSR_ID ? (
+                      <div>
+                        <span className='post_comment_txt' onClick={() => showCommentInput(comment.COMMENT_ID, comment.COMMENT_CNTN, 'comment_modify')}>
+                          수정
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span className='post_comment_txt' onClick={() => deleteComment(comment.COMMENT_ID)}>
+                          삭제
+                        </span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div id={`comment_modify_${comment.COMMENT_ID}`} className='post_comment_modify_div'>
+                    <textarea className='post_comment_textarea' placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
+                    <div className='df jc_e'>
+                      <button className='post_comment_cancel_btn' onClick={() => showCommentInput(comment.COMMENT_ID, '', 'comment_modify')}>
+                        취소
+                      </button>
+                      <button className='post_comment_save_btn' onClick={() => saveComment('comment_modify', comment.COMMENT_ID)}>
+                        댓글 작성
+                      </button>
+                    </div>
+                  </div>
+                  <p className='post_comment_cntn'>{comment.COMMENT_CNTN}</p>
+                  <span id={`comment_id_${comment.COMMENT_ID}`} className='post_comment_reply' onClick={parseInt(comment.REPLY_CNT) > 0 ? () => showReplyHandle(comment.COMMENT_ID) : () => {}}>
+                    <i className='fa-regular fa-square-plus'></i>&nbsp;&nbsp;
+                    {parseInt(comment.REPLY_CNT) > 0 ? `${comment.REPLY_CNT}개의 답글` : `답글 달기`}
+                  </span>
+                  <div id={`comment_${comment.COMMENT_ID}_reply_div`} className='post_reply_div'>
+                    {commentArr
+                      .filter((reply) => reply.COMMENT_ORIGIN_ID === comment.COMMENT_ID)
+                      .map((reply, idx) => (
+                        <div key={reply.COMMENT_ID} className={`post_reply ${replyList.length - 1 === idx ? 'bbn' : 'bb2'}`}>
+                          <div className='df jc_sb'>
+                            <div className='df jc_sb'>
+                              <img className='post_comment_user_image' src={reply.USER_THMB_IMG_URL} alt='userImage'></img>
+                              <div className='df fd_c jc_c ml15'>
+                                <span className='post_comment_user_id' onClick={() => router.push(`/${reply.RGSR_ID}`)}>
+                                  {reply.USER_NICKNAME}
+                                </span>
+                                <span className='post_comment_rgsn_dttm'>{timeFormat(reply.RGSN_DTTM)}</span>
+                              </div>
+                            </div>
+                            {session?.user?.id === reply.RGSR_ID ? (
+                              <div>
+                                <span className='post_comment_txt' onClick={() => showCommentInput(reply.COMMENT_ID, reply.COMMENT_CNTN, 'reply_modify')}>
+                                  수정
+                                </span>
+                                &nbsp;&nbsp;&nbsp;
+                                <span className='post_comment_txt' onClick={() => deleteComment(reply.COMMENT_ID)}>
+                                  삭제
+                                </span>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                          <div id={`reply_modify_${reply.COMMENT_ID}`} className='post_comment_modify_div'>
+                            <textarea className='post_comment_textarea' placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
+                            <div className='df jc_e'>
+                              <button className='post_comment_cancel_btn' onClick={() => showCommentInput(reply.COMMENT_ID, '', 'reply_modify')}>
+                                취소
+                              </button>
+                              <button className='post_comment_save_btn' onClick={() => saveComment('reply_modify', reply.COMMENT_ID)}>
+                                댓글 작성
+                              </button>
+                            </div>
+                          </div>
+                          <p className='post_comment_cntn'>{reply.COMMENT_CNTN}</p>
+                        </div>
+                      ))}
+                    <div id={`reply_insert_${comment.COMMENT_ID}`} className='post_comment_modify_div'>
+                      <textarea className='post_comment_textarea' placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
+                      <div className='df jc_e'>
+                        <button className='post_comment_cancel_btn' onClick={() => showCommentInput(comment.COMMENT_ID, '', 'reply_insert')}>
+                          취소
+                        </button>
+                        <button className='post_comment_save_btn' onClick={() => saveComment('reply_insert', comment.COMMENT_ID)}>
+                          댓글 작성
+                        </button>
+                      </div>
+                    </div>
+                    <div className='post_reply_btn_div'>
+                      <button className='post_reply_btn' onClick={() => showCommentInput(comment.COMMENT_ID, '', 'reply_insert')}>
+                        답글달기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
         <Snackbar
-          open={showNoti}
+          open={showClipNoti}
           autoHideDuration={5000}
           message='링크가 복사되었습니다.'
-          onClose={closeNoti}
+          onClose={closeClipNoti}
           action={
             <React.Fragment>
-              <Button color='primary' size='small' onClick={closeNoti}>
+              <Button color='primary' size='small' onClick={closeClipNoti}>
                 확인
+              </Button>
+            </React.Fragment>
+          }
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        ></Snackbar>
+        <Snackbar
+          open={showCommentNoti}
+          message='로그인이 필요한 서비스입니다. 로그인 화면으로 이동하시겠습니까?'
+          onClose={closeCommentNoti}
+          action={
+            <React.Fragment>
+              <Button color='primary' size='small' onClick={() => router.push('/login')}>
+                확인
+              </Button>
+              <Button color='inherit' size='small' onClick={closeCommentNoti}>
+                취소
               </Button>
             </React.Fragment>
           }
@@ -141,6 +413,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, userInfo }: { post: post; 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let post;
+  let comments;
   let imgFileArr: string[] = [];
   let htmlCntn = '';
 
@@ -151,7 +424,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     postId: context.query.id,
   };
 
-  await handleMySql(params)
+  await handlePostSql(params)
     .then((res) => JSON.stringify(res))
     .then((res) => {
       post = JSON.parse(res).items[0];
@@ -163,7 +436,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       imgFileArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
     });
 
-  return { props: { post, imgFileArr, htmlCntn } };
+  params.type = 'getCommentlist';
+
+  await handleCommentSql(params)
+    .then((res) => JSON.stringify(res))
+    .then((res) => {
+      comments = JSON.parse(res).items;
+    });
+
+  return { props: { post, imgFileArr, htmlCntn, comments } };
 };
 
-export default PostDetailPage;
+export default React.memo(PostDetailPage);

@@ -133,6 +133,10 @@ a {
   border-bottom: 1px solid #c7c7c7 !important;
 }
 
+.bb2 {
+  border-bottom: 1px solid #efefef !important;
+}
+
 .bbn {
   border-bottom: none !important;
 }
@@ -183,6 +187,14 @@ a {
 
 .mr10 {
   margin-right: 10px;
+}
+
+.ml15 {
+  margin-left: 15px;
+}
+
+.pd15 {
+  padding: 5px;
 }
 
 .pt15 {
@@ -242,6 +254,10 @@ a {
 
 .jc_e {
   justify-content: flex-end;
+}
+
+.jc_c {
+  justify-content: center;
 }
 
 .ai_c {

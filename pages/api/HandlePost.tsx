@@ -32,27 +32,56 @@ export const handleMySql = async (params: any) => {
       const currPageNum = params.currPageNum;
       const sttRowNum = perPage * (currPageNum - 1) + 1;
       const eddRowNum = perPage * currPageNum;
-      sql = `SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX, POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS FROM POST WHERE RGSR_ID = '${rgsrId}' ) AS A WHERE PAGE_INDX >= ${sttRowNum} AND PAGE_INDX <= ${eddRowNum}`;
+      sql = `SELECT * 
+               FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX
+                          , POST_ID
+                          , POST_TITLE
+                          , POST_CNTN
+                          , POST_THMB_IMG_URL
+                          , AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS 
+                       FROM POST 
+                      WHERE RGSR_ID = '${rgsrId}' ) AS A 
+              WHERE PAGE_INDX >= ${sttRowNum} 
+                AND PAGE_INDX <= ${eddRowNum}`;
       break;
     case 'read':
       postId = params.postId;
-      sql = `SELECT POST_ID, POST_TITLE, POST_HTML_CNTN, AMNT_DTTM FROM POST WHERE POST_ID = ${postId}`;
+      sql = `SELECT POST_ID
+                  , POST_TITLE
+                  , POST_HTML_CNTN
+                  , AMNT_DTTM 
+              FROM POST 
+             WHERE POST_ID = ${postId}`;
       break;
     case 'insert':
       post = params.post;
-      sql = `INSERT INTO POST ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSR_ID, RGSN_DTTM, AMNT_DTTM ) VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}', '${post.post_thmb_img_url}','${post.rgsr_id}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+      sql = `INSERT INTO POST 
+                         ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSR_ID, RGSN_DTTM, AMNT_DTTM )
+                  VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}'
+                       , '${post.post_thmb_img_url}','${post.rgsr_id}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;
-      sql = `UPDATE POST SET POST_TITLE = '${post.post_title.replaceAll("'", "''")}', POST_CNTN = '${post.post_cntn.replaceAll("'", "''")}', POST_HTML_CNTN = '${post.post_html_cntn.replaceAll("'", "''")}', POST_THMB_IMG_URL= '${post.post_thmb_img_url}', AMNT_DTTM='${post.amnt_dttm}' WHERE POST_ID='${post.post_id}'`;
+      sql = `UPDATE POST 
+                SET POST_TITLE = '${post.post_title.replaceAll("'", "''")}'
+                  , POST_CNTN = '${post.post_cntn.replaceAll("'", "''")}'
+                  , POST_HTML_CNTN = '${post.post_html_cntn.replaceAll("'", "''")}'
+                  , POST_THMB_IMG_URL= '${post.post_thmb_img_url}'
+                  , AMNT_DTTM='${post.amnt_dttm}' 
+              WHERE POST_ID='${post.post_id}'`;
       break;
     case 'delete':
       postId = params.postId;
-      sql = `DELETE FROM POST WHERE POST_ID = ${postId}`;
+      sql = `DELETE 
+               FROM POST 
+              WHERE POST_ID = ${postId}`;
       break;
     case 'dropOut':
       rgsrId = params.email;
-      sql = `DELETE FROM POST WHERE RGSR_ID = '${rgsrId}'`;
+      sql = `DELETE 
+               FROM POST 
+              WHERE RGSR_ID = '${rgsrId}'`;
+      break;
   }
 
   await new Promise((resolve, reject) => {

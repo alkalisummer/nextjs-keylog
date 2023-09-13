@@ -34,7 +34,14 @@ export const handleMySql = async (params: any) => {
   switch (params.type) {
     case 'getUser':
       userId = params.id;
-      sql = `SELECT USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_THMB_IMG_URL, USER_BLOG_NAME FROM USER WHERE USER_ID = '${userId}'`;
+      sql = `SELECT USER_ID
+                  , USER_EMAIL
+                  , USER_NICKNAME
+                  , USER_PASSWORD
+                  , USER_THMB_IMG_URL
+                  , USER_BLOG_NAME 
+               FROM USER 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'signup':
       userId = params.id;
@@ -44,41 +51,59 @@ export const handleMySql = async (params: any) => {
       userBlogName = params.blogName;
       rgsnDttm = params.rgsnDttm;
       amntDttm = params.amntDttm;
-      sql = `INSERT INTO USER (USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_BLOG_NAME, RGSN_DTTM, AMNT_DTTM) VALUES ('${userId}','${userEmail}', '${userNickname}', '${userPassword}', '${userBlogName}','${rgsnDttm}', '${amntDttm}')`;
+      sql = `INSERT INTO USER 
+                         (USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_BLOG_NAME, RGSN_DTTM, AMNT_DTTM) 
+                  VALUES ('${userId}','${userEmail}', '${userNickname}', '${userPassword}', '${userBlogName}','${rgsnDttm}', '${amntDttm}')`;
       break;
     case 'updatePassword':
       userPassword = await hashPassword(params.password);
       userId = params.id;
       amntDttm = params.amntDttm;
-      sql = `UPDATE USER SET USER_PASSWORD = '${userPassword}', AMNT_DTTM = '${amntDttm}' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER 
+                SET USER_PASSWORD = '${userPassword}'
+                  , AMNT_DTTM = '${amntDttm}' 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'uploadUserImg':
       userThmbImgUrl = params.imgUrl;
       userId = params.id;
-      sql = `UPDATE USER SET USER_THMB_IMG_URL = '${userThmbImgUrl}' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER 
+                SET USER_THMB_IMG_URL = '${userThmbImgUrl}' 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'deleteUserImg':
       userId = params.id;
-      sql = `UPDATE USER SET USER_THMB_IMG_URL = '' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER 
+                SET USER_THMB_IMG_URL = '' 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'updateNicknameBlogName':
       userNickname = params.nickname;
       userBlogName = params.blogName;
       userId = params.id;
-      sql = `UPDATE USER SET USER_NICKNAME = '${userNickname}', USER_BLOG_NAME = '${userBlogName}' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER 
+                SET USER_NICKNAME = '${userNickname}'
+                  , USER_BLOG_NAME = '${userBlogName}' 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'updateEmail':
       userEmail = params.email;
       userId = params.id;
-      sql = `UPDATE USER SET USER_EMAIL = '${userEmail}' WHERE USER_ID = '${userId}'`;
+      sql = `UPDATE USER 
+                SET USER_EMAIL = '${userEmail}' 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'getCurrentPassword':
       userId = params.id;
-      sql = `SELECT USER_PASSWORD FROM USER WHERE USER_ID = '${userId}'`;
+      sql = `SELECT USER_PASSWORD 
+               FROM USER 
+              WHERE USER_ID = '${userId}'`;
       break;
     case 'dropOut':
       userId = params.id;
-      sql = `DELETE FROM USER WHERE USER_Id = '${userId}'`;
+      sql = `DELETE 
+               FROM USER 
+              WHERE USER_ID = '${userId}'`;
       break;
   }
 
