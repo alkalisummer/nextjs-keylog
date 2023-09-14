@@ -1,6 +1,58 @@
 .index_div {
   width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 15px;
+}
+
+.index_header_div {
+  display: flex;
+  height: 10%;
+  justify-content: space-between;
+  line-height: 4rem;
+}
+
+.index_main_div {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.index_main_title {
+  margin-bottom: 5rem;
+  font-family: 'NanumSquareNeo';
+  font-size: 45px;
+  font-weight: 400;
+  color: #333;
+}
+
+.index_main_title:hover {
+  color: #848484;
+  cursor: pointer;
+}
+
+.index_main_keyword_div {
+  width: 80%;
+  line-height: 3rem;
+  text-align: center;
+}
+
+.index_main_keyword {
+  display: inline-block;
+  font-family: 'NanumSquareNeo';
+  color: #333;
+  font-size: 30px;
+  font-weight: 300;
+  margin-right: 25px;
+  text-decoration: underline;
+}
+
+.index_main_keyword:hover {
+  color: #848484;
+  cursor: pointer;
 }

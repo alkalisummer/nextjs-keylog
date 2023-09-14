@@ -2,7 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { timeFormat, replaceSymbol, timeAgoFormat } from './CommonUtils';
+import { replaceSymbol, timeAgoFormat } from './CommonUtils';
+import DailyTrends from './DailyTrends';
 import ArticlePrompt from './ChatGptPrompt';
 
 //echart - wordcloud, linechart
@@ -94,21 +95,10 @@ function TrendKeyword() {
     let keyArr: keyword[] = [];
     let trendKeyData: any[] = [];
 
-    const dailyTrendsparam = { type: 'dailyTrends' };
-    axios.get('/api/HandleKeyword', { params: dailyTrendsparam }).then((result) => {
-      const res = JSON.parse(result.data).default.trendingSearchesDays;
-      setBaseDate(`(기준일: ${timeFormat(res[res.length - 1].date)} - ${timeFormat(res[0].date)})`);
-      for (let dateData of res) {
-        dateData.trendingSearches.map((obj: any) => {
-          //wordcloud value 사용을 위한 traffic format 간소화(ex: 200K+ -> 200)
-          const trafficStr = obj.formattedTraffic;
-          const reduceNum = parseInt(trafficStr.substr(0, trafficStr.length - 2));
-          obj.formattedTraffic = reduceNum;
-          trendKeyData.push(obj);
-        });
-      }
-
-      keyArr = trendKeyData.map((obj) => ({ name: obj.title.query.replaceAll("'", ''), value: obj.formattedTraffic, articles: obj.articles }));
+    DailyTrends().then((res) => {
+      setBaseDate(res.baseDate);
+      keyArr = res.keyArr;
+      trendKeyData = res.trendKeyData;
       if (wChartDom.current) {
         let wordCloud = echarts.getInstanceByDom(wChartDom.current);
         if (!wordCloud) {
@@ -353,19 +343,13 @@ function TrendKeyword() {
         <span className='post_base_date'>{baseDate}</span>
       </div>
       <div className='post_wordcloud_div'>
-        <div
-          id='wordcloud'
-          ref={wChartDom}
-          style={{ width: '50%', height: '400px' }}></div>
+        <div id='wordcloud' ref={wChartDom} style={{ width: '50%', height: '400px' }}></div>
         <div className='post_linkage_div'>
           <span className='post_linkage_title'>연관 검색어</span>
           <div className='post_linkage_tag_div'>
             {linkage.map((obj, idx) => {
               return (
-                <Link
-                  key={idx}
-                  href={`https://www.google.com/search?q=${obj}`}
-                  target='_blank'>
+                <Link key={idx} href={`https://www.google.com/search?q=${obj}`} target='_blank'>
                   <span className='post_linkage_tag'>{obj}</span>
                 </Link>
               );
@@ -379,46 +363,31 @@ function TrendKeyword() {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Interest Change Chart
-            <i
-              className='fa-regular fa-circle-question tooltip'
-              data-tooltip-id='line-tooltip'
-              data-tooltip-html={'복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 비교시 수치가 달라질 수 있습니다.'}></i>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 비교시 수치가 달라질 수 있습니다.'}></i>
           </span>
 
-          <button
-            className='post_fold_btn'
-            onClick={() => setShowLineChart(!showLineChart)}>
+          <button className='post_fold_btn' onClick={() => setShowLineChart(!showLineChart)}>
             {showLineChart ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
-        <div
-          className='post_line_chart_div'
-          style={{ display: showLineChart ? '' : 'none' }}>
+        <div className='post_line_chart_div' style={{ display: showLineChart ? '' : 'none' }}>
           <div className='post_line_keyword_div'>
             {lineKeyword.map((obj: string, idx: number) => {
               return (
-                <span
-                  key={idx}
-                  className='post_line_keyword'>
+                <span key={idx} className='post_line_keyword'>
                   {obj}
                 </span>
               );
             })}
             {lineKeyword.length !== 5 && showAddterm ? (
-              <button
-                id='addTerm'
-                className='post_line_keyword'
-                onClick={() => addTerm()}>
+              <button id='addTerm' className='post_line_keyword' onClick={() => addTerm()}>
                 + 비교 추가
               </button>
             ) : (
               ''
             )}
           </div>
-          <div
-            id='lineChart'
-            ref={lChartDom}
-            style={{ width: '100%', height: '400px' }}></div>
+          <div id='lineChart' ref={lChartDom} style={{ width: '100%', height: '400px' }}></div>
         </div>
       </div>
       {/* /Interest Over Time */}
@@ -426,9 +395,7 @@ function TrendKeyword() {
       <div className='post_sub_div'>
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>Articles</span>
-          <button
-            className='post_fold_btn'
-            onClick={() => setShowArticles(!showArticles)}>
+          <button className='post_fold_btn' onClick={() => setShowArticles(!showArticles)}>
             {showArticles ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
@@ -444,12 +411,8 @@ function TrendKeyword() {
             )}
             {articles.map((article: article, idx: number) => {
               return (
-                <div
-                  className='post_article'
-                  key={idx}>
-                  <Link
-                    href={article.url}
-                    target='_blank'>
+                <div className='post_article' key={idx}>
+                  <Link href={article.url} target='_blank'>
                     <div className='post_article_detail'>
                       <div className='post_article_content'>
                         <div className='post_article_content_detail'>
@@ -462,9 +425,7 @@ function TrendKeyword() {
                         </div>
                       </div>
                       <div className='post_article_img'>
-                        <img
-                          alt='article img'
-                          src={article.image.imageUrl}></img>
+                        <img alt='article img' src={article.image.imageUrl}></img>
                       </div>
                     </div>
                   </Link>
@@ -482,14 +443,9 @@ function TrendKeyword() {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Auto Posting
-            <i
-              className='fa-regular fa-circle-question tooltip'
-              data-tooltip-id='daily-tooltip'
-              data-tooltip-html={'입력한 키워드를 기반으로 게시글을 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='daily-tooltip' data-tooltip-html={'입력한 키워드를 기반으로 게시글을 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
           </span>
-          <button
-            className='post_fold_btn'
-            onClick={() => setShowAutoPost(!showAutoPost)}>
+          <button className='post_fold_btn' onClick={() => setShowAutoPost(!showAutoPost)}>
             {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
@@ -498,28 +454,15 @@ function TrendKeyword() {
             <div className='post_auto_btn_div'>
               <div className='post_auto_left_btn'>
                 <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
-                <input
-                  type='text'
-                  className='post_auto_input'
-                  value={autoKeyword}
-                  onChange={(e) => setAutoKeyword(e.target.value)}
-                />
-                <button
-                  className='post_auto_button'
-                  onClick={() => autoPostDaily()}>
+                <input type='text' className='post_auto_input' value={autoKeyword} onChange={(e) => setAutoKeyword(e.target.value)} />
+                <button className='post_auto_button' onClick={() => autoPostDaily()}>
                   <i className='fa-solid fa-pen'></i>&nbsp; 글 생성하기
                 </button>
-                <button
-                  id='clipboard_copy_btn'
-                  className='post_auto_button'
-                  data-clipboard-target='.post_auto_daily_content'
-                  onClick={() => openNoti('clipboard')}>
+                <button id='clipboard_copy_btn' className='post_auto_button' data-clipboard-target='.post_auto_daily_content' onClick={() => openNoti('clipboard')}>
                   <i className='fa-regular fa-copy'></i>&nbsp; 클립보드 복사
                 </button>
               </div>
-              <button
-                className='post_auto_button'
-                onClick={() => clearPost()}>
+              <button className='post_auto_button' onClick={() => clearPost()}>
                 <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
               </button>
             </div>
@@ -535,14 +478,9 @@ function TrendKeyword() {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Image
-            <i
-              className='fa-regular fa-circle-question tooltip'
-              data-tooltip-id='image-tooltip'
-              data-tooltip-html={'입력한 키워드의 이미지를 검색합니다.<br/> 게시글에 이미지를 삽입해보세요.'}></i>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='image-tooltip' data-tooltip-html={'입력한 키워드의 이미지를 검색합니다.<br/> 게시글에 이미지를 삽입해보세요.'}></i>
           </span>
-          <button
-            className='post_fold_btn'
-            onClick={() => setShowImage(!showImage)}>
+          <button className='post_fold_btn' onClick={() => setShowImage(!showImage)}>
             {showImage ? '접기 ▲' : '펼치기 ▼'}
           </button>
         </div>
@@ -551,54 +489,27 @@ function TrendKeyword() {
             <div className='post_auto_btn_div'>
               <div className='post_auto_left_btn'>
                 <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
-                <input
-                  type='text'
-                  className='post_auto_input'
-                  value={imgKeyword}
-                  onChange={(e) => setImgKeyword(e.target.value)}
-                />
+                <input type='text' className='post_auto_input' value={imgKeyword} onChange={(e) => setImgKeyword(e.target.value)} />
                 <button
                   className='post_auto_button'
                   onClick={() => {
                     clearImage();
                     searchImg();
-                  }}>
+                  }}
+                >
                   <i className='fa-regular fa-image'></i>&nbsp; 이미지 검색
                 </button>
-                <button
-                  id='clipboard_copy_btn'
-                  className='post_auto_button'
-                  data-clipboard-text={selectedImgUrl}
-                  onClick={() => openNoti('imageCopy')}>
+                <button id='clipboard_copy_btn' className='post_auto_button' data-clipboard-text={selectedImgUrl} onClick={() => openNoti('imageCopy')}>
                   <i className='fa-regular fa-copy'></i>&nbsp; 이미지 URL 복사
                 </button>
               </div>
-              <button
-                className='post_auto_button'
-                onClick={() => clearImage()}>
+              <button className='post_auto_button' onClick={() => clearImage()}>
                 <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
               </button>
             </div>
             <div className='post_img_div'>
               {imgArr.map((img, idx) => (
-                <React.Fragment key={idx}>
-                  {imgArr.length - 1 === idx ? (
-                    <img
-                      ref={ref}
-                      className='post_img'
-                      onClick={(e) => selectImg(e.target)}
-                      src={img.link}
-                      alt='검색 이미지'
-                    />
-                  ) : (
-                    <img
-                      className='post_img'
-                      onClick={(e) => selectImg(e.target)}
-                      src={img.link}
-                      alt='검색 이미지'
-                    />
-                  )}
-                </React.Fragment>
+                <React.Fragment key={idx}>{imgArr.length - 1 === idx ? <img ref={ref} className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' /> : <img className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' />}</React.Fragment>
               ))}
             </div>
           </div>
@@ -607,18 +518,9 @@ function TrendKeyword() {
         )}
       </div>
       {/* /Image */}
-      <ReactTooltip
-        id='line-tooltip'
-        place='bottom'
-      />
-      <ReactTooltip
-        id='daily-tooltip'
-        place='bottom'
-      />
-      <ReactTooltip
-        id='image-tooltip'
-        place='bottom'
-      />
+      <ReactTooltip id='line-tooltip' place='bottom' />
+      <ReactTooltip id='daily-tooltip' place='bottom' />
+      <ReactTooltip id='image-tooltip' place='bottom' />
       <Snackbar
         open={showNoti}
         autoHideDuration={6000}
@@ -626,15 +528,13 @@ function TrendKeyword() {
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button
-              color='primary'
-              size='small'
-              onClick={closeNoti}>
+            <Button color='primary' size='small' onClick={closeNoti}>
               확인
             </Button>
           </React.Fragment>
         }
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}></Snackbar>
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      ></Snackbar>
     </div>
   );
 }
