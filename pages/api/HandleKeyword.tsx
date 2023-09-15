@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
-import { error } from 'console';
 
 interface naverArticle {
   title: string;
@@ -61,9 +60,8 @@ const getArticles = async (keyword: string) => {
     let keywordArr = [];
     if (keyword.indexOf(' ') !== -1) {
       let resultArr = [];
-
       keywordArr = keyword.replaceAll(' ', '').split('');
-      resultArr = result.filter((article: naverArticle) => article.link.indexOf('naver.com') !== -1 && article.originallink.indexOf('nocutnews') === -1);
+      resultArr = result.filter((article: naverArticle) => article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1);
 
       for (let article of resultArr) {
         for (let i = 0; i < keywordArr.length; i++) {
@@ -76,10 +74,9 @@ const getArticles = async (keyword: string) => {
         }
       }
     } else {
-      naverArticles = result.filter((article: naverArticle) => article.title.indexOf(keyword) !== -1 && article.link.indexOf('naver.com') !== -1 && article.originallink.indexOf('nocutnews') === -1);
+      naverArticles = result.filter((article: naverArticle) => article.title.indexOf(keyword) !== -1 && article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1);
     }
   });
-
   for (let article of naverArticles) {
     await axios.get(article.link).then(async (res) => {
       const $ = cheerio.load(res.data);
@@ -112,8 +109,8 @@ const getArticles = async (keyword: string) => {
         articles.push({ title: title, content: content });
       }
     });
-    //2개의 기사만 크롤링
-    if (articles.length === 3) {
+    //5개의 기사만 크롤링
+    if (articles.length === 5) {
       break;
     }
   }

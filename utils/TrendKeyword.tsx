@@ -240,7 +240,7 @@ function TrendKeyword() {
 
     clearPost();
     const chatMsg = await ArticlePrompt(autoKeyword);
-
+    debugger;
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');
       return;
