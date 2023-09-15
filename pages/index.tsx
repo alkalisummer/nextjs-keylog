@@ -42,10 +42,27 @@ const HomePage = () => {
     });
   };
 
-  const setKeywordArticles = async (articles: article[]) => {
-    //이미지가 없는 기사는 제거
-    const existImgArr = articles.filter((article) => article.image);
-    setArticles(existImgArr);
+  const setKeywordArticles = async (articles: article[], keyword: string) => {
+    //이미지가 없는 기사는 제거, 제목에 키워드가 없는 기사 제거
+    let resultArticles = [];
+    if (keyword.indexOf(' ') !== -1) {
+      let keywordArr = [];
+      keywordArr = keyword.replaceAll(' ', '').split('');
+
+      for (let article of articles) {
+        for (let i = 0; i < keywordArr.length; i++) {
+          if (article.title.indexOf(keywordArr[i]) === -1) {
+            break;
+          }
+          if (i === keywordArr.length - 1) {
+            resultArticles.push(article);
+          }
+        }
+      }
+    } else {
+      resultArticles = articles.filter((article: article) => article.title.indexOf(keyword) !== -1);
+    }
+    setArticles(resultArticles);
   };
 
   return (
@@ -55,29 +72,34 @@ const HomePage = () => {
         <Navbar></Navbar>
       </div>
       <div className='index_main_div'>
-        <span className='index_main_title' onClick={() => getDailyTrends()}>{`#keyword`}</span>
+        <span className='index_main_title' onClick={() => getDailyTrends()}>{`#keylog `}</span>
         <div className='index_main_keyword_div'>
           {keyArr.map((keyword, idx) => (
-            <span key={idx} className='index_main_keyword' onClick={() => setKeywordArticles(keyword.articles)}>{`#${keyword.name}`}</span>
+            <span key={idx} className='index_main_keyword' onClick={() => setKeywordArticles(keyword.articles, keyword.name)}>{`#${keyword.name}`}</span>
           ))}
         </div>
         {articles.length > 0 ? (
-          <div className='index_article_div'>
-            {articles.map((article, idx) => (
-              <Link key={idx} href={article.url} target='_blank'>
-                <div className='index_article'>
-                  <img className='index_article_img' src={article.image.imageUrl} alt='articleImg'></img>
-                  <div className='index_article_info'>
-                    <span className='index_article_title'>{replaceSymbol(article.title)}</span>
-                    <span className='index_article_desc'>{replaceSymbol(article.snippet)}</span>
-                    <div className='index_article_bottom'>
-                      <span className='index_article_comp'>{article.source}</span>•<span className='index_article_time'>{timeAgoFormat(article.timeAgo)}</span>
+          <>
+            <div className='w100 df jc_e mb10'>
+              <span className='index_article_date'>{baseDate}</span>
+            </div>
+            <div className='index_article_div'>
+              {articles.map((article, idx) => (
+                <Link key={idx} href={article.url} target='_blank'>
+                  <div className='index_article'>
+                    {article.image ? <img className='index_article_img' src={article.image.imageUrl} alt='articleImg'></img> : <></>}
+                    <div className={`index_article_info ${article.image ? '' : 'btlr bblr'}`}>
+                      <span className='index_article_title'>{replaceSymbol(article.title)}</span>
+                      <span className='index_article_desc'>{replaceSymbol(article.snippet)}</span>
+                      <div className='index_article_bottom'>
+                        <span className='index_article_comp'>{article.source}</span>•<span className='index_article_time'>{timeAgoFormat(article.timeAgo)}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          </>
         ) : (
           <></>
         )}
