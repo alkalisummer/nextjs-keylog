@@ -10,6 +10,7 @@ import PostLayout from '../postLayout';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
+import { handleMySql as handleLikeSql } from '@/pages/api/HandleLike';
 import CheckAuth from '@/utils/CheckAuth';
 import ClipboardJS from 'clipboard';
 
@@ -57,7 +58,12 @@ interface reply {
   AMNT_DTTM: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user }) => {
+interface like {
+  USER_ID: string;
+  LIKE_CNT: number;
+}
+
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -76,6 +82,8 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
 
   //대댓글 리스트
   const [replyList, setReplyList] = useState<reply[]>([]);
+  //좋아요 개수
+  const [likeCnt, setLikeCnt] = useState(like.length > 0 ? like[0].LIKE_CNT : 0);
 
   useEffect(() => {
     setCurrUrl(window.location.href);
@@ -241,6 +249,35 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
     }
   };
 
+  const likeHandle = async (postId: string) => {
+    if (status === 'unauthenticated') {
+      setShowCommentNoti(true);
+      return;
+    }
+
+    const userId = session?.user?.id;
+    const currentTime = timeToString(new Date());
+    const params = { type: 'getLikeCnt', postId: postId, userId: userId, currentTime: currentTime };
+    await axios.get('/api/HandleLike', { params: params }).then(async (result) => {
+      const res = result.data;
+      // 좋아요를 한 사용자 중에 현재 사용자 id의 존재 유무
+      const likeYn = res.totalItems !== 0 && res.items.filter((obj: like) => obj.USER_ID === userId).length > 0 ? true : false;
+      if (!likeYn) {
+        params.type = 'increaseLikeCnt';
+        await axios.get('/api/HandleLike', { params: params }).then((res) => {
+          const result = res.data.refreshCnt;
+          setLikeCnt(result[0].LIKE_CNT);
+        });
+      } else {
+        params.type = 'decreaseLikeCnt';
+        await axios.get('/api/HandleLike', { params: params }).then((res) => {
+          const result = res.data.refreshCnt;
+          setLikeCnt(result.length > 0 ? result[0].LIKE_CNT : 0);
+        });
+      }
+    });
+  };
+
   return (
     <BlogLayout userInfo={userInfo}>
       <PostLayout>
@@ -267,6 +304,10 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
           </div>
           <div className='toastui-editor-contents post_content' dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
           <div className='post_scrap_div'>
+            <div className='post_scrap_ico w52' onClick={() => likeHandle(post.POST_ID)}>
+              <i className='fa-solid fa-heart'></i>
+              <span className='post_like_cnt'>{likeCnt}</span>
+            </div>
             <div className='post_scrap_ico' onClick={() => scrapPost('facebook')}>
               <i className='fa-brands fa-facebook-f'></i>
             </div>
@@ -409,7 +450,6 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
         </div>
         <Snackbar
           open={showClipNoti}
-          autoHideDuration={5000}
           message='링크가 복사되었습니다.'
           onClose={closeClipNoti}
           action={
@@ -423,8 +463,10 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
         ></Snackbar>
         <Snackbar
           open={showCommentNoti}
-          message='로그인이 필요한 서비스입니다. 로그인 화면으로 이동하시겠습니까?'
+          message={`로그인이 필요한 서비스 입니다. \n 로그인 화면으로 이동하시겠습니까?`}
           onClose={closeCommentNoti}
+          sx={{ whiteSpace: 'pre-line', maxWidth: '350px' }}
+          style={{ alignItems: 'center', textAlign: 'center' }}
           action={
             <React.Fragment>
               <Button color='primary' size='small' onClick={() => router.push('/login')}>
@@ -445,6 +487,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo }: { po
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let post;
   let comments;
+  let like;
   let imgFileArr: string[] = [];
   let htmlCntn = '';
 
@@ -475,7 +518,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       comments = JSON.parse(res).items;
     });
 
-  return { props: { post, imgFileArr, htmlCntn, comments } };
+  params.type = 'getLikeCnt';
+  await handleLikeSql(params)
+    .then((res) => JSON.stringify(res))
+    .then((res) => {
+      like = JSON.parse(res).items;
+    });
+
+  return { props: { post, imgFileArr, htmlCntn, comments, like } };
 };
 
 export default React.memo(PostDetailPage);

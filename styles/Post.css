@@ -438,7 +438,7 @@ pre:has(> code) {
   margin-right: 7px;
   background-color: #525252;
   color: white;
-  border-radius: 10px;
+  border-radius: 5px;
   width: 40px;
   height: 30px;
   align-items: center;
@@ -449,6 +449,11 @@ pre:has(> code) {
 
 .post_scrap_ico:hover {
   background-color: #8f8f8f;
+}
+
+.post_like_cnt {
+  font-size: 12px;
+  padding-left: 5px;
 }
 
 .post_comment_div {
@@ -618,6 +623,13 @@ pre:has(> code) {
   background-color: #009bf2;
   color: white;
   cursor: pointer;
+}
+
+.MuiSnackbarContent-root {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 @media (max-width: 1520px) {

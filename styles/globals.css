@@ -238,6 +238,10 @@ a {
   width: 100%;
 }
 
+.w52 {
+  width: 52px !important;
+}
+
 .w80 {
   width: 80%;
 }
