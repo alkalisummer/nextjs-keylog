@@ -71,7 +71,7 @@
   width: 80%;
   line-height: 3rem;
   text-align: center;
-  padding-bottom: 8rem;
+  padding-bottom: 5rem;
 }
 
 .index_main_keyword {
@@ -99,7 +99,6 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
-  grid-auto-flow: dense;
   align-content: baseline;
 }
 
@@ -124,6 +123,7 @@
 
 .index_article_info {
   display: flex;
+  width: -webkit-fill-available;
   height: 118.9px;
   flex-direction: column;
   justify-content: space-between;
@@ -179,4 +179,9 @@
 .index_article_date {
   font-size: 12px;
   color: #868e96;
+}
+
+.index_highlight {
+  font-weight: bold !important;
+  color: #868e96 !important;
 }

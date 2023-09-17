@@ -58,7 +58,18 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   };
 
   const setKeywordArticles = async (articles: article[], keyword: string, value: number) => {
-    //이미지가 없는 기사는 제거, 제목에 키워드가 없는 기사 제거
+    const keywordId = document.getElementById(keyword);
+
+    if (keywordId) {
+      // 기존 선택되어 있던 키워드 css 제거
+      var removeTargetEl = document.getElementsByClassName('index_highlight');
+      if (removeTargetEl.length > 0) {
+        removeTargetEl[0].classList.remove('index_highlight');
+      }
+      keywordId.classList.add('index_highlight');
+    }
+
+    //제목에 키워드가 없는 기사 필터링
     let resultArticles = [];
     if (keyword.indexOf(' ') !== -1) {
       let keywordArr = [];
