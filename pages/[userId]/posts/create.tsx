@@ -20,10 +20,7 @@ const CreatePost = ({ userInfo }: { userInfo: user }) => {
         <BlogLayout userInfo={userInfo}>
           <PostLayout>
             <TrendKeyword />
-            <ToastEditor
-              mode={'insert'}
-              postId={''}
-            />
+            <ToastEditor mode={'insert'} postId={''} />
           </PostLayout>
         </BlogLayout>
       ) : (

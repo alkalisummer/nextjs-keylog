@@ -16,6 +16,7 @@ import Modal from '@mui/material/Modal';
 //mui notification
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
+import classNames from 'classnames';
 
 const Navbar = () => {
   //사용자 세션
@@ -48,10 +49,17 @@ const Navbar = () => {
   //notification 팝업
   const [showNoti, setShowNoti] = useState(false);
 
+  const [showCreateBtn, setShowCreateBtn] = useState(true);
+
   useEffect(() => {
     // 세션이 만료된경우 계정관리창 닫기
     if (status === 'unauthenticated') {
       setOpenModal(false);
+    }
+    if (window.location.href.indexOf('/posts/create') !== -1) {
+      setShowCreateBtn(false);
+    } else {
+      setShowCreateBtn(true);
     }
   }, [status]);
 
@@ -218,7 +226,12 @@ const Navbar = () => {
   return (
     <div className='nav_div'>
       {status === 'authenticated' ? (
-        <div>
+        <div className='df'>
+          <div className={showCreateBtn ? '' : 'dn'}>
+            <Link href={`/${session.user?.id}/posts/create`} className='nav_create_link'>
+              <button className='nav_create_btn'>새 글 작성</button>
+            </Link>
+          </div>
           <div onClick={openToggle} className='nav_menu_div'>
             <img id='nav_menu_img' src={session.user?.image ? session.user?.image : '/icon/person.png'} alt='userImage'></img>
             <div>▾</div>
@@ -302,20 +315,8 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <div className='df fd_c w100'>
-                    <input
-                      className='nav_modal_input'
-                      type='text'
-                      placeholder='닉네임'
-                      value={nickname ? nickname : ''}
-                      onChange={(e) => setNickname(e.target.value)}
-                    />
-                    <input
-                      className='nav_modal_input'
-                      type='text'
-                      placeholder='블로그 이름'
-                      value={blogName}
-                      onChange={(e) => setBlogName(e.target.value)}
-                    />
+                    <input className='nav_modal_input' type='text' placeholder='닉네임' value={nickname ? nickname : ''} onChange={(e) => setNickname(e.target.value)} />
+                    <input className='nav_modal_input' type='text' placeholder='블로그 이름' value={blogName} onChange={(e) => setBlogName(e.target.value)} />
                     <div className='df jc_e'>
                       <button className='nav_modal_profile_btn' onClick={() => updateNicknameBlogName()}>
                         저장
@@ -347,13 +348,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <input
-                    type='text'
-                    value={email}
-                    placeholder='이메일을 입력하세요.'
-                    className='nav_modal_input w80 mb0'
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <input type='text' value={email} placeholder='이메일을 입력하세요.' className='nav_modal_input w80 mb0' onChange={(e) => setEmail(e.target.value)} />
                   <button className='nav_modal_profile_btn mb0' onClick={() => updateEmail()}>
                     저장
                   </button>
@@ -370,27 +365,9 @@ const Navbar = () => {
                 </button>
               ) : (
                 <div className='nav_modal_pw_div'>
-                  <input
-                    type='password'
-                    value={currPassword}
-                    placeholder='현재 비밀번호'
-                    className='nav_modal_pw_input mb15'
-                    onChange={(e) => setCurrPassword(e.target.value)}
-                  />
-                  <input
-                    type='password'
-                    value={newPassword}
-                    placeholder='새 비밀번호'
-                    className='nav_modal_pw_input mb5'
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                  <input
-                    type='password'
-                    value={checkPassword}
-                    placeholder='새 비밀번호 확인'
-                    className='nav_modal_pw_input mb5'
-                    onChange={(e) => setCheckPassword(e.target.value)}
-                  />
+                  <input type='password' value={currPassword} placeholder='현재 비밀번호' className='nav_modal_pw_input mb15' onChange={(e) => setCurrPassword(e.target.value)} />
+                  <input type='password' value={newPassword} placeholder='새 비밀번호' className='nav_modal_pw_input mb5' onChange={(e) => setNewPassword(e.target.value)} />
+                  <input type='password' value={checkPassword} placeholder='새 비밀번호 확인' className='nav_modal_pw_input mb5' onChange={(e) => setCheckPassword(e.target.value)} />
                   <button className='nav_modal_password_btn wa mt10' onClick={() => updatePassword()}>
                     확인
                   </button>

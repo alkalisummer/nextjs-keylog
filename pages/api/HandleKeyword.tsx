@@ -22,6 +22,12 @@ interface imgData {
   title: string;
 }
 
+export const getDailyTrends = async (hl: string) => {
+  const googleTrends = require('google-trends-api');
+  const result = await googleTrends.dailyTrends({ geo: 'KR', hl: hl });
+  return result;
+};
+
 const getArticles = async (keyword: string) => {
   const Crawler = require('crawler');
   const cheerio = require('cheerio');
@@ -153,7 +159,8 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
 
   switch (type) {
     case 'dailyTrends':
-      res = await googleTrends.dailyTrends({ geo: 'KR' });
+      const hl = request.query.hl as string;
+      res = await getDailyTrends(hl);
       break;
     case 'relatedQueries':
       const googleSuggests = require('get-google-suggestions');

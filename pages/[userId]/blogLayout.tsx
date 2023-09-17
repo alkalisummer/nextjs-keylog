@@ -44,7 +44,7 @@ const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo }) => {
         )}
       </div>
       <div className='right_area'>
-        <div className='right_header pt15 pr15'>
+        <div className='right_header pr25'>
           <Navbar></Navbar>
         </div>
         {children}

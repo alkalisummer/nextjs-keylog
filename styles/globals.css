@@ -93,6 +93,7 @@ body {
   display: flex;
   justify-content: flex-end;
   height: 5%;
+  line-height: 4rem;
 }
 
 .create_btn {
@@ -208,6 +209,10 @@ a {
 
 .pr15 {
   padding-right: 15px;
+}
+
+.pr25 {
+  padding-right: 25px;
 }
 
 .dn {

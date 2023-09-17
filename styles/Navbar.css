@@ -11,14 +11,18 @@
   color: #525252;
 }
 
+.nav_logo_btn:hover {
+  color: #8f8f8f;
+}
+
 .nav_login_btn {
   color: white;
   background-color: #525252;
   border-radius: 30px;
   font-size: 12px;
   font-weight: 100;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 15px;
   padding-right: 15px;
 }
@@ -28,11 +32,33 @@
 }
 
 /*로그인시 우측 상단 토글*/
+.nav_create_btn {
+  color: #f8f9fa;
+  background-color: #525252;
+  border-radius: 30px;
+  font-family: 'Spoqa Han Sans Neo', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+}
+
+.nav_create_link .nav_create_btn:hover {
+  background-color: #8f8f8f;
+  cursor: pointer;
+  color: white;
+}
+
 .nav_menu_div {
   color: #525252;
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-left: 20px;
+  height: 4rem;
 }
 
 .nav_menu_div:hover {

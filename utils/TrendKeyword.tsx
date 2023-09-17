@@ -26,7 +26,39 @@ import { useInView } from 'react-intersection-observer';
 //ChatGpt
 import ChatGptHandle from '@/utils/ChatGptHandle';
 
-function TrendKeyword() {
+interface keyword {
+  name: string;
+  value: number;
+  articles: [];
+}
+
+interface article {
+  image: {
+    imageUrl: string;
+    newsUrl: string;
+    source: string;
+  };
+  snippet: string;
+  source: string;
+  timeAgo: string;
+  title: string;
+  url: string;
+}
+
+interface seletedKey {
+  name: string;
+  cnt: number;
+}
+
+interface imgData {
+  link: string;
+  sizeheight: string;
+  sizewidth: string;
+  thumbnail: string;
+  title: string;
+}
+
+const TrendKeyword = () => {
   const wChartDom = useRef(null);
   const lChartDom = useRef(null);
 
@@ -57,48 +89,14 @@ function TrendKeyword() {
   const [pageNum, setPageNum] = useState(1);
   const [selectedImgUrl, setSelectedImgUrl] = useState('');
 
-  interface keyword {
-    name: string;
-    value: number;
-    articles: [];
-  }
-
-  interface article {
-    image: {
-      imageUrl: string;
-      newsUrl: string;
-      source: string;
-    };
-    snippet: string;
-    source: string;
-    timeAgo: string;
-    title: string;
-    url: string;
-  }
-
-  interface seletedKey {
-    name: string;
-    cnt: number;
-  }
-
-  interface imgData {
-    link: string;
-    sizeheight: string;
-    sizewidth: string;
-    thumbnail: string;
-    title: string;
-  }
-
   useEffect(() => {
     import('echarts-wordcloud');
     new ClipboardJS('#clipboard_copy_btn');
     let keyArr: keyword[] = [];
-    let trendKeyData: any[] = [];
 
-    DailyTrends().then((res) => {
+    DailyTrends('en').then((res) => {
       setBaseDate(res.baseDate);
       keyArr = res.keyArr;
-      trendKeyData = res.trendKeyData;
       if (wChartDom.current) {
         let wordCloud = echarts.getInstanceByDom(wChartDom.current);
         if (!wordCloud) {
@@ -240,7 +238,6 @@ function TrendKeyword() {
 
     clearPost();
     const chatMsg = await ArticlePrompt(autoKeyword);
-    debugger;
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');
       return;
@@ -537,6 +534,6 @@ function TrendKeyword() {
       ></Snackbar>
     </div>
   );
-}
+};
 
 export default React.memo(TrendKeyword);

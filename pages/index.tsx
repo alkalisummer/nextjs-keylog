@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
-import { replaceSymbol, timeAgoFormat } from '../utils/CommonUtils';
+import { getDailyTrends } from './api/HandleKeyword';
+import { GetServerSideProps } from 'next';
+import { replaceSymbol, timeAgoFormat, timeFormat } from '../utils/CommonUtils';
 import DailyTrends from '@/utils/DailyTrends';
 import Link from 'next/link';
 
@@ -24,25 +26,38 @@ interface article {
   url: string;
 }
 
-const HomePage = () => {
-  const [keyArr, setKeyArr] = useState<keyword[]>([]);
-  const [baseDate, setBaseDate] = useState<string>('');
-  const [articles, setArticles] = useState<article[]>([]);
+const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: string }) => {
+  const [keyArr, setKeyArr] = useState<keyword[]>(keywordArr);
+  const [baseDate, setBaseDate] = useState<string>(pubDate);
+  const [articles, setArticles] = useState<article[]>();
+  const [selectKey, setSelectKey] = useState('');
+  const [selectKeyValue, setSelectKeyValue] = useState(0);
 
   useEffect(() => {
-    getDailyTrends();
+    init(keywordArr);
   }, []);
 
-  const getDailyTrends = async () => {
-    await DailyTrends().then((res) => {
-      //인기순으로 내림차순
-      const sortByValue = res.keyArr.sort((a, b) => b.value - a.value);
-      setKeyArr(sortByValue);
+  const init = async (keyArr: keyword[]) => {
+    const initKeyword = keyArr[0].name;
+    const initArticles = keyArr[0].articles;
+    const initValue = keyArr[0].value;
+
+    setSelectKey(initKeyword);
+    setKeywordArticles(initArticles, initKeyword, initValue);
+    setSelectKeyValue(initValue);
+  };
+
+  const getDailyTrendsKeyword = async () => {
+    return await DailyTrends('ko').then((res) => {
+      setKeyArr(res.keyArr);
       setBaseDate(res.baseDate);
+      init(res.keyArr);
+
+      return res.keyArr;
     });
   };
 
-  const setKeywordArticles = async (articles: article[], keyword: string) => {
+  const setKeywordArticles = async (articles: article[], keyword: string, value: number) => {
     //이미지가 없는 기사는 제거, 제목에 키워드가 없는 기사 제거
     let resultArticles = [];
     if (keyword.indexOf(' ') !== -1) {
@@ -63,22 +78,38 @@ const HomePage = () => {
       resultArticles = articles.filter((article: article) => article.title.indexOf(keyword) !== -1);
     }
     setArticles(resultArticles);
+    setSelectKey(keyword);
+    setSelectKeyValue(value);
   };
 
   return (
     <div className='index_div'>
       <div className='index_header_div'>
-        <span className='nav_logo_btn'>keylog</span>
+        <div>
+          <span className='nav_logo_btn' onClick={() => getDailyTrendsKeyword()}>
+            keylog
+          </span>
+        </div>
         <Navbar></Navbar>
       </div>
       <div className='index_main_div'>
-        <span className='index_main_title' onClick={() => getDailyTrends()}>{`#keylog `}</span>
+        <div className='index_main_title_div'>
+          <div className='index_main_title'>
+            <span>{`# ${selectKey}`}</span>
+            <span className='index_main_value'>
+              {selectKeyValue.toString().replaceAll('+', '')}
+              <i className='fa-solid fa-up-long index_main_value_ico'></i>
+            </span>
+          </div>
+          <div className='index_main_cnt'>(검색 횟수)</div>
+        </div>
         <div className='index_main_keyword_div'>
           {keyArr.map((keyword, idx) => (
-            <span key={idx} className='index_main_keyword' onClick={() => setKeywordArticles(keyword.articles, keyword.name)}>{`#${keyword.name}`}</span>
+            <span key={idx} id={keyword.name} className='index_main_keyword' onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}>{`#${keyword.name}`}</span>
           ))}
         </div>
-        {articles.length > 0 ? (
+        <div> </div>
+        {articles && articles.length > 0 ? (
           <>
             <div className='w100 df jc_e mb10'>
               <span className='index_article_date'>{baseDate}</span>
@@ -106,6 +137,27 @@ const HomePage = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const result = await getDailyTrends('ko');
+  const resArr = JSON.parse(result).default.trendingSearchesDays;
+  const pubDate = `(인기 급상승 검색어 기준일: ${timeFormat(resArr[resArr.length - 1].date)} - ${timeFormat(resArr[0].date)})`;
+  let trendKeyData: any[] = [];
+  for (let dateData of resArr) {
+    dateData.trendingSearches.map((obj: any) => {
+      trendKeyData.push(obj);
+    });
+  }
+
+  const keyArr = trendKeyData.map((obj) => ({ name: obj.title.query.replaceAll("'", ''), value: obj.formattedTraffic, articles: obj.articles }));
+
+  return {
+    props: {
+      keywordArr: keyArr,
+      pubDate: pubDate,
+    },
+  };
 };
 
 export default HomePage;
