@@ -101,6 +101,10 @@ const TrendKeyword = () => {
         let wordCloud = echarts.getInstanceByDom(wChartDom.current);
         if (!wordCloud) {
           wordCloud = echarts.init(wChartDom.current);
+          wordCloud.on('finished', () => {
+            document.querySelector('.post_main')?.scrollTo(0, 0);
+          });
+
           wordCloud.setOption(WordCloudOpt(keyArr));
           //wordcloud 키워드 클릭 이벤트
           wordCloud.on('click', (params) => {
@@ -141,6 +145,7 @@ const TrendKeyword = () => {
         lineChart.resize();
       }
     });
+    document.querySelector('.post_main')?.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {

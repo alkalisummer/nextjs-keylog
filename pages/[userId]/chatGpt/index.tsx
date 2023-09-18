@@ -8,9 +8,30 @@ interface user {
   email: string;
   image: string;
   nickname: string;
+  blogName: string;
 }
 
-const ChatGpt = ({ userInfo }: { userInfo: user }) => {
+interface recentPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+}
+
+interface popularPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+  LIKE_CNT: number;
+}
+
+interface recentComment {
+  COMMENT_CNTN: string;
+  USER_NICKNAME: string;
+  RGSR_ID: string;
+  RGSN_DTTM: string;
+}
+
+const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
@@ -102,7 +123,7 @@ const ChatGpt = ({ userInfo }: { userInfo: user }) => {
   };
 
   return (
-    <BlogLayout userInfo={userInfo}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
       <form className='chat_div' onSubmit={handleSubmit}>
         <div className='chat_header_div'>
           <span className='chat_back_arrow' onClick={() => router.push('/')}>

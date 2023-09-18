@@ -16,10 +16,36 @@ interface user {
   nickname: string;
   blogName: string;
 }
-const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; items: any[]; postId: string }; pageNum: number; userInfo: user }) => {
+
+interface posts {
+  totalItems: number;
+  items: any[];
+  postId: string;
+}
+
+interface recentPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+}
+
+interface popularPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+  LIKE_CNT: number;
+}
+
+interface recentComment {
+  COMMENT_CNTN: string;
+  USER_NICKNAME: string;
+  RGSR_ID: string;
+  RGSN_DTTM: string;
+}
+
+const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentComments }: { posts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const router = useRouter();
   const { userId } = router.query;
-
   let totalPageNum: number;
 
   const getTotalPostsArr = () => {
@@ -44,14 +70,10 @@ const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; i
   const totalPostsArr = getTotalPostsArr();
 
   return (
-    <BlogLayout userInfo={userInfo}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
       <div className={listStyle.home_div}>
         <div className={listStyle.home_header_div}>
-          <img
-            src={userInfo.image ? userInfo.image : '../../icon/person.png'}
-            className={listStyle.home_profile_img}
-            alt='profile img'
-          />
+          <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
           <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
           <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
         </div>
@@ -73,34 +95,21 @@ const ListPage = ({ posts, pageNum, userInfo }: { posts: { totalItems: number; i
           </div>
 
           {posts.items?.map((post: any) => {
-            return (
-              <PostItem
-                key={post.POST_ID}
-                post={post}
-                userId={userId}
-              />
-            );
+            return <PostItem key={post.POST_ID} post={post} userId={userId} />;
           })}
         </div>
         <div className={listStyle.home_page_nav}>
-          <span
-            className={listStyle.home_page_nav_prev}
-            onClick={(e) => handlePagination(Number(pageNum) - 1)}>
+          <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
             <span className={listStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
           </span>
           {totalPostsArr.map((obj: number, idx: number) => {
             return (
-              <span
-                key={idx}
-                className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num}
-                onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
+              <span key={idx} className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num} onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
                 {obj}
               </span>
             );
           })}
-          <span
-            className={listStyle.home_page_nav_next}
-            onClick={(e) => handlePagination(Number(pageNum) + 1)}>
+          <span className={listStyle.home_page_nav_next} onClick={(e) => handlePagination(Number(pageNum) + 1)}>
             Next&nbsp;&nbsp; <span className={listStyle.home_page_nav_arr}>&gt;</span>
           </span>
         </div>
@@ -122,11 +131,7 @@ const PostItem = ({ post, userId }: any) => {
               <span className={listStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
             </div>
             <div className={listStyle.home_thumb_img_div}>
-              <img
-                className={listStyle.home_thumb_img}
-                src={POST_THMB_IMG_URL}
-                alt='thumbImg'
-              />
+              <img className={listStyle.home_thumb_img} src={POST_THMB_IMG_URL} alt='thumbImg' />
             </div>
           </div>
         ) : (

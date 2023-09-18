@@ -105,6 +105,10 @@ export const handleMySql = async (params: any) => {
                FROM USER 
               WHERE USER_ID = '${userId}'`;
       break;
+    case 'getUserBlogInfo':
+      userId = params.id;
+      sql = ``;
+      break;
   }
 
   await new Promise((resolve, reject) => {

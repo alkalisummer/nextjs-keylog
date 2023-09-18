@@ -91,6 +91,21 @@ export const handleMySql = async (params: any) => {
                          (POST_ID, COMMENT_ORIGIN_ID, COMMENT_DEPTH, COMMENT_CNTN, RGSR_ID, RGSN_DTTM, AMNT_DTTM ) 
                   VALUES ( '${postId}', '${commentOriginId}', '${commentDepth}','${commentCntn.replaceAll("'", "''")}','${rgsrId}', '${rgsnDttm}', '${amntDttm}')`;
       break;
+    case 'getRecentComment':
+      rgsrId = params.id;
+      sql = `SELECT A.COMMENT_CNTN AS COMMENT_CNTN
+                  , A.RGSN_DTTM    AS RGSN_DTTM
+                  , A.RGSR_ID      AS RGSR_ID
+                  , C.USER_NICKNAME AS USER_NICKNAME
+               FROM COMMENT A
+               LEFT JOIN POST B              
+                 ON A.POST_ID = B.POST_ID 
+               LEFT JOIN USER C
+                 ON A.RGSR_ID = C.USER_ID
+              WHERE B.RGSR_ID = '${rgsrId}' 
+              ORDER BY A.RGSN_DTTM DESC
+              LIMIT 5`;
+      break;
   }
 
   await new Promise((resolve, reject) => {

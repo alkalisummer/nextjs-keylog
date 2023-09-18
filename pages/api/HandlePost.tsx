@@ -17,10 +17,11 @@ export const handleMySql = async (params: any) => {
   let postId;
   let rgsrId;
   let sql = '';
-  let result: { totalItems: number; items: any[]; postId: string } = {
+  let result: { totalItems: number; items: any[]; postId: string; popularPosts: any[] } = {
     totalItems: 0,
     items: [],
     postId: '',
+    popularPosts: [],
   };
 
   await connection.connect();
@@ -82,6 +83,30 @@ export const handleMySql = async (params: any) => {
                FROM POST 
               WHERE RGSR_ID = '${rgsrId}'`;
       break;
+    case 'getRecentPost':
+      rgsrId = params.id;
+      sql = `SELECT POST_TITLE
+                  , POST_THMB_IMG_URL
+                  , RGSN_DTTM
+               FROM POST
+              WHERE RGSR_ID = '${rgsrId}'
+              ORDER BY RGSN_DTTM DESC
+              LIMIT 5`;
+      break;
+    case 'getPopularPost':
+      rgsrId = params.id;
+      sql = `SELECT A.POST_TITLE        AS POST_TITLE
+                  , A.POST_THMB_IMG_URL AS POST_THMB_IMG_URL
+                  , A.RGSN_DTTM         AS RGSN_DTTM
+                  , COUNT(B.LIKEACT_ID) AS LIKE_CNT 
+               FROM POST A
+               LEFT JOIN LIKEACT B 
+                 ON A.POST_ID = B.POST_ID
+              WHERE A.RGSR_ID  = '${rgsrId}'
+              GROUP BY A.POST_ID
+              ORDER BY LIKE_CNT DESC
+              LIMIT 5`;
+      break;
   }
 
   await new Promise((resolve, reject) => {
@@ -118,6 +143,11 @@ export default async function HandlePost(request: NextApiRequest, response: Next
     params = request.body.data;
   }
   const result = await handleMySql(params);
+  if (params.type === 'getRecentPost') {
+    params.type = 'getPopularPost';
+    const popularPosts = await handleMySql(params);
+    result.popularPosts = popularPosts.items;
+  }
 
   response.status(200).json(result);
 }

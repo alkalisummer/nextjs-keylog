@@ -71,23 +71,19 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
 
     //제목에 키워드가 없는 기사 필터링
     let resultArticles = [];
-    if (keyword.indexOf(' ') !== -1) {
-      let keywordArr = [];
-      keywordArr = keyword.replaceAll(' ', '').split('');
-
-      for (let article of articles) {
-        for (let i = 0; i < keywordArr.length; i++) {
-          if (article.title.indexOf(keywordArr[i]) === -1) {
-            break;
-          }
-          if (i === keywordArr.length - 1) {
-            resultArticles.push(article);
-          }
+    let keywordArr = [];
+    keywordArr = keyword.replaceAll(' ', '').split('');
+    for (let article of articles) {
+      for (let i = 0; i < keywordArr.length; i++) {
+        if (article.title.toUpperCase().indexOf(keywordArr[i].toUpperCase()) === -1) {
+          break;
+        }
+        if (i === keywordArr.length - 1) {
+          resultArticles.push(article);
         }
       }
-    } else {
-      resultArticles = articles.filter((article: article) => article.title.indexOf(keyword) !== -1);
     }
+
     setArticles(resultArticles);
     setSelectKey(keyword);
     setSelectKeyValue(value);

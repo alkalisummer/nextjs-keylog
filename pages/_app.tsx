@@ -1,5 +1,8 @@
 import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
+import { handleMySql as handleUser } from './api/HandleUser';
+import { handleMySql as handlePost } from './api/HandlePost';
+import { handleMySql as handleComment } from './api/HandleComment';
 import Head from 'next/head';
 import Script from 'next/script';
 
@@ -36,19 +39,64 @@ export default function App({ Component, pageProps }: AppProps) {
 
 App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   let pageProps = {};
+  let recentPost;
+  let popularPost;
+  let recentComment;
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
-
+  // 화면 갱신시 useSession으로 가져오는 사용자 정보 데이터가 깜빡이는것을 방지 하기 위함
   const session = await getSession(ctx);
+
   const userId = ctx.query.userId;
   let userInfo;
 
   if (userId) {
     const params = { type: 'getUser', id: userId };
-    const user = await axios.post('http://localhost:3000/api/HandleUser', { data: params }).then((res) => {
-      return JSON.parse(JSON.stringify(res.data.items[0]));
-    });
+    let user;
+
+    if (ctx.req) {
+      user = await handleUser(params).then((res) => {
+        return JSON.parse(JSON.stringify(res.items[0]));
+      });
+      // 최근 게시글 5개
+      params.type = 'getRecentPost';
+      await handlePost(params).then((res) => {
+        const result = JSON.parse(JSON.stringify(res));
+        recentPost = result.items;
+      });
+
+      // 인기 게시글 5개
+      params.type = 'getPopularPost';
+      await handlePost(params).then((res) => {
+        const result = JSON.parse(JSON.stringify(res));
+        popularPost = result.items;
+      });
+
+      // 최근 댓글 5개
+      params.type = 'getRecentComment';
+      await handleComment(params).then((res) => {
+        const result = JSON.parse(JSON.stringify(res));
+        recentComment = result.items;
+      });
+    } else {
+      user = await axios.post('/api/HandleUser', { data: params }).then((res) => {
+        return JSON.parse(JSON.stringify(res.data.items[0]));
+      });
+      // 최근 게시글 5개, 인기 게시글 5개
+      params.type = 'getRecentPost';
+      await axios.post('/api/HandlePost', { data: params }).then((res) => {
+        const result = JSON.parse(JSON.stringify(res.data));
+        recentPost = result.items;
+        popularPost = result.popularPosts;
+      });
+      // 최근 댓글 5개
+      params.type = 'getRecentComment';
+      await axios.post('/api/HandleComment', { data: params }).then((res) => {
+        const result = JSON.parse(JSON.stringify(res.data));
+        recentComment = result.items;
+      });
+    }
 
     userInfo = {
       id: user.USER_ID,
@@ -59,7 +107,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
     };
   }
 
-  pageProps = { ...pageProps, userInfo, session };
+  pageProps = { ...pageProps, userInfo, session, recentPost, popularPost, recentComment };
 
   return { pageProps };
 };

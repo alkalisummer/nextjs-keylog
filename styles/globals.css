@@ -30,7 +30,7 @@ body {
 }
 
 .left_area {
-  width: 23%;
+  width: 19%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,7 +85,7 @@ body {
 }
 
 .right_area {
-  width: 77%;
+  width: 81%;
   height: 100%;
 }
 

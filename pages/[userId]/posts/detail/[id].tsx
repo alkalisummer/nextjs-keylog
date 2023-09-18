@@ -32,6 +32,7 @@ interface user {
   email: string;
   image: string;
   nickname: string;
+  blogName: string;
 }
 
 interface comment {
@@ -63,7 +64,27 @@ interface like {
   LIKE_CNT: number;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[] }) => {
+interface recentPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+}
+
+interface popularPost {
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  RGSN_DTTM: string;
+  LIKE_CNT: number;
+}
+
+interface recentComment {
+  COMMENT_CNTN: string;
+  USER_NICKNAME: string;
+  RGSR_ID: string;
+  RGSN_DTTM: string;
+}
+
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, recentPosts, popularPosts, recentComments }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -279,7 +300,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like }
   };
 
   return (
-    <BlogLayout userInfo={userInfo}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
       <PostLayout>
         <div className='post_div'>
           <div className='post_title_created'>
