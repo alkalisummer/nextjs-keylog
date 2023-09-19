@@ -14,6 +14,8 @@ import '@/styles/ChatGpt.css';
 import '@/styles/Navbar.css';
 import '@/styles/Index.css';
 import '@/styles/Error.css';
+import '@/styles/leftArea.css';
+import '@/styles/rightArea.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const { session } = pageProps;
@@ -39,9 +41,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
 App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   let pageProps = {};
-  let recentPost;
-  let popularPost;
-  let recentComment;
+  let recentPosts;
+  let popularPosts;
+  let recentComments;
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
@@ -63,21 +65,21 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
       params.type = 'getRecentPost';
       await handlePost(params).then((res) => {
         const result = JSON.parse(JSON.stringify(res));
-        recentPost = result.items;
+        recentPosts = result.items;
       });
 
       // 인기 게시글 5개
       params.type = 'getPopularPost';
       await handlePost(params).then((res) => {
         const result = JSON.parse(JSON.stringify(res));
-        popularPost = result.items;
+        popularPosts = result.items;
       });
 
       // 최근 댓글 5개
       params.type = 'getRecentComment';
       await handleComment(params).then((res) => {
         const result = JSON.parse(JSON.stringify(res));
-        recentComment = result.items;
+        recentComments = result.items;
       });
     } else {
       user = await axios.post('/api/HandleUser', { data: params }).then((res) => {
@@ -87,14 +89,14 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
       params.type = 'getRecentPost';
       await axios.post('/api/HandlePost', { data: params }).then((res) => {
         const result = JSON.parse(JSON.stringify(res.data));
-        recentPost = result.items;
-        popularPost = result.popularPosts;
+        recentPosts = result.items;
+        popularPosts = result.popularPosts;
       });
       // 최근 댓글 5개
       params.type = 'getRecentComment';
       await axios.post('/api/HandleComment', { data: params }).then((res) => {
         const result = JSON.parse(JSON.stringify(res.data));
-        recentComment = result.items;
+        recentComments = result.items;
       });
     }
 
@@ -107,7 +109,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
     };
   }
 
-  pageProps = { ...pageProps, userInfo, session, recentPost, popularPost, recentComment };
+  pageProps = { ...pageProps, userInfo, session, recentPosts, popularPosts, recentComments };
 
   return { pageProps };
 };

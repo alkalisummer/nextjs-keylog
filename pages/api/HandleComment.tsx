@@ -93,8 +93,10 @@ export const handleMySql = async (params: any) => {
       break;
     case 'getRecentComment':
       rgsrId = params.id;
-      sql = `SELECT A.COMMENT_CNTN AS COMMENT_CNTN
+      sql = `SELECT A.COMMENT_ID   AS COMMENT_ID
+                  , A.COMMENT_CNTN AS COMMENT_CNTN
                   , A.RGSN_DTTM    AS RGSN_DTTM
+                  , A.POST_ID      AS POST_ID
                   , A.RGSR_ID      AS RGSR_ID
                   , C.USER_NICKNAME AS USER_NICKNAME
                FROM COMMENT A
@@ -104,7 +106,7 @@ export const handleMySql = async (params: any) => {
                  ON A.RGSR_ID = C.USER_ID
               WHERE B.RGSR_ID = '${rgsrId}' 
               ORDER BY A.RGSN_DTTM DESC
-              LIMIT 5`;
+              LIMIT 3`;
       break;
   }
 

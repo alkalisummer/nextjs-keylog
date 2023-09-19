@@ -12,12 +12,14 @@ interface user {
 }
 
 interface recentPost {
+  POST_ID: string;
   POST_TITLE: string;
   POST_THMB_IMG_URL: string;
   RGSN_DTTM: string;
 }
 
 interface popularPost {
+  POST_ID: string;
   POST_TITLE: string;
   POST_THMB_IMG_URL: string;
   RGSN_DTTM: string;
@@ -25,6 +27,8 @@ interface popularPost {
 }
 
 interface recentComment {
+  POST_ID: string;
+  COMMENT_ID: string;
   COMMENT_CNTN: string;
   USER_NICKNAME: string;
   RGSR_ID: string;

@@ -16,7 +16,6 @@ import Modal from '@mui/material/Modal';
 //mui notification
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
-import classNames from 'classnames';
 
 const Navbar = () => {
   //사용자 세션

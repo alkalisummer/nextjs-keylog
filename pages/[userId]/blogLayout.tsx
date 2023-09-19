@@ -12,17 +12,21 @@ interface LayoutProps {
     blogName: string;
   };
   recentPosts: {
+    POST_ID: string;
     POST_TITLE: string;
     POST_THMB_IMG_URL: string;
     RGSN_DTTM: string;
   }[];
   popularPosts: {
+    POST_ID: string;
     POST_TITLE: string;
     POST_THMB_IMG_URL: string;
     RGSN_DTTM: string;
     LIKE_CNT: number;
   }[];
   recentComments: {
+    POST_ID: string;
+    COMMENT_ID: string;
     COMMENT_CNTN: string;
     USER_NICKNAME: string;
     RGSR_ID: string;
