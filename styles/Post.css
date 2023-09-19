@@ -10,11 +10,10 @@
 .post_div {
   padding-left: 8rem;
   padding-right: 8rem;
-  padding-top: 1rem;
+  padding-top: 2rem;
   padding-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  height: 96%;
+  display: block;
+  height: 89%;
 }
 
 .post_title_created {
@@ -47,6 +46,7 @@
   color: #555;
   word-break: break-all;
   margin-bottom: 2.5rem !important;
+  min-height: 44%;
 }
 
 .post_title_input {
@@ -96,6 +96,11 @@
   cursor: pointer;
 }
 
+.post_submit_btn:hover {
+  background-color: #009bf2;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
 .post_cancel_btn {
   border-radius: 20px;
   border: 1px solid #d0d0d0;
@@ -107,6 +112,11 @@
   background-color: #f5f5f5;
   color: #333;
   cursor: pointer;
+}
+
+.post_cancel_btn:hover {
+  background-color: #ffffff;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
 .post_header {
@@ -185,6 +195,10 @@ pre:has(> code) {
   white-space: nowrap;
 }
 
+.post_linkage_tag:hover {
+  background-color: #c3c3c3;
+}
+
 .post_sub_div {
   padding-left: 8rem;
   padding-right: 8rem;
@@ -219,6 +233,10 @@ pre:has(> code) {
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #efefef;
+}
+
+.post_article:hover {
+  background-color: #f8f9fa;
 }
 
 .post_selected_div {
@@ -291,6 +309,7 @@ pre:has(> code) {
 }
 
 .post_line_keyword_div {
+  display: flex;
   margin-bottom: 20px;
   margin-top: 20px;
 }
@@ -303,6 +322,18 @@ pre:has(> code) {
   background-color: transparent;
   font-size: 15px;
   margin-right: 5px;
+  width: fit-content;
+}
+
+.post_line_keyword:hover {
+  background-color: #f8f9fa;
+}
+
+.post_line_keyword_delete {
+  margin-left: 15px;
+  font-size: 13px;
+  color: #b9b9b9;
+  cursor: pointer;
 }
 
 .post_line_keyword_div button {
@@ -352,6 +383,10 @@ pre:has(> code) {
   border: none;
   font-size: 12px;
   cursor: pointer;
+}
+
+.post_auto_button:hover {
+  background-color: #cacaca;
 }
 
 .post_auto_daily_div {
@@ -407,11 +442,11 @@ pre:has(> code) {
 }
 
 .post_img:hover {
-  border: 3px solid #009bf2;
+  border: 3px solid hsl(35, 100%, 57%);
 }
 
 .post_img_focus {
-  border: 3px solid #009bf2;
+  border: 3px solid hsl(35, 100%, 57%);
 }
 
 .tooltip {

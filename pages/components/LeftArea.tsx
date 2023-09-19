@@ -49,7 +49,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
           </span>
         </Link>
         <Link href={`/${userId}`}>
-          <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className='left_profile_icon' alt='profile img' />
+          <img src={userInfo.image ? userInfo.image : '/../../icon/person.png'} className='left_profile_icon' alt='profile img' />
         </Link>
         <Link href={`/${userId}`}>
           <span className='left_area_blog_name'>{userInfo.blogName}</span>
@@ -77,9 +77,13 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
                 <span className='left_area_side_title'>{post.POST_TITLE}</span>
                 <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
               </div>
-              <div className='df ai_c'>
-                <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
-              </div>
+              {post.POST_THMB_IMG_URL ? (
+                <div className='df ai_c'>
+                  <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           ))}
         </div>
@@ -95,9 +99,13 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
                 <span className='left_area_side_title'>{post.POST_TITLE}</span>
                 <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
               </div>
-              <div className='df ai_c'>
-                <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
-              </div>
+              {post.POST_THMB_IMG_URL ? (
+                <div className='df ai_c'>
+                  <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           ))}
         </div>

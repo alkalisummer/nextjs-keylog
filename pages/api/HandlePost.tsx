@@ -96,17 +96,20 @@ export const handleMySql = async (params: any) => {
       break;
     case 'getPopularPost':
       rgsrId = params.id;
-      sql = `SELECT A.POST_ID           AS POST_ID
-                  , A.POST_TITLE        AS POST_TITLE
-                  , A.POST_THMB_IMG_URL AS POST_THMB_IMG_URL
-                  , A.RGSN_DTTM         AS RGSN_DTTM
-                  , COUNT(B.LIKEACT_ID) AS LIKE_CNT
-               FROM POST A
-               LEFT JOIN LIKEACT B 
-                 ON A.POST_ID = B.POST_ID
-              WHERE A.RGSR_ID  = '${rgsrId}'
-              GROUP BY A.POST_ID
-              ORDER BY LIKE_CNT DESC
+      sql = `
+             SELECT A.*
+               FROM (SELECT A.POST_ID           AS POST_ID
+                          , A.POST_TITLE        AS POST_TITLE
+                          , A.POST_THMB_IMG_URL AS POST_THMB_IMG_URL
+                          , A.RGSN_DTTM         AS RGSN_DTTM
+                          , COUNT(B.LIKEACT_ID) AS LIKE_CNT
+                       FROM POST A
+                       LEFT JOIN LIKEACT B 
+                         ON A.POST_ID = B.POST_ID
+                      WHERE A.RGSR_ID  = '${rgsrId}'
+                      GROUP BY A.POST_ID) AS A
+              WHERE A.LIKE_CNT > 0 
+              ORDER BY A.LIKE_CNT DESC, A.RGSN_DTTM DESC
               LIMIT 3`;
       break;
   }

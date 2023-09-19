@@ -136,16 +136,25 @@ const TrendKeyword = () => {
     });
     //word-cloud, line-chart 화면사이즈 변경시 resize
     window.addEventListener('resize', () => {
-      let wordCloud = echarts.init(wChartDom.current);
-      let lineChart = echarts.init(lChartDom.current);
-      if (wordCloud) {
-        wordCloud.resize();
-      }
-      if (lineChart) {
-        lineChart.resize();
+      if (wChartDom.current) {
+        let wordCloud = echarts.getInstanceByDom(wChartDom.current);
+        let lineChart = echarts.getInstanceByDom(lChartDom.current!);
+
+        if (!wordCloud) {
+          wordCloud = echarts.init(wChartDom.current);
+        }
+        if (!lineChart) {
+          lineChart = echarts.init(lChartDom.current);
+        }
+
+        if (wordCloud) {
+          wordCloud.resize();
+        }
+        if (lineChart) {
+          lineChart.resize();
+        }
       }
     });
-    document.querySelector('.post_main')?.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -232,6 +241,12 @@ const TrendKeyword = () => {
       }
     });
     parentDiv?.append(keywordInput);
+  };
+
+  const deleteTerm = (keyId: string) => {
+    const resultArr = JSON.parse(JSON.stringify(lineKeyword));
+    resultArr.splice(parseInt(keyId), 1);
+    setLineKeyword(resultArr);
   };
 
   const autoPostDaily = async () => {
@@ -347,7 +362,7 @@ const TrendKeyword = () => {
       <div className='post_wordcloud_div'>
         <div id='wordcloud' ref={wChartDom} style={{ width: '50%', height: '400px' }}></div>
         <div className='post_linkage_div'>
-          <span className='post_linkage_title'>연관 검색어</span>
+          <span className='post_linkage_title'>{`연관 검색어 ${selectedKey?.name ? ' : ' + selectedKey.name : ''}`}</span>
           <div className='post_linkage_tag_div'>
             {linkage.map((obj, idx) => {
               return (
@@ -376,9 +391,10 @@ const TrendKeyword = () => {
           <div className='post_line_keyword_div'>
             {lineKeyword.map((obj: string, idx: number) => {
               return (
-                <span key={idx} className='post_line_keyword'>
-                  {obj}
-                </span>
+                <div key={idx} id={idx.toString()} className='post_line_keyword'>
+                  <span>{obj}</span>
+                  <i className='fa-solid fa-xmark post_line_keyword_delete' onClick={() => deleteTerm(idx.toString())}></i>
+                </div>
               );
             })}
             {lineKeyword.length !== 5 && showAddterm ? (
