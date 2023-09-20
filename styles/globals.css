@@ -109,6 +109,10 @@ a {
   padding-top: 15px;
 }
 
+.pr5 {
+  padding-right: 5px;
+}
+
 .pr15 {
   padding-right: 15px;
 }
@@ -138,6 +142,10 @@ a {
 
 .w100 {
   width: 100%;
+}
+
+.w40 {
+  width: 40% !important;
 }
 
 .w52 {
@@ -178,6 +186,10 @@ a {
 
 .ai_c {
   align-items: center;
+}
+
+.fw_500 {
+  font-weight: 500 !important;
 }
 
 @media (max-width: 768px) {

@@ -210,3 +210,51 @@
   text-decoration: underline;
   text-underline-offset: 10px;
 }
+
+.index_search_input_div {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.index_search_input {
+  font-family: 'Spoqa Han Sans Neo', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  background-color: #f8f9fa;
+  color: #333;
+  border: none;
+  border-bottom: 3px solid #333;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.index_search_input::placeholder {
+  font-weight: 300;
+}
+
+.index_search_input:focus {
+  outline: none;
+}
+
+.index_search_btn {
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  border-bottom: 3px solid #333;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.index__search_post_div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 30px;
+  column-gap: 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+}

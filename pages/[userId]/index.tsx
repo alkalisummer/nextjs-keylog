@@ -123,7 +123,7 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
 };
 
 const PostItem = ({ post, userId }: any) => {
-  const { POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, AMNT_DTTM } = post || {};
+  const { POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, RGSN_DTTM } = post || {};
   return (
     <div className={listStyle.home_post_title_content}>
       <Link href={`/${userId}/posts/detail/${POST_ID}`}>
@@ -132,7 +132,7 @@ const PostItem = ({ post, userId }: any) => {
             <div className={listStyle.home_thumb_content}>
               <span className={listStyle.home_post_title}>{POST_TITLE}</span>
               <p className={listStyle.home_post_content}>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
-              <span className={listStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
+              <span className={listStyle.home_post_created}>{timeFormat(RGSN_DTTM)}</span>
             </div>
             <div className={listStyle.home_thumb_img_div}>
               <img className={listStyle.home_thumb_img} src={POST_THMB_IMG_URL} alt='thumbImg' />
@@ -142,7 +142,7 @@ const PostItem = ({ post, userId }: any) => {
           <div>
             <span className={listStyle.home_post_title}>{POST_TITLE}</span>
             <p className={listStyle.home_post_content}>{POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}</p>
-            <span className={listStyle.home_post_created}>{timeFormat(AMNT_DTTM)}</span>
+            <span className={listStyle.home_post_created}>{timeFormat(RGSN_DTTM)}</span>
           </div>
         )}
       </Link>

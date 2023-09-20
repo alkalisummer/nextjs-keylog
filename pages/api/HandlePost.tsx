@@ -33,17 +33,37 @@ export const handleMySql = async (params: any) => {
       const currPageNum = params.currPageNum;
       const sttRowNum = perPage * (currPageNum - 1) + 1;
       const eddRowNum = perPage * currPageNum;
+      const searchWord = params.searchWord;
       sql = `SELECT * 
-               FROM (SELECT ROW_NUMBER() OVER(ORDER BY AMNT_DTTM DESC) AS PAGE_INDX
-                          , POST_ID
-                          , POST_TITLE
-                          , POST_CNTN
-                          , POST_THMB_IMG_URL
-                          , AMNT_DTTM, COUNT(*) OVER() AS TOTAL_ITEMS 
-                       FROM POST 
-                      WHERE RGSR_ID = '${rgsrId}' ) AS A 
+                  , COUNT(*) OVER()                                      AS TOTAL_ITEMS
+               FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.RGSN_DTTM DESC) AS PAGE_INDX
+                          , A.POST_ID                                    AS POST_ID
+                          , A.POST_TITLE                                 AS POST_TITLE
+                          , A.POST_CNTN                                  AS POST_CNTN
+                          , A.POST_THMB_IMG_URL                          AS POST_THMB_IMG_URL
+                          , A.RGSR_ID                                    AS RGSR_ID
+                          , A.RGSN_DTTM                                  AS RGSN_DTTM
+                          , B.USER_NICKNAME                              AS USER_ID
+                          , B.USER_THMB_IMG_URL                          AS USER_THMB_IMG_URL
+                          , COUNT(DISTINCT C.COMMENT_ID)                 AS COMMENT_CNT
+                          , COUNT(DISTINCT D.LIKEACT_ID)                 AS LIKE_CNT
+                       FROM POST A 
+                  LEFT JOIN USER B 
+                         ON A.RGSR_ID = B.USER_ID
+                  LEFT JOIN COMMENT C
+                         ON A.POST_ID = C.POST_ID
+                  LEFT JOIN LIKEACT D 
+                         ON A.POST_ID = D.POST_ID  
+                      WHERE 1=1
+            ${rgsrId ? `AND A.RGSR_ID = '${rgsrId}'` : ''} 
+        ${searchWord ? `AND (A.POST_TITLE LIKE '%${searchWord}%' OR A.POST_CNTN LIKE '%${searchWord}%')` : ''}
+                   GROUP BY A.POST_ID
+                   ORDER BY A.RGSN_DTTM 
+                   ) AS A 
               WHERE PAGE_INDX >= ${sttRowNum} 
-                AND PAGE_INDX <= ${eddRowNum}`;
+                AND PAGE_INDX <= ${eddRowNum}
+              ORDER BY PAGE_INDX;`;
+      console.log(sql);
       break;
     case 'read':
       postId = params.postId;

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import RigthArea from '../components/RigthArea';
+import RightArea from '../components/RightArea';
 import LeftArea from '../components/LeftArea';
 
 interface LayoutProps {
@@ -38,7 +38,7 @@ const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo, recentPosts, po
   return (
     <div className='main_area'>
       <LeftArea userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}></LeftArea>
-      <RigthArea>{children}</RigthArea>
+      <RightArea>{children}</RightArea>
     </div>
   );
 };

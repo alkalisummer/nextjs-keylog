@@ -93,7 +93,6 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   const { data: session, status } = useSession();
   const router = useRouter();
   const { userId } = router.query;
-
   //링크 복사 - 현재 url 변수
   const [currUrl, setCurrUrl] = useState('');
   const [showClipNoti, setShowClipNoti] = useState(false);
@@ -103,16 +102,18 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   const [showCommentNoti, setShowCommentNoti] = useState(false);
 
   //댓글 리스트 변수
-  const [commentArr, setCommentArr] = useState(comments || []);
+  const [commentArr, setCommentArr] = useState<comment[]>([]);
 
   //대댓글 리스트
   const [replyList, setReplyList] = useState<reply[]>([]);
   //좋아요 개수
-  const [likeCnt, setLikeCnt] = useState(like.length > 0 ? like[0].LIKE_CNT : 0);
+  const [likeCnt, setLikeCnt] = useState(0);
 
   useEffect(() => {
     setCurrUrl(window.location.href);
-  }, []);
+    setCommentArr(comments.length > 0 ? comments : []);
+    setLikeCnt(like.length > 0 ? like[0].LIKE_CNT : 0);
+  }, [comments, like]);
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };
@@ -549,6 +550,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((res) => {
       like = JSON.parse(res).items;
     });
+
+  console.log(like);
+  console.log(comments);
 
   return { props: { post, imgFileArr, htmlCntn, comments, like } };
 };

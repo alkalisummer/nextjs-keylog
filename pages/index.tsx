@@ -6,6 +6,7 @@ import { GetServerSideProps } from 'next';
 import { replaceSymbol, timeAgoFormat, timeFormat } from '../utils/CommonUtils';
 import DailyTrends from '@/utils/DailyTrends';
 import Link from 'next/link';
+import axios from 'axios';
 
 interface keyword {
   name: string;
@@ -26,6 +27,18 @@ interface article {
   url: string;
 }
 
+interface post {
+  POST_ID: string;
+  POST_TITLE: string;
+  POST_THMB_IMG_URL: string;
+  POST_CNTN: string;
+  RGSR_ID: string;
+  USER_NICKNAME: string;
+  COMMENT_CNT: string;
+  LIKE_CNT: string;
+  RGSN_DTTM: string;
+}
+
 const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: string }) => {
   const [keyArr, setKeyArr] = useState<keyword[]>(keywordArr);
   const [baseDate, setBaseDate] = useState<string>(pubDate);
@@ -34,10 +47,8 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   const [selectKeyValue, setSelectKeyValue] = useState(0);
   const [currTab, setCurrTab] = useState('keyword');
   const [searchWord, setSearchWord] = useState('');
-
-  useEffect(() => {
-    init(keywordArr);
-  }, []);
+  const [currPageNum, setCurrPageNum] = useState(1);
+  const [posts, setPosts] = useState<post[]>([]);
 
   const init = async (keyArr: keyword[]) => {
     const initKeyword = keyArr[0].name;
@@ -49,28 +60,28 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
     setSelectKeyValue(initValue);
   };
 
+  useEffect(() => {
+    if (currTab === 'keyword') {
+      init(keywordArr);
+    } else {
+      getPosts(1);
+    }
+  }, [currTab]);
+
   const getDailyTrendsKeyword = async () => {
     return await DailyTrends('ko').then((res) => {
       setKeyArr(res.keyArr);
       setBaseDate(res.baseDate);
-      init(res.keyArr);
-
+      if (currTab === 'keyword') {
+        init(res.keyArr);
+      } else {
+        setCurrTab('keyword');
+      }
       return res.keyArr;
     });
   };
 
   const setKeywordArticles = async (articles: article[], keyword: string, value: number) => {
-    const keywordId = document.getElementById(keyword);
-
-    if (keywordId) {
-      // 기존 선택되어 있던 키워드 css 제거
-      let removeTargetEl = document.getElementsByClassName('index_highlight');
-      if (removeTargetEl.length > 0) {
-        removeTargetEl[0].classList.remove('index_highlight');
-      }
-      keywordId.classList.add('index_highlight');
-    }
-
     //제목에 키워드가 없는 기사 필터링
     let resultArticles = [];
     let keywordArr = [];
@@ -91,14 +102,25 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
     setSelectKeyValue(value);
   };
 
-  const selectTab = (e: HTMLElement, tabName: string) => {
-    // 기존 선택되어 있던 키워드 css 제거
-    let removeAcitveEl = document.getElementsByClassName('index_main_active');
-    if (removeAcitveEl.length > 0) {
-      removeAcitveEl[0].classList.remove('index_main_active');
-    }
-    e.classList.add('index_main_active');
+  const selectTab = async (e: HTMLElement, tabName: string) => {
     setCurrTab(tabName);
+    if (tabName === 'keyword') {
+      init(keyArr);
+    }
+  };
+
+  const searchPost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setCurrPageNum(1);
+    getPosts(1);
+  };
+
+  const getPosts = async (currPageNum: number) => {
+    const params = { type: 'list', searchWord: searchWord, currPageNum: currPageNum, perPage: 10 };
+    await axios.get('/api/HandlePost', { params: params }).then((res) => {
+      const result = res.data.items;
+      setPosts(result);
+    });
   };
 
   return (
@@ -112,13 +134,12 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
         <Navbar></Navbar>
       </div>
       <div className='index_main_tab'>
-        <span className='index_main_tab_text index_main_active' onClick={(e) => selectTab(e.currentTarget, 'keyword')}>
+        <span className={`index_main_tab_text ${currTab === 'keyword' ? 'index_main_active' : ''}`} onClick={(e) => selectTab(e.currentTarget, 'keyword')}>
           <i className='fa-solid fa-arrow-trend-up mr8'></i>급상승 키워드
         </span>
-        <span className='index_main_tab_text' onClick={(e) => selectTab(e.currentTarget, 'post')}>
+        <span className={`index_main_tab_text ${currTab === 'post' ? 'index_main_active' : ''}`} onClick={(e) => selectTab(e.currentTarget, 'post')}>
           <i className='fa-solid fa-magnifying-glass mr8'></i>포스트
         </span>
-        <input className='index_search_input' type='text' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}></input>
       </div>
       <div className='index_main_div'>
         {currTab === 'keyword' ? (
@@ -135,7 +156,7 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
             </div>
             <div className='index_main_keyword_div'>
               {keyArr.map((keyword, idx) => (
-                <span key={idx} id={keyword.name} className='index_main_keyword' onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}>{`#${keyword.name}`}</span>
+                <span key={idx} id={keyword.name} className={`index_main_keyword ${keyword.name === selectKey ? 'index_highlight' : ''}`} onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}>{`#${keyword.name}`}</span>
               ))}
             </div>
             {articles && articles.length > 0 ? (
@@ -165,7 +186,50 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
             )}
           </>
         ) : (
-          <div></div>
+          <div className='index_main_title_div'>
+            <form className='index_search_input_div' onSubmit={searchPost}>
+              <span className='index_search_input pr5 fw_500'>#</span>
+              <input className='index_search_input w40' type='text' placeholder='검색어를 입력하세요' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}></input>
+              <div>
+                <button className='index_search_btn' type='submit'>
+                  <i className='fa-solid fa-magnifying-glass'></i>
+                </button>
+              </div>
+            </form>
+            <div className='index_search_post_div'>
+              {posts.length > 0 ? (
+                posts.map((post) => (
+                  <div key={post.POST_ID}>
+                    <div className='index_search_post'>
+                      {post.POST_THMB_IMG_URL ? <img className='index_search_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img> : <></>}
+                      <div className='index_search_post_summary'>
+                        <span className='index_search_post_title'>{post.POST_TITLE}</span>
+                        <p className='index_search_post_cntn'>{post.POST_CNTN}</p>
+                        <div>
+                          <span className='index_search_post_bottom'>{timeFormat(post.RGSN_DTTM)}</span>•<span className='index_search_post_bottom'>{post.COMMENT_CNT}</span>
+                        </div>
+                      </div>
+                      <div className='index_search_post_author'>
+                        <div>
+                          <img src={post.POST_THMB_IMG_URL ? post.POST_THMB_IMG_URL : '/../../icon/person.png'} alt='userImg'></img>
+                          <span>by</span>
+                          <span>{post.USER_NICKNAME}</span>
+                        </div>
+                        <span>
+                          <i className='fa-solid fa-heart'></i>
+                          {post.LIKE_CNT}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <span>검색 결과가 없습니다.</span>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

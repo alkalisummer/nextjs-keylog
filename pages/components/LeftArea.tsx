@@ -68,70 +68,57 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
           <></>
         )}
       </div>
-      {recentPosts.length > 0 ? (
-        <div className='left_area_side_div'>
-          <span className='left_area_recent_title'>최근 글</span>
-          {recentPosts.map((post) => (
-            <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
-              <div className='left_area_side_info'>
-                <span className='left_area_side_title'>{post.POST_TITLE}</span>
-                <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
-              </div>
-              {post.POST_THMB_IMG_URL ? (
-                <div className='df ai_c'>
-                  <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
-                </div>
-              ) : (
-                <></>
-              )}
+      <div className='left_area_side_div'>
+        <span className='left_area_recent_title'>최근 글</span>
+        {recentPosts.map((post) => (
+          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
+            <div className='left_area_side_info'>
+              <span className='left_area_side_title'>{post.POST_TITLE}</span>
+              <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
             </div>
-          ))}
-        </div>
-      ) : (
-        <></>
-      )}
-      {popularPosts.length > 0 ? (
-        <div className='left_area_side_div'>
-          <span className='left_area_recent_title'>인기 글</span>
-          {popularPosts.map((post) => (
-            <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
-              <div className='left_area_side_info'>
-                <span className='left_area_side_title'>{post.POST_TITLE}</span>
-                <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
+            {post.POST_THMB_IMG_URL ? (
+              <div className='df ai_c'>
+                <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
               </div>
-              {post.POST_THMB_IMG_URL ? (
-                <div className='df ai_c'>
-                  <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
-                </div>
-              ) : (
-                <></>
-              )}
+            ) : (
+              <></>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className='left_area_side_div'>
+        <span className='left_area_recent_title'>인기 글</span>
+        {popularPosts.map((post) => (
+          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
+            <div className='left_area_side_info'>
+              <span className='left_area_side_title'>{post.POST_TITLE}</span>
+              <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
             </div>
-          ))}
-        </div>
-      ) : (
-        <></>
-      )}
-      {recentComments.length > 0 ? (
-        <div className='left_area_side_div'>
-          <span className='left_area_recent_title'>최근 댓글</span>
-          {recentComments.map((comment) => (
-            <div key={comment.COMMENT_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${comment.POST_ID}`)}>
-              <div className='left_area_side_info'>
-                <span className='left_area_side_title'>
-                  <i className='fa-solid fa-comment-dots mr8'></i>
-                  {comment.COMMENT_CNTN}
-                </span>
-                <span className='left_area_side_date'>{comment.USER_NICKNAME}</span>
+            {post.POST_THMB_IMG_URL ? (
+              <div className='df ai_c'>
+                <img className='left_area_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
               </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className='left_area_side_div'>
+        <span className='left_area_recent_title'>최근 댓글</span>
+        {recentComments.map((comment) => (
+          <div key={comment.COMMENT_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${comment.POST_ID}`)}>
+            <div className='left_area_side_info'>
+              <span className='left_area_side_title'>
+                <i className='fa-solid fa-comment-dots mr8'></i>
+                {comment.COMMENT_CNTN}
+              </span>
+              <span className='left_area_side_date'>{comment.USER_NICKNAME}</span>
             </div>
-          ))}
-        </div>
-      ) : (
-        <></>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
-
 export default React.memo(LeftArea);

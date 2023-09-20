@@ -356,7 +356,10 @@ const TrendKeyword = () => {
     <div>
       {/* WordCloud  */}
       <div className='post_daily_keyword_div'>
-        <span className='post_daily_keyword_title'>Daily Keyword</span>
+        <span className='post_daily_keyword_title'>
+          Daily Keyword
+          <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='keyword-tooltip' data-tooltip-html={'최근 급상승한 키워드와 연관검색어를 표출합니다.<br/> 연관 검색어 클릭시 해당 키워드로 구글 검색 창을 표출합니다.'}></i>
+        </span>
         <span className='post_base_date'>{baseDate}</span>
       </div>
       <div className='post_wordcloud_div'>
@@ -380,7 +383,7 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Interest Change Chart
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드로 비교시 수치가 달라질 수 있습니다.'}></i>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'해당 키워드의 시간대별 관심도 변화를 차트로 표출합니다.<br/> 복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드와 비교시 수치가 달라질 수 있습니다.'}></i>
           </span>
 
           <button className='post_fold_btn' onClick={() => setShowLineChart(!showLineChart)}>
@@ -412,7 +415,10 @@ const TrendKeyword = () => {
       {/* Article  */}
       <div className='post_sub_div'>
         <div className='post_sub_title_div'>
-          <span className='post_sub_title'>Articles</span>
+          <span className='post_sub_title'>
+            Articles
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='article-tooltip' data-tooltip-html={'해당 키워드로 작성된 관련 기사를 표출합니다.<br/> 기사 클릭시 해당 기사의 웹 페이지가 새 창으로 표출됩니다.'}></i>
+          </span>
           <button className='post_fold_btn' onClick={() => setShowArticles(!showArticles)}>
             {showArticles ? '접기 ▲' : '펼치기 ▼'}
           </button>
@@ -461,7 +467,7 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Auto Posting
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='daily-tooltip' data-tooltip-html={'입력한 키워드를 기반으로 게시글을 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='daily-tooltip' data-tooltip-html={'입력한 키워드의 기사를 분석하여 자동으로 블로그 포스트를 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
           </span>
           <button className='post_fold_btn' onClick={() => setShowAutoPost(!showAutoPost)}>
             {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
@@ -536,7 +542,9 @@ const TrendKeyword = () => {
         )}
       </div>
       {/* /Image */}
+      <ReactTooltip id='keyword-tooltip' place='bottom' />
       <ReactTooltip id='line-tooltip' place='bottom' />
+      <ReactTooltip id='article-tooltip' place='bottom' />
       <ReactTooltip id='daily-tooltip' place='bottom' />
       <ReactTooltip id='image-tooltip' place='bottom' />
       <Snackbar
