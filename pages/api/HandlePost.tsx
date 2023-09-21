@@ -63,7 +63,6 @@ export const handleMySql = async (params: any) => {
               WHERE PAGE_INDX >= ${sttRowNum} 
                 AND PAGE_INDX <= ${eddRowNum}
               ORDER BY PAGE_INDX;`;
-      console.log(sql);
       break;
     case 'read':
       postId = params.postId;

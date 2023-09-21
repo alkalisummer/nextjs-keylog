@@ -109,11 +109,26 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   //좋아요 개수
   const [likeCnt, setLikeCnt] = useState(0);
 
+  //사용자 좋아요 여부
+  const [likeYn, setLikeYn] = useState(false);
+
   useEffect(() => {
     setCurrUrl(window.location.href);
     setCommentArr(comments.length > 0 ? comments : []);
     setLikeCnt(like.length > 0 ? like[0].LIKE_CNT : 0);
   }, [comments, like]);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      const currentUserId = session?.user?.id;
+      const findUser = like.filter((likeUser) => likeUser.USER_ID === currentUserId);
+      if (findUser.length > 0) {
+        setLikeYn(true);
+      } else {
+        setLikeYn(false);
+      }
+    }
+  }, []);
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };
@@ -293,12 +308,14 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
         await axios.get('/api/HandleLike', { params: params }).then((res) => {
           const result = res.data.refreshCnt;
           setLikeCnt(result[0].LIKE_CNT);
+          setLikeYn(true);
         });
       } else {
         params.type = 'decreaseLikeCnt';
         await axios.get('/api/HandleLike', { params: params }).then((res) => {
           const result = res.data.refreshCnt;
           setLikeCnt(result.length > 0 ? result[0].LIKE_CNT : 0);
+          setLikeYn(false);
         });
       }
     });
@@ -331,7 +348,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
           <div className='toastui-editor-contents post_content' dangerouslySetInnerHTML={{ __html: htmlCntn }}></div>
           <div className='post_scrap_div'>
             <div className='post_scrap_ico w52' onClick={() => likeHandle(post.POST_ID)}>
-              <i className='fa-solid fa-heart'></i>
+              {likeYn ? <i className='fa-solid fa-heart'></i> : <i className='fa-regular fa-heart'></i>}
               <span className='post_like_cnt'>{likeCnt}</span>
             </div>
             <div className='post_scrap_ico' onClick={() => scrapPost('facebook')}>
