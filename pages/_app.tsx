@@ -5,6 +5,8 @@ import { handleMySql as handlePost } from './api/HandlePost';
 import { handleMySql as handleComment } from './api/HandleComment';
 import Head from 'next/head';
 import Script from 'next/script';
+import Error from 'next/error';
+import { useRouter } from 'next/router';
 
 import axios from 'axios';
 
@@ -18,7 +20,14 @@ import '@/styles/leftArea.css';
 import '@/styles/rightArea.css';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { session } = pageProps;
+  const router = useRouter();
+
+  const { session, userInfo } = pageProps;
+  const { userId } = router.query;
+
+  if (userId && !userInfo.id) {
+    return <Error statusCode={404} />;
+  }
   return (
     <SessionProvider session={session}>
       <div className='main_area'>
@@ -59,7 +68,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
 
     if (ctx.req) {
       user = await handleUser(params).then((res) => {
-        return JSON.parse(JSON.stringify(res.items[0]));
+        return res.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.items[0]));
       });
       // 최근 게시글 5개
       params.type = 'getRecentPost';
@@ -83,7 +92,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
       });
     } else {
       user = await axios.post('/api/HandleUser', { data: params }).then((res) => {
-        return JSON.parse(JSON.stringify(res.data.items[0]));
+        return res.data.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.data.items[0]));
       });
       // 최근 게시글 5개, 인기 게시글 5개
       params.type = 'getRecentPost';

@@ -35,8 +35,8 @@ export const handleMySql = async (params: any) => {
       const eddRowNum = perPage * currPageNum;
       const searchWord = params.searchWord;
       sql = `SELECT * 
-                  , COUNT(*) OVER()                                      AS TOTAL_ITEMS
                FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.RGSN_DTTM DESC) AS PAGE_INDX
+                          , COUNT(*) OVER()                              AS TOTAL_ITEMS
                           , A.POST_ID                                    AS POST_ID
                           , A.POST_TITLE                                 AS POST_TITLE
                           , A.POST_CNTN                                  AS POST_CNTN

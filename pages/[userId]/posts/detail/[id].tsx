@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import '@toast-ui/editor/dist/toastui-editor.css';
-import BlogLayout from '../../blogLayout';
+import BlogLayout from '../../../components/blogLayout';
 import Link from 'next/link';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat, timeToString } from '@/utils/CommonUtils';
-import PostLayout from '../postLayout';
+import PostLayout from '../../../components/postLayout';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
@@ -567,9 +567,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .then((res) => {
       like = JSON.parse(res).items;
     });
-
-  console.log(like);
-  console.log(comments);
 
   return { props: { post, imgFileArr, htmlCntn, comments, like } };
 };

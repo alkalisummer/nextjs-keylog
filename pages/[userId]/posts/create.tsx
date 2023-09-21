@@ -1,9 +1,9 @@
-import PostLayout from './postLayout';
-import BlogLayout from '../blogLayout';
+import PostLayout from '../../components/postLayout';
+import BlogLayout from '../../components/blogLayout';
 import TrendKeyword from '@/utils/TrendKeyword';
 import dynamic from 'next/dynamic';
 import CheckAuth from '@/utils/CheckAuth';
-import ErrorPage from '@/pages/components/ErrorPage';
+import Error from 'next/error';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
 interface user {
@@ -49,7 +49,7 @@ const CreatePost = ({ userInfo, recentPosts, popularPosts, recentComments }: { u
           </PostLayout>
         </BlogLayout>
       ) : (
-        <ErrorPage errorText={'Unauthorized'}></ErrorPage>
+        <Error statusCode={401}></Error>
       )}
     </>
   );

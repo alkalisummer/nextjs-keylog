@@ -68,9 +68,9 @@
   font-weight: 400;
   color: #333;
   border-bottom: 3px solid #333;
-  width: 35rem;
   margin-bottom: 5px;
   padding-bottom: 5px;
+  min-width: 35rem;
 }
 
 .index_main_value {
@@ -80,9 +80,7 @@
 }
 
 .index_main_cnt {
-  display: flex;
-  justify-content: flex-end;
-  width: 35rem;
+  margin-left: 5px;
   font-size: 12px;
   color: #868e96;
 }

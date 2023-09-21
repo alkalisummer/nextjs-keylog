@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import BlogLayout from './blogLayout';
+import BlogLayout from '../components/blogLayout';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import listStyle from '../../styles/List.module.css';

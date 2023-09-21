@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import RightArea from '../components/RightArea';
-import LeftArea from '../components/LeftArea';
+import RightArea from './RightArea';
+import LeftArea from './LeftArea';
 
 interface LayoutProps {
   children: ReactNode;

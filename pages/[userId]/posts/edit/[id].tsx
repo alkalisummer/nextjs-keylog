@@ -1,8 +1,8 @@
-import PostLayout from '../postLayout';
-import BlogLayout from '../../blogLayout';
+import PostLayout from '../../../components/postLayout';
+import BlogLayout from '../../../components/blogLayout';
 import { useRouter } from 'next/router';
 import CheckAuth from '@/utils/CheckAuth';
-import ErrorPage from '@/pages/components/ErrorPage';
+import Error from 'next/error';
 import dynamic from 'next/dynamic';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
@@ -51,7 +51,7 @@ const EditPost = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
           </PostLayout>
         </BlogLayout>
       ) : (
-        <ErrorPage errorText={'Unauthorized'}></ErrorPage>
+        <Error statusCode={401}></Error>
       )}
     </>
   );

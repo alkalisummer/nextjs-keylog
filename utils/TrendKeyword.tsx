@@ -320,6 +320,7 @@ const TrendKeyword = () => {
         keyword: imgKeyword,
         pageNum: pageNum,
       };
+      debugger;
       await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
         const imgArr = result.data;
         if (imgArr.length > 0) {
@@ -533,7 +534,9 @@ const TrendKeyword = () => {
             </div>
             <div className='post_img_div'>
               {imgArr.map((img, idx) => (
-                <React.Fragment key={idx}>{imgArr.length - 1 === idx ? <img ref={ref} className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' /> : <img className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' />}</React.Fragment>
+                <React.Fragment key={idx}>
+                  <img ref={imgArr.length - 1 === idx ? ref : null} className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' />
+                </React.Fragment>
               ))}
             </div>
           </div>
