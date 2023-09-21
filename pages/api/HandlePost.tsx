@@ -43,7 +43,7 @@ export const handleMySql = async (params: any) => {
                           , A.POST_THMB_IMG_URL                          AS POST_THMB_IMG_URL
                           , A.RGSR_ID                                    AS RGSR_ID
                           , A.RGSN_DTTM                                  AS RGSN_DTTM
-                          , B.USER_NICKNAME                              AS USER_ID
+                          , B.USER_NICKNAME                              AS USER_NICKNAME
                           , B.USER_THMB_IMG_URL                          AS USER_THMB_IMG_URL
                           , COUNT(DISTINCT C.COMMENT_ID)                 AS COMMENT_CNT
                           , COUNT(DISTINCT D.LIKEACT_ID)                 AS LIKE_CNT

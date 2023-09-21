@@ -7,6 +7,7 @@ import { replaceSymbol, timeAgoFormat, timeFormat } from '../utils/CommonUtils';
 import DailyTrends from '@/utils/DailyTrends';
 import Link from 'next/link';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 interface keyword {
   name: string;
@@ -34,6 +35,7 @@ interface post {
   POST_CNTN: string;
   RGSR_ID: string;
   USER_NICKNAME: string;
+  USER_THMB_IMG_URL: string;
   COMMENT_CNT: string;
   LIKE_CNT: string;
   RGSN_DTTM: string;
@@ -49,6 +51,7 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   const [searchWord, setSearchWord] = useState('');
   const [currPageNum, setCurrPageNum] = useState(1);
   const [posts, setPosts] = useState<post[]>([]);
+  const router = useRouter();
 
   const init = async (keyArr: keyword[]) => {
     const initKeyword = keyArr[0].name;
@@ -199,27 +202,34 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
             <div className='index_search_post_div'>
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  <div key={post.POST_ID}>
-                    <div className='index_search_post'>
-                      {post.POST_THMB_IMG_URL ? <img className='index_search_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img> : <></>}
-                      <div className='index_search_post_summary'>
+                  <div key={post.POST_ID} className='index_search_post' onClick={() => router.push(`/${post.RGSR_ID}/posts/detail/${post.POST_ID}`)}>
+                    <div className='index_search_post_summary'>
+                      {post.POST_THMB_IMG_URL ? (
+                        <div className='index_search_post_img_div'>
+                          <img className='index_search_post_img' src={post.POST_THMB_IMG_URL} alt='postImg'></img>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                      <div className='index_search_post_title_cntn'>
                         <span className='index_search_post_title'>{post.POST_TITLE}</span>
                         <p className='index_search_post_cntn'>{post.POST_CNTN}</p>
                         <div>
-                          <span className='index_search_post_bottom'>{timeFormat(post.RGSN_DTTM)}</span>•<span className='index_search_post_bottom'>{post.COMMENT_CNT}</span>
+                          <span className='index_search_post_bottom'>{timeFormat(post.RGSN_DTTM)}•</span>
+                          <span className='index_search_post_bottom'>{`${post.COMMENT_CNT}개의 댓글`}</span>
                         </div>
                       </div>
-                      <div className='index_search_post_author'>
-                        <div>
-                          <img src={post.POST_THMB_IMG_URL ? post.POST_THMB_IMG_URL : '/../../icon/person.png'} alt='userImg'></img>
-                          <span>by</span>
-                          <span>{post.USER_NICKNAME}</span>
-                        </div>
-                        <span>
-                          <i className='fa-solid fa-heart'></i>
-                          {post.LIKE_CNT}
-                        </span>
+                    </div>
+                    <div className='index_search_post_author'>
+                      <div className='df ai_c'>
+                        <img className='index_search_user_img' src={post.USER_THMB_IMG_URL ? post.USER_THMB_IMG_URL : '/../../icon/person.png'} alt='userImg'></img>
+                        <span className='index_search_user_text'>by</span>
+                        <span className='index_search_nickname'>{post.USER_NICKNAME}</span>
                       </div>
+                      <span className='index_like_text'>
+                        <i className='fa-solid fa-heart mr10'></i>
+                        {post.LIKE_CNT}
+                      </span>
                     </div>
                   </div>
                 ))
