@@ -182,12 +182,15 @@ const TrendKeyword = () => {
 
           const timeLineData = (num: number) => {
             let res = [];
-            for (let data of interestRes.default.timelineData) {
-              res.push(data.value[num]);
-              if (lineChartDate.length !== interestRes.default.timelineData.length) {
-                lineChartDate.push(data.formattedAxisTime);
+            if (interestRes) {
+              for (let data of interestRes.default.timelineData) {
+                res.push(data.value[num]);
+                if (lineChartDate.length !== interestRes.default.timelineData.length) {
+                  lineChartDate.push(data.formattedAxisTime);
+                }
               }
             }
+
             return res;
           };
 
@@ -320,7 +323,6 @@ const TrendKeyword = () => {
         keyword: imgKeyword,
         pageNum: pageNum,
       };
-      debugger;
       await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
         const imgArr = result.data;
         if (imgArr.length > 0) {

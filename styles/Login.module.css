@@ -145,3 +145,13 @@
   font-weight: 500;
   color: gray;
 }
+
+@media (max-width: 768px) {
+  .login_form {
+    width: 330px !important;
+  }
+
+  .login_forgot_pw_infoText {
+    font-size: 14px;
+  }
+}

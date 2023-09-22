@@ -128,7 +128,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
         setLikeYn(false);
       }
     }
-  }, []);
+  }, [status, session?.user?.id, like]);
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };

@@ -86,3 +86,9 @@
   font-size: 13px;
   color: red;
 }
+
+@media (max-width: 768px) {
+  .signup_form {
+    width: 330px;
+  }
+}

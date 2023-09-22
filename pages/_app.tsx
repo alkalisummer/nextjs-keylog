@@ -70,6 +70,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
       user = await handleUser(params).then((res) => {
         return res.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.items[0]));
       });
+
       // 최근 게시글 5개
       params.type = 'getRecentPost';
       await handlePost(params).then((res) => {

@@ -330,3 +330,85 @@
   color: gray;
   margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+  .nav_modal_div {
+    width: 300px;
+    height: 620px;
+  }
+
+  .nav_profile_img_div {
+    width: 40%;
+  }
+  .nav_profile_detail_div {
+    width: 60%;
+  }
+
+  #nav_profile_img {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .nav_img_upload_btn {
+    width: 70px;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .nav_img_del_btn {
+    width: 90px;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #nav_modal_nickname {
+    font-size: 18px;
+  }
+
+  .nav_modal_email {
+    font-size: 15px;
+  }
+
+  .nav_modal_text_update_btn {
+    line-height: 1.5rem !important;
+    font-size: 10px;
+  }
+
+  .nav_modal_profile_btn {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .nav_modal_sub_title {
+    font-size: 14px;
+    padding-left: 5px;
+    width: 25%;
+  }
+
+  .nav_modal_sub {
+    width: 75%;
+  }
+
+  .nav_modal_password_btn {
+    font-size: 12px;
+    width: 100px;
+  }
+
+  .nav_modal_leave_btn {
+    font-size: 12px;
+    width: 100px;
+  }
+
+  .nav_modal_input {
+    font-size: 12px;
+  }
+
+  .nav_modal_pw_input {
+    font-size: 12px;
+  }
+  .nav_div .MuiSnackbar-root {
+    top: 30% !important;
+  }
+}

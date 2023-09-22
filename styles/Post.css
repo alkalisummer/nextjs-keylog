@@ -13,7 +13,7 @@
   padding-top: 2rem;
   padding-bottom: 10px;
   display: block;
-  height: 89%;
+  height: 94%;
 }
 
 .post_title_created {
@@ -710,16 +710,15 @@ pre:has(> code) {
     padding-left: 1.2rem !important;
     padding-right: 1.2rem !important;
     padding-top: 1.5rem !important;
-    height: 94%;
+    height: 93%;
   }
   .post_header {
-    display: inherit;
-    width: 100%;
+    display: flex;
     height: 5%;
     text-align: center;
-    border-bottom: 1px solid #efefef;
-    line-height: 40px;
+    line-height: 4rem;
   }
+
   .post_header_title {
     color: #5c5c5c;
     font-size: 15px;
@@ -727,7 +726,7 @@ pre:has(> code) {
   }
 
   .post_main {
-    height: 95%;
+    height: 93%;
   }
 
   .post_title {
@@ -740,7 +739,6 @@ pre:has(> code) {
 
   .post_content {
     font-size: 13px;
-    height: 86%;
   }
 
   .post_back_arrow {

@@ -1,6 +1,8 @@
 .right_area {
   width: 81%;
   height: 100%;
+  background-color: white;
+  overflow-y: auto;
 }
 
 .right_header {
@@ -30,7 +32,7 @@
 .right_footer {
   position: absolute;
   bottom: 0;
-  width: 77%;
+  width: 81%;
   height: 5%;
   border-top: 1px solid #efefef;
 
@@ -43,4 +45,24 @@
 
 .right_footer_text {
   color: #6bacce;
+}
+
+@media (max-width: 1150px) {
+  .right_area {
+    width: 100%;
+  }
+  .right_footer {
+    width: 100%;
+  }
+
+  .right_header {
+    background-color: #f8f9fa;
+    height: 7%;
+  }
+}
+
+@media (max-width: 768px) {
+  .right_header {
+    padding-right: 10px;
+  }
 }

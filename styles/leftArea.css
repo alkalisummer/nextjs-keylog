@@ -116,3 +116,9 @@
   object-fit: cover;
   border-radius: 5px;
 }
+
+@media (max-width: 1150px) {
+  .left_area {
+    display: none;
+  }
+}

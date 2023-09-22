@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 import { timeFormat } from './CommonUtils';
 
@@ -16,7 +15,7 @@ const DailyTrends = async (hl: string) => {
   const dailyTrendsparam = { type: 'dailyTrends', hl: hl };
   await axios.get('/api/HandleKeyword', { params: dailyTrendsparam }).then((result) => {
     const res = JSON.parse(result.data).default.trendingSearchesDays;
-    baseDate = `(인기 급상승 검색어 기준일: ${timeFormat(res[res.length - 1].date)} - ${timeFormat(res[0].date)})`;
+    baseDate = `(기준일: ${timeFormat(res[res.length - 1].date)} - ${timeFormat(res[0].date)})`;
 
     for (let dateData of res) {
       dateData.trendingSearches.map((obj: any) => {

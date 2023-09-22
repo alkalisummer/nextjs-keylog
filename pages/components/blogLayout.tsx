@@ -36,10 +36,10 @@ interface LayoutProps {
 
 const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo, recentPosts, popularPosts, recentComments }) => {
   return (
-    <div className='main_area'>
+    <>
       <LeftArea userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}></LeftArea>
       <RightArea>{children}</RightArea>
-    </div>
+    </>
   );
 };
 

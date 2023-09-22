@@ -130,7 +130,7 @@ const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments }: { user
     <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
       <form className='chat_div' onSubmit={handleSubmit}>
         <div className='chat_header_div'>
-          <span className='chat_back_arrow' onClick={() => router.push('/')}>
+          <span className='chat_back_arrow' onClick={() => router.back()}>
             &lt;
           </span>
           <span className='chat_header_title'>ChatGPT</span>
