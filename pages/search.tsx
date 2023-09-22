@@ -70,7 +70,6 @@ const HomePage = () => {
       <div className='index_main_div'>
         <div className='index_main_title_div'>
           <form className='index_search_input_div' onSubmit={searchPost}>
-            <span className='index_search_input pr5 fw_500'>#</span>
             <input className='index_search_input w40' type='text' placeholder='검색어를 입력하세요' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}></input>
             <div>
               <button className='index_search_btn' type='submit'>

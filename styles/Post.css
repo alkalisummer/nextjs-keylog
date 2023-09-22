@@ -779,7 +779,7 @@ pre:has(> code) {
   }
 
   .post_base_date {
-    font-size: 5px;
+    font-size: 10px;
     padding-top: 10px;
   }
 
@@ -820,7 +820,7 @@ pre:has(> code) {
   }
 
   .post_fold_btn {
-    font-size: 5px;
+    font-size: 10px;
     padding-top: 10px;
   }
 

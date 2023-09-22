@@ -29,6 +29,11 @@ body {
   justify-content: space-between;
 }
 
+input {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+}
+
 a {
   text-decoration: none !important;
 }

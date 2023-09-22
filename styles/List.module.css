@@ -279,6 +279,10 @@
 }
 
 @media (max-width: 634px) {
+  .home_div {
+    height: 86%;
+  }
+
   .home_post {
     width: 360px;
   }

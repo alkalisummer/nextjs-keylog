@@ -332,6 +332,10 @@
 }
 
 @media (max-width: 768px) {
+  .nav_div {
+    align-items: baseline;
+  }
+
   .nav_modal_div {
     width: 300px;
     height: 620px;

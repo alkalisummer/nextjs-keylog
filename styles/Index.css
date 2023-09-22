@@ -248,6 +248,7 @@ body {
   border-bottom: 3px solid #333;
   margin-bottom: 5px;
   padding-bottom: 5px;
+  color: #333;
 }
 
 .index_search_post_div {
@@ -500,7 +501,7 @@ body {
   }
 
   .index_main_title {
-    font-size: 25px;
+    font-size: 22px;
     min-width: 15rem;
   }
 
@@ -575,7 +576,7 @@ body {
   }
 
   .index_search_input {
-    width: auto !important;
+    width: 60% !important;
     font-size: 22px;
     padding-bottom: 3px;
   }
