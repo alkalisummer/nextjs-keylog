@@ -162,7 +162,9 @@
     background: #f8f9fa;
     padding-top: 5rem;
     padding-bottom: 5rem;
+    border-bottom: 1px solid #efefef;
   }
+
   .home_blog_name {
     font-weight: 400;
     font-size: 35px;
@@ -281,7 +283,7 @@
 @media (max-width: 634px) {
   .home_div {
     height: 86%;
-    background-color: white;
+    background-color: #f8f9fa;
   }
 
   .home_post {
@@ -319,7 +321,8 @@
     font-size: 18px;
   }
 
-  .home_header_div {
-    border-bottom: 1px solid #efefef;
+  .home_page_nav {
+    width: 100%;
+    background-color: white;
   }
 }

@@ -200,3 +200,11 @@ a {
 .fw_500 {
   font-weight: 500 !important;
 }
+
+.bgf8f9fa {
+  background-color: #f8f9fa;
+}
+
+.bgffffff {
+  background-color: white;
+}

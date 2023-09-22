@@ -58,6 +58,7 @@
   .right_header {
     background-color: #f8f9fa;
     height: 8%;
+    border-bottom: 1px solid #efefef;
   }
 }
 
