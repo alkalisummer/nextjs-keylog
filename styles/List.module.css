@@ -281,6 +281,7 @@
 @media (max-width: 634px) {
   .home_div {
     height: 86%;
+    background-color: white;
   }
 
   .home_post {
@@ -316,5 +317,9 @@
   }
   .home_header_title {
     font-size: 18px;
+  }
+
+  .home_header_div {
+    border-bottom: 1px solid #efefef;
   }
 }

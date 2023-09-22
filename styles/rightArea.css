@@ -65,4 +65,11 @@
   .right_header {
     padding-right: 10px;
   }
+  .right_area {
+    width: 100%;
+  }
+  .right_footer {
+    width: 100%;
+    font-size: 10px;
+  }
 }

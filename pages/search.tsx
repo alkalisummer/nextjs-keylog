@@ -93,7 +93,7 @@ const HomePage = () => {
                       <span className='index_search_post_title'>{post.POST_TITLE}</span>
                       <p className='index_search_post_cntn'>{post.POST_CNTN}</p>
                       <div>
-                        <span className='index_search_post_bottom'>{timeFormat(post.RGSN_DTTM)}•</span>
+                        <span className='index_search_post_bottom'>{timeFormat(post.RGSN_DTTM)}&nbsp;•&nbsp;</span>
                         <span className='index_search_post_bottom'>{`${post.COMMENT_CNT}개의 댓글`}</span>
                       </div>
                     </div>

@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 const RigthArea = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { userId } = router.query;
 
   return (
     <div className='right_area'>

@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <meta property='og:title' content='Keylog'></meta>
           <meta property='og:url' content='https://keylog.hopto.org'></meta>
           <meta property='og:description' content='키워드를 활용한 블로그 포스팅'></meta>
-          {process.env.NODE_ENV === 'production' ? <meta httpEquiv='Content-Security-Policy' content='upgrade-insecure-requests'></meta> : <></>}
+          {/* {process.env.NODE_ENV === 'production' ? <meta httpEquiv='Content-Security-Policy' content='upgrade-insecure-requests'></meta> : <></>} */}
         </Head>
         <Component {...pageProps} />
       </div>
