@@ -879,4 +879,29 @@ pre:has(> code) {
   .post_img_div {
     grid-template-columns: repeat(auto-fill, minmax(30%, auto));
   }
+
+  .post_comment_user_image {
+    width: 2.375rem;
+    height: 2.375rem;
+  }
+
+  .post_comment_user_id {
+    font-size: 14px;
+  }
+
+  .post_comment_txt {
+    font-size: 11px;
+  }
+
+  .post_comment_rgsn_dttm {
+    font-size: 11px;
+  }
+
+  .post_comment_cntn {
+    font-size: 15px;
+  }
+
+  .post_comment_reply {
+    font-size: 14px;
+  }
 }
