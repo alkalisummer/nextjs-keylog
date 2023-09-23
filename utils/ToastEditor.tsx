@@ -100,7 +100,9 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
         }
       }
 
-      axios.post('/api/DeleteImgFile', { removedImg });
+      if (removedImg.length > 0) {
+        await axios.post('/api/DeleteImgFile', { removedImg });
+      }
 
       const currentTime = timeToString(new Date());
       const postData = {
@@ -151,25 +153,17 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
           removedImg.push(currImg);
         }
       }
-
-      await axios.post('/api/DeleteImgFile', { removedImg });
+      if (removedImg.length > 0) {
+        await axios.post('/api/DeleteImgFile', { removedImg });
+      }
       router.push(`/${userId}/posts/detail/${postId}`);
     }
   };
 
   return (
-    <form
-      className='post_div'
-      onSubmit={handleSubmit}>
+    <form className='post_div' onSubmit={handleSubmit}>
       <div className='post_title_created'>
-        <input
-          type='text'
-          className='post_title_input'
-          placeholder='제목을 입력하세요'
-          value={title}
-          maxLength={300}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <input type='text' className='post_title_input' placeholder='제목을 입력하세요' value={title} maxLength={300} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <Editor
         ref={editorRef}
@@ -193,15 +187,10 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
         }}
       />
       <div className='post_btn_div'>
-        <button
-          className='post_cancel_btn'
-          onClick={hadleCancel}
-          type='button'>
+        <button className='post_cancel_btn' onClick={hadleCancel} type='button'>
           취소
         </button>
-        <button
-          className='post_submit_btn'
-          type='submit'>
+        <button className='post_submit_btn' type='submit'>
           완료
         </button>
       </div>

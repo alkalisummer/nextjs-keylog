@@ -116,7 +116,7 @@ const getArticles = async (keyword: string) => {
       }
     });
     //5개의 기사만 크롤링
-    if (articles.length === 5) {
+    if (articles.length === 4) {
       break;
     }
   }

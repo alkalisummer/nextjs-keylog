@@ -135,7 +135,9 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
     await axios.get('/api/HandlePost', { params: param }).then(() => {
       // 해당 게시글 이미지 삭제
       let removedImg = imgFileArr;
-      axios.post('/api/DeleteImgFile', { removedImg });
+      if (removedImg.length > 0) {
+        axios.post('/api/DeleteImgFile', { removedImg });
+      }
       router.back();
     });
   };
