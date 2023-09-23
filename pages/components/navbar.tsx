@@ -191,7 +191,7 @@ const Navbar = () => {
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setOpenModal(false);
-      signOut();
+      signOut({ redirect: false, callbackUrl: window.location.href });
     });
 
     await axios.post('/api/HandlePost', { data: params });
@@ -257,7 +257,11 @@ const Navbar = () => {
                 <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
               </Link>
             </MenuItem>
-            <MenuItem onClick={() => signOut()}>
+            <MenuItem
+              onClick={() => {
+                signOut({ redirect: false, callbackUrl: window.location.href });
+              }}
+            >
               <i className='fa-solid fa-right-from-bracket nav_menu_item_ico'></i>로그아웃
             </MenuItem>
           </Menu>

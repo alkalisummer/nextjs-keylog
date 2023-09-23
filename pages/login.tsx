@@ -26,6 +26,7 @@ const Login = () => {
       redirect: false,
       id: id.replaceAll(' ', ''),
       password: password,
+      callbackUrl: window.location.href,
     }).then((res) => {
       if (!res?.error) {
         if (saveId) {
