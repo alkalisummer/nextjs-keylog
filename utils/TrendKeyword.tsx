@@ -26,6 +26,8 @@ import { useInView } from 'react-intersection-observer';
 //ChatGpt
 import ChatGptHandle from '@/utils/ChatGptHandle';
 
+import Image from 'next/image';
+
 interface keyword {
   name: string;
   value: number;
@@ -324,9 +326,10 @@ const TrendKeyword = () => {
         pageNum: pageNum,
       };
       await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
-        const imgArr = result.data;
-        if (imgArr.length > 0) {
-          setImgArr((prev) => [...prev, ...imgArr]);
+        const res = result.data;
+        const imageArr = res.filter((image: any) => image.link.indexOf('imgnews.naver.net') !== -1);
+        if (imageArr.length > 0) {
+          setImgArr((prev) => [...prev, ...imageArr]);
         }
       });
       setImgLoading(false);
@@ -537,7 +540,7 @@ const TrendKeyword = () => {
             <div className='post_img_div'>
               {imgArr.map((img, idx) => (
                 <React.Fragment key={idx}>
-                  <img ref={imgArr.length - 1 === idx ? ref : null} className='post_img' onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' />
+                  <Image ref={imgArr.length - 1 === idx ? ref : null} width={100} height={100} style={{ borderRadius: '10px', width: '100%', height: 'auto' }} onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' loading='eager' />
                 </React.Fragment>
               ))}
             </div>

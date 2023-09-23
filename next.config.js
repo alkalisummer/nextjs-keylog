@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['objectstorage.ap-chuncheon-1.oraclecloud.com'],
+    domains: ['objectstorage.ap-chuncheon-1.oraclecloud.com', 'imgnews.naver.net'],
   },
 };
 
