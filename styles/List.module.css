@@ -159,7 +159,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background: #f8f9fa;
+    background: white;
     padding-top: 5rem;
     padding-bottom: 5rem;
     border-bottom: 1px solid #efefef;
@@ -223,6 +223,10 @@
     object-fit: cover;
     border-radius: 50%;
   }
+
+  .home_page_nav {
+    padding-bottom: 10px;
+  }
 }
 
 @media (max-width: 990px) {
@@ -283,7 +287,7 @@
 @media (max-width: 634px) {
   .home_div {
     height: 86%;
-    background-color: #f8f9fa;
+    background-color: white;
   }
 
   .home_post {
@@ -324,5 +328,6 @@
   .home_page_nav {
     width: 100%;
     background-color: white;
+    padding-bottom: 5px;
   }
 }

@@ -81,28 +81,26 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
           <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
           <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
         </div>
-        <div className='bgffffff w100 df jc_c'>
-          <div className={listStyle.home_post}>
-            <div className={listStyle.home_header}>
-              <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
-              {CheckAuth() ? (
-                <div className={listStyle.home_header_btn}>
-                  <Link href={`/${userId}/chatGpt`}>
-                    <button className={listStyle.chatgpt_btn}>ChatGPT</button>
-                  </Link>
-                  <Link href={`/${userId}/posts/create`}>
-                    <button className={listStyle.create_btn}>글쓰기</button>
-                  </Link>
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-
-            {posts.items?.map((post: any) => {
-              return <PostItem key={post.POST_ID} post={post} userId={userId} />;
-            })}
+        <div className={listStyle.home_post}>
+          <div className={listStyle.home_header}>
+            <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
+            {CheckAuth() ? (
+              <div className={listStyle.home_header_btn}>
+                <Link href={`/${userId}/chatGpt`}>
+                  <button className={listStyle.chatgpt_btn}>ChatGPT</button>
+                </Link>
+                <Link href={`/${userId}/posts/create`}>
+                  <button className={listStyle.create_btn}>글쓰기</button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
+
+          {posts.items?.map((post: any) => {
+            return <PostItem key={post.POST_ID} post={post} userId={userId} />;
+          })}
         </div>
         <div className={listStyle.home_page_nav}>
           <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
