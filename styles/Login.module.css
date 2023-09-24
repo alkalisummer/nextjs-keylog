@@ -29,11 +29,12 @@
   font-family: 'Spoqa Han Sans Neo';
   font-size: 16px;
   border: 1px solid #c7c7c7;
-  background: transparent;
+  background: white;
   padding: 15px;
   border-bottom: none;
   border-left: none;
   width: 90%;
+  height: 20px;
 }
 
 .login_input_text:focus {
@@ -61,6 +62,8 @@
   align-items: center;
   border-bottom: none;
   border-right: none;
+  background-color: white;
+  height: 50px;
 }
 
 .login_btn {

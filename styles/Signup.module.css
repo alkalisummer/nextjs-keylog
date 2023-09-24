@@ -35,6 +35,8 @@
   border-bottom: none;
   border-left: none;
   width: 90%;
+  background-color: white;
+  height: 20px;
 }
 
 .signup_input_text:focus {
@@ -62,6 +64,8 @@
   align-items: center;
   border-bottom: none;
   border-right: none;
+  background-color: white;
+  height: 50px;
 }
 
 .signup_btn {
