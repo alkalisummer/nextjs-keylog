@@ -88,7 +88,7 @@ const TrendKeyword = () => {
 
   const [ref, inView] = useInView();
   const [imgArr, setImgArr] = useState<imgData[]>([]);
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState<number>();
   const [selectedImgUrl, setSelectedImgUrl] = useState('');
 
   useEffect(() => {
@@ -103,10 +103,6 @@ const TrendKeyword = () => {
         let wordCloud = echarts.getInstanceByDom(wChartDom.current);
         if (!wordCloud) {
           wordCloud = echarts.init(wChartDom.current);
-          wordCloud.on('finished', () => {
-            document.querySelector('.post_main')?.scrollTo(0, 0);
-          });
-
           wordCloud.setOption(WordCloudOpt(keyArr));
           //wordcloud 키워드 클릭 이벤트
           wordCloud.on('click', (params) => {
@@ -122,6 +118,7 @@ const TrendKeyword = () => {
             setArticles(articleData.filter((obj: any) => obj.image));
             setAutoKeyword(params.name);
             setImgKeyword(params.name);
+            setPageNum(0);
             setImgLoading(false);
             if (!showArticles) {
               setShowArticles(true);
@@ -157,6 +154,10 @@ const TrendKeyword = () => {
         }
       }
     });
+
+    setTimeout(() => {
+      document.querySelector('.post_main')?.scrollTo(0, 0);
+    }, 300);
   }, []);
 
   useEffect(() => {
@@ -320,29 +321,35 @@ const TrendKeyword = () => {
   const searchImg = async () => {
     if (imgKeyword) {
       setImgLoading(true);
-      const imgParams = {
-        type: 'searchImage',
-        keyword: imgKeyword,
-        pageNum: pageNum,
-      };
-      await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
-        const res = result.data;
-        const imageArr = res.filter((image: any) => image.link.indexOf('imgnews.naver.net') !== -1);
-        if (imageArr.length > 0) {
-          setImgArr((prev) => [...prev, ...imageArr]);
-        }
-      });
-      setImgLoading(false);
+      nextSearchImg(1);
     }
   };
 
+  const nextSearchImg = async (pageNum: number) => {
+    const imgParams = {
+      type: 'searchImage',
+      keyword: imgKeyword,
+      pageNum: pageNum,
+    };
+    await axios.post('/api/HandleKeyword', { params: imgParams }).then((result) => {
+      const res = result.data;
+      const imageArr = res.filter((image: any) => image.link.indexOf('imgnews.naver.net') !== -1);
+      if (imageArr.length > 0) {
+        setImgArr((prev) => [...prev, ...imageArr]);
+      }
+    });
+    setImgLoading(false);
+  };
+
   useEffect(() => {
-    searchImg();
+    if (pageNum) {
+      nextSearchImg(pageNum);
+    }
   }, [pageNum]);
 
   useEffect(() => {
     if (inView && !imgLoading) {
-      setPageNum((prev) => prev + 1);
+      setPageNum((prev) => prev! + 1);
     }
   }, [inView]);
 
@@ -364,7 +371,9 @@ const TrendKeyword = () => {
       <div className='post_daily_keyword_div'>
         <span className='post_daily_keyword_title'>
           Daily Keyword
-          <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='keyword-tooltip' data-tooltip-html={'최근 급상승한 키워드와 연관검색어를 표출합니다.<br/> 연관 검색어 클릭시 해당 키워드로 구글 검색 창을 표출합니다.'}></i>
+          <span>
+            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='keyword-tooltip' data-tooltip-html={'최근 급상승한 키워드와 연관검색어를 표출합니다.<br/> 연관 검색어 클릭시 해당 키워드로 구글 검색 창을 표출합니다.'}></i>
+          </span>
         </span>
         <span className='post_base_date'>{baseDate}</span>
       </div>
@@ -389,7 +398,9 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Interest Change Chart
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'해당 키워드의 시간대별 관심도 변화를 차트로 표출합니다.<br/> 복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드와 비교시 수치가 달라질 수 있습니다.'}></i>
+            <span>
+              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'해당 키워드의 시간대별 관심도 변화를 차트로 표출합니다.<br/> 복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드와 비교시 수치가 달라질 수 있습니다.'}></i>
+            </span>
           </span>
 
           <button className='post_fold_btn' onClick={() => setShowLineChart(!showLineChart)}>
@@ -402,7 +413,9 @@ const TrendKeyword = () => {
               return (
                 <div key={idx} id={idx.toString()} className='post_line_keyword'>
                   <span>{obj}</span>
-                  <i className='fa-solid fa-xmark post_line_keyword_delete' onClick={() => deleteTerm(idx.toString())}></i>
+                  <span>
+                    <i className='fa-solid fa-xmark post_line_keyword_delete' onClick={() => deleteTerm(idx.toString())}></i>
+                  </span>
                 </div>
               );
             })}
@@ -423,7 +436,9 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Articles
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='article-tooltip' data-tooltip-html={'해당 키워드로 작성된 관련 기사를 표출합니다.<br/> 기사 클릭시 해당 기사의 웹 페이지가 새 창으로 표출됩니다.'}></i>
+            <span>
+              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='article-tooltip' data-tooltip-html={'해당 키워드로 작성된 관련 기사를 표출합니다.<br/> 기사 클릭시 해당 기사의 웹 페이지가 새 창으로 표출됩니다.'}></i>
+            </span>
           </span>
           <button className='post_fold_btn' onClick={() => setShowArticles(!showArticles)}>
             {showArticles ? '접기 ▲' : '펼치기 ▼'}
@@ -473,7 +488,9 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Auto Posting
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='daily-tooltip' data-tooltip-html={'입력한 키워드의 기사를 분석하여 자동으로 블로그 포스트를 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
+            <span>
+              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='daily-tooltip' data-tooltip-html={'입력한 키워드의 기사를 분석하여 자동으로 블로그 포스트를 작성합니다.<br/> 자동생성된 게시글을 참고하여 작성해보세요.'}></i>
+            </span>
           </span>
           <button className='post_fold_btn' onClick={() => setShowAutoPost(!showAutoPost)}>
             {showAutoPost ? '접기 ▲' : '펼치기 ▼'}
@@ -486,14 +503,23 @@ const TrendKeyword = () => {
                 <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
                 <input type='text' className='post_auto_input' value={autoKeyword} onChange={(e) => setAutoKeyword(e.target.value)} />
                 <button className='post_auto_button' onClick={() => autoPostDaily()}>
-                  <i className='fa-solid fa-pen'></i>&nbsp; 글 생성하기
+                  <span>
+                    <i className='fa-solid fa-pen'></i>
+                  </span>
+                  &nbsp; 글 생성하기
                 </button>
                 <button id='clipboard_copy_btn' className='post_auto_button' data-clipboard-target='.post_auto_daily_content' onClick={() => openNoti('clipboard')}>
-                  <i className='fa-regular fa-copy'></i>&nbsp; 클립보드 복사
+                  <span>
+                    <i className='fa-regular fa-copy'></i>
+                  </span>
+                  &nbsp; 클립보드 복사
                 </button>
               </div>
               <button className='post_auto_button' onClick={() => clearPost()}>
-                <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
+                <span>
+                  <i className='fa-regular fa-trash-can'></i>
+                </span>
+                &nbsp;초기화
               </button>
             </div>
             <div className='post_auto_daily_content'></div>
@@ -508,7 +534,9 @@ const TrendKeyword = () => {
         <div className='post_sub_title_div'>
           <span className='post_sub_title'>
             Image
-            <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='image-tooltip' data-tooltip-html={'입력한 키워드의 이미지를 검색합니다.<br/> 게시글에 이미지를 삽입해보세요.'}></i>
+            <span>
+              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='image-tooltip' data-tooltip-html={'입력한 키워드의 이미지를 검색합니다.<br/> 게시글에 이미지를 삽입해보세요.'}></i>
+            </span>
           </span>
           <button className='post_fold_btn' onClick={() => setShowImage(!showImage)}>
             {showImage ? '접기 ▲' : '펼치기 ▼'}
@@ -527,22 +555,32 @@ const TrendKeyword = () => {
                     searchImg();
                   }}
                 >
-                  <i className='fa-regular fa-image'></i>&nbsp; 이미지 검색
+                  <span>
+                    <i className='fa-regular fa-image'></i>
+                  </span>
+                  &nbsp; 이미지 검색
                 </button>
                 <button id='clipboard_copy_btn' className='post_auto_button' data-clipboard-text={selectedImgUrl} onClick={() => openNoti('imageCopy')}>
-                  <i className='fa-regular fa-copy'></i>&nbsp; 이미지 URL 복사
+                  <span>
+                    <i className='fa-regular fa-copy'></i>
+                  </span>
+                  &nbsp; 이미지 URL 복사
                 </button>
               </div>
               <button className='post_auto_button' onClick={() => clearImage()}>
-                <i className='fa-regular fa-trash-can'></i>&nbsp;초기화
+                <span>
+                  <i className='fa-regular fa-trash-can'></i>
+                </span>
+                &nbsp;초기화
               </button>
             </div>
             <div className='post_img_div'>
-              {imgArr.map((img, idx) => (
-                <React.Fragment key={idx}>
-                  <Image ref={imgArr.length - 1 === idx ? ref : null} width={100} height={100} style={{ borderRadius: '10px', width: '100%', height: 'auto' }} onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' loading='eager' />
-                </React.Fragment>
-              ))}
+              {imgArr.length > 0 &&
+                imgArr.map((img, idx) => (
+                  <div className='w100' key={idx}>
+                    <Image ref={imgArr.length - 1 === idx ? ref : null} width={100} height={100} style={{ borderRadius: '10px', width: '100%', height: 'auto' }} onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' loading='eager' />
+                  </div>
+                ))}
             </div>
           </div>
         ) : (
