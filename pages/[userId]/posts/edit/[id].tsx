@@ -1,7 +1,8 @@
 import PostLayout from '../../../components/postLayout';
 import BlogLayout from '../../../components/blogLayout';
 import { useRouter } from 'next/router';
-import CheckAuth from '@/utils/CheckAuth';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import Error from 'next/error';
 import dynamic from 'next/dynamic';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
@@ -39,12 +40,23 @@ interface recentComment {
 }
 
 const EditPost = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const { id } = router.query;
+
+  const currentUserId = session?.user?.id;
+  const { userId, id } = router.query;
+
+  const [isValidate, setIsValisdate] = useState(true);
+
+  useEffect(() => {
+    if (status === 'unauthenticated' || currentUserId !== userId) {
+      setIsValisdate(false);
+    }
+  }, [status]);
 
   return (
     <>
-      {CheckAuth() ? (
+      {isValidate ? (
         <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
           <PostLayout>
             <ToastEditor mode={'update'} postId={id as string} />

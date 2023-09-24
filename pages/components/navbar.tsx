@@ -73,7 +73,7 @@ const Navbar = () => {
     const fileInput = event.target.files?.[0];
     if (fileInput && status === 'authenticated') {
       //기존 이미지가 있다면 오라클클라우드 버킷에서 삭제
-      deleteImg();
+      await deleteImg();
       //오라클 클라우드에 이미지 업로드 후 url 반환
       const image = await onUploadImage(fileInput);
 
