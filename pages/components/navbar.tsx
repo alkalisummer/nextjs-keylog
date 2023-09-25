@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Router, { useRouter } from 'next/router';
 import axios from 'axios';
 
 import { onUploadImage, getImgName, timeToString } from '@/utils/CommonUtils';
@@ -20,6 +21,9 @@ import Button from '@mui/material/Button';
 const Navbar = () => {
   //사용자 세션
   const { data: session, status, update } = useSession();
+
+  const router = useRouter();
+  const { userId, id } = router.query;
 
   //로그인시 메뉴 토글
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -191,7 +195,7 @@ const Navbar = () => {
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setOpenModal(false);
-      signOut({ redirect: false, callbackUrl: window.location.href });
+      logout();
     });
 
     await axios.post('/api/HandlePost', { data: params });
@@ -220,6 +224,22 @@ const Navbar = () => {
       await update({ email });
       setShowEmailInput(false);
     });
+  };
+
+  const logout = async () => {
+    let url = '';
+    if (id) {
+      // 수정화면에서 로그아웃 하는 경우
+      url = `${window.location.origin}/${userId}/posts/detail/${id}`;
+    } else if (userId) {
+      // 신규등록화면에서 로그아웃 하는 경우
+      url = `${window.location.origin}/${userId}`;
+    } else {
+      // 그 외
+      url = window.location.href;
+    }
+
+    await signOut({ redirect: true, callbackUrl: url });
   };
 
   return (
@@ -257,11 +277,7 @@ const Navbar = () => {
                 <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
               </Link>
             </MenuItem>
-            <MenuItem
-              onClick={() => {
-                signOut({ redirect: false, callbackUrl: window.location.href });
-              }}
-            >
+            <MenuItem onClick={() => logout()}>
               <i className='fa-solid fa-right-from-bracket nav_menu_item_ico'></i>로그아웃
             </MenuItem>
           </Menu>
