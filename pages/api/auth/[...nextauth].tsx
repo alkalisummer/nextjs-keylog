@@ -71,5 +71,8 @@ export default NextAuth({
 
       return session; // The return type will match the one returned in `useSession()`
     },
+    async redirect({ url }) {
+      return url;
+    },
   },
 });
