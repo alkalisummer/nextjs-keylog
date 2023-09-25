@@ -114,6 +114,10 @@ a {
   padding: 5px;
 }
 
+.pt0 {
+  padding-top: 0 !important;
+}
+
 .pt15 {
   padding-top: 15px;
 }

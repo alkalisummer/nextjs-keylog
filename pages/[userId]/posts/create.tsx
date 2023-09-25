@@ -6,6 +6,7 @@ import Error from 'next/error';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useBeforeunload } from 'react-beforeunload';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
 interface user {
@@ -42,6 +43,7 @@ interface recentComment {
 
 const CreatePost = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const { data: session, status } = useSession();
+  useBeforeunload((event) => event.preventDefault());
   const router = useRouter();
 
   const currentUserId = session?.user?.id;

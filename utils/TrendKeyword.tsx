@@ -133,18 +133,12 @@ const TrendKeyword = () => {
         }
       }
     });
+
     //word-cloud, line-chart 화면사이즈 변경시 resize
     window.addEventListener('resize', () => {
       if (wChartDom.current) {
         let wordCloud = echarts.getInstanceByDom(wChartDom.current);
         let lineChart = echarts.getInstanceByDom(lChartDom.current!);
-
-        if (!wordCloud) {
-          wordCloud = echarts.init(wChartDom.current);
-        }
-        if (!lineChart) {
-          lineChart = echarts.init(lChartDom.current);
-        }
 
         if (wordCloud) {
           wordCloud.resize();
@@ -159,6 +153,8 @@ const TrendKeyword = () => {
       document.querySelector('.post_main')?.scrollTo(0, 0);
     }, 300);
   }, []);
+
+  useEffect(() => {}, [showLineChart]);
 
   useEffect(() => {
     if (lineKeyword.length > 0) {

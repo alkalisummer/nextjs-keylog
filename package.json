@@ -46,6 +46,7 @@
     "openai": "^4.1.0",
     "querystring": "^0.2.1",
     "react": "18.2.0",
+    "react-beforeunload": "^2.6.0",
     "react-cookie": "^6.1.0",
     "react-dom": "18.2.0",
     "react-intersection-observer": "^9.5.2",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@types/formidable": "^2.0.6",
     "@types/mysql": "^2.15.21",
-    "@types/next-auth": "^3.15.0"
+    "@types/next-auth": "^3.15.0",
+    "@types/react-beforeunload": "^2.1.1"
   }
 }

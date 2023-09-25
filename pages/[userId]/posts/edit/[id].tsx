@@ -3,6 +3,7 @@ import BlogLayout from '../../../components/blogLayout';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import { useBeforeunload } from 'react-beforeunload';
 import Error from 'next/error';
 import dynamic from 'next/dynamic';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
@@ -41,6 +42,7 @@ interface recentComment {
 
 const EditPost = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const { data: session, status } = useSession();
+  useBeforeunload((event) => event.preventDefault());
   const router = useRouter();
 
   const currentUserId = session?.user?.id;
