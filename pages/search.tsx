@@ -51,7 +51,7 @@ const HomePage = () => {
 
   const getPosts = async () => {
     setPostLoading(true);
-    const params = { type: 'list', searchWord: searchWord, currPageNum: pageNum, perPage: 10 };
+    const params = { type: 'list', searchWord: searchWord, currPageNum: pageNum, perPage: 10, tempYn: 'N' };
 
     await axios.get('/api/HandlePost', { params: params }).then((res) => {
       const result = res.data.items;
@@ -78,7 +78,7 @@ const HomePage = () => {
           {posts.length > 0 ? (
             <div className='index_search_post_div'>
               {posts.map((post, idx) => (
-                <div key={post.POST_ID} ref={posts.length - 1 === idx ? ref : null} className='index_search_post' onClick={() => router.push(`/${post.RGSR_ID}/posts/detail/${post.POST_ID}`)}>
+                <div key={post.POST_ID} ref={posts.length - 1 === idx ? ref : null} className='index_search_post' onClick={() => router.push(`/${post.RGSR_ID}/posts/${post.POST_ID}`)}>
                   <div className='index_search_post_summary'>
                     {post.POST_THMB_IMG_URL ? (
                       <div className='index_search_post_img_div'>

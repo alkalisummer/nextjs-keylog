@@ -16,15 +16,19 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { onUploadImage } from '@/utils/CommonUtils';
 
 //시간포맷변경
-import { timeToString } from '@/utils/CommonUtils';
+import { timeToString, timeFormat } from '@/utils/CommonUtils';
 
-const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) => {
+//mui notification
+//mui notification
+import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
+
+const ToastEditor = ({ postId }: { postId: string | undefined }) => {
   //사용자 세션
   const { data: session, status } = useSession();
 
   const [title, setTitle] = useState('');
   const editorRef = useRef<Editor>(null);
-
   //이미지 파일 업로드 변수
   const [imgFileArr, setImgFileArr] = useState<string[]>([]);
   const [oriImgArr, setOriImgArr] = useState<string[]>([]);
@@ -35,9 +39,15 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
   //html data 추출
   const cheerio = require('cheerio');
 
+  //임시글 여부
+  const [tempYn, setTempYn] = useState('N');
+
+  //notification 팝업
+  const [showNoti, setShowNoti] = useState(false);
+
   useEffect(() => {
     // 수정 화면에서 수정 전 데이터를 세팅
-    if (mode === 'update') {
+    if (postId) {
       const param = {
         type: '',
         postId: postId,
@@ -46,15 +56,22 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       const getPost = async () => {
         param.type = 'read';
         await axios.get('/api/HandlePost', { params: param }).then((res) => {
-          setTitle(res.data.items[0].POST_TITLE);
+          const post = res.data.items[0];
+
+          setTitle(post.POST_TITLE);
 
           //html 데이터 추출
-          const htmlCntn = Buffer.from(res.data.items[0].POST_HTML_CNTN).toString();
+          const htmlCntn = Buffer.from(post.POST_HTML_CNTN).toString();
           const $ = cheerio.load(htmlCntn);
 
           //기존 이미지 파일 이름 추출
           const imageTags = $('img');
           const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+
+          //임시글 여부
+          if (post.TEMP_YN === 'Y') {
+            setTempYn('Y');
+          }
 
           setImgFileArr(currImgArr);
           setOriImgArr(currImgArr);
@@ -62,13 +79,45 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
           editorRef.current?.getInstance().setHTML(htmlCntn);
         });
       };
-      getPost();
+
+      const getTempPost = async () => {
+        param.type = 'getLastTempPost';
+        await axios.get('/api/HandlePost', { params: param }).then(async (res) => {
+          if (res.data.items.length > 0) {
+            const tmpPost = res.data.items[0];
+            if (confirm(`${timeFormat(tmpPost.RGSN_DTTM)} 에 저장된 임시 글이 있습니다. \n 이어서 작성하시겠습니까?`)) {
+              setTitle(tmpPost.POST_TITLE);
+
+              //html 데이터 추출
+              const htmlCntn = Buffer.from(tmpPost.POST_HTML_CNTN).toString();
+              const $ = cheerio.load(htmlCntn);
+
+              //기존 이미지 파일 이름 추출
+              const imageTags = $('img');
+              const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+
+              setImgFileArr(currImgArr);
+              setOriImgArr(currImgArr);
+
+              editorRef.current?.getInstance().setHTML(htmlCntn);
+            } else {
+              debugger;
+              await getPost();
+            }
+          } else {
+            await getPost();
+          }
+        });
+      };
+
+      getTempPost();
+    } else {
+      setTitle('');
+      editorRef.current?.getInstance().setHTML('');
     }
-  }, [mode, postId, cheerio]);
+  }, [postId]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const savePost = async (saveType: string) => {
     if (status === 'authenticated') {
       //html 추출 및 제거
       const htmlCntn = editorRef.current?.getInstance().getHTML();
@@ -105,8 +154,39 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       }
 
       const currentTime = timeToString(new Date());
+
+      let type = '';
+      let saveTempYn = '';
+      let postOriginId = ''; // 기존 게시글 수정 중 임시저장했을 경우 원본 게시글 ID
+      if (!postId && tempYn === 'N' && saveType === 'publish') {
+        // 신규 등록 완료
+        type = 'insert';
+        saveTempYn = 'N';
+      } else if (!postId && tempYn === 'N' && saveType === 'temp') {
+        // 신규 등록 중 임시저장한 경우
+        type = 'insert';
+        saveTempYn = 'Y';
+      } else if (postId && tempYn === 'Y' && saveType === 'temp') {
+        // 신규등록 중 임시저장했던 글을 다시 임시저장
+        type = 'update';
+        saveTempYn = 'Y';
+      } else if (postId && tempYn === 'Y' && saveType === 'publish') {
+        // 신규등록 중 임시저장한 글을 완료
+        type = 'update';
+        saveTempYn = 'N';
+      } else if (postId && tempYn === 'N' && saveType === 'publish') {
+        // 기존 게시글 수정 완료
+        type = 'update';
+        saveTempYn = 'N';
+      } else if (postId && tempYn === 'N' && saveType === 'temp') {
+        // 기존 게시글 수정중에 임시저장한 경우
+        type = 'insert';
+        saveTempYn = 'Y';
+        postOriginId = postId;
+      }
+
       const postData = {
-        type: mode,
+        type: type,
         post: {
           post_id: postId,
           post_title: title,
@@ -114,6 +194,8 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
           post_html_cntn: htmlCntn,
           post_thmb_img_url: thmbImgUrl ? thmbImgUrl : '',
           rgsr_id: session?.user?.id,
+          temp_yn: saveTempYn,
+          post_origin_id: postOriginId ? postOriginId : null,
           rgsn_dttm: currentTime,
           amnt_dttm: currentTime,
         },
@@ -121,12 +203,21 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       await axios
         .post('/api/HandlePost', { data: postData })
         .then((response) => response.data)
-        .then(function (res) {
-          setTitle('');
-          if (mode === 'insert') {
-            router.push(`/${userId}/posts/detail/${res.postId}`);
-          } else {
-            router.push(`/${userId}/posts/detail/${postId}`);
+        .then((res) => {
+          if (!postId && type === 'insert' && saveType === 'publish') {
+            // 신규등록인 경우
+            router.push(`/${userId}/posts/${res.postId}`);
+          } else if (!postId && type === 'insert' && saveType === 'temp') {
+            // 신규등록중 임시저장을 한 경우
+            router.push(`/${userId}/write?postId=${res.postId}&keyword=true`);
+          } else if (postId && type === 'update' && saveType === 'publish' && !postOriginId) {
+            // 신규등록중 임시저장한 글을 완료
+            const params = { type: 'deleteTempPost', postOriginId: postId };
+            axios.post('/api/HandlePost', { data: params }); // 원본 글의 임시저장글은 삭제
+            router.push(`/${userId}/posts/${postId}`);
+          }
+          if (saveType === 'temp') {
+            setShowNoti(true);
           }
         });
     } else {
@@ -136,7 +227,7 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
   };
 
   const hadleCancel = async () => {
-    if (mode === 'insert') {
+    if (!postId) {
       // 이미지 제거
       if (imgFileArr.length > 0) {
         const removedImg = imgFileArr;
@@ -156,12 +247,19 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
       if (removedImg.length > 0) {
         await axios.post('/api/DeleteImgFile', { removedImg });
       }
-      router.push(`/${userId}/posts/detail/${postId}`);
+      router.push(`/${userId}/posts/${postId}`);
     }
   };
 
+  const closeNoti = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setShowNoti(false);
+  };
+
   return (
-    <form className='post_div' onSubmit={handleSubmit}>
+    <div className='post_div'>
       <div className='post_title_created'>
         <input type='text' className='post_title_input' placeholder='제목을 입력하세요' value={title} maxLength={300} onChange={(e) => setTitle(e.target.value)} />
       </div>
@@ -190,12 +288,31 @@ const ToastEditor = ({ mode, postId }: { mode: string; postId: string | null }) 
         <button className='post_cancel_btn' onClick={hadleCancel} type='button'>
           취소
         </button>
-        <button className='post_submit_btn' type='submit'>
-          완료
-        </button>
+        <div>
+          <button className='post_tmp_btn' onClick={() => savePost('temp')}>
+            임시저장
+          </button>
+          <button className='post_submit_btn' onClick={() => savePost('publish')}>
+            완료
+          </button>
+        </div>
       </div>
-    </form>
+      <Snackbar
+        open={showNoti}
+        message='포스트가 임시저장되었습니다.'
+        autoHideDuration={3000}
+        onClose={closeNoti}
+        action={
+          <React.Fragment>
+            <Button color='primary' size='small' onClick={closeNoti}>
+              확인
+            </Button>
+          </React.Fragment>
+        }
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      ></Snackbar>
+    </div>
   );
 };
 
-export default ToastEditor;
+export default React.memo(ToastEditor);

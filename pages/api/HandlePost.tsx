@@ -15,6 +15,7 @@ export const handleMySql = async (params: any) => {
 
   let post;
   let postId;
+  let postOriginId;
   let rgsrId;
   let sql = '';
   let result: { totalItems: number; items: any[]; postId: string; popularPosts: any[] } = {
@@ -32,8 +33,9 @@ export const handleMySql = async (params: any) => {
       const perPage = params.perPage;
       const currPageNum = params.currPageNum;
       const sttRowNum = perPage * (currPageNum - 1) + 1;
-      const eddRowNum = perPage * currPageNum;
+      const endRowNum = perPage * currPageNum;
       const searchWord = params.searchWord;
+      const tempYn = params.tempYn;
       sql = `SELECT * 
                FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.RGSN_DTTM DESC) AS PAGE_INDX
                           , COUNT(*) OVER()                              AS TOTAL_ITEMS
@@ -55,13 +57,15 @@ export const handleMySql = async (params: any) => {
                   LEFT JOIN LIKEACT D 
                          ON A.POST_ID = D.POST_ID  
                       WHERE 1=1
+                        AND (A.POST_ORIGIN_ID IS NULL OR A.POST_ORIGIN_ID = '')
             ${rgsrId ? `AND A.RGSR_ID = '${rgsrId}'` : ''} 
         ${searchWord ? `AND (A.POST_TITLE LIKE '%${searchWord}%' OR A.POST_CNTN LIKE '%${searchWord}%')` : ''}
-                   GROUP BY A.POST_ID
+            ${tempYn ? `AND A.TEMP_YN = '${tempYn}'` : ''}   
+        GROUP BY A.POST_ID
                    ORDER BY A.RGSN_DTTM 
                    ) AS A 
               WHERE PAGE_INDX >= ${sttRowNum} 
-                AND PAGE_INDX <= ${eddRowNum}
+                AND PAGE_INDX <= ${endRowNum}
               ORDER BY PAGE_INDX;`;
       break;
     case 'read':
@@ -69,6 +73,7 @@ export const handleMySql = async (params: any) => {
       sql = `SELECT POST_ID
                   , POST_TITLE
                   , POST_HTML_CNTN
+                  , TEMP_YN
                   , AMNT_DTTM 
               FROM POST 
              WHERE POST_ID = ${postId}`;
@@ -76,9 +81,9 @@ export const handleMySql = async (params: any) => {
     case 'insert':
       post = params.post;
       sql = `INSERT INTO POST 
-                         ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSR_ID, RGSN_DTTM, AMNT_DTTM )
+                         ( POST_TITLE, POST_CNTN, POST_HTML_CNTN, POST_THMB_IMG_URL, RGSR_ID, TEMP_YN, POST_ORIGIN_ID, RGSN_DTTM, AMNT_DTTM )
                   VALUES ( '${post.post_title.replaceAll("'", "''")}', '${post.post_cntn.replaceAll("'", "''")}','${post.post_html_cntn.replaceAll("'", "''")}'
-                       , '${post.post_thmb_img_url}','${post.rgsr_id}', '${post.rgsn_dttm}', '${post.amnt_dttm}')`;
+                       , '${post.post_thmb_img_url}','${post.rgsr_id}', '${post.temp_yn}', ${post.post_origin_id},'${post.rgsn_dttm}', '${post.amnt_dttm}')`;
       break;
     case 'update':
       post = params.post;
@@ -87,6 +92,7 @@ export const handleMySql = async (params: any) => {
                   , POST_CNTN = '${post.post_cntn.replaceAll("'", "''")}'
                   , POST_HTML_CNTN = '${post.post_html_cntn.replaceAll("'", "''")}'
                   , POST_THMB_IMG_URL= '${post.post_thmb_img_url}'
+                  , TEMP_YN = '${post.temp_yn}'
                   , AMNT_DTTM='${post.amnt_dttm}' 
               WHERE POST_ID='${post.post_id}'`;
       break;
@@ -110,13 +116,13 @@ export const handleMySql = async (params: any) => {
                   , RGSN_DTTM
                FROM POST
               WHERE RGSR_ID = '${rgsrId}'
+                AND TEMP_YN = 'N'
               ORDER BY RGSN_DTTM DESC
               LIMIT 3`;
       break;
     case 'getPopularPost':
       rgsrId = params.id;
-      sql = `
-             SELECT A.*
+      sql = `SELECT A.*
                FROM (SELECT A.POST_ID           AS POST_ID
                           , A.POST_TITLE        AS POST_TITLE
                           , A.POST_THMB_IMG_URL AS POST_THMB_IMG_URL
@@ -126,10 +132,27 @@ export const handleMySql = async (params: any) => {
                        LEFT JOIN LIKEACT B 
                          ON A.POST_ID = B.POST_ID
                       WHERE A.RGSR_ID  = '${rgsrId}'
+                        AND A.TEMP_YN = 'N'
                       GROUP BY A.POST_ID) AS A
               WHERE A.LIKE_CNT > 0 
               ORDER BY A.LIKE_CNT DESC, A.RGSN_DTTM DESC
               LIMIT 3`;
+      break;
+    case 'deleteTempPost':
+      postOriginId = params.postOriginId;
+      sql = `DELETE FROM POST WHERE POST_ORIGIN_ID = '${postOriginId}'`;
+      break;
+    case 'getLastTempPost':
+      postOriginId = params.postId;
+      sql = `SELECT POST_ID
+                  , POST_TITLE
+                  , POST_HTML_CNTN
+                  , TEMP_YN
+                  , RGSN_DTTM
+              FROM POST 
+             WHERE POST_ORIGIN_ID = '${postOriginId}'
+             ORDER BY RGSN_DTTM DESC 
+             LIMIT 1`;
       break;
   }
 

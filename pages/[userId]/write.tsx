@@ -1,12 +1,11 @@
-import PostLayout from '../../components/postLayout';
-import BlogLayout from '../../components/blogLayout';
+import PostLayout from '../components/postLayout';
+import BlogLayout from '../components/blogLayout';
 import TrendKeyword from '@/utils/TrendKeyword';
 import dynamic from 'next/dynamic';
 import Error from 'next/error';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useBeforeunload } from 'react-beforeunload';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
 interface user {
@@ -43,12 +42,10 @@ interface recentComment {
 
 const CreatePost = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const { data: session, status } = useSession();
-  useBeforeunload((event) => event.preventDefault());
   const router = useRouter();
 
   const currentUserId = session?.user?.id;
-  const { userId } = router.query;
-
+  const { userId, postId, keyword } = router.query;
   const [isValidate, setIsValisdate] = useState(true);
 
   useEffect(() => {
@@ -62,8 +59,8 @@ const CreatePost = ({ userInfo, recentPosts, popularPosts, recentComments }: { u
       {isValidate ? (
         <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
           <PostLayout>
-            <TrendKeyword />
-            <ToastEditor mode={'insert'} postId={''} />
+            {keyword ? <TrendKeyword /> : <></>}
+            <ToastEditor postId={postId as string | undefined} />
           </PostLayout>
         </BlogLayout>
       ) : (

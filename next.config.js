@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: ['objectstorage.ap-chuncheon-1.oraclecloud.com', 'imgnews.naver.net'],
   },

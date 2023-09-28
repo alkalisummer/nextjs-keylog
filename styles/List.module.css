@@ -7,6 +7,15 @@
   overflow-y: auto;
 }
 
+.home_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
 .home_post_cnt {
   font-weight: normal;
   font-size: 20px;
@@ -126,9 +135,31 @@
 .home_thumb_img_div {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
+
 .home_header_btn {
   display: none;
+}
+
+.home_post_bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home_post_del_btn {
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #5c5c5c;
+  font-size: 12px;
+  font-weight: 400;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home_post_del_btn:hover {
+  color: #98a1a9;
 }
 
 @media (max-width: 1380px) {

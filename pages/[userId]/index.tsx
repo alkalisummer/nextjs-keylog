@@ -81,41 +81,43 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
           <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
           <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
         </div>
-        <div className={listStyle.home_post}>
-          <div className={listStyle.home_header}>
-            <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
-            {CheckAuth() ? (
-              <div className={listStyle.home_header_btn}>
-                <Link href={`/${userId}/chatGpt`}>
-                  <button className={listStyle.chatgpt_btn}>ChatGPT</button>
-                </Link>
-                <Link href={`/${userId}/posts/create`}>
-                  <button className={listStyle.create_btn}>글쓰기</button>
-                </Link>
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
+        <div className={listStyle.home_main}>
+          <div className={listStyle.home_post}>
+            <div className={listStyle.home_header}>
+              <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
+              {CheckAuth() ? (
+                <div className={listStyle.home_header_btn}>
+                  <Link href={`/${userId}/chatGpt`}>
+                    <button className={listStyle.chatgpt_btn}>ChatGPT</button>
+                  </Link>
+                  <Link href={`/${userId}/write?keyword=true`}>
+                    <button className={listStyle.create_btn}>글쓰기</button>
+                  </Link>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
 
-          {posts.items?.map((post: any) => {
-            return <PostItem key={post.POST_ID} post={post} userId={userId} />;
-          })}
-        </div>
-        <div className={listStyle.home_page_nav}>
-          <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
-            <span className={listStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
-          </span>
-          {totalPostsArr.map((obj: number, idx: number) => {
-            return (
-              <span key={idx} className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num} onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
-                {obj}
-              </span>
-            );
-          })}
-          <span className={listStyle.home_page_nav_next} onClick={(e) => handlePagination(Number(pageNum) + 1)}>
-            Next&nbsp;&nbsp; <span className={listStyle.home_page_nav_arr}>&gt;</span>
-          </span>
+            {posts.items?.map((post: any) => {
+              return <PostItem key={post.POST_ID} post={post} userId={userId} />;
+            })}
+          </div>
+          <div className={listStyle.home_page_nav}>
+            <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
+              <span className={listStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
+            </span>
+            {totalPostsArr.map((obj: number, idx: number) => {
+              return (
+                <span key={idx} className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num} onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
+                  {obj}
+                </span>
+              );
+            })}
+            <span className={listStyle.home_page_nav_next} onClick={(e) => handlePagination(Number(pageNum) + 1)}>
+              Next&nbsp;&nbsp; <span className={listStyle.home_page_nav_arr}>&gt;</span>
+            </span>
+          </div>
         </div>
       </div>
     </BlogLayout>
@@ -126,7 +128,7 @@ const PostItem = ({ post, userId }: any) => {
   const { POST_ID, POST_TITLE, POST_CNTN, POST_THMB_IMG_URL, RGSN_DTTM } = post || {};
   return (
     <div className={listStyle.home_post_title_content}>
-      <Link href={`/${userId}/posts/detail/${POST_ID}`}>
+      <Link href={`/${userId}/posts/${POST_ID}`}>
         {POST_THMB_IMG_URL ? (
           <div className={listStyle.home_post_thumb}>
             <div className={listStyle.home_thumb_content}>
@@ -155,7 +157,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = context.query.userId as string;
   let posts = {};
 
-  const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId };
+  const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId, tempYn: 'N' };
 
   await handlePost(params)
     .then((res) => JSON.stringify(res))

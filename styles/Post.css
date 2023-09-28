@@ -81,7 +81,26 @@
 
 .post_btn_div {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.post_tmp_btn {
+  border-radius: 20px;
+  border: none;
+  width: 75px;
+  height: 30px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 300;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  margin-right: 7px;
+}
+
+.post_tmp_btn:hover {
+  background-color: hsl(35, 100%, 57%);
+  color: white;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
 .post_submit_btn {
@@ -90,7 +109,7 @@
   width: 61px;
   height: 30px;
   font-family: 'Spoqa Han Sans Neo';
-  font-weight: 200;
+  font-weight: 300;
   background-color: black;
   color: white;
   cursor: pointer;
@@ -108,7 +127,7 @@
   height: 30px;
   margin-right: 10px;
   font-family: 'Spoqa Han Sans Neo';
-  font-weight: 200;
+  font-weight: 300;
   background-color: #f5f5f5;
   color: #333;
   cursor: pointer;

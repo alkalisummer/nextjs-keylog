@@ -59,7 +59,7 @@ const Navbar = () => {
     if (status === 'unauthenticated') {
       setOpenModal(false);
     }
-    if (window.location.href.indexOf('/posts/create') !== -1) {
+    if (window.location.href.indexOf('/write') !== -1) {
       setShowCreateBtn(false);
     } else {
       setShowCreateBtn(true);
@@ -230,7 +230,7 @@ const Navbar = () => {
     let url = '';
     if (id) {
       // 수정화면에서 로그아웃 하는 경우
-      url = `${window.location.origin}/${userId}/posts/detail/${id}`;
+      url = `${window.location.origin}/${userId}/posts/${id}`;
     } else if (userId) {
       // 신규등록화면에서 로그아웃 하는 경우
       url = `${window.location.origin}/${userId}`;
@@ -247,7 +247,7 @@ const Navbar = () => {
       {status === 'authenticated' ? (
         <div className='df'>
           <div className={showCreateBtn ? '' : 'dn'}>
-            <Link href={`/${session.user?.id}/posts/create`} className='nav_create_link'>
+            <Link href={`/${session.user?.id}/write?keyword=true`} className='nav_create_link'>
               <button className='nav_create_btn'>새 글 작성</button>
             </Link>
           </div>
@@ -264,18 +264,23 @@ const Navbar = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
+            <MenuItem>
+              <Link href={`/${session.user?.id}`}>
+                <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link href={`/${session.user?.id}/tmpPosts`}>
+                <i className='fa-solid fa-file-signature nav_menu_item_ico'></i>임시 글
+              </Link>
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 setOpenModal(true);
                 closeToggle();
               }}
             >
-              <i className='fa-solid fa-user nav_menu_item_ico'></i>계정관리
-            </MenuItem>
-            <MenuItem>
-              <Link href={`/${session.user?.id}`}>
-                <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
-              </Link>
+              <i className='fa-solid fa-user nav_menu_item_ico'></i>계정 관리
             </MenuItem>
             <MenuItem onClick={() => logout()}>
               <i className='fa-solid fa-right-from-bracket nav_menu_item_ico'></i>로그아웃

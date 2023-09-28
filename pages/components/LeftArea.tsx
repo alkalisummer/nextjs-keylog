@@ -57,7 +57,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
         <span className='left_area_title'>{userInfo.nickname}</span>
         {CheckAuth() ? (
           <div className='left_area_btn_div'>
-            <Link href={`/${userId}/posts/create`}>
+            <Link href={`/${userId}/write?keyword=true`}>
               <button className='create_btn'></button>
             </Link>
             <Link href={`/${userId}/chatGpt`}>
@@ -71,7 +71,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>최근 글</span>
         {recentPosts.map((post) => (
-          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
+          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${post.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>{post.POST_TITLE}</span>
               <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
@@ -89,7 +89,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>인기 글</span>
         {popularPosts.map((post) => (
-          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${post.POST_ID}`)}>
+          <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${post.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>{post.POST_TITLE}</span>
               <span className='left_area_side_date'>{timeFormat(post.RGSN_DTTM)}</span>
@@ -107,7 +107,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>최근 댓글</span>
         {recentComments.map((comment) => (
-          <div key={comment.COMMENT_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/detail/${comment.POST_ID}`)}>
+          <div key={comment.COMMENT_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${comment.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>
                 <i className='fa-solid fa-comment-dots mr8'></i>
