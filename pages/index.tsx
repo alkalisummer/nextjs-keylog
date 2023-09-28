@@ -34,7 +34,15 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   const [selectKeyValue, setSelectKeyValue] = useState(0);
 
   useEffect(() => {
-    setKeyArr(keywordArr);
+    //중복제거
+    let removeDuplicate: keyword[] = [];
+    for (let keyword of keywordArr) {
+      const index = removeDuplicate.findIndex((obj) => obj.name === keyword.name);
+      if (index === -1) {
+        removeDuplicate.push(keyword);
+      }
+    }
+    setKeyArr(removeDuplicate);
     setBaseDate(pubDate);
     init(keywordArr);
   }, [keywordArr, pubDate]);
