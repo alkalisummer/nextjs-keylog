@@ -20,9 +20,11 @@ import { onUploadImage } from '@/utils/CommonUtils';
 import { timeToString, timeFormat } from '@/utils/CommonUtils';
 
 //mui notification
-//mui notification
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
+
+//hashtag 컴포넌트
+import Hashtag from '@/pages/components/Hashtag';
 
 const ToastEditor = ({ postId }: { postId: string | undefined }) => {
   //사용자 세션
@@ -35,7 +37,8 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
   const [oriImgArr, setOriImgArr] = useState<string[]>([]);
 
   const router = useRouter();
-  const { userId } = router.query;
+  const { keyword } = router.query;
+  const userId = session?.user?.id;
 
   //html data 추출
   const cheerio = require('cheerio');
@@ -45,6 +48,9 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
 
   //notification 팝업
   const [showNoti, setShowNoti] = useState(false);
+
+  //hashtag
+  const [hashtagArr, setHashtagArr] = useState<string[]>([]);
 
   useEffect(() => {
     // 수정 화면에서 수정 전 데이터를 세팅
@@ -210,7 +216,7 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
             router.push(`/${userId}/posts/${res.postId}`);
           } else if (!postId && type === 'insert' && saveType === 'temp') {
             // 신규등록중 임시저장을 한 경우
-            router.push(`/${userId}/write?postId=${res.postId}&keyword=true`);
+            router.push(`/write?postId=${res.postId}&keyword=true`);
           } else if (postId && type === 'update' && saveType === 'publish' && !postOriginId) {
             // 신규등록중 임시저장한 글을 완료
             const params = { type: 'deleteTempPost', postOriginId: postId };
@@ -259,8 +265,14 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
     setShowNoti(false);
   };
 
+  const deleteTag = (index: number) => {
+    debugger;
+    const removedTagArr = hashtagArr.filter((el, idx) => idx !== index);
+    setHashtagArr(removedTagArr);
+  };
+
   return (
-    <div className='post_div'>
+    <div className={`post_write_div ${keyword ? '' : 'w70'}`}>
       <div className='post_title_created'>
         <input type='text' className='post_title_input' placeholder='제목을 입력하세요' value={title} maxLength={300} onChange={(e) => setTitle(e.target.value)} />
       </div>
@@ -285,6 +297,21 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
           },
         }}
       />
+      <div className='post_hashtag_div'>
+        {hashtagArr.length > 0 ? (
+          hashtagArr.map((hashtag, idx) => (
+            <div className='post_hashtag' key={idx}>
+              #{hashtag}
+              <span className='post_hashtag_del_btn' onClick={() => deleteTag(idx)}>
+                <i className='fa-solid fa-xmark'></i>
+              </span>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
+        <Hashtag hashtagArr={hashtagArr} setHashtagArr={setHashtagArr} />
+      </div>
       <div className='post_btn_div'>
         <button className='post_cancel_btn' onClick={hadleCancel} type='button'>
           취소

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BlogLayout from '../../components/blogLayout';
+import BlogLayout from '../../components/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { useRouter } from 'next/navigation';
 

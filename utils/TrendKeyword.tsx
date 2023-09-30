@@ -362,7 +362,7 @@ const TrendKeyword = () => {
   };
 
   return (
-    <div>
+    <div className='post_keyword_div'>
       {/* WordCloud  */}
       <div className='post_daily_keyword_div'>
         <span className='post_daily_keyword_title'>

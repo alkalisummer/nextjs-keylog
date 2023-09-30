@@ -138,6 +138,14 @@ a {
   padding-right: 25px;
 }
 
+.pl15 {
+  padding-left: 15px;
+}
+
+.pr15 {
+  padding-right: 15px;
+}
+
 .dn {
   display: none !important;
 }
@@ -159,6 +167,10 @@ a {
 
 .w100 {
   width: 100%;
+}
+
+.w70 {
+  width: 70%;
 }
 
 .w40 {
@@ -198,7 +210,7 @@ a {
 }
 
 .jc_c {
-  justify-content: center;
+  justify-content: center !important;
 }
 
 .ai_c {

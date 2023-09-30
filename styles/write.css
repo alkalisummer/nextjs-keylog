@@ -1,0 +1,75 @@
+.write_div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.write_header_div {
+  height: 7%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #efefef;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.write_header_logo {
+  font-family: 'Fira Mono', monospace;
+  font-size: 1.325rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #525252;
+  line-height: 4rem;
+}
+
+.write_main_div {
+  display: flex;
+  justify-content: space-around;
+  height: 93%;
+}
+
+.write_keyword_div {
+  overflow-y: auto;
+  width: 45%;
+  height: 93%;
+  margin-top: 2rem;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+@media (max-width: 860px) {
+  .write_div {
+    overflow-y: auto;
+  }
+
+  .write_main_div {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+  }
+
+  .write_header_div {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .write_keyword_div {
+    width: calc(100% - 3.5rem);
+    height: fit-content;
+    overflow: unset;
+  }
+}
+
+@media (max-width: 768px) {
+  .write_keyword_div {
+    width: calc(100% - 0.7rem);
+  }
+
+  .write_header_div {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

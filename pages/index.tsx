@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
-import IndexLayout from './components/indexLayout';
+import IndexLayout from './components/IndexLayout';
 import { getDailyTrends } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
 import { replaceSymbol, timeAgoFormat, timeFormat } from '../utils/CommonUtils';

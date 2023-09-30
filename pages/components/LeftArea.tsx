@@ -39,6 +39,7 @@ interface recentComment {
 
 const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const router = useRouter();
+  console.log(userInfo);
   const { userId } = router.query;
   return (
     <div className='left_area'>
@@ -57,7 +58,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
         <span className='left_area_title'>{userInfo.nickname}</span>
         {CheckAuth() ? (
           <div className='left_area_btn_div'>
-            <Link href={`/${userId}/write?keyword=true`}>
+            <Link href={`/write?keyword=true`}>
               <button className='create_btn'></button>
             </Link>
             <Link href={`/${userId}/chatGpt`}>
@@ -121,4 +122,4 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
     </div>
   );
 };
-export default React.memo(LeftArea);
+export default LeftArea;

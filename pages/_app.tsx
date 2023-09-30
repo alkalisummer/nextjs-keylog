@@ -18,6 +18,7 @@ import '@/styles/Index.css';
 import '@/styles/Error.css';
 import '@/styles/leftArea.css';
 import '@/styles/rightArea.css';
+import '@/styles/write.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();

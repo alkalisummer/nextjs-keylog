@@ -247,7 +247,7 @@ const Navbar = () => {
       {status === 'authenticated' ? (
         <div className='df'>
           <div className={showCreateBtn ? '' : 'dn'}>
-            <Link href={`/${session.user?.id}/write?keyword=true`} className='nav_create_link'>
+            <Link href={`/write?keyword=true`} className='nav_create_link'>
               <button className='nav_create_btn'>새 글 작성</button>
             </Link>
           </div>

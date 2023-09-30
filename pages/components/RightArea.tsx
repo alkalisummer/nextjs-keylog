@@ -13,7 +13,7 @@ const RigthArea = ({ children }: { children: React.ReactNode }) => {
             <i className='fa-brands fa-kickstarter mr10'></i>
           </span>
         </div>
-        <div className={`post_header ${['/[userId]/posts/[id]', '/[userId]/write'].indexOf(router.pathname) !== -1 ? '' : 'dn'}`}>
+        <div className={`post_header ${['/[userId]/posts/[id]', '/write'].indexOf(router.pathname) !== -1 ? '' : 'dn'}`}>
           <span className='post_back_arrow' onClick={() => router.back()}>
             &lt;
           </span>

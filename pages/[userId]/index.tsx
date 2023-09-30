@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import BlogLayout from '../components/blogLayout';
+import BlogLayout from '../components/BlogLayout';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import listStyle from '../../styles/List.module.css';
@@ -90,7 +90,7 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
                   <Link href={`/${userId}/chatGpt`}>
                     <button className={listStyle.chatgpt_btn}>ChatGPT</button>
                   </Link>
-                  <Link href={`/${userId}/write?keyword=true`}>
+                  <Link href={`/write?keyword=true`}>
                     <button className={listStyle.create_btn}>글쓰기</button>
                   </Link>
                 </div>

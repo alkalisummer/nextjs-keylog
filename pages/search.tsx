@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 //게시물 검색 무한 스크롤
 import { useInView } from 'react-intersection-observer';
-import IndexLayout from './components/indexLayout';
+import IndexLayout from './components/IndexLayout';
 
 interface post {
   POST_ID: string;

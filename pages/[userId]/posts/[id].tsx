@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import '@toast-ui/editor/dist/toastui-editor.css';
-import BlogLayout from '../../components/blogLayout';
+import BlogLayout from '../../components/BlogLayout';
 import Link from 'next/link';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat, timeToString } from '@/utils/CommonUtils';
-import PostLayout from '../../components/postLayout';
+import PostLayout from '../../components/PostLayout';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
@@ -334,7 +334,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
               {CheckAuth() ? (
                 <>
                   |
-                  <Link href={`/${userId}/write?postId=${post.POST_ID}`}>
+                  <Link href={`/write?postId=${post.POST_ID}`}>
                     <span className='mg-r-10 mg-l-10'>수정</span>
                   </Link>
                   |

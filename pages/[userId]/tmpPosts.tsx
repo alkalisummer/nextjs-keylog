@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
-import BlogLayout from '../components/blogLayout';
+import BlogLayout from '../components/BlogLayout';
 import Error from 'next/error';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -169,16 +169,16 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
       {POST_THMB_IMG_URL ? (
         <div className={listStyle.home_post_thumb}>
           <div className={listStyle.home_thumb_content}>
-            <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/${userId}/write?postId=${POST_ID}&keyword=true`)}>
+            <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
               {POST_TITLE}
             </span>
-            <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/${userId}/write?postId=${POST_ID}&keyword=true`)}>
+            <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
               {POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}
             </p>
             <span className={listStyle.home_post_created}>{timeFormat(RGSN_DTTM)}</span>
           </div>
           <div className={listStyle.home_thumb_img_div}>
-            <img className={`${listStyle.home_thumb_img} pointer`} src={POST_THMB_IMG_URL} alt='thumbImg' onClick={() => router.push(`/${userId}/write?postId=${POST_ID}&keyword=true`)} />
+            <img className={`${listStyle.home_thumb_img} pointer`} src={POST_THMB_IMG_URL} alt='thumbImg' onClick={() => router.push(`write?postId=${POST_ID}&keyword=true`)} />
             <div className='w100 df jc_e mt17'>
               <span className={`${listStyle.home_post_del_btn} pointer`} onClick={() => deletePost(POST_ID)}>
                 삭제
@@ -188,10 +188,10 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
         </div>
       ) : (
         <div>
-          <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/${userId}/write?postId=${POST_ID}&keyword=true`)}>
+          <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
             {POST_TITLE}
           </span>
-          <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/${userId}/write?postId=${POST_ID}&keyword=true`)}>
+          <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
             {POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}
           </p>
           <div className={listStyle.home_post_bottom}>
