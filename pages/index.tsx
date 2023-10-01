@@ -37,7 +37,8 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
     //중복제거
     let removeDuplicate: keyword[] = [];
     for (let keyword of keywordArr) {
-      const index = removeDuplicate.findIndex((obj) => obj.name === keyword.name);
+      keyword.name = keyword.name.toLowerCase();
+      const index = removeDuplicate.findIndex((obj) => obj.name.toLowerCase() === keyword.name);
       if (index === -1) {
         removeDuplicate.push(keyword);
       }

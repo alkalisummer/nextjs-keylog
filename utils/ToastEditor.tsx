@@ -272,7 +272,7 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
   };
 
   return (
-    <div className={`post_write_div ${keyword ? '' : 'w70'}`}>
+    <div className={`${keyword ? '' : 'w70'} post_write_div`}>
       <div className='post_title_created'>
         <input type='text' className='post_title_input' placeholder='제목을 입력하세요' value={title} maxLength={300} onChange={(e) => setTitle(e.target.value)} />
       </div>

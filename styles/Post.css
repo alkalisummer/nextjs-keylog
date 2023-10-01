@@ -797,7 +797,7 @@ pre:has(> code) {
 
 @media (max-width: 860px) {
   .post_write_div {
-    width: calc(100% - 3.5rem);
+    width: calc(100% - 3.5rem) !important;
     height: 800px;
     margin-bottom: 4rem;
   }
@@ -812,7 +812,7 @@ pre:has(> code) {
   }
 
   .post_write_div {
-    width: calc(100% - 2rem);
+    width: calc(100% - 2rem) !important;
     height: 665px;
   }
 

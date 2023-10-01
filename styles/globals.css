@@ -170,7 +170,7 @@ a {
 }
 
 .w70 {
-  width: 70%;
+  width: 70% !important;
 }
 
 .w40 {
