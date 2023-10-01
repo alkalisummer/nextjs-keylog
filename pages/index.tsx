@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import IndexLayout from './components/IndexLayout';
 import { getDailyTrends } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { replaceSymbol, timeAgoFormat, timeFormat } from '../utils/CommonUtils';
+import { replaceSymbol, timeAgoFormat, timeFormat, getValueToNum } from '../utils/CommonUtils';
 import Link from 'next/link';
 
 interface keyword {
   name: string;
-  value: number;
+  value: string;
   articles: [];
 }
 
@@ -31,7 +31,7 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   const [baseDate, setBaseDate] = useState<string>(pubDate);
   const [articles, setArticles] = useState<article[]>();
   const [selectKey, setSelectKey] = useState('');
-  const [selectKeyValue, setSelectKeyValue] = useState(0);
+  const [selectKeyValue, setSelectKeyValue] = useState('');
 
   useEffect(() => {
     //중복제거
@@ -43,9 +43,11 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
         removeDuplicate.push(keyword);
       }
     }
+    removeDuplicate.sort((a: keyword, b: keyword) => getValueToNum(b.value) - getValueToNum(a.value));
+
     setKeyArr(removeDuplicate);
     setBaseDate(pubDate);
-    init(keywordArr);
+    init(removeDuplicate);
   }, [keywordArr, pubDate]);
 
   const init = async (keyArr: keyword[]) => {
@@ -58,7 +60,7 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
     setSelectKeyValue(initValue);
   };
 
-  const setKeywordArticles = async (articles: article[], keyword: string, value: number) => {
+  const setKeywordArticles = async (articles: article[], keyword: string, value: string) => {
     //제목에 키워드가 없는 기사 필터링
     let resultArticles = [];
     let keywordArr = [];

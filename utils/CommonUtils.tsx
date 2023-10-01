@@ -117,3 +117,15 @@ export function getImgName(imgUrl: string) {
   }
   return imgName;
 }
+
+export function getValueToNum(value: string) {
+  let valueNum: string = value.replaceAll('+', '');
+  let resultNum: number = 0;
+
+  if (valueNum.indexOf('만') !== -1) {
+    resultNum = parseInt(valueNum.replaceAll('만', '')) * 10000;
+  } else if (valueNum.indexOf('천') !== -1) {
+    resultNum = parseInt(valueNum.replaceAll('천', '')) * 1000;
+  }
+  return resultNum;
+}
