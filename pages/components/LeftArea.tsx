@@ -39,7 +39,6 @@ interface recentComment {
 
 const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   const router = useRouter();
-  console.log(userInfo);
   const { userId } = router.query;
   return (
     <div className='left_area'>

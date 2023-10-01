@@ -45,9 +45,12 @@ export function timeFormat(currTime: string) {
   return fullTimeFormat;
 }
 
-export function replaceSymbol(str: string) {
-  const replaceStr = str.replaceAll('&nbsp;', ' ').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&').replaceAll('&quot;', '"').replaceAll('&#035;', '#').replaceAll('&#35;', '#').replaceAll('&#039;', "'").replaceAll('&#39;', "'");
-  return replaceStr;
+export function removeHtml(str: string) {
+  const cheerio = require('cheerio');
+  const $ = cheerio.load(str);
+  const plainText = $.text();
+
+  return plainText;
 }
 
 export function timeAgoFormat(str: string) {

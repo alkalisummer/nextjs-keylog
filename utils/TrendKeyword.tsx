@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { replaceSymbol, timeAgoFormat } from './CommonUtils';
+import { removeHtml, timeAgoFormat } from './CommonUtils';
 import DailyTrends from './DailyTrends';
 import ArticlePrompt from './ChatGptPrompt';
 
@@ -457,8 +457,8 @@ const TrendKeyword = () => {
                     <div className='post_article_detail'>
                       <div className='post_article_content'>
                         <div className='post_article_content_detail'>
-                          <span className='post_article_title'>{replaceSymbol(article.title)}</span>
-                          <pre>{replaceSymbol(article.snippet)}</pre>
+                          <span className='post_article_title'>{removeHtml(article.title)}</span>
+                          <pre>{removeHtml(article.snippet)}</pre>
                           <div className='post_article_summary'>
                             <span>{article.source}</span>
                             <span>•{timeAgoFormat(article.timeAgo)}</span>
