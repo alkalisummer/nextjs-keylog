@@ -73,6 +73,7 @@ export const handleMySql = async (params: any) => {
       sql = `SELECT POST_ID
                   , POST_TITLE
                   , POST_HTML_CNTN
+                  , RGSR_ID
                   , TEMP_YN
                   , AMNT_DTTM 
               FROM POST 

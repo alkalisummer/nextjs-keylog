@@ -43,6 +43,7 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
         removeDuplicate.push(keyword);
       }
     }
+    // 검색횟수 내림차순 정렬
     removeDuplicate.sort((a: keyword, b: keyword) => getValueToNum(b.value) - getValueToNum(a.value));
 
     setKeyArr(removeDuplicate);
