@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import IndexLayout from './components/IndexLayout';
 import { getDailyTrends } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { replaceSymbol, timeAgoFormat, timeFormat, getValueToNum } from '../utils/CommonUtils';
+import { removeHtml, timeAgoFormat, timeFormat, getValueToNum } from '../utils/CommonUtils';
 import Link from 'next/link';
 
 interface keyword {
@@ -110,8 +110,8 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
                   <div className='index_article'>
                     {article.image ? <img className='index_article_img' src={article.image.imageUrl} alt='articleImg'></img> : <></>}
                     <div className={`index_article_info ${article.image ? '' : 'btlr bblr'}`}>
-                      <span className='index_article_title'>{replaceSymbol(article.title)}</span>
-                      <span className='index_article_desc'>{replaceSymbol(article.snippet)}</span>
+                      <span className='index_article_title'>{removeHtml(article.title)}</span>
+                      <span className='index_article_desc'>{removeHtml(article.snippet)}</span>
                       <div className='index_article_bottom'>
                         <span className='index_article_comp'>{article.source}</span>•<span className='index_article_time'>{timeAgoFormat(article.timeAgo)}</span>
                       </div>
