@@ -6,6 +6,7 @@ declare module 'next-auth' {
     user?: {
       id?: string;
       blogName?: string;
+      tokenExp?: string;
     } & DefaultSession['user'];
   }
 }

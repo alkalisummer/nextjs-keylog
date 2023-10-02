@@ -68,6 +68,7 @@ export default NextAuth({
       session.user.email = token.email;
       session.user.image = token.picture;
       session.user.blogName = token.blogName;
+      session.user.tokenExp = token.exp;
 
       return session; // The return type will match the one returned in `useSession()`
     },

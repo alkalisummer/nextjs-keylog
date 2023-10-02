@@ -3,10 +3,13 @@ import { SessionProvider, getSession } from 'next-auth/react';
 import { handleMySql as handleUser } from './api/HandleUser';
 import { handleMySql as handlePost } from './api/HandlePost';
 import { handleMySql as handleComment } from './api/HandleComment';
+import RefreshTokenHandler from './components/RefreshTokenHandler';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
 import Head from 'next/head';
 import Script from 'next/script';
 import Error from 'next/error';
-import { useRouter } from 'next/router';
 
 import axios from 'axios';
 
@@ -22,15 +25,16 @@ import '@/styles/write.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-
+  const [sessionRefetchInterval, setSessionRefetchInterval] = useState(10000);
   const { session, userInfo } = pageProps;
   const { userId } = router.query;
 
   if (userId && !userInfo.id) {
     return <Error statusCode={404} />;
   }
+
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} refetchInterval={sessionRefetchInterval}>
       <div className='main_area'>
         <Script src='https://kit.fontawesome.com/25678e103e.js' crossOrigin='anonymous' />
         <Head>
@@ -44,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
         </Head>
         <Component {...pageProps} />
       </div>
+      <RefreshTokenHandler setSessionRefetchInterval={setSessionRefetchInterval} />
     </SessionProvider>
   );
 }
@@ -53,6 +58,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   let recentPosts;
   let popularPosts;
   let recentComments;
+  let expTimeRemaining;
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
