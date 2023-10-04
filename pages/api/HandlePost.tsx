@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { handleMySql as handleHashtag } from './HandleHashtag';
 
 const conn = {
   // mysql 접속 설정
@@ -18,11 +19,12 @@ export const handleMySql = async (params: any) => {
   let postOriginId;
   let rgsrId;
   let sql = '';
-  let result: { totalItems: number; items: any[]; postId: string; popularPosts: any[] } = {
+  let result: { totalItems: number; items: any[]; postId: string; popularPosts: any[]; hashtagArr: string[] } = {
     totalItems: 0,
     items: [],
     postId: '',
     popularPosts: [],
+    hashtagArr: [],
   };
 
   await connection.connect();
@@ -193,8 +195,66 @@ export default async function HandlePost(request: NextApiRequest, response: Next
   const result = await handleMySql(params);
   if (params.type === 'getRecentPost') {
     params.type = 'getPopularPost';
-    const popularPosts = await handleMySql(params);
-    result.popularPosts = popularPosts.items;
+    result.popularPosts = (await handleMySql(params)).items;
+  }
+
+  if (params.type === 'getLastTempPost') {
+    if (result.items[0] > 0) {
+      params.type = 'getHashtag';
+      params.postId = result.items[0].POST_ID;
+      result.hashtagArr = (await handleHashtag(params)).items;
+    }
+  }
+
+  // hashtag 등록, 수정
+  const hashtagArr = params.post?.hashtag_arr as string[];
+  const originTagArr = (await handleHashtag({ type: 'getHashtag', postId: params.post?.post_id })).items;
+
+  const insertTag = async (tagName: string, postId: string) => {
+    let tagParams = { type: '', hashtagName: tagName, hashtagId: '', postId: postId };
+    tagParams.type = 'checkHashtag';
+    const tagData = await handleHashtag(tagParams);
+    let tagId = tagData.items[0]?.HASHTAG_ID;
+
+    //기존에 없는 해시태그라면 신규 등록
+    if (tagData.totalItems === 0) {
+      tagParams.type = 'insertHashtag';
+      tagId = (await handleHashtag(tagParams)).hashtagId;
+    }
+
+    tagParams.type = 'insertPostTag';
+    tagParams.hashtagId = tagId;
+    await handleHashtag(tagParams);
+  };
+
+  const deleteTag = async (tagId: string, postId: string) => {
+    let tagParams = { type: 'deleteHashtag', hashtagId: tagId, postId: postId };
+    await handleHashtag(tagParams);
+  };
+
+  if (hashtagArr && hashtagArr.length > 0) {
+    for (let hashtag of hashtagArr) {
+      if (params.type === 'insert') {
+        //해시태그 신규등록
+        await insertTag(hashtag, result.postId);
+      } else if (params.type === 'update') {
+        // 기존에 없는 해시태그라면 신규 등록
+        const findTag = originTagArr.filter((tag) => tag.HASHTAG_NAME === hashtag);
+        if (findTag.length === 0) {
+          await insertTag(hashtag, params.post?.post_id);
+        }
+      }
+    }
+  }
+
+  //삭제된 해시태그 제거
+  if (params.type === 'update' && originTagArr && originTagArr.length > 0) {
+    for (let orginTag of originTagArr) {
+      const findTag = hashtagArr.filter((tag) => tag === orginTag.HASHTAG_NAME);
+      if (findTag.length === 0) {
+        deleteTag(orginTag.HASHTAG_ID, params.post?.post_id);
+      }
+    }
   }
 
   response.status(200).json(result);

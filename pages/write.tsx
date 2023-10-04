@@ -5,10 +5,17 @@ import Navbar from './components/Navbar';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from './api/HandlePost';
+import { handleMySql as handleHashtag } from './api/HandleHashtag';
 import { getSession } from 'next-auth/react';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
-const CreatePost = () => {
+interface hashtag {
+  POST_ID: string;
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+}
+
+const CreatePost = ({ post, hashtagArr }: { post: any; hashtagArr: string[] }) => {
   const router = useRouter();
   const { postId, keyword } = router.query;
 
@@ -21,7 +28,7 @@ const CreatePost = () => {
         <Navbar></Navbar>
       </div>
       <div className={`write_main_div ${keyword ? '' : 'jc_c'}`}>
-        <ToastEditor postId={postId as string | undefined} />
+        <ToastEditor postId={postId as string | undefined} post={post} tagArr={hashtagArr} />
         {keyword ? (
           <div className='write_keyword_div'>
             <TrendKeyword />
@@ -36,12 +43,31 @@ const CreatePost = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const postId = context.query.postId;
+  let post: any;
+  let hashtagArr: any;
 
   if (postId) {
     const currUserId = await getSession(context).then((res) => res?.user?.id);
     const params = { type: 'read', postId: postId };
-    const rgsrId = await handlePost(params).then((res) => res.items[0].RGSR_ID);
+    await handlePost(params)
+      .then((res) => JSON.stringify(res))
+      .then((res) => {
+        const result = JSON.parse(res);
+        post = result.items[0];
+        hashtagArr = result.hashtagArr.map((hashtag: hashtag) => hashtag.HASHTAG_NAME);
+      });
 
+    params.type = 'getHashtag';
+    await handleHashtag(params)
+      .then((res) => JSON.stringify(res))
+      .then((res) => {
+        const result = JSON.parse(res).items;
+        hashtagArr = result.map((hashtag: hashtag) => hashtag.HASHTAG_NAME);
+      });
+
+    const rgsrId = post!.RGSR_ID;
+
+    //글 수정시 현재 session user id 와 글 작성자 id가 일치하지 않으면 error 페이지로 redirect
     if (currUserId !== rgsrId) {
       return {
         redirect: {
@@ -52,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: { post: post || null, hashtagArr: hashtagArr || null },
   };
 };
 

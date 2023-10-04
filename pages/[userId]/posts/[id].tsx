@@ -11,6 +11,7 @@ import { GetServerSideProps } from 'next';
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
 import { handleMySql as handleLikeSql } from '@/pages/api/HandleLike';
+import { handleMySql as handleHashtag } from '@/pages/api/HandleHashtag';
 import CheckAuth from '@/utils/CheckAuth';
 import ClipboardJS from 'clipboard';
 
@@ -64,6 +65,12 @@ interface like {
   LIKE_CNT: number;
 }
 
+interface hashtag {
+  POST_ID: string;
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+}
+
 interface recentPost {
   POST_ID: string;
   POST_TITLE: string;
@@ -88,7 +95,7 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, recentPosts, popularPosts, recentComments }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, hashtag, recentPosts, popularPosts, recentComments }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; hashtag: hashtag[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -364,6 +371,17 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
             </div>
             <input id='currentUrl' className='dn op0' type='text' value={currUrl} readOnly />
           </div>
+          {hashtag.length > 0 ? (
+            <div className='post_detail_hashtag_div'>
+              {hashtag.map((tag) => (
+                <span className='post_detail_hashtag' key={tag.HASHTAG_ID}>
+                  # {tag.HASHTAG_NAME}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <></>
+          )}
           <div className='post_comment_div'>
             <span className='post_comment_cnt'>{`${commentArr.length}개의 댓글`}</span>
             <textarea className='post_comment_textarea' value={comment} onChange={(e) => setComment(e.target.value)} placeholder='댓글을 작성하세요.' maxLength={290}></textarea>
@@ -533,6 +551,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let post;
   let comments;
   let like;
+  let hashtag;
   let imgFileArr: string[] = [];
   let htmlCntn = '';
 
@@ -570,7 +589,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       like = JSON.parse(res).items;
     });
 
-  return { props: { post, imgFileArr, htmlCntn, comments, like } };
+  params.type = 'getHashtag';
+  await handleHashtag(params)
+    .then((res) => JSON.stringify(res))
+    .then((res) => {
+      hashtag = JSON.parse(res).items;
+    });
+
+  return { props: { post, imgFileArr, htmlCntn, comments, like, hashtag } };
 };
 
 export default React.memo(PostDetailPage);

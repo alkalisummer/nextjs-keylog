@@ -26,7 +26,13 @@ import Button from '@mui/material/Button';
 //hashtag 컴포넌트
 import Hashtag from '@/pages/components/Hashtag';
 
-const ToastEditor = ({ postId }: { postId: string | undefined }) => {
+interface hashtag {
+  POST_ID: string;
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+}
+
+const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; post: any; tagArr: string[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
 
@@ -55,45 +61,42 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
   useEffect(() => {
     // 수정 화면에서 수정 전 데이터를 세팅
     if (postId) {
+      const getPost = async () => {
+        setTitle(post.POST_TITLE);
+        setHashtagArr(tagArr);
+
+        //html 데이터 추출
+        const htmlCntn = Buffer.from(post.POST_HTML_CNTN).toString();
+        const $ = cheerio.load(htmlCntn);
+
+        //기존 이미지 파일 이름 추출
+        const imageTags = $('img');
+        const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
+
+        //임시글 여부
+        if (post.TEMP_YN === 'Y') {
+          setTempYn('Y');
+        }
+
+        setImgFileArr(currImgArr);
+        setOriImgArr(currImgArr);
+
+        editorRef.current?.getInstance().setHTML(htmlCntn);
+      };
+
       const param = {
-        type: '',
+        type: 'getLastTempPost',
         postId: postId,
       };
 
-      const getPost = async () => {
-        param.type = 'read';
-        await axios.get('/api/HandlePost', { params: param }).then((res) => {
-          const post = res.data.items[0];
-
-          setTitle(post.POST_TITLE);
-
-          //html 데이터 추출
-          const htmlCntn = Buffer.from(post.POST_HTML_CNTN).toString();
-          const $ = cheerio.load(htmlCntn);
-
-          //기존 이미지 파일 이름 추출
-          const imageTags = $('img');
-          const currImgArr = imageTags.map((index: number, el: any) => $(el).attr('alt')).get();
-
-          //임시글 여부
-          if (post.TEMP_YN === 'Y') {
-            setTempYn('Y');
-          }
-
-          setImgFileArr(currImgArr);
-          setOriImgArr(currImgArr);
-
-          editorRef.current?.getInstance().setHTML(htmlCntn);
-        });
-      };
-
       const getTempPost = async () => {
-        param.type = 'getLastTempPost';
         await axios.get('/api/HandlePost', { params: param }).then(async (res) => {
           if (res.data.items.length > 0) {
             const tmpPost = res.data.items[0];
             if (confirm(`${timeFormat(tmpPost.RGSN_DTTM)} 에 저장된 임시 글이 있습니다. \n 이어서 작성하시겠습니까?`)) {
               setTitle(tmpPost.POST_TITLE);
+              debugger;
+              setHashtagArr(res.data.hashtagArr.map((hashtag: hashtag) => hashtag.HASHTAG_NAME));
 
               //html 데이터 추출
               const htmlCntn = Buffer.from(tmpPost.POST_HTML_CNTN).toString();
@@ -203,6 +206,7 @@ const ToastEditor = ({ postId }: { postId: string | undefined }) => {
           rgsr_id: session?.user?.id,
           temp_yn: saveTempYn,
           post_origin_id: postOriginId ? postOriginId : null,
+          hashtag_arr: hashtagArr,
           rgsn_dttm: currentTime,
           amnt_dttm: currentTime,
         },
