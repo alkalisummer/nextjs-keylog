@@ -100,7 +100,7 @@ const HomePage = () => {
               </>
             )}
           </form>
-          <div className='index_search_cnt_txt'>
+          <div className='index_search_cnt_txt index_search_responsive'>
             {showCnt ? (
               <span>
                 총 <span className='index_search_cnt'>{totalCnt}</span>개의 포스트를 찾았습니다.

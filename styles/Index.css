@@ -445,6 +445,10 @@ body {
   .index_search_post_div {
     grid-template-columns: 1fr 1fr 1fr;
   }
+
+  .index_search_responsive {
+    padding-left: 30px;
+  }
 }
 
 @media (max-width: 1050px) {
