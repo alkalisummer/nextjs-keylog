@@ -199,8 +199,9 @@ export default async function HandlePost(request: NextApiRequest, response: Next
   }
 
   if (params.type === 'getLastTempPost') {
-    if (result.items[0] > 0) {
+    if (result.items.length > 0) {
       params.type = 'getHashtag';
+      console.log(result.items[0]);
       params.postId = result.items[0].POST_ID;
       result.hashtagArr = (await handleHashtag(params)).items;
     }

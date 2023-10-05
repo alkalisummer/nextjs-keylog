@@ -733,6 +733,7 @@ pre:has(> code) {
 .post_detail_hashtag_div {
   display: flex;
   margin-bottom: 30px;
+  height: 28px;
 }
 
 .post_detail_hashtag {

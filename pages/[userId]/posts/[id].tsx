@@ -371,17 +371,14 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
             </div>
             <input id='currentUrl' className='dn op0' type='text' value={currUrl} readOnly />
           </div>
-          {hashtag.length > 0 ? (
-            <div className='post_detail_hashtag_div'>
-              {hashtag.map((tag) => (
+          <div className='post_detail_hashtag_div'>
+            {hashtag.length > 0 &&
+              hashtag.map((tag) => (
                 <span className='post_detail_hashtag' key={tag.HASHTAG_ID}>
                   # {tag.HASHTAG_NAME}
                 </span>
               ))}
-            </div>
-          ) : (
-            <></>
-          )}
+          </div>
           <div className='post_comment_div'>
             <span className='post_comment_cnt'>{`${commentArr.length}개의 댓글`}</span>
             <textarea className='post_comment_textarea' value={comment} onChange={(e) => setComment(e.target.value)} placeholder='댓글을 작성하세요.' maxLength={290}></textarea>

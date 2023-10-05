@@ -1,9 +1,6 @@
-import { hasAttrib } from 'domutils';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const Hashtag = ({ hashtagArr, setHashtagArr }: { hashtagArr: string[]; setHashtagArr: React.Dispatch<React.SetStateAction<string[]>> }) => {
-  const [hashtag, setHashtag] = useState('');
-
+const Hashtag = ({ hashtag, setHashtag, hashtagArr, setHashtagArr }: { hashtag: string; setHashtag: React.Dispatch<React.SetStateAction<string>>; hashtagArr: string[]; setHashtagArr: React.Dispatch<React.SetStateAction<string[]>> }) => {
   //이벤트 실행순서 : onKeyDown -> onKeyPress -> onChange -> onKeyUp 이므로 onChange로 먼저 상태변경 후 onKeyUp에서 comma와 enter를 구분자로 split
   const splitTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {

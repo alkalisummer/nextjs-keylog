@@ -56,6 +56,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
   const [showNoti, setShowNoti] = useState(false);
 
   //hashtag
+  const [hashtag, setHashtag] = useState('');
   const [hashtagArr, setHashtagArr] = useState<string[]>([]);
 
   useEffect(() => {
@@ -95,7 +96,6 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
             const tmpPost = res.data.items[0];
             if (confirm(`${timeFormat(tmpPost.RGSN_DTTM)} 에 저장된 임시 글이 있습니다. \n 이어서 작성하시겠습니까?`)) {
               setTitle(tmpPost.POST_TITLE);
-              debugger;
               setHashtagArr(res.data.hashtagArr.map((hashtag: hashtag) => hashtag.HASHTAG_NAME));
 
               //html 데이터 추출
@@ -111,7 +111,6 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
 
               editorRef.current?.getInstance().setHTML(htmlCntn);
             } else {
-              debugger;
               await getPost();
             }
           } else {
@@ -133,6 +132,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
       const htmlCntn = editorRef.current?.getInstance().getHTML();
       const $ = cheerio.load(htmlCntn);
       const plainText = $.text();
+      let currentTagArr = hashtagArr;
 
       if (title.replaceAll(' ', '').length === 0) {
         alert('제목을 입력하세요.');
@@ -159,11 +159,18 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
         }
       }
 
+      //클라우드 서버에서 지워진 이미지 삭제
       if (removedImg.length > 0) {
         await axios.post('/api/DeleteImgFile', { removedImg });
       }
 
       const currentTime = timeToString(new Date());
+
+      // comma or enter 키로 해시태그를 생성하지 않더라도 input value가 있다면 배열에 push
+      if (hashtag != '') {
+        currentTagArr.push(hashtag);
+        setHashtag('');
+      }
 
       let type = '';
       let saveTempYn = '';
@@ -206,7 +213,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
           rgsr_id: session?.user?.id,
           temp_yn: saveTempYn,
           post_origin_id: postOriginId ? postOriginId : null,
-          hashtag_arr: hashtagArr,
+          hashtag_arr: currentTagArr,
           rgsn_dttm: currentTime,
           amnt_dttm: currentTime,
         },
@@ -270,7 +277,6 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
   };
 
   const deleteTag = (index: number) => {
-    debugger;
     const removedTagArr = hashtagArr.filter((el, idx) => idx !== index);
     setHashtagArr(removedTagArr);
   };
@@ -314,7 +320,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
         ) : (
           <></>
         )}
-        <Hashtag hashtagArr={hashtagArr} setHashtagArr={setHashtagArr} />
+        <Hashtag hashtag={hashtag} setHashtag={setHashtag} hashtagArr={hashtagArr} setHashtagArr={setHashtagArr} />
       </div>
       <div className='post_btn_div'>
         <button className='post_cancel_btn' onClick={hadleCancel} type='button'>
