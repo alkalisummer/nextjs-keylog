@@ -20,6 +20,7 @@ interface post {
   COMMENT_CNT: string;
   LIKE_CNT: string;
   RGSN_DTTM: string;
+  TOTAL_ITEMS: string;
 }
 
 const HomePage = () => {
@@ -30,8 +31,11 @@ const HomePage = () => {
   const [ref, inView] = useInView();
   const [postLoading, setPostLoading] = useState(false);
   const [pageNum, setPageNum] = useState(1);
+  const [totalCnt, setTotalCnt] = useState();
+  const [showCnt, setShowCnt] = useState(false);
 
   const router = useRouter();
+  const { tagId, tagName } = router.query;
 
   useEffect(() => {
     if (inView && !postLoading) {
@@ -51,12 +55,20 @@ const HomePage = () => {
 
   const getPosts = async () => {
     setPostLoading(true);
-    const params = { type: 'list', searchWord: searchWord, currPageNum: pageNum, perPage: 10, tempYn: 'N' };
+    const params = { type: 'list', searchWord: searchWord, currPageNum: pageNum, perPage: 10, tempYn: 'N', tagId: tagId };
+
+    if (searchWord.replaceAll(' ', '').length > 0) {
+      setShowCnt(true);
+    } else {
+      setShowCnt(false);
+    }
 
     await axios.get('/api/HandlePost', { params: params }).then((res) => {
       const result = res.data.items;
+
       if (pageNum === 1) {
         setPosts(result);
+        setTotalCnt(res.data.totalItems);
       } else {
         setPosts((prev) => [...prev, ...result]);
       }
@@ -70,11 +82,33 @@ const HomePage = () => {
       <div className='index_main_div'>
         <div className='index_main_title_div'>
           <form className='index_search_input_div' onSubmit={searchPost}>
-            <input className='index_search_input w40' type='text' placeholder='검색어를 입력하세요' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}></input>
-            <button className='index_search_btn' type='submit'>
-              <i className='fa-solid fa-magnifying-glass'></i>
-            </button>
+            {tagName ? (
+              <div className='index_search_tag_div'>
+                <span className='index_search_tag_name'>{`# ${tagName}`}</span>
+                <div className='index_search_cnt_txt'>
+                  <span>
+                    총 <span className='index_search_cnt'>{totalCnt}</span>개의 포스트
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <>
+                <input className='index_search_input w40' type='text' placeholder='검색어를 입력하세요' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}></input>
+                <button className='index_search_btn' type='submit'>
+                  <i className='fa-solid fa-magnifying-glass'></i>
+                </button>
+              </>
+            )}
           </form>
+          <div className='index_search_cnt_txt'>
+            {showCnt ? (
+              <span>
+                총 <span className='index_search_cnt'>{totalCnt}</span>개의 포스트를 찾았습니다.
+              </span>
+            ) : (
+              <></>
+            )}
+          </div>
           {posts.length > 0 ? (
             <div className='index_search_post_div'>
               {posts.map((post, idx) => (

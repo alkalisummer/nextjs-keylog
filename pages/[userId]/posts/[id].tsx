@@ -374,7 +374,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
           <div className='post_detail_hashtag_div'>
             {hashtag.length > 0 &&
               hashtag.map((tag) => (
-                <span className='post_detail_hashtag' key={tag.HASHTAG_ID}>
+                <span className='post_detail_hashtag' key={tag.HASHTAG_ID} onClick={() => router.push(`/search?tagId=${tag.HASHTAG_ID}&tagName=${tag.HASHTAG_NAME}`)}>
                   # {tag.HASHTAG_NAME}
                 </span>
               ))}

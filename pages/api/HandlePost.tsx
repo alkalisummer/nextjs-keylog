@@ -38,6 +38,7 @@ export const handleMySql = async (params: any) => {
       const endRowNum = perPage * currPageNum;
       const searchWord = params.searchWord;
       const tempYn = params.tempYn;
+      const tagId = params.tagId;
       sql = `SELECT * 
                FROM (SELECT ROW_NUMBER() OVER(ORDER BY A.RGSN_DTTM DESC) AS PAGE_INDX
                           , COUNT(*) OVER()                              AS TOTAL_ITEMS
@@ -58,11 +59,14 @@ export const handleMySql = async (params: any) => {
                          ON A.POST_ID = C.POST_ID
                   LEFT JOIN LIKEACT D 
                          ON A.POST_ID = D.POST_ID  
+                  LEFT JOIN POST_TAG E
+                         ON A.POST_ID = E.POST_ID
                       WHERE 1=1
                         AND (A.POST_ORIGIN_ID IS NULL OR A.POST_ORIGIN_ID = '')
             ${rgsrId ? `AND A.RGSR_ID = '${rgsrId}'` : ''} 
         ${searchWord ? `AND (A.POST_TITLE LIKE '%${searchWord}%' OR A.POST_CNTN LIKE '%${searchWord}%')` : ''}
             ${tempYn ? `AND A.TEMP_YN = '${tempYn}'` : ''}   
+             ${tagId ? `AND E.HASHTAG_ID = '${tagId}'` : ''}
         GROUP BY A.POST_ID
                    ORDER BY A.RGSN_DTTM 
                    ) AS A 
