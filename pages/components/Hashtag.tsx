@@ -14,9 +14,9 @@ const Hashtag = ({ hashtag, setHashtag, hashtagArr, setHashtagArr }: { hashtag: 
   };
 
   return (
-    <div className='post_hashtag_input_div'>
+    <span className='post_hashtag_input_div'>
       #<input type='text' id='post_hashtag_input' className='post_hashtag_input' value={hashtag} onChange={(e) => setHashtag(e.target.value)} onKeyUp={(e) => splitTag(e)} placeholder='태그를 입력하세요'></input>
-    </div>
+    </span>
   );
 };
 

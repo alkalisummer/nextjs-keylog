@@ -310,12 +310,10 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
       <div className='post_hashtag_div'>
         {hashtagArr.length > 0 ? (
           hashtagArr.map((hashtag, idx) => (
-            <div className='post_hashtag' key={idx}>
+            <span className='post_hashtag_txt' key={idx}>
               #{hashtag}
-              <span className='post_hashtag_del_btn' onClick={() => deleteTag(idx)}>
-                <i className='fa-solid fa-xmark'></i>
-              </span>
-            </div>
+              <i className='fa-solid fa-xmark post_hashtag_del_btn' onClick={() => deleteTag(idx)}></i>
+            </span>
           ))
         ) : (
           <></>

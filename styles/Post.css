@@ -695,9 +695,8 @@ pre:has(> code) {
 }
 
 .post_hashtag_div {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  width: 100%;
+  display: block;
   margin-top: 10px;
   margin-bottom: 20px;
 }
@@ -705,6 +704,7 @@ pre:has(> code) {
 .post_hashtag_input_div {
   color: #929292;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .post_hashtag_input {
@@ -723,6 +723,13 @@ pre:has(> code) {
   color: #525252;
 }
 
+.post_hashtag_txt {
+  white-space: nowrap;
+  margin-right: 10px;
+  font-size: 14px;
+  color: #525252;
+}
+
 .post_hashtag_del_btn {
   cursor: pointer;
   color: #c3c3c3;
@@ -731,9 +738,10 @@ pre:has(> code) {
 }
 
 .post_detail_hashtag_div {
-  display: flex;
+  display: block;
   margin-bottom: 30px;
-  height: 28px;
+  line-height: 2rem;
+  height: fit-content;
 }
 
 .post_detail_hashtag {
@@ -743,6 +751,7 @@ pre:has(> code) {
   border-radius: 5px;
   padding: 7px 10px 7px 10px;
   margin-right: 10px;
+  white-space: nowrap;
 }
 
 .post_detail_hashtag:hover {
