@@ -696,6 +696,7 @@ pre:has(> code) {
 
 .post_hashtag_div {
   width: 100%;
+  height: fit-content;
   display: block;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -704,13 +705,17 @@ pre:has(> code) {
 .post_hashtag_input_div {
   color: #929292;
   font-size: 14px;
-  white-space: nowrap;
+  width: 120px;
 }
 
 .post_hashtag_input {
+  color: #929292;
   border: none;
   font-family: 'Spoqa Han Sans Neo';
   font-size: 14px;
+  width: 120px;
+  line-height: 1rem;
+  height: 14px;
 }
 
 .post_hashtag_input:focus {
