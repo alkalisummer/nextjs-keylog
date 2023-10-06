@@ -6,7 +6,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat, timeToString } from '@/utils/CommonUtils';
-import PostLayout from '../../components/PostLayout';
+import PostLayout from '@/pages/components/PostLayout';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';

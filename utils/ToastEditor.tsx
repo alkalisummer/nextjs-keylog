@@ -167,7 +167,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
       const currentTime = timeToString(new Date());
 
       // comma or enter 키로 해시태그를 생성하지 않더라도 input value가 있다면 배열에 push
-      if (hashtag != '') {
+      if (hashtag.trim() != '') {
         currentTagArr.push(hashtag.trim());
         setHashtag('');
       }
