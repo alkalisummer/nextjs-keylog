@@ -5,6 +5,11 @@
   align-items: center;
   background-color: #f8f9fa;
   padding-top: 2%;
+  overflow-y: auto;
+}
+
+.left_area::-webkit-scrollbar {
+  display: none;
 }
 
 .left_area_logo_btn {
@@ -115,6 +120,26 @@
   height: 44px;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.left_area_hashtag {
+  padding: 2px 20px 6px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: gray;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  line-height: 1.2rem;
+  word-wrap: break-word;
+}
+
+.left_area_hashtag:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
 }
 
 @media (max-width: 1150px) {

@@ -10,9 +10,9 @@ import { getSession } from 'next-auth/react';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 
 interface hashtag {
-  POST_ID: string;
   HASHTAG_ID: string;
   HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
 }
 
 const CreatePost = ({ post, hashtagArr }: { post: any; hashtagArr: string[] }) => {

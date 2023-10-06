@@ -37,9 +37,21 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+interface hashtag {
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
+}
+
+const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
   const router = useRouter();
   const { userId } = router.query;
+  let tagTotalCnt = 0;
+
+  for (const tag of hashtags) {
+    tagTotalCnt += parseInt(tag.HASHTAG_CNT);
+  }
+
   return (
     <div className='left_area'>
       <div className='df fd_c ai_c mb25'>
@@ -116,6 +128,15 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments }: { use
               <span className='left_area_side_date'>{comment.USER_NICKNAME}</span>
             </div>
           </div>
+        ))}
+      </div>
+      <div className='left_area_side_div mb25'>
+        <span className='left_area_recent_title'>태그 목록</span>
+        <span className='left_area_hashtag'>{`전체(${tagTotalCnt})`}</span>
+        {hashtags.map((tag) => (
+          <span key={tag.HASHTAG_ID} className='left_area_hashtag' onClick={() => router.push(`/${userId}?tagId=${tag.HASHTAG_ID}`)}>
+            {`${tag.HASHTAG_NAME}(${tag.HASHTAG_CNT})`}
+          </span>
         ))}
       </div>
     </div>

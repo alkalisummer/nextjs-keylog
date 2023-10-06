@@ -3,6 +3,7 @@ import { SessionProvider, getSession } from 'next-auth/react';
 import { handleMySql as handleUser } from './api/HandleUser';
 import { handleMySql as handlePost } from './api/HandlePost';
 import { handleMySql as handleComment } from './api/HandleComment';
+import { handleMySql as handleHashtag } from './api/HandleHashtag';
 import RefreshTokenHandler from './components/RefreshTokenHandler';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -58,7 +59,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   let recentPosts;
   let popularPosts;
   let recentComments;
-  let expTimeRemaining;
+  let hashtags;
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
@@ -97,10 +98,18 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
         const result = JSON.parse(JSON.stringify(res));
         recentComments = result.items;
       });
+
+      // 해시태그
+      params.type = 'getHashtagCnt';
+      await handleHashtag(params).then((res) => {
+        const result = JSON.parse(JSON.stringify(res));
+        hashtags = result.items;
+      });
     } else {
       user = await axios.post('/api/HandleUser', { data: params }).then((res) => {
         return res.data.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.data.items[0]));
       });
+
       // 최근 게시글 5개, 인기 게시글 5개
       params.type = 'getRecentPost';
       await axios.post('/api/HandlePost', { data: params }).then((res) => {
@@ -108,11 +117,19 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
         recentPosts = result.items;
         popularPosts = result.popularPosts;
       });
+
       // 최근 댓글 5개
       params.type = 'getRecentComment';
       await axios.post('/api/HandleComment', { data: params }).then((res) => {
         const result = JSON.parse(JSON.stringify(res.data));
         recentComments = result.items;
+      });
+
+      // 해시태그
+      params.type = 'getHashtagCnt';
+      await axios.post('/api/HandleHashtag', { data: params }).then((res) => {
+        const result = JSON.parse(JSON.stringify(res.data));
+        hashtags = result.items;
       });
     }
 
@@ -125,7 +142,7 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
     };
   }
 
-  pageProps = { ...pageProps, userInfo, session, recentPosts, popularPosts, recentComments };
+  pageProps = { ...pageProps, userInfo, session, recentPosts, popularPosts, recentComments, hashtags };
 
   return { pageProps };
 };

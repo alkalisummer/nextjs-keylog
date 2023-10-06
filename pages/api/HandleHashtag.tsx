@@ -17,6 +17,7 @@ export const handleMySql = async (params: any) => {
   let hashtagId: string;
   let hashtagName: string;
   let postId: string;
+  let userId: string;
   let sql = '';
   let result: { totalItems: number; items: any[]; hashtagId: string } = {
     totalItems: 0,
@@ -29,13 +30,47 @@ export const handleMySql = async (params: any) => {
   switch (params.type) {
     case 'getHashtag':
       postId = params.postId;
+      userId = params.id;
       sql = `SELECT A.POST_ID      AS POST_ID
                   , A.HASHTAG_ID   AS HASHTAG_ID
                   , B.HASHTAG_NAME AS HASHTAG_NAME
+                  , C.RGSN_DTTM    AS RGSN_DTTM
                FROM POST_TAG A
           LEFT JOIN HASHTAG B
                  ON A.HASHTAG_ID = B.HASHTAG_ID
-              WHERE A.POST_ID = '${postId}'`;
+          LEFT JOIN POST C
+                 ON A.POST_ID = C.POST_ID
+              WHERE 1=1
+    ${postId ? `AND A.POST_ID = '${postId}'` : ''}        
+    ${
+      userId
+        ? `AND C.RGSR_ID = '${userId}'
+           AND C.TEMP_YN = 'N'
+         ORDER BY RGSN_DTTM DESC`
+        : ''
+    }`;
+      break;
+    case 'getHashtagCnt':
+      userId = params.id;
+      sql = `SELECT A.HASHTAG_ID   AS HASHTAG_ID
+                  , B.HASHTAG_NAME AS HASHTAG_NAME
+                  , COUNT(*)       AS HASHTAG_CNT
+               FROM POST_TAG A
+          LEFT JOIN HASHTAG B
+                 ON A.HASHTAG_ID = B.HASHTAG_ID
+          LEFT JOIN POST C
+                 ON A.POST_ID = C.POST_ID
+              WHERE 1=1
+    ${
+      userId
+        ? `AND C.RGSR_ID = '${userId}'
+           AND C.TEMP_YN = 'N'
+         GROUP BY A.HASHTAG_ID
+         ORDER BY HASHTAG_NAME 
+           `
+        : ''
+    }`;
+
       break;
     case 'checkHashtag':
       hashtagName = params.hashtagName;

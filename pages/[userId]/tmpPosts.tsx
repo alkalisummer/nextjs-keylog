@@ -49,7 +49,13 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const TmpPosts = ({ tmpPosts, pageNum, userInfo, recentPosts, popularPosts, recentComments }: { tmpPosts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+interface hashtag {
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
+}
+
+const TmpPosts = ({ tmpPosts, pageNum, userInfo, recentPosts, popularPosts, recentComments, hashtags }: { tmpPosts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const currentUserId = session?.user?.id;
@@ -88,7 +94,7 @@ const TmpPosts = ({ tmpPosts, pageNum, userInfo, recentPosts, popularPosts, rece
   return (
     <>
       {isValidate ? (
-        <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
+        <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
           <div className={listStyle.home_div}>
             <div className={listStyle.home_header_div}>
               <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />

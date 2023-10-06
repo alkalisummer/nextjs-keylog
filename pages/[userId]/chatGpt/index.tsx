@@ -35,7 +35,13 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+interface hashtag {
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
+}
+
+const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
@@ -127,7 +133,7 @@ const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments }: { user
   };
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
       <form className='chat_div' onSubmit={handleSubmit}>
         <div className='chat_header_div'>
           <span className='chat_back_arrow' onClick={() => router.back()}>

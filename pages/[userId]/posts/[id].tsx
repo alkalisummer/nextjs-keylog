@@ -65,7 +65,7 @@ interface like {
   LIKE_CNT: number;
 }
 
-interface hashtag {
+interface postHashtag {
   POST_ID: string;
   HASHTAG_ID: string;
   HASHTAG_NAME: string;
@@ -95,7 +95,13 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, hashtag, recentPosts, popularPosts, recentComments }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; hashtag: hashtag[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+interface tag {
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
+}
+
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, postHashtags, recentPosts, popularPosts, recentComments, hashtags }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; postHashtags: postHashtag[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: tag[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -331,7 +337,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   };
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
       <PostLayout>
         <div className='post_div'>
           <div className='post_title_created'>
@@ -372,8 +378,8 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
             <input id='currentUrl' className='dn op0' type='text' value={currUrl} readOnly />
           </div>
           <div className='post_detail_hashtag_div'>
-            {hashtag.length > 0 &&
-              hashtag.map((tag) => (
+            {postHashtags.length > 0 &&
+              postHashtags.map((tag) => (
                 <span className='post_detail_hashtag' key={tag.HASHTAG_ID} onClick={() => router.push(`/search?tagId=${tag.HASHTAG_ID}&tagName=${tag.HASHTAG_NAME}`)}>
                   # {tag.HASHTAG_NAME}
                 </span>
@@ -548,7 +554,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let post;
   let comments;
   let like;
-  let hashtag;
+  let postHashtags;
   let imgFileArr: string[] = [];
   let htmlCntn = '';
 
@@ -590,10 +596,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await handleHashtag(params)
     .then((res) => JSON.stringify(res))
     .then((res) => {
-      hashtag = JSON.parse(res).items;
+      postHashtags = JSON.parse(res).items;
     });
 
-  return { props: { post, imgFileArr, htmlCntn, comments, like, hashtag } };
+  return { props: { post, imgFileArr, htmlCntn, comments, like, postHashtags } };
 };
 
 export default React.memo(PostDetailPage);

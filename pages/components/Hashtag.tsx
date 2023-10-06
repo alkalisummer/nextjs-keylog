@@ -5,7 +5,7 @@ const Hashtag = ({ hashtag, setHashtag, hashtagArr, setHashtagArr }: { hashtag: 
   const splitTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {
       //comma 제거, 중복 제거
-      const inputText = hashtag.replaceAll(',', '');
+      const inputText = hashtag.replaceAll(',', '').trim();
       if (inputText.replaceAll(' ', '') && hashtagArr.indexOf(inputText) === -1) {
         setHashtagArr((prev) => [...prev, inputText]);
       }

@@ -27,9 +27,9 @@ import Button from '@mui/material/Button';
 import Hashtag from '@/pages/components/Hashtag';
 
 interface hashtag {
-  POST_ID: string;
   HASHTAG_ID: string;
   HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
 }
 
 const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; post: any; tagArr: string[] }) => {
@@ -168,7 +168,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
 
       // comma or enter 키로 해시태그를 생성하지 않더라도 input value가 있다면 배열에 push
       if (hashtag != '') {
-        currentTagArr.push(hashtag);
+        currentTagArr.push(hashtag.trim());
         setHashtag('');
       }
 

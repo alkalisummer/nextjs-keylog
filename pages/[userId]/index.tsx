@@ -47,7 +47,13 @@ interface recentComment {
   RGSN_DTTM: string;
 }
 
-const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentComments }: { posts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[] }) => {
+interface hashtag {
+  HASHTAG_ID: string;
+  HASHTAG_NAME: string;
+  HASHTAG_CNT: string;
+}
+
+const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentComments, hashtags }: { posts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
   const router = useRouter();
   const { userId } = router.query;
   let totalPageNum: number;
@@ -74,7 +80,7 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
   const totalPostsArr = getTotalPostsArr();
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}>
+    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
       <div className={listStyle.home_div}>
         <div className={listStyle.home_header_div}>
           <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
@@ -155,9 +161,10 @@ const PostItem = ({ post, userId }: any) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   const userId = context.query.userId as string;
+  const tagId = context.query.tagId as string;
   let posts = {};
 
-  const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId, tempYn: 'N' };
+  const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId, tempYn: 'N', tagId: tagId };
 
   await handlePost(params)
     .then((res) => JSON.stringify(res))

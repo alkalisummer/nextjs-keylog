@@ -32,12 +32,17 @@ interface LayoutProps {
     RGSR_ID: string;
     RGSN_DTTM: string;
   }[];
+  hashtags: {
+    HASHTAG_ID: string;
+    HASHTAG_NAME: string;
+    HASHTAG_CNT: string;
+  }[];
 }
 
-const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo, recentPosts, popularPosts, recentComments }) => {
+const BlogLayout: React.FC<LayoutProps> = ({ children, userInfo, recentPosts, popularPosts, recentComments, hashtags }) => {
   return (
     <>
-      <LeftArea userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments}></LeftArea>
+      <LeftArea userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}></LeftArea>
       <RightArea>{children}</RightArea>
     </>
   );
