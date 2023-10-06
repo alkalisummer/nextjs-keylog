@@ -4,7 +4,6 @@
   flex-direction: column;
   align-items: center;
   background-color: #f8f9fa;
-  padding-top: 2%;
   overflow-y: auto;
 }
 
@@ -12,14 +11,16 @@
   display: none;
 }
 
+.left_area_header {
+  width: 100%;
+  display: flex;
+  padding-left: 25px;
+}
+
 .left_area_logo_btn {
   font-size: 30px;
   cursor: pointer;
   color: #525252;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 15px;
 }
 
 .left_area_logo_btn:hover {
@@ -145,5 +146,11 @@
 @media (max-width: 1150px) {
   .left_area {
     display: none;
+  }
+  .left_area_logo_btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 15px;
   }
 }

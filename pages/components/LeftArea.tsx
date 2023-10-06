@@ -54,12 +54,14 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
 
   return (
     <div className='left_area'>
-      <div className='df fd_c ai_c mb25'>
+      <div className='left_area_header'>
         <Link href={`/`}>
           <span className='left_area_logo_btn'>
             <i className='fa-brands fa-kickstarter mr10'></i>
           </span>
         </Link>
+      </div>
+      <div className='df fd_c ai_c mb25'>
         <Link href={`/${userId}`}>
           <img src={userInfo.image ? userInfo.image : '/../../icon/person.png'} className='left_profile_icon' alt='profile img' />
         </Link>
@@ -130,9 +132,10 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
           </div>
         ))}
       </div>
-      <div className='left_area_side_div mb25'>
+      <div className='left_area_side_div mb15'>
         <span className='left_area_recent_title'>태그 목록</span>
-        <span className='left_area_hashtag'>{`전체(${tagTotalCnt})`}</span>
+        {hashtags.length > 0 ? <span className='left_area_hashtag' onClick={() => router.push(`/${userId}`)}>{`전체(${tagTotalCnt})`}</span> : <></>}
+
         {hashtags.map((tag) => (
           <span key={tag.HASHTAG_ID} className='left_area_hashtag' onClick={() => router.push(`/${userId}?tagId=${tag.HASHTAG_ID}`)}>
             {`${tag.HASHTAG_NAME}(${tag.HASHTAG_CNT})`}

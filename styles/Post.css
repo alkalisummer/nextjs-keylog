@@ -767,6 +767,15 @@ pre:has(> code) {
   }
 }
 
+@media (max-width: 1150px) {
+  .post_header {
+    display: flex;
+    height: 5%;
+    text-align: center;
+    line-height: 4rem;
+  }
+}
+
 @media (max-width: 1100px) {
   .post_daily_keyword_title {
     font-size: 25px;
@@ -834,13 +843,6 @@ pre:has(> code) {
   .post_write_div {
     width: calc(100% - 2rem) !important;
     height: 665px;
-  }
-
-  .post_header {
-    display: flex;
-    height: 5%;
-    text-align: center;
-    line-height: 4rem;
   }
 
   .post_header_title {
