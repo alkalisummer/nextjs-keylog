@@ -150,7 +150,7 @@ const TrendKeyword = () => {
     });
 
     setTimeout(() => {
-      document.querySelector('.post_main')?.scrollTo(0, 0);
+      document.querySelector('.write_div')?.scrollTo(0, 0);
     }, 300);
   }, []);
 

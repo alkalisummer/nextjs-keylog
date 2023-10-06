@@ -42,6 +42,7 @@
 @media (max-width: 860px) {
   .write_div {
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .write_main_div {
@@ -71,5 +72,10 @@
   .write_header_div {
     padding-left: 1rem;
     padding-right: 1rem;
+    height: 10%;
+  }
+
+  .post_btn_div {
+    padding-bottom: 20px;
   }
 }

@@ -774,6 +774,12 @@ pre:has(> code) {
     text-align: center;
     line-height: 4rem;
   }
+  .post_back_arrow {
+    color: #5c5c5c;
+    position: absolute;
+    left: 15px;
+    cursor: pointer;
+  }
 }
 
 @media (max-width: 1100px) {
@@ -868,12 +874,6 @@ pre:has(> code) {
     min-height: 31%;
   }
 
-  .post_back_arrow {
-    color: #5c5c5c;
-    position: absolute;
-    left: 15px;
-    cursor: pointer;
-  }
   .post_title_input {
     font-size: 25px !important;
   }
