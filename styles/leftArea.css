@@ -143,6 +143,10 @@
   cursor: pointer;
 }
 
+.left_area_hashtag_cnt {
+  color: #c0c0c0;
+}
+
 @media (max-width: 1150px) {
   .left_area {
     display: none;

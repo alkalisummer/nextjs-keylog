@@ -134,11 +134,17 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
       </div>
       <div className='left_area_side_div mb15'>
         <span className='left_area_recent_title'>태그 목록</span>
-        {hashtags.length > 0 ? <span className='left_area_hashtag' onClick={() => router.push(`/${userId}`)}>{`전체(${tagTotalCnt})`}</span> : <></>}
-
+        {hashtags.length > 0 ? (
+          <span className='left_area_hashtag' onClick={() => router.push(`/${userId}`)}>
+            전체 <span className='left_area_hashtag_cnt'>{` (${tagTotalCnt})`}</span>
+          </span>
+        ) : (
+          <></>
+        )}
         {hashtags.map((tag) => (
           <span key={tag.HASHTAG_ID} className='left_area_hashtag' onClick={() => router.push(`/${userId}?tagId=${tag.HASHTAG_ID}`)}>
-            {`${tag.HASHTAG_NAME}(${tag.HASHTAG_CNT})`}
+            {tag.HASHTAG_NAME}
+            <span className='left_area_hashtag_cnt'>{` (${tag.HASHTAG_CNT})`}</span>
           </span>
         ))}
       </div>

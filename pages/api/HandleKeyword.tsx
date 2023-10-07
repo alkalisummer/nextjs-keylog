@@ -163,14 +163,13 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
       res = await getDailyTrends(hl);
       break;
     case 'relatedQueries':
-      const googleSuggests = require('get-google-suggestions');
       const searchKeyword = request.query.keyword;
-      const suggestRes = await googleSuggests(searchKeyword);
-      res = suggestRes;
+      const suggestRes = await axios.get(`https://suggestqueries.google.com/complete/search?client=chrome-omni&q=${searchKeyword}&hl=ko&gl=KR&oe=utf-8`);
+      res = suggestRes.data[1];
       break;
     case 'interestOverTime':
       const keyWordArr = request.body.params.keyword;
-      const today = new Date();
+      const today = new Date(Date.now());
       const startTm = new Date(today.setDate(today.getDate() - 3));
       const interestRes = await googleTrends.interestOverTime({ keyword: keyWordArr, geo: 'KR', hl: 'ko', granularTimeResolution: true, startTime: startTm });
       res = interestRes;

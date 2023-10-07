@@ -211,6 +211,11 @@ pre:has(> code) {
 .post_linkage_tag_div {
   margin-top: 10px;
   width: 100%;
+  display: block;
+}
+
+.post_linkage_tag_div a {
+  white-space: nowrap !important;
 }
 
 .post_linkage_tag {
@@ -220,8 +225,6 @@ pre:has(> code) {
   background-color: #a2a2a2;
   color: white;
   border-radius: 15px;
-
-  white-space: nowrap;
 }
 
 .post_linkage_tag:hover {
