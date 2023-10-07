@@ -320,6 +320,15 @@ pre:has(> code) {
   color: #333333;
   font-size: 17px;
   font-weight: 500;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.4em;
 }
 
 .post_article_summary {
@@ -748,7 +757,6 @@ pre:has(> code) {
 .post_detail_hashtag_div {
   display: block;
   margin-bottom: 30px;
-  line-height: 2rem;
   height: fit-content;
 }
 
@@ -759,7 +767,8 @@ pre:has(> code) {
   border-radius: 5px;
   padding: 7px 10px 7px 10px;
   margin-right: 10px;
-  white-space: nowrap;
+  display: inline-block;
+  margin-bottom: 5px;
 }
 
 .post_detail_hashtag:hover {

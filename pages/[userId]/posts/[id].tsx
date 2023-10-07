@@ -234,6 +234,11 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
       } else {
         showCommentInput(commentId, '', commentType);
       }
+      // 댓글 작성후 스크롤 최하단으로 이동
+      const postMain = document.querySelector('.post_main');
+      setTimeout(() => {
+        postMain!.scrollTo(0, postMain!.scrollHeight);
+      }, 0.1);
     });
   };
 
@@ -381,7 +386,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
             {postHashtags.length > 0 &&
               postHashtags.map((tag) => (
                 <span className='post_detail_hashtag' key={tag.HASHTAG_ID} onClick={() => router.push(`/search?tagId=${tag.HASHTAG_ID}&tagName=${tag.HASHTAG_NAME}`)}>
-                  # {tag.HASHTAG_NAME}
+                  {`# ${tag.HASHTAG_NAME}`}
                 </span>
               ))}
           </div>
