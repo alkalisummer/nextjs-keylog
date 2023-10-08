@@ -234,10 +234,14 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
       } else {
         showCommentInput(commentId, '', commentType);
       }
-      // 댓글 작성후 스크롤 최하단으로 이동
-      const postMain = document.querySelector('.post_main');
+
       setTimeout(() => {
-        postMain!.scrollTo(0, postMain!.scrollHeight);
+        // 댓글 작성후 해당 댓글 위치로 스크롤 이동
+        if (result.commentId) {
+          document.getElementById(`comment_${result.commentId}`)?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          document.getElementById(`comment_${commentId}`)?.scrollIntoView({ behavior: 'smooth' });
+        }
       }, 0.1);
     });
   };
@@ -403,7 +407,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
             {commentArr
               .filter((comment) => parseInt(comment.COMMENT_DEPTH) === 1)
               .map((comment, idx) => (
-                <div key={comment.COMMENT_ID} className={`post_comment ${commentArr.length - 1 === idx ? 'bbn' : 'bb2'}`}>
+                <div key={comment.COMMENT_ID} id={`comment_${comment.COMMENT_ID}`} className={`post_comment ${commentArr.length - 1 === idx ? 'bbn' : 'bb2'}`}>
                   <div className='df jc_sb mb10'>
                     <div className='df jc_sb'>
                       <img className='post_comment_user_image' src={comment.USER_THMB_IMG_URL ? comment.USER_THMB_IMG_URL : '../../../../icon/person.png'} alt='user12Image'></img>
@@ -459,7 +463,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
                     {commentArr
                       .filter((reply) => reply.COMMENT_ORIGIN_ID === comment.COMMENT_ID)
                       .map((reply, idx) => (
-                        <div key={reply.COMMENT_ID} className={`post_reply ${replyList.length - 1 === idx ? 'bbn' : 'bb2'}`}>
+                        <div key={reply.COMMENT_ID} id={`comment_${reply.COMMENT_ID}`} className={`post_reply ${replyList.length - 1 === idx ? 'bbn' : 'bb2'}`}>
                           <div className='df jc_sb'>
                             <div className='df jc_sb'>
                               <img className='post_comment_user_image' src={reply.USER_THMB_IMG_URL ? reply.USER_THMB_IMG_URL : '../../../../icon/person.png'} alt='userImage'></img>
