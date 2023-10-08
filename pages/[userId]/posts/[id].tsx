@@ -242,7 +242,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
         } else {
           document.getElementById(`comment_${commentId}`)?.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 0.1);
+      }, 100);
     });
   };
 
