@@ -52,6 +52,7 @@ export const handleMySql = async (params: any) => {
                           , B.USER_THMB_IMG_URL                          AS USER_THMB_IMG_URL
                           , COUNT(DISTINCT C.COMMENT_ID)                 AS COMMENT_CNT
                           , COUNT(DISTINCT D.LIKEACT_ID)                 AS LIKE_CNT
+               ${tagId ? `, F.HASHTAG_NAME                               AS HASHTAG_NAME` : ''}
                        FROM POST A 
                   LEFT JOIN USER B 
                          ON A.RGSR_ID = B.USER_ID
@@ -61,6 +62,8 @@ export const handleMySql = async (params: any) => {
                          ON A.POST_ID = D.POST_ID  
                   LEFT JOIN POST_TAG E
                          ON A.POST_ID = E.POST_ID
+                  LEFT JOIN HASHTAG F
+                         ON E.HASHTAG_ID = F.HASHTAG_ID
                       WHERE 1=1
                         AND (A.POST_ORIGIN_ID IS NULL OR A.POST_ORIGIN_ID = '')
             ${rgsrId ? `AND A.RGSR_ID = '${rgsrId}'` : ''} 

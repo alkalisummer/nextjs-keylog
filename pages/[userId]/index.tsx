@@ -55,7 +55,7 @@ interface hashtag {
 
 const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentComments, hashtags }: { posts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId, tagId } = router.query;
   let totalPageNum: number;
 
   const getTotalPostsArr = () => {
@@ -90,7 +90,7 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
         <div className={listStyle.home_main}>
           <div className={listStyle.home_post}>
             <div className={listStyle.home_header}>
-              <span className={listStyle.home_post_cnt}>{`전체 글(${posts.totalItems})`}</span>
+              <span className={listStyle.home_post_cnt}>{`${tagId ? `'${posts.items[0].HASHTAG_NAME}' 태그의 글 목록` : '전체 글'}(${posts.totalItems})`}</span>
               {CheckAuth() ? (
                 <div className={listStyle.home_header_btn}>
                   <Link href={`/${userId}/chatGpt`}>
