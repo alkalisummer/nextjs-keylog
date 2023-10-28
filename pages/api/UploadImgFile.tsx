@@ -13,7 +13,7 @@ export const config = {
 export default async function UploadImgFile(request: NextApiRequest, response: NextApiResponse) {
   const common = require('oci-common');
   const path = require('path');
-  const ociConfigFilePath = path.join(process.cwd(), '/api_config/config');
+  const ociConfigFilePath = path.join(process.cwd(), '/config/config');
 
   const form = new IncomingForm();
 

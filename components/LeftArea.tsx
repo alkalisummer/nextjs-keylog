@@ -4,14 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import CheckAuth from '@/utils/CheckAuth';
 import { timeFormat } from '@/utils/CommonUtils';
-
-interface user {
-  id: string;
-  email: string;
-  image: string;
-  nickname: string;
-  blogName: string;
-}
+import { useAppSelector } from '@/hooks/reduxHooks';
 
 interface recentPost {
   POST_ID: string;
@@ -43,15 +36,21 @@ interface hashtag {
   HASHTAG_CNT: string;
 }
 
-const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
+const LeftArea = () => {
   const router = useRouter();
   const { userId } = router.query;
   let tagTotalCnt = 0;
 
+  const blogUser = useAppSelector((state) => state.blogUser);
+  const userInfo = blogUser.userInfo;
+  const recentPosts = blogUser.recentPosts;
+  const popularPosts = blogUser.popularPosts;
+  const recentComments = blogUser.recentComments;
+  const hashtags = blogUser.hashtagCnt;
+
   for (const tag of hashtags) {
     tagTotalCnt += parseInt(tag.HASHTAG_CNT);
   }
-
   return (
     <div className='left_area'>
       <div className='left_area_header'>
@@ -84,7 +83,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
       </div>
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>최근 글</span>
-        {recentPosts.map((post) => (
+        {recentPosts.map((post: recentPost) => (
           <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${post.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>{post.POST_TITLE}</span>
@@ -102,7 +101,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
       </div>
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>인기 글</span>
-        {popularPosts.map((post) => (
+        {popularPosts.map((post: popularPost) => (
           <div key={post.POST_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${post.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>{post.POST_TITLE}</span>
@@ -120,7 +119,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
       </div>
       <div className='left_area_side_div'>
         <span className='left_area_recent_title'>최근 댓글</span>
-        {recentComments.map((comment) => (
+        {recentComments.map((comment: recentComment) => (
           <div key={comment.COMMENT_ID} className='left_area_side' onClick={() => router.push(`/${userId}/posts/${comment.POST_ID}`)}>
             <div className='left_area_side_info'>
               <span className='left_area_side_title'>
@@ -141,7 +140,7 @@ const LeftArea = ({ userInfo, recentPosts, popularPosts, recentComments, hashtag
         ) : (
           <></>
         )}
-        {hashtags.map((tag) => (
+        {hashtags.map((tag: hashtag) => (
           <span key={tag.HASHTAG_ID} className='left_area_hashtag' onClick={() => router.push(`/${userId}?tagId=${tag.HASHTAG_ID}`)}>
             {tag.HASHTAG_NAME}
             <span className='left_area_hashtag_cnt'>{` (${tag.HASHTAG_CNT})`}</span>

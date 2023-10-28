@@ -1,47 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import BlogLayout from '../../components/BlogLayout';
+import BlogLayout from '../../../components/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/navigation';
 
-interface user {
-  id: string;
-  email: string;
-  image: string;
-  nickname: string;
-  blogName: string;
-}
+//redux, redux-saga
+import wrapper from '@/store/index';
+import { fetchBlogUser } from '@/reducer/blogUser';
+import { useAppSelector } from '@/hooks/reduxHooks';
+import { END } from 'redux-saga';
 
-interface recentPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-}
-
-interface popularPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-  LIKE_CNT: number;
-}
-
-interface recentComment {
-  POST_ID: string;
-  COMMENT_ID: string;
-  COMMENT_CNTN: string;
-  USER_NICKNAME: string;
-  RGSR_ID: string;
-  RGSN_DTTM: string;
-}
-
-interface hashtag {
-  HASHTAG_ID: string;
-  HASHTAG_NAME: string;
-  HASHTAG_CNT: string;
-}
-
-const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags }: { userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
+const ChatGpt = () => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
@@ -133,7 +102,7 @@ const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags
   };
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
+    <BlogLayout>
       <form className='chat_div' onSubmit={handleSubmit}>
         <div className='chat_header_div'>
           <span className='chat_back_arrow' onClick={() => router.back()}>
@@ -153,5 +122,18 @@ const ChatGpt = ({ userInfo, recentPosts, popularPosts, recentComments, hashtags
     </BlogLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const userId = context.query.userId as string;
+
+  store.dispatch(fetchBlogUser(userId as string));
+  //redux-saga를 사용하여 비동기로 가져오는 데이터의 응답결과를 기다려주는 역할
+  store.dispatch(END);
+  await store.sagaTask?.toPromise();
+
+  return {
+    props: {},
+  };
+});
 
 export default ChatGpt;

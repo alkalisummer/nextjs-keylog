@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { handleMySql } from '../HandleUser';
+import { handleMySql } from '@/pages/api/HandleUser';
 import { verifyPassword } from '@/utils/Bcypt';
 
 export default NextAuth({
@@ -11,7 +11,7 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       // 로그인 방식명
-      name: 'EMAIL, PW',
+      name: 'ID, PW',
       credentials: {
         id: { label: '아이디', type: 'text', placeholder: '아이디를 입력하세요.' },
         password: { label: '비밀번호', type: 'password' },

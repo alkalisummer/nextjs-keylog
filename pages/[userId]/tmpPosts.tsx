@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
-import BlogLayout from '../components/BlogLayout';
+import BlogLayout from '../../components/BlogLayout';
 import Error from 'next/error';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -11,13 +11,11 @@ import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
 
-interface user {
-  id: string;
-  email: string;
-  image: string;
-  nickname: string;
-  blogName: string;
-}
+//redux, redux-saga
+import wrapper from '@/store/index';
+import { fetchBlogUser } from '@/reducer/blogUser';
+import { useAppSelector } from '@/hooks/reduxHooks';
+import { END } from 'redux-saga';
 
 interface posts {
   totalItems: number;
@@ -25,42 +23,13 @@ interface posts {
   postId: string;
 }
 
-interface recentPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-}
-
-interface popularPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-  LIKE_CNT: number;
-}
-
-interface recentComment {
-  POST_ID: string;
-  COMMENT_ID: string;
-  COMMENT_CNTN: string;
-  USER_NICKNAME: string;
-  RGSR_ID: string;
-  RGSN_DTTM: string;
-}
-
-interface hashtag {
-  HASHTAG_ID: string;
-  HASHTAG_NAME: string;
-  HASHTAG_CNT: string;
-}
-
-const TmpPosts = ({ tmpPosts, pageNum, userInfo, recentPosts, popularPosts, recentComments, hashtags }: { tmpPosts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
+const TmpPosts = ({ tmpPosts, pageNum }: { tmpPosts: posts; pageNum: number }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const currentUserId = session?.user?.id;
   const { userId } = router.query;
   const [isValidate, setIsValisdate] = useState(true);
+  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
 
   useEffect(() => {
     if (status === 'unauthenticated' || currentUserId !== userId) {
@@ -94,7 +63,7 @@ const TmpPosts = ({ tmpPosts, pageNum, userInfo, recentPosts, popularPosts, rece
   return (
     <>
       {isValidate ? (
-        <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
+        <BlogLayout>
           <div className={listStyle.home_div}>
             <div className={listStyle.home_header_div}>
               <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
@@ -212,12 +181,17 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   const userId = context.query.userId as string;
   let tmpPosts = {};
 
   const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId, tempYn: 'Y' };
+
+  store.dispatch(fetchBlogUser(userId as string));
+  //redux-saga를 사용하여 비동기로 가져오는 데이터의 응답결과를 기다려주는 역할
+  store.dispatch(END);
+  await store.sagaTask?.toPromise();
 
   await handlePost(params)
     .then((res) => JSON.stringify(res))
@@ -231,6 +205,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       pageNum: pageNum,
     },
   };
-};
+});
 
 export default TmpPosts;

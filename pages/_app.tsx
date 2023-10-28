@@ -1,10 +1,10 @@
-import type { AppProps, AppContext } from 'next/app';
+import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { handleMySql as handleUser } from './api/HandleUser';
 import { handleMySql as handlePost } from './api/HandlePost';
 import { handleMySql as handleComment } from './api/HandleComment';
 import { handleMySql as handleHashtag } from './api/HandleHashtag';
-import RefreshTokenHandler from './components/RefreshTokenHandler';
+import RefreshTokenHandler from '../components/RefreshTokenHandler';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -14,6 +14,12 @@ import Error from 'next/error';
 
 import axios from 'axios';
 
+//redux, redux-saga
+import wrapper from '@/store';
+import { fetchBlogUser } from '@/reducer/blogUser';
+import { useAppSelector } from '@/hooks/reduxHooks';
+
+//css
 import '@/styles/globals.css';
 import '@/styles/Post.css';
 import '@/styles/ChatGpt.css';
@@ -24,15 +30,17 @@ import '@/styles/leftArea.css';
 import '@/styles/rightArea.css';
 import '@/styles/write.css';
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
   const [sessionRefetchInterval, setSessionRefetchInterval] = useState(10000);
-  const { session, userInfo } = pageProps;
+  const { session } = pageProps;
   const { userId } = router.query;
 
-  if (userId && !userInfo.id) {
-    return <Error statusCode={404} />;
-  }
+  // const blogUser = useAppSelector((state) => state.blogUser);
+
+  // if (userId && !blogUser.userInfo.id) {
+  //   return <Error statusCode={404} />;
+  // }
 
   return (
     <SessionProvider session={session} refetchInterval={sessionRefetchInterval}>
@@ -53,9 +61,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <RefreshTokenHandler setSessionRefetchInterval={setSessionRefetchInterval} />
     </SessionProvider>
   );
-}
+};
 
-App.getInitialProps = async ({ Component, ctx }: AppContext) => {
+App.getInitialProps = wrapper.getInitialAppProps((store) => async ({ Component, ctx }: AppContext) => {
   let pageProps = {};
   let recentPosts;
   let popularPosts;
@@ -146,4 +154,6 @@ App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   pageProps = { ...pageProps, userInfo, session, recentPosts, popularPosts, recentComments, hashtags };
 
   return { pageProps };
-};
+});
+
+export default wrapper.withRedux(App);

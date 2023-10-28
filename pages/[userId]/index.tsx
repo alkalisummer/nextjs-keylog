@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import BlogLayout from '../components/BlogLayout';
+import BlogLayout from '../../components/BlogLayout';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import listStyle from '../../styles/List.module.css';
@@ -9,13 +9,11 @@ import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
 import CheckAuth from '@/utils/CheckAuth';
 
-interface user {
-  id: string;
-  email: string;
-  image: string;
-  nickname: string;
-  blogName: string;
-}
+//redux, redux-saga
+import wrapper from '@/store/index';
+import { fetchBlogUser } from '@/reducer/blogUser';
+import { useAppSelector } from '@/hooks/reduxHooks';
+import { END } from 'redux-saga';
 
 interface posts {
   totalItems: number;
@@ -23,40 +21,11 @@ interface posts {
   postId: string;
 }
 
-interface recentPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-}
-
-interface popularPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-  LIKE_CNT: number;
-}
-
-interface recentComment {
-  POST_ID: string;
-  COMMENT_ID: string;
-  COMMENT_CNTN: string;
-  USER_NICKNAME: string;
-  RGSR_ID: string;
-  RGSN_DTTM: string;
-}
-
-interface hashtag {
-  HASHTAG_ID: string;
-  HASHTAG_NAME: string;
-  HASHTAG_CNT: string;
-}
-
-const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentComments, hashtags }: { posts: posts; pageNum: number; userInfo: user; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: hashtag[] }) => {
+const ListPage = ({ posts, pageNum }: { posts: posts; pageNum: number }) => {
   const router = useRouter();
   const { userId, tagId } = router.query;
   let totalPageNum: number;
+  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
 
   const getTotalPostsArr = () => {
     const totalPostCnt = posts.totalItems;
@@ -80,7 +49,7 @@ const ListPage = ({ posts, pageNum, userInfo, recentPosts, popularPosts, recentC
   const totalPostsArr = getTotalPostsArr();
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
+    <BlogLayout>
       <div className={listStyle.home_div}>
         <div className={listStyle.home_header_div}>
           <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
@@ -158,13 +127,18 @@ const PostItem = ({ post, userId }: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   const userId = context.query.userId as string;
   const tagId = context.query.tagId as string;
   let posts = {};
 
   const params = { type: 'list', perPage: 6, currPageNum: pageNum, id: userId, tempYn: 'N', tagId: tagId };
+
+  store.dispatch(fetchBlogUser(userId as string));
+  //redux-saga를 사용하여 비동기로 가져오는 데이터의 응답결과를 기다려주는 역할
+  store.dispatch(END);
+  await store.sagaTask?.toPromise();
 
   await handlePost(params)
     .then((res) => JSON.stringify(res))
@@ -178,6 +152,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       pageNum: pageNum,
     },
   };
-};
+});
 
 export default ListPage;

@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import '@toast-ui/editor/dist/toastui-editor.css';
-import BlogLayout from '../../components/BlogLayout';
+import BlogLayout from '../../../components/BlogLayout';
 import Link from 'next/link';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat, timeToString } from '@/utils/CommonUtils';
-import PostLayout from '@/pages/components/PostLayout';
+import PostLayout from '@/components/PostLayout';
 import { GetServerSideProps } from 'next';
+
 import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
 import { handleMySql as handleLikeSql } from '@/pages/api/HandleLike';
@@ -22,18 +23,15 @@ import Button from '@mui/material/Button';
 //사용자 세션
 import { useSession } from 'next-auth/react';
 
+//redux, redux-saga
+import wrapper from '@/store/index';
+import { fetchBlogUser } from '@/reducer/blogUser';
+import { END } from 'redux-saga';
+
 interface post {
   POST_ID: string;
   POST_TITLE: string;
   AMNT_DTTM: string;
-}
-
-interface user {
-  id: string;
-  email: string;
-  image: string;
-  nickname: string;
-  blogName: string;
 }
 
 interface comment {
@@ -71,37 +69,7 @@ interface postHashtag {
   HASHTAG_NAME: string;
 }
 
-interface recentPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-}
-
-interface popularPost {
-  POST_ID: string;
-  POST_TITLE: string;
-  POST_THMB_IMG_URL: string;
-  RGSN_DTTM: string;
-  LIKE_CNT: number;
-}
-
-interface recentComment {
-  POST_ID: string;
-  COMMENT_ID: string;
-  COMMENT_CNTN: string;
-  USER_NICKNAME: string;
-  RGSR_ID: string;
-  RGSN_DTTM: string;
-}
-
-interface tag {
-  HASHTAG_ID: string;
-  HASHTAG_NAME: string;
-  HASHTAG_CNT: string;
-}
-
-const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, postHashtags, recentPosts, popularPosts, recentComments, hashtags }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; userInfo: user; like: like[]; postHashtags: postHashtag[]; recentPosts: recentPost[]; popularPosts: popularPost[]; recentComments: recentComment[]; hashtags: tag[] }) => {
+const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashtags }: { post: post; imgFileArr: []; htmlCntn: string; comments: comment[]; like: like[]; postHashtags: postHashtag[] }) => {
   //사용자 세션
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -119,6 +87,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
 
   //대댓글 리스트
   const [replyList, setReplyList] = useState<reply[]>([]);
+
   //좋아요 개수
   const [likeCnt, setLikeCnt] = useState(0);
 
@@ -346,7 +315,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   };
 
   return (
-    <BlogLayout userInfo={userInfo} recentPosts={recentPosts} popularPosts={popularPosts} recentComments={recentComments} hashtags={hashtags}>
+    <BlogLayout>
       <PostLayout>
         <div className='post_div'>
           <div className='post_title_created'>
@@ -559,13 +528,14 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, userInfo, like, 
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   let post;
   let comments;
   let like;
   let postHashtags;
   let imgFileArr: string[] = [];
   let htmlCntn = '';
+  const userId = context.query.userId;
 
   const cheerio = require('cheerio');
 
@@ -573,6 +543,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     type: 'read',
     postId: context.query.id,
   };
+
+  store.dispatch(fetchBlogUser(userId as string));
+  //redux-saga를 사용하여 비동기로 가져오는 데이터의 응답결과를 기다려주는 역할
+  store.dispatch(END);
+  await store.sagaTask?.toPromise();
 
   await handlePostSql(params)
     .then((res) => JSON.stringify(res))
@@ -609,6 +584,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
 
   return { props: { post, imgFileArr, htmlCntn, comments, like, postHashtags } };
-};
+});
 
 export default React.memo(PostDetailPage);

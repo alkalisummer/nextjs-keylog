@@ -607,4 +607,4 @@ const TrendKeyword = () => {
   );
 };
 
-export default React.memo(TrendKeyword);
+export default TrendKeyword;

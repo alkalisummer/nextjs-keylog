@@ -24,7 +24,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 
 //hashtag 컴포넌트
-import Hashtag from '@/pages/components/Hashtag';
+import Hashtag from '@/components/Hashtag';
 
 interface hashtag {
   HASHTAG_ID: string;
