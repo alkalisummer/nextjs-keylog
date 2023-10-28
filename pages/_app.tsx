@@ -1,23 +1,14 @@
-import type { AppProps, AppContext, AppInitialProps } from 'next/app';
+import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
-import { handleMySql as handleUser } from './api/HandleUser';
-import { handleMySql as handlePost } from './api/HandlePost';
-import { handleMySql as handleComment } from './api/HandleComment';
-import { handleMySql as handleHashtag } from './api/HandleHashtag';
+
 import RefreshTokenHandler from '../components/RefreshTokenHandler';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import Head from 'next/head';
 import Script from 'next/script';
-import Error from 'next/error';
-
-import axios from 'axios';
 
 //redux, redux-saga
 import wrapper from '@/store';
-import { fetchBlogUser } from '@/reducer/blogUser';
-import { useAppSelector } from '@/hooks/reduxHooks';
 
 //css
 import '@/styles/globals.css';
@@ -31,16 +22,8 @@ import '@/styles/rightArea.css';
 import '@/styles/write.css';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
   const [sessionRefetchInterval, setSessionRefetchInterval] = useState(10000);
   const { session } = pageProps;
-  const { userId } = router.query;
-
-  // const blogUser = useAppSelector((state) => state.blogUser);
-
-  // if (userId && !blogUser.userInfo.id) {
-  //   return <Error statusCode={404} />;
-  // }
 
   return (
     <SessionProvider session={session} refetchInterval={sessionRefetchInterval}>
@@ -63,97 +46,18 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-App.getInitialProps = wrapper.getInitialAppProps((store) => async ({ Component, ctx }: AppContext) => {
+App.getInitialProps = async ({ Component, ctx }: AppContext) => {
   let pageProps = {};
-  let recentPosts;
-  let popularPosts;
-  let recentComments;
-  let hashtags;
+
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
   // 화면 갱신시 useSession으로 가져오는 사용자 정보 데이터가 깜빡이는것을 방지 하기 위함
   const session = await getSession(ctx);
 
-  const userId = ctx.query.userId;
-  let userInfo;
-
-  if (userId) {
-    const params = { type: 'getUser', id: userId };
-    let user;
-
-    if (ctx.req) {
-      user = await handleUser(params).then((res) => {
-        return res.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.items[0]));
-      });
-
-      // 최근 게시글 5개
-      params.type = 'getRecentPost';
-      await handlePost(params).then((res) => {
-        const result = JSON.parse(JSON.stringify(res));
-        recentPosts = result.items;
-      });
-
-      // 인기 게시글 5개
-      params.type = 'getPopularPost';
-      await handlePost(params).then((res) => {
-        const result = JSON.parse(JSON.stringify(res));
-        popularPosts = result.items;
-      });
-
-      // 최근 댓글 5개
-      params.type = 'getRecentComment';
-      await handleComment(params).then((res) => {
-        const result = JSON.parse(JSON.stringify(res));
-        recentComments = result.items;
-      });
-
-      // 해시태그
-      params.type = 'getHashtagCnt';
-      await handleHashtag(params).then((res) => {
-        const result = JSON.parse(JSON.stringify(res));
-        hashtags = result.items;
-      });
-    } else {
-      user = await axios.post('/api/HandleUser', { data: params }).then((res) => {
-        return res.data.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.data.items[0]));
-      });
-
-      // 최근 게시글 5개, 인기 게시글 5개
-      params.type = 'getRecentPost';
-      await axios.post('/api/HandlePost', { data: params }).then((res) => {
-        const result = JSON.parse(JSON.stringify(res.data));
-        recentPosts = result.items;
-        popularPosts = result.popularPosts;
-      });
-
-      // 최근 댓글 5개
-      params.type = 'getRecentComment';
-      await axios.post('/api/HandleComment', { data: params }).then((res) => {
-        const result = JSON.parse(JSON.stringify(res.data));
-        recentComments = result.items;
-      });
-
-      // 해시태그
-      params.type = 'getHashtagCnt';
-      await axios.post('/api/HandleHashtag', { data: params }).then((res) => {
-        const result = JSON.parse(JSON.stringify(res.data));
-        hashtags = result.items;
-      });
-    }
-
-    userInfo = {
-      id: user.USER_ID,
-      email: user.USER_EMAIL,
-      image: user.USER_THMB_IMG_URL,
-      nickname: user.USER_NICKNAME,
-      blogName: user.USER_BLOG_NAME,
-    };
-  }
-
-  pageProps = { ...pageProps, userInfo, session, recentPosts, popularPosts, recentComments, hashtags };
+  pageProps = { ...pageProps, session };
 
   return { pageProps };
-});
+};
 
 export default wrapper.withRedux(App);
