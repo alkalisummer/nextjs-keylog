@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import createSagaMiddleware, { Task } from 'redux-saga';
+import createSagaMiddleware from 'redux-saga';
 import rootReducer, { blogUserSaga } from '@/reducer/blogUser';
 import { all } from 'redux-saga/effects';
 import { createWrapper } from 'next-redux-wrapper';
