@@ -1,8 +1,48 @@
-@import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap');
 @font-face {
   font-family: 'NanumSquareNeo';
   src: url('/font/NanumSquareNeo-Variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 700;
+  src: url('/font/SpoqaHanSansNeo-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 500;
+  src: url('/font/SpoqaHanSansNeo-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 400;
+  src: url('/font/SpoqaHanSansNeo-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: 300;
+  src: url('/font/SpoqaHanSansNeo-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  font-weight: 700;
+  src: url('/font/FiraMono-Bold.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  font-weight: 500;
+  src: url('/font/FiraMono-Medium.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Fira Mono';
+  font-weight: 400;
+  src: url('/font/FiraMono-Regular.ttf') format('ttf');
 }
 
 #__next {
