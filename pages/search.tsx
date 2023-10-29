@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { timeFormat } from '../utils/CommonUtils';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { handleMySql as handlePost } from './api/HandlePost';
 
 //게시물 검색 무한 스크롤
 import { useInView } from 'react-intersection-observer';
@@ -23,9 +25,9 @@ interface post {
   TOTAL_ITEMS: string;
 }
 
-const HomePage = () => {
+const HomePage = ({ initPosts }: { initPosts: post[] }) => {
   const [searchWord, setSearchWord] = useState('');
-  const [posts, setPosts] = useState<post[]>([]);
+  const [posts, setPosts] = useState<post[]>(initPosts);
 
   // 게시물 무한 스크롤
   const [ref, inView] = useInView();
@@ -44,7 +46,9 @@ const HomePage = () => {
   }, [inView]);
 
   useEffect(() => {
-    getPosts();
+    if (pageNum > 1) {
+      getPosts();
+    }
   }, [pageNum]);
 
   const searchPost = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,6 +157,21 @@ const HomePage = () => {
       </div>
     </IndexLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let initPosts;
+  const params = { type: 'list', searchWord: '', currPageNum: 1, perPage: 10, tempYn: 'N', tagId: '' };
+
+  await handlePost(params).then((res) => {
+    initPosts = JSON.parse(JSON.stringify(res.items));
+  });
+
+  return {
+    props: {
+      initPosts,
+    },
+  };
 };
 
 export default HomePage;
