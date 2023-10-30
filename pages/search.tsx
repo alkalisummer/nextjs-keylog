@@ -25,7 +25,7 @@ interface post {
   TOTAL_ITEMS: string;
 }
 
-const HomePage = ({ initPosts }: { initPosts: post[] }) => {
+const HomePage = ({ initPosts, initTotalCnt }: { initPosts: post[]; initTotalCnt: number }) => {
   const [searchWord, setSearchWord] = useState('');
   const [posts, setPosts] = useState<post[]>(initPosts);
 
@@ -33,8 +33,9 @@ const HomePage = ({ initPosts }: { initPosts: post[] }) => {
   const [ref, inView] = useInView();
   const [postLoading, setPostLoading] = useState(false);
   const [pageNum, setPageNum] = useState(1);
-  const [totalCnt, setTotalCnt] = useState();
+  const [totalCnt, setTotalCnt] = useState(initTotalCnt);
   const [showCnt, setShowCnt] = useState(false);
+  const [initYn, setInitYn] = useState(true);
 
   const router = useRouter();
   const { tagId, tagName } = router.query;
@@ -46,8 +47,10 @@ const HomePage = ({ initPosts }: { initPosts: post[] }) => {
   }, [inView]);
 
   useEffect(() => {
-    if (pageNum > 1 || tagId) {
+    if (!initYn) {
       getPosts();
+    } else {
+      setInitYn(false);
     }
   }, [pageNum]);
 
@@ -69,7 +72,6 @@ const HomePage = ({ initPosts }: { initPosts: post[] }) => {
 
     await axios.get('/api/HandlePost', { params: params }).then((res) => {
       const result = res.data.items;
-      debugger;
       if (pageNum === 1) {
         setPosts(result);
         setTotalCnt(res.data.totalItems);
@@ -161,18 +163,19 @@ const HomePage = ({ initPosts }: { initPosts: post[] }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let initPosts: post[] = [];
+  let initTotalCnt = 0;
   const tagId = context.query.tagId;
-  const params = { type: 'list', searchWord: '', currPageNum: 1, perPage: 10, tempYn: 'N', tagId: '' };
+  const params = { type: 'list', searchWord: '', currPageNum: 1, perPage: 10, tempYn: 'N', tagId: tagId };
 
-  if (!tagId) {
-    await handlePost(params).then((res) => {
-      initPosts = JSON.parse(JSON.stringify(res.items));
-    });
-  }
+  await handlePost(params).then((res) => {
+    initPosts = JSON.parse(JSON.stringify(res.items));
+    initTotalCnt = res.totalItems;
+  });
 
   return {
     props: {
       initPosts,
+      initTotalCnt,
     },
   };
 };
