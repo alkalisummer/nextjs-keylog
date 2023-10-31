@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import BlogLayout from '../../../components/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Custom404 from '@/pages/404';
 
 //redux, redux-saga
 import wrapper from '@/store/index';
@@ -14,31 +16,38 @@ const ChatGpt = () => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
+  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
 
   useEffect(() => {
-    const footer: any = document.getElementsByClassName('right_footer')[0];
-    const leftArea: any = document.getElementsByClassName('left_area')[0];
-    const blogName: any = document.getElementsByClassName('left_area_blog_name')[0];
-    const createBtn: any = document.getElementsByClassName('create_btn')[0];
-    const chatGptBtn: any = document.getElementsByClassName('chatgpt_btn')[0];
-    const rightHeader: any = document.getElementsByClassName('right_header')[0];
+    if (userInfo.id) {
+      const footer: any = document.getElementsByClassName('right_footer')[0];
+      const leftArea: any = document.getElementsByClassName('left_area')[0];
+      const blogName: any = document.getElementsByClassName('left_area_blog_name')[0];
+      const createBtn: any = document.getElementsByClassName('create_btn')[0];
+      const chatGptBtn: any = document.getElementsByClassName('chatgpt_btn')[0];
+      const rightHeader: any = document.getElementsByClassName('right_header')[0];
 
-    rightHeader.style.display = 'none';
-    footer.style.display = 'none';
-    leftArea.style.backgroundColor = '#202123';
-    blogName.style.color = '#d1d1d1';
-    createBtn.style.filter = 'invert(100%) sepia(100%) saturate(0%) hue-rotate(10deg) brightness(103%) contrast(101%)';
-    chatGptBtn.style.filter = 'invert(35%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
+      rightHeader.style.display = 'none';
+      footer.style.display = 'none';
+      leftArea.style.backgroundColor = '#202123';
+      blogName.style.color = '#d1d1d1';
+      createBtn.style.filter = 'invert(100%) sepia(100%) saturate(0%) hue-rotate(10deg) brightness(103%) contrast(101%)';
+      chatGptBtn.style.filter = 'invert(35%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
 
-    return () => {
-      rightHeader.style.display = 'flex';
-      footer.style.display = 'flex';
-      leftArea.style.backgroundColor = '#009bf2';
-      blogName.style.color = '#5c5c5c';
-      createBtn.style.filter = 'unset';
-      chatGptBtn.style.filter = 'invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
-    };
+      return () => {
+        rightHeader.style.display = 'flex';
+        footer.style.display = 'flex';
+        leftArea.style.backgroundColor = '#009bf2';
+        blogName.style.color = '#5c5c5c';
+        createBtn.style.filter = 'unset';
+        chatGptBtn.style.filter = 'invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
+      };
+    }
   }, []);
+
+  if (!userInfo.id) {
+    return <Custom404></Custom404>;
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

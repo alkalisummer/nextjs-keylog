@@ -8,6 +8,7 @@ import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
 import CheckAuth from '@/utils/CheckAuth';
+import Custom404 from '@/pages/404';
 
 //redux, redux-saga
 import wrapper from '@/store/index';
@@ -26,6 +27,9 @@ const ListPage = ({ posts, pageNum }: { posts: posts; pageNum: number }) => {
   const { userId, tagId } = router.query;
   let totalPageNum: number;
   const userInfo = useAppSelector((state) => state.blogUser.userInfo);
+  if (!userInfo.id) {
+    return <Custom404></Custom404>;
+  }
 
   const getTotalPostsArr = () => {
     const totalPostCnt = posts.totalItems;

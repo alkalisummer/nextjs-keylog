@@ -116,11 +116,11 @@ function* fetchBlogUserInfo(action: actionType) {
     const hashtagCnt: hashtagResultType = yield call(getHashtags, userId);
 
     const userInfo = {
-      id: user.USER_ID,
-      email: user.USER_EMAIL,
-      image: user.USER_THMB_IMG_URL,
-      nickname: user.USER_NICKNAME,
-      blogName: user.USER_BLOG_NAME,
+      id: user.USER_ID ?? null,
+      email: user.USER_EMAIL ?? null,
+      image: user.USER_THMB_IMG_URL ?? null,
+      nickname: user.USER_NICKNAME ?? null,
+      blogName: user.USER_BLOG_NAME ?? null,
     };
 
     yield put({ type: FETCH_BLOG_USER_SUCCESS, payload: { userInfo, recentPosts, popularPosts, recentComments, hashtagCnt } });
