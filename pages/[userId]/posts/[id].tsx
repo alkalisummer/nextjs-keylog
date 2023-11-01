@@ -26,7 +26,11 @@ import { useSession } from 'next-auth/react';
 //redux, redux-saga
 import wrapper from '@/store/index';
 import { fetchBlogUser } from '@/reducer/blogUser';
+import { useAppSelector } from '@/hooks/reduxHooks';
 import { END } from 'redux-saga';
+
+//next-error
+import Error from 'next/error';
 
 interface post {
   POST_ID: string;
@@ -94,6 +98,11 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
   //사용자 좋아요 여부
   const [likeYn, setLikeYn] = useState(false);
 
+  //블로그 사용자 정보
+  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
+
+  console.log('서버:' + process.env.NODE_ENV);
+
   useEffect(() => {
     setCurrUrl(window.location.href);
     setCommentArr(comments.length > 0 ? comments : []);
@@ -111,6 +120,10 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
       }
     }
   }, [status, session?.user?.id, like]);
+
+  if (!userInfo.id) {
+    return <Error statusCode={404} />;
+  }
 
   const handleDelete = async () => {
     const param = { type: 'delete', postId: post.POST_ID };

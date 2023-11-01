@@ -10,7 +10,6 @@ import listStyle from '../../styles/List.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
-import Custom404 from '@/pages/404';
 
 //redux, redux-saga
 import wrapper from '@/store/index';
@@ -39,7 +38,7 @@ const TmpPosts = ({ tmpPosts, pageNum }: { tmpPosts: posts; pageNum: number }) =
   }, [status]);
 
   if (!userInfo.id) {
-    return <Custom404></Custom404>;
+    return <Error statusCode={404} />;
   }
 
   let totalPageNum: number;

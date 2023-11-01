@@ -1,10 +1,16 @@
 import React from 'react';
+import type {} from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { NextPageContext } from 'next';
+import { NextPageContext, NextPage } from 'next';
 
-const Error = ({ statusCode }: { statusCode: number }) => {
+type Props = {
+  statusCode: number | undefined;
+};
+
+const Error: NextPage<Props> = ({ statusCode }: { statusCode: number | undefined }) => {
   const router = useRouter();
+  debugger;
   const goBack = () => {
     router.back();
   };

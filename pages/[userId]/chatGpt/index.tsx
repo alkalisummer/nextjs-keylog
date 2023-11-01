@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import BlogLayout from '../../../components/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { GetServerSideProps } from 'next';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Custom404 from '@/pages/404';
+import Error from 'next/error';
 
 //redux, redux-saga
 import wrapper from '@/store/index';
@@ -46,7 +45,7 @@ const ChatGpt = () => {
   }, []);
 
   if (!userInfo.id) {
-    return <Custom404></Custom404>;
+    return <Error statusCode={404}></Error>;
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
