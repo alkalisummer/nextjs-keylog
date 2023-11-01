@@ -29,8 +29,8 @@ import { fetchBlogUser } from '@/reducer/blogUser';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { END } from 'redux-saga';
 
-//next-error
-import Error from 'next/error';
+//error Page
+import Error from '@/pages/_error';
 
 interface post {
   POST_ID: string;
@@ -100,8 +100,6 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
 
   //블로그 사용자 정보
   const userInfo = useAppSelector((state) => state.blogUser.userInfo);
-
-  console.log('서버:' + process.env.NODE_ENV);
 
   useEffect(() => {
     setCurrUrl(window.location.href);

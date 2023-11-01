@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
 import BlogLayout from '../../components/BlogLayout';
-import Error from 'next/error';
+import Error from '@/pages/_error';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';

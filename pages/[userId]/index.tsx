@@ -8,7 +8,8 @@ import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '../api/HandlePost';
 import CheckAuth from '@/utils/CheckAuth';
-import Error from 'next/error';
+//error Page
+import Error from '@/pages/_error';
 
 //redux, redux-saga
 import wrapper from '@/store/index';

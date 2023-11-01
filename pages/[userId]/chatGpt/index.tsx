@@ -3,7 +3,8 @@ import BlogLayout from '../../../components/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/navigation';
-import Error from 'next/error';
+//error Page
+import Error from '@/pages/_error';
 
 //redux, redux-saga
 import wrapper from '@/store/index';
@@ -45,7 +46,7 @@ const ChatGpt = () => {
   }, []);
 
   if (!userInfo.id) {
-    return <Error statusCode={404}></Error>;
+    return <Error statusCode={404} />;
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

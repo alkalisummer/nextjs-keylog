@@ -10,7 +10,6 @@ type Props = {
 
 const Error: NextPage<Props> = ({ statusCode }: { statusCode: number | undefined }) => {
   const router = useRouter();
-  debugger;
   const goBack = () => {
     router.back();
   };
