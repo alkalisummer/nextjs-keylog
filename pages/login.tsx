@@ -94,7 +94,7 @@ const Login = () => {
         </button>
         <div className={loginStyle.signup_btn_div}>
           아직 회원이 아니신가요? &nbsp;
-          <span className={loginStyle.signup_btn} onClick={() => router.push('/signup')}>
+          <span className={loginStyle.signup_btn} onClick={() => router.replace('/signup')}>
             회원가입
           </span>
         </div>
