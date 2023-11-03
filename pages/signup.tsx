@@ -59,7 +59,7 @@ const Signup = () => {
       return;
     }
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', '').replaceAll("'", "\\'"), password: password, blogName: blogName.replaceAll("'", "\\'"), rgsnDttm: currentTime, amntDttm: currentTime };
+    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', '').replaceAll('\\', '\\\\'), password: password, blogName: blogName.replaceAll('\\', '\\\\'), rgsnDttm: currentTime, amntDttm: currentTime };
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);

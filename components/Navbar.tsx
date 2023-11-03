@@ -116,7 +116,7 @@ const Navbar = () => {
 
     if (status === 'authenticated') {
       const userId = session?.user?.id;
-      const params = { type: 'updateNicknameBlogName', nickname: nickname.replaceAll("'", "\\'"), blogName: blogName.replaceAll("'", "\\'"), id: userId };
+      const params = { type: 'updateNicknameBlogName', nickname: nickname.replaceAll('\\', '\\\\'), blogName: blogName.replaceAll('\\', '\\\\'), id: userId };
       await axios.get('/api/HandleUser', { params: params });
       await update({ nickname, blogName });
     }

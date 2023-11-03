@@ -53,7 +53,7 @@ export const handleMySql = async (params: any) => {
       amntDttm = params.amntDttm;
       sql = `INSERT INTO USER 
                          (USER_ID, USER_EMAIL, USER_NICKNAME, USER_PASSWORD, USER_BLOG_NAME, RGSN_DTTM, AMNT_DTTM) 
-                  VALUES ('${userId}','${userEmail}', '${userNickname}', '${userPassword}', '${userBlogName}','${rgsnDttm}', '${amntDttm}')`;
+                  VALUES ('${userId}','${userEmail}', '${userNickname.replaceAll("'", "''")}', '${userPassword}', '${userBlogName.replaceAll("'", "''")}','${rgsnDttm}', '${amntDttm}')`;
       break;
     case 'updatePassword':
       userPassword = await hashPassword(params.password);
@@ -82,8 +82,8 @@ export const handleMySql = async (params: any) => {
       userBlogName = params.blogName;
       userId = params.id;
       sql = `UPDATE USER 
-                SET USER_NICKNAME = '${userNickname}'
-                  , USER_BLOG_NAME = '${userBlogName}' 
+                SET USER_NICKNAME = '${userNickname.replaceAll("'", "''")}'
+                  , USER_BLOG_NAME = '${userBlogName.replaceAll("'", "''")}' 
               WHERE USER_ID = '${userId}'`;
       break;
     case 'updateEmail':
