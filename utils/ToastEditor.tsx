@@ -206,9 +206,9 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
         type: type,
         post: {
           post_id: postId,
-          post_title: title,
-          post_cntn: plainText,
-          post_html_cntn: htmlCntn,
+          post_title: title.replaceAll('\\', '\\\\'),
+          post_cntn: plainText.replaceAll('\\', '\\\\'),
+          post_html_cntn: (htmlCntn as string).replaceAll('\\', '\\\\'),
           post_thmb_img_url: thmbImgUrl ? thmbImgUrl : '',
           rgsr_id: session?.user?.id,
           temp_yn: saveTempYn,

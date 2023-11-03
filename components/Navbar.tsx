@@ -116,7 +116,7 @@ const Navbar = () => {
 
     if (status === 'authenticated') {
       const userId = session?.user?.id;
-      const params = { type: 'updateNicknameBlogName', nickname: nickname, blogName: blogName, id: userId };
+      const params = { type: 'updateNicknameBlogName', nickname: nickname.replaceAll("'", "\\'"), blogName: blogName.replaceAll("'", "\\'"), id: userId };
       await axios.get('/api/HandleUser', { params: params });
       await update({ nickname, blogName });
     }
@@ -133,7 +133,7 @@ const Navbar = () => {
     let isValidate = passwordRegEx.test(newPassword);
 
     if (!isValidate) {
-      alert('비밀번호는 8~16자의 영문 대/소문자, 숫자가 포함되어야 합니다.');
+      alert('비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 조합하여 입력하세요.');
       return isValidate;
     }
 

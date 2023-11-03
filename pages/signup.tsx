@@ -59,7 +59,7 @@ const Signup = () => {
       return;
     }
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', ''), password: password, blogName: blogName, rgsnDttm: currentTime, amntDttm: currentTime };
+    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', '').replaceAll("'", "\\'"), password: password, blogName: blogName.replaceAll("'", "\\'"), rgsnDttm: currentTime, amntDttm: currentTime };
 
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);
@@ -112,7 +112,7 @@ const Signup = () => {
 
     if (!isValidate) {
       setPasswordValidate(false);
-      document.querySelector('.passwordErrMsg')!.innerHTML = '<div class="mt5">비밀번호: 8~16자의 영문 대/소문자, 숫자를 사용해 주세요.</div>';
+      document.querySelector('.passwordErrMsg')!.innerHTML = '<div class="mt5">비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 조합하여 입력하세요.</div>';
     } else {
       setPasswordValidate(true);
       document.querySelector('.passwordErrMsg')!.innerHTML = '';
@@ -168,9 +168,7 @@ const Signup = () => {
   return (
     <div className={signupStyle.signup_div}>
       <span className={signupStyle.signup_title}>keylog</span>
-      <form
-        onSubmit={submitHandler}
-        className={signupStyle.signup_form}>
+      <form onSubmit={submitHandler} className={signupStyle.signup_form}>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${idValidate ? '' : signupStyle.validateErr} btlr`}>
             <i className={'fa-solid fa-user'}></i>
@@ -184,7 +182,8 @@ const Signup = () => {
             required
             onChange={(e) => {
               setId(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${passwordValidate ? '' : signupStyle.validateErr}`}>
@@ -200,7 +199,8 @@ const Signup = () => {
             onChange={(e) => {
               setPassword(e.target.value);
               passwordCheck(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${pwDoubleValidate ? '' : signupStyle.validateErr}`}>
@@ -216,7 +216,8 @@ const Signup = () => {
             onChange={(e) => {
               setPwDoubleCheckText(e.target.value);
               passwordDoubleCheck(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${emailValidate ? '' : signupStyle.validateErr}`}>
@@ -232,7 +233,8 @@ const Signup = () => {
             onChange={(e) => {
               setEmail(e.target.value);
               emailCheck(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={`${signupStyle.signup_input_div}`}>
           <div className={`${signupStyle.signup_emoji} ${blogNameValidate ? '' : signupStyle.validateErr}`}>
@@ -249,7 +251,8 @@ const Signup = () => {
             onChange={(e) => {
               setBlogName(e.target.value);
               blogNameCheck(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={`${signupStyle.signup_input_div} mb10`}>
           <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
@@ -266,7 +269,8 @@ const Signup = () => {
             onChange={(e) => {
               setNickname(e.target.value);
               nicknameCheck(e.target.value);
-            }}></input>
+            }}
+          ></input>
         </div>
         <div className={`idErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`emailErrMsg ${signupStyle.validateErrMsg}`}></div>
@@ -274,9 +278,7 @@ const Signup = () => {
         <div className={`pwDobleCheckErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`blogNameErrMsg ${signupStyle.validateErrMsg}`}></div>
-        <button
-          type='submit'
-          className={signupStyle.signup_btn}>
+        <button type='submit' className={signupStyle.signup_btn}>
           가입하기
         </button>
       </form>
@@ -286,15 +288,13 @@ const Signup = () => {
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button
-              color='primary'
-              size='small'
-              onClick={closeNoti}>
+            <Button color='primary' size='small' onClick={closeNoti}>
               확인
             </Button>
           </React.Fragment>
         }
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}></Snackbar>
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      ></Snackbar>
     </div>
   );
 };
