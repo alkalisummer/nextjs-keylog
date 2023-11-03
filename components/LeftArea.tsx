@@ -64,8 +64,8 @@ const LeftArea = () => {
         <Link href={`/${userId}`}>
           <img src={userInfo.image ? userInfo.image : '/../../icon/person.png'} className='left_profile_icon' alt='profile img' />
         </Link>
-        <Link href={`/${userId}`}>
-          <span className='left_area_blog_name'>{userInfo.blogName}</span>
+        <Link href={`/${userId}`} className='left_area_blog_name'>
+          <span>{userInfo.blogName}</span>
         </Link>
         <span className='left_area_title'>{userInfo.nickname}</span>
         {CheckAuth() ? (
