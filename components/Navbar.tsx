@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import axios from 'axios';
 
-import { onUploadImage, getImgName, timeToString } from '@/utils/CommonUtils';
+import { onUploadImage, getImgName, timeToString, storePathValues } from '@/utils/CommonUtils';
 
 //로그인시 우측 상단메뉴 토글
 import Menu from '@mui/material/Menu';
@@ -241,7 +241,7 @@ const Navbar = () => {
       // 그 외
       url = window.location.href;
     }
-
+    storePathValues(url);
     await signOut({ redirect: true, callbackUrl: url });
   };
 

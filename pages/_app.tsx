@@ -2,10 +2,12 @@ import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
 
 import RefreshTokenHandler from '../components/RefreshTokenHandler';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import Head from 'next/head';
 import Script from 'next/script';
+import { storePathValues } from '@/utils/CommonUtils';
 
 //redux, redux-saga
 import wrapper from '@/store';
@@ -24,6 +26,9 @@ import '@/styles/write.css';
 const App = ({ Component, pageProps }: AppProps) => {
   const [sessionRefetchInterval, setSessionRefetchInterval] = useState(10000);
   const { session } = pageProps;
+  const router = useRouter();
+
+  useEffect(() => storePathValues(''), [router.asPath]);
 
   return (
     <SessionProvider session={session} refetchInterval={sessionRefetchInterval}>

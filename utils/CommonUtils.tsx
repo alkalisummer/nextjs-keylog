@@ -132,3 +132,11 @@ export function getValueToNum(value: string) {
   }
   return resultNum;
 }
+
+export function storePathValues(url: string) {
+  const storage = globalThis?.sessionStorage;
+  if (!storage) return;
+  const prevPath = storage.getItem('currentPath') ?? '/';
+  storage.setItem('prevPath', prevPath);
+  storage.setItem('currentPath', url ? url : globalThis.location.pathname);
+}
