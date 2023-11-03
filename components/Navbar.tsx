@@ -177,6 +177,9 @@ const Navbar = () => {
     const params = { type: 'updatePassword', password: newPassword, id: userId, amntDttm: amntDttm };
     axios.post('/api/HandleUser', { data: params }).then((res) => {
       alert('비밀번호가 변경되었습니다.');
+      setCurrPassword('');
+      setNewPassword('');
+      setCheckPassword('');
       setShowPwInput(false);
     });
   };
