@@ -361,10 +361,10 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
             <div className='post_scrap_ico' onClick={() => scrapPost('twitter')}>
               <i className='fa-brands fa-twitter'></i>
             </div>
-            <div id='post_url_copy' data-clipboard-target='#currentUrl' className='post_scrap_ico' onClick={() => scrapPost('cilpboard')}>
+            <div id='post_url_copy' data-clipboard-action='copy' data-clipboard-target='#currentUrl' className='post_scrap_ico' onClick={() => scrapPost('cilpboard')}>
               <i className='fa-solid fa-paperclip'></i>
             </div>
-            <input id='currentUrl' className='dn op0' type='text' value={currUrl} readOnly />
+            <input id='currentUrl' className='post_scrap_url' type='text' value={currUrl} readOnly />
           </div>
           <div className='post_detail_hashtag_div'>
             {postHashtags.length > 0 &&
