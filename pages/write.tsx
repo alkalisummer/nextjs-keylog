@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         hashtagArr = result.map((hashtag: hashtag) => hashtag.HASHTAG_NAME);
       });
 
-    const rgsrId = post!.RGSR_ID;
+    const rgsrId = post.RGSR_ID;
 
     //글 수정시 현재 session user id 와 글 작성자 id가 일치하지 않으면 error 페이지로 redirect
     if (currUserId !== rgsrId) {

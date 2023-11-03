@@ -131,7 +131,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
       if (removedImg.length > 0) {
         axios.post('/api/DeleteImgFile', { removedImg });
       }
-      router.back();
+      router.push(`/${userId}`);
     });
   };
 
@@ -185,7 +185,7 @@ const PostDetailPage = ({ post, imgFileArr, htmlCntn, comments, like, postHashta
     let params;
 
     if (commentType === 'comment') {
-      if (comment.length === 0) {
+      if (comment.replaceAll(' ', '').length === 0) {
         alert('댓글 내용을 작성하세요.');
         return;
       }

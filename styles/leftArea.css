@@ -128,6 +128,17 @@
   font-size: 14px;
   font-weight: 400;
   color: gray;
+  display: flex;
+  align-items: center;
+}
+
+.left_area_hashtag:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.left_area_hashtag_name {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -135,12 +146,6 @@
   -webkit-box-orient: vertical;
   line-height: 1.2rem;
   word-wrap: break-word;
-}
-
-.left_area_hashtag:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
 }
 
 .left_area_hashtag_cnt {

@@ -142,7 +142,7 @@ const LeftArea = () => {
         )}
         {hashtags.map((tag: hashtag) => (
           <span key={tag.HASHTAG_ID} className='left_area_hashtag' onClick={() => router.push(`/${userId}?tagId=${tag.HASHTAG_ID}`)}>
-            {tag.HASHTAG_NAME}
+            <span className='left_area_hashtag_name'>{tag.HASHTAG_NAME}</span>
             <span className='left_area_hashtag_cnt'>{` (${tag.HASHTAG_CNT})`}</span>
           </span>
         ))}
