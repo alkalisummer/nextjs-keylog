@@ -170,7 +170,7 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
     case 'interestOverTime':
       const keyWordArr = request.body.params.keyword;
       const today = new Date(Date.now());
-      const startTm = new Date(today.setDate(today.getDate() - 3));
+      const startTm = new Date(today.setDate(today.getDate() - 8));
       const interestRes = await googleTrends.interestOverTime({ keyword: keyWordArr, geo: 'KR', hl: 'ko', granularTimeResolution: true, startTime: startTm });
       res = interestRes;
       break;
