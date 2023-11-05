@@ -81,6 +81,40 @@
   cursor: pointer;
 }
 
+.signup_btn:hover {
+  background-color: #c7c7c7;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.signup_vrfy_code_btn_div {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  height: 50px;
+  border-top: 1px solid #c7c7c7;
+  border-right: 1px solid #c7c7c7;
+  padding-right: 5px;
+}
+
+.signup_vrfy_code_btn {
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  font-size: 12px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-weight: bold;
+  color: white;
+  background-color: #7f7f7f;
+  cursor: pointer;
+  width: 95px;
+  height: 35px;
+}
+
+.signup_vrfy_code_btn:hover {
+  background-color: #c7c7c7;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
 .validateErr {
   color: red !important;
   -webkit-text-fill-color: red !important;
@@ -94,5 +128,11 @@
 @media (max-width: 768px) {
   .signup_form {
     width: 330px;
+  }
+
+  .signup_vrfy_code_btn {
+    font-size: 10px;
+    width: 80px;
+    height: 30px;
   }
 }

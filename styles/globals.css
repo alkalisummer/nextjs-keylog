@@ -90,6 +90,10 @@ a {
   border-bottom: none !important;
 }
 
+.brn {
+  border-right: none !important;
+}
+
 .btlr {
   border-top-left-radius: 15px;
 }

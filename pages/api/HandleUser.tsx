@@ -15,10 +15,10 @@ export const handleMySql = async (params: any) => {
   const connection = mysql.createConnection(conn);
 
   let sql = '';
-  let result: { totalItems: number; items: any[]; userId: string } = {
+  let result: { totalItems: number; items: any[]; insertId: string } = {
     totalItems: 0,
     items: [],
-    userId: '',
+    insertId: '',
   };
   let userId: string;
   let userEmail: string;
@@ -28,6 +28,11 @@ export const handleMySql = async (params: any) => {
   let userBlogName: string;
   let rgsnDttm: string;
   let amntDttm: string;
+
+  //회원가입 인증코드, 만료시간
+  let verifyCodeId: string;
+  let verifyCode: string;
+  let expireTime: string;
 
   await connection.connect();
 
@@ -105,9 +110,21 @@ export const handleMySql = async (params: any) => {
                FROM USER 
               WHERE USER_ID = '${userId}'`;
       break;
-    case 'getUserBlogInfo':
-      userId = params.id;
-      sql = ``;
+    case 'insertVerifyCode':
+      verifyCode = params.verifyCode;
+      expireTime = params.expireTime;
+      rgsnDttm = params.rgsnDttm;
+      sql = `INSERT INTO VERIFY_CODE
+                         (VERIFY_CODE, EXPIRATION_TIME, RGSN_DTTM)
+                  VALUES ('${verifyCode.replaceAll("'", "''")}', '${expireTime}', '${rgsnDttm}')`;
+      break;
+    case 'getVerifyCode':
+      verifyCodeId = params.verifyCodeId;
+      sql = `SELECT VERIFY_CODE_ID
+                  , VERIFY_CODE
+                  , EXPIRATION_TIME 
+               FROM VERIFY_CODE
+              WHERE VERIFY_CODE_ID = ${verifyCodeId}`;
       break;
   }
 
@@ -118,7 +135,7 @@ export const handleMySql = async (params: any) => {
         reject(error);
       } else {
         if (!data.length) {
-          result.userId = data.insertId;
+          result.insertId = data.insertId;
         } else {
           let rowArr = [];
           for (let row of data) {

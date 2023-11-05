@@ -22,6 +22,12 @@ const Signup = () => {
   //이메일
   const [email, setEmail] = useState('');
   const [emailValidate, setEmailValidate] = useState<boolean>(true);
+
+  //이메일 인증코드 ID
+  const [verifyCode, setVerifyCode] = useState('');
+  const [verifyCodeId, setVerifyCodeId] = useState('');
+  const [verifyCodeValidate, setVerifyCodeValidate] = useState<boolean>(true);
+
   //닉네임
   const [nickname, setNickname] = useState('');
   const [nicknameValidate, setNicknameValidate] = useState<boolean>(true);
@@ -47,7 +53,7 @@ const Signup = () => {
     //email, password 유효성 검사
     if (!(await idCheck(id))) {
       return;
-    } else if (!emailCheck(email)) {
+    } else if (!(await emailCheck(email))) {
       return;
     } else if (!passwordCheck(password)) {
       return;
@@ -56,6 +62,8 @@ const Signup = () => {
     } else if (!blogNameCheck(blogName)) {
       return;
     } else if (!nicknameCheck(nickname)) {
+      return;
+    } else if (!(await verifyCodeCheck())) {
       return;
     }
     const currentTime = timeToString(new Date());
@@ -165,6 +173,46 @@ const Signup = () => {
     router.replace('/login');
   };
 
+  const sendEmailCode = async () => {
+    if (!emailValidate) {
+      return;
+    }
+    const btn = document.getElementById('signup_vrfy_code_btn') as HTMLButtonElement;
+    btn.disabled = true;
+    const params = { mode: 'sendMailCode', mailAddress: email };
+    await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
+      setVerifyCodeId(res.data.insertId);
+      alert('입력하신 이메일 주소로 인증코드가 발송되었습니다.\n인증코드는 발송시간을 기준으로 24시간동안 유효합니다. ');
+      btn.disabled = false;
+    });
+  };
+
+  const verifyCodeCheck = async () => {
+    let isValidate;
+    if (verifyCode.replaceAll(' ', '').length === 0) {
+      setVerifyCodeValidate(false);
+      isValidate = false;
+      document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증코드를 입력해주세요.</div>';
+      return isValidate;
+    } else if (!verifyCodeId) {
+      setVerifyCodeValidate(false);
+      isValidate = false;
+      document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">이메일 인증을 진행해주세요.</div>';
+      return isValidate;
+    } else {
+      const params = { userInputCode: verifyCode.replaceAll(' ', ''), verifyCodeId: verifyCodeId };
+      isValidate = (await axios.post('/api/CheckVerifyCode', { data: params })).data.isValid;
+      if (!isValidate) {
+        setVerifyCodeValidate(false);
+        document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증코드가 일치하지 않습니다.</div>';
+      } else {
+        setVerifyCodeValidate(true);
+        document.querySelector('.verifyCodeErrMsg')!.innerHTML = '';
+      }
+    }
+    return isValidate;
+  };
+
   return (
     <div className={signupStyle.signup_div}>
       <span className={signupStyle.signup_title}>keylog</span>
@@ -226,13 +274,34 @@ const Signup = () => {
           <input
             type='text'
             value={email}
-            className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr}`}
+            className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr} brn`}
             placeholder='이메일'
             autoComplete='off'
             required
             onChange={(e) => {
               setEmail(e.target.value);
               emailCheck(e.target.value);
+            }}
+          ></input>
+          <div className={`${signupStyle.signup_vrfy_code_btn_div}`}>
+            <button id='signup_vrfy_code_btn' className={`${signupStyle.signup_vrfy_code_btn}`} onClick={() => sendEmailCode()}>
+              인증코드 요청
+            </button>
+          </div>
+        </div>
+        <div className={signupStyle.signup_input_div}>
+          <div className={`${signupStyle.signup_emoji} ${emailValidate ? '' : signupStyle.validateErr}`}>
+            <i className='fa-solid fa-user-check'></i>
+          </div>
+          <input
+            type='text'
+            value={verifyCode}
+            className={`${signupStyle.signup_input_text} ${verifyCodeValidate ? '' : signupStyle.validateErr}`}
+            placeholder='인증코드'
+            autoComplete='off'
+            required
+            onChange={(e) => {
+              setVerifyCode(e.target.value);
             }}
           ></input>
         </div>
@@ -278,6 +347,7 @@ const Signup = () => {
         <div className={`pwDobleCheckErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`blogNameErrMsg ${signupStyle.validateErrMsg}`}></div>
+        <div className={`verifyCodeErrMsg ${signupStyle.validateErrMsg}`}></div>
         <button type='submit' className={signupStyle.signup_btn}>
           가입하기
         </button>
