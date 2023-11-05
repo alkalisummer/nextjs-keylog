@@ -39,6 +39,7 @@ export const handleMySql = async (params: any) => {
   switch (params.type) {
     case 'getUser':
       userId = params.id;
+      userEmail = params.email;
       sql = `SELECT USER_ID
                   , USER_EMAIL
                   , USER_NICKNAME
@@ -46,7 +47,9 @@ export const handleMySql = async (params: any) => {
                   , USER_THMB_IMG_URL
                   , USER_BLOG_NAME 
                FROM USER 
-              WHERE USER_ID = '${userId}'`;
+              WHERE USER_ID = '${userId}'
+ ${userEmail ? `AND USER_EMAIL = '${userEmail}'` : ''}   
+              `;
       break;
     case 'signup':
       userId = params.id;

@@ -26,10 +26,9 @@ const Login = () => {
     const link = storage.getItem('prevPath');
 
     const result = await signIn('credentials', {
-      redirect: true,
+      redirect: false,
       id: id.replaceAll(' ', ''),
       password: password,
-      callbackUrl: link as string,
     }).then((res) => {
       if (!res?.error) {
         if (saveId) {
@@ -37,6 +36,7 @@ const Login = () => {
         } else {
           setCookies('userId', '', { maxAge: 0 }); // 쿠키삭제
         }
+        router.push(link as string);
       } else {
         document.querySelector('.loginErrMsg')!.innerHTML = '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
       }

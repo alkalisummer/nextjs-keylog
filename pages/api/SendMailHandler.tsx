@@ -51,12 +51,11 @@ export default async function SendMailHandler(request: NextApiRequest, response:
           params.type = 'updatePassword';
           params.amntDttm = timeToString(new Date());
           await handleMySql(params);
-
-          response.status(200).json(user);
         } catch (error) {
           console.log(error);
         }
       }
+      response.status(200).json(user);
       break;
     case 'sendMailCode':
       const toMailAddress = params.mailAddress;
