@@ -23,7 +23,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [emailValidate, setEmailValidate] = useState<boolean>(true);
 
-  //이메일 인증코드 ID
+  //이메일 인증번호 ID
   const [verifyCode, setVerifyCode] = useState('');
   const [verifyCodeId, setVerifyCodeId] = useState('');
   const [verifyCodeValidate, setVerifyCodeValidate] = useState<boolean>(true);
@@ -180,7 +180,7 @@ const Signup = () => {
     const params = { mode: 'sendMailCode', mailAddress: email };
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       setVerifyCodeId(res.data.insertId);
-      alert('입력하신 이메일 주소로 인증코드가 발송되었습니다.\n인증코드는 발송시간을 기준으로 24시간동안 유효합니다. ');
+      alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
     });
   };
 
@@ -189,7 +189,7 @@ const Signup = () => {
     if (verifyCode.replaceAll(' ', '').length === 0) {
       setVerifyCodeValidate(false);
       isValidate = false;
-      document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증코드를 입력해주세요.</div>';
+      document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증번호를 입력해주세요.</div>';
       return isValidate;
     } else if (!verifyCodeId) {
       setVerifyCodeValidate(false);
@@ -201,7 +201,7 @@ const Signup = () => {
       isValidate = (await axios.post('/api/CheckVerifyCode', { data: params })).data.isValid;
       if (!isValidate) {
         setVerifyCodeValidate(false);
-        document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증코드가 일치하지 않습니다.</div>';
+        document.querySelector('.verifyCodeErrMsg')!.innerHTML = '<div class="mt5">인증번호가 일치하지 않습니다.</div>';
       } else {
         setVerifyCodeValidate(true);
         document.querySelector('.verifyCodeErrMsg')!.innerHTML = '';
@@ -282,7 +282,7 @@ const Signup = () => {
           ></input>
           <div className={`${signupStyle.signup_vrfy_code_btn_div}`}>
             <button id='signup_vrfy_code_btn' className={`${signupStyle.signup_vrfy_code_btn}`} onClick={() => sendEmailCode()}>
-              인증코드 요청
+              인증번호 요청
             </button>
           </div>
         </div>
@@ -294,7 +294,7 @@ const Signup = () => {
             type='text'
             value={verifyCode}
             className={`${signupStyle.signup_input_text} ${verifyCodeValidate ? '' : signupStyle.validateErr}`}
-            placeholder='인증코드'
+            placeholder='인증번호'
             autoComplete='off'
             required
             onChange={(e) => {

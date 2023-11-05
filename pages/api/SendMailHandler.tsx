@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { handleMySql } from './HandleUser';
-import { timeToString, timeFormat, generateRandomNum } from '@/utils/CommonUtils';
+import { timeToString, timeFormat, generateRandomChar } from '@/utils/CommonUtils';
 import nodemailer from 'nodemailer';
 
 interface mailOption {
@@ -36,7 +36,7 @@ export default async function SendMailHandler(request: NextApiRequest, response:
 
       if (user.totalItems > 0) {
         //영문 소문자, 대문자, 숫자, 특수문자를 랜덤하게 섞은 임시비밀번호 10자리 생성
-        tmpPassword = generateRandomNum(10);
+        tmpPassword = generateRandomChar(10, 'password');
 
         mailOptions = {
           from: 'verify@keylog.io',
@@ -59,23 +59,23 @@ export default async function SendMailHandler(request: NextApiRequest, response:
       break;
     case 'sendMailCode':
       const toMailAddress = params.mailAddress;
-      //영문 소문자, 대문자, 숫자, 특수문자를 랜덤하게 섞은 임시비밀번호 10자리 생성
-      const verifyCode = generateRandomNum(10);
+      //영문 소문자, 대문자, 숫자를 랜덤하게 섞은 인증번호 6자리 생성
+      const verifyCode = generateRandomChar(6, 'mailcode');
       const expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24); // 만료시간 24시간
       const expireTimeToStr = timeToString(expireTime);
 
       mailOptions = {
         from: 'verify@keylog.io',
         to: toMailAddress,
-        subject: 'Keylog 회원가입 인증코드',
+        subject: 'Keylog 회원가입 인증번호',
         text: `
-          Keylog 회원가입을 위한 인증코드입니다.
+          Keylog 회원가입을 위한 인증번호입니다.
         
-          아래의 인증코드를 입력하여 인증을 완료해주세요.
+          아래의 인증번호를 입력하여 인증을 완료해주세요.
         
-          인증코드 : ${verifyCode}
+          인증번호 : ${verifyCode}
         
-          인증코드는 ${timeFormat(expireTimeToStr)}까지 유효합니다.
+          인증번호는 ${timeFormat(expireTimeToStr)}까지 유효합니다.
         `,
       };
 

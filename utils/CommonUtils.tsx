@@ -78,21 +78,26 @@ export async function onUploadImage(imgFile: any) {
   return { imgName: imgName, imgUrl: `${imgURL}/${newImgFile.name}` };
 }
 
-export function generateRandomNum(passwordLength: number) {
+export function generateRandomChar(charLength: number, type: string) {
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
   const symbols = '!@#$%^&*()_+[]{}|;:,.<>?';
+  let allCharacters = '';
 
-  const allCharacters = lowercase + uppercase + numbers + symbols;
-  let tempPassword = '';
+  if (type === 'password') {
+    allCharacters = lowercase + uppercase + numbers + symbols;
+  } else {
+    allCharacters = numbers;
+  }
+  let randomChar = '';
 
-  for (let i = 0; i < passwordLength; i++) {
+  for (let i = 0; i < charLength; i++) {
     const randomIndex = Math.floor(Math.random() * allCharacters.length);
-    tempPassword += allCharacters[randomIndex];
+    randomChar += allCharacters[randomIndex];
   }
 
-  return tempPassword;
+  return randomChar;
 }
 
 export function getEmailId(email: string) {
