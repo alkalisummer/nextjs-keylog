@@ -170,20 +170,17 @@ const Signup = () => {
       return;
     }
     setShowNoti(false);
-    router.replace('/login');
+    router.push('/');
   };
 
   const sendEmailCode = async () => {
-    if (!emailValidate) {
+    if (!emailCheck(email)) {
       return;
     }
-    const btn = document.getElementById('signup_vrfy_code_btn') as HTMLButtonElement;
-    btn.disabled = true;
     const params = { mode: 'sendMailCode', mailAddress: email };
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       setVerifyCodeId(res.data.insertId);
       alert('입력하신 이메일 주소로 인증코드가 발송되었습니다.\n인증코드는 발송시간을 기준으로 24시간동안 유효합니다. ');
-      btn.disabled = false;
     });
   };
 
@@ -290,7 +287,7 @@ const Signup = () => {
           </div>
         </div>
         <div className={signupStyle.signup_input_div}>
-          <div className={`${signupStyle.signup_emoji} ${emailValidate ? '' : signupStyle.validateErr}`}>
+          <div className={`${signupStyle.signup_emoji} ${verifyCodeValidate ? '' : signupStyle.validateErr}`}>
             <i className='fa-solid fa-user-check'></i>
           </div>
           <input
