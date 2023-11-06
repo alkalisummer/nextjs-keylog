@@ -66,9 +66,10 @@ const Signup = () => {
     } else if (!(await verifyCodeCheck())) {
       return;
     }
+
+    axios.post('/api/HandleUser', { data: { type: 'deleteVerifyCode', verifyCodeId: verifyCodeId } });
     const currentTime = timeToString(new Date());
     const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', '').replaceAll('\\', '\\\\'), password: password, blogName: blogName.replaceAll('\\', '\\\\'), rgsnDttm: currentTime, amntDttm: currentTime };
-
     await axios.post('/api/HandleUser', { data: params }).then((res) => {
       setShowNoti(true);
     });
@@ -174,13 +175,17 @@ const Signup = () => {
   };
 
   const sendEmailCode = async () => {
-    if (!emailCheck(email)) {
+    if (!(await emailCheck(email))) {
       return;
+    }
+    alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
+    //기존에 인증번호가 있고 재진행하는 경우라면 기존 인증번호 데이터는 삭제
+    if (verifyCodeId) {
+      axios.post('/api/HandleUser', { data: { type: 'deleteVerifyCode', verifyCodeId: verifyCodeId } });
     }
     const params = { mode: 'sendMailCode', mailAddress: email };
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       setVerifyCodeId(res.data.insertId);
-      alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
     });
   };
 

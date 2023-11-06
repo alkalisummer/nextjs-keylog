@@ -24,7 +24,7 @@ const Login = () => {
 
     const storage = globalThis?.sessionStorage;
     const link = storage.getItem('prevPath');
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       redirect: false,
       id: id.replaceAll(' ', ''),
       password: password,

@@ -129,6 +129,12 @@ export const handleMySql = async (params: any) => {
                FROM VERIFY_CODE
               WHERE VERIFY_CODE_ID = ${verifyCodeId}`;
       break;
+    case 'deleteVerifyCode':
+      verifyCodeId = params.verifyCodeId;
+      sql = `DELETE 
+               FROM VERIFY_CODE
+              WHERE VERIFY_CODE_ID = ${verifyCodeId}`;
+      break;
   }
 
   await new Promise((resolve, reject) => {
