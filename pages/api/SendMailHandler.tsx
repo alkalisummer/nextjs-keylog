@@ -3,22 +3,10 @@ import { handleMySql } from './HandleUser';
 import { timeToString, timeFormat, generateRandomChar } from '@/utils/CommonUtils';
 import nodemailer from 'nodemailer';
 
-interface mailOption {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-}
-
 export default async function SendMailHandler(request: NextApiRequest, response: NextApiResponse) {
   const params = request.body.data;
   const mode = params.mode;
-  let mailOptions: mailOption = {
-    from: '',
-    to: '',
-    subject: '',
-    text: '',
-  };
+  let mailOptions;
 
   const transporter = nodemailer.createTransport({
     service: process.env.MAIL_SERVICE,
@@ -32,24 +20,45 @@ export default async function SendMailHandler(request: NextApiRequest, response:
     case 'forgotPassword':
       params.type = 'getUser';
       const user = await handleMySql(params);
-      let tmpPassword = '';
+      const crypto = require('crypto');
 
       if (user.totalItems > 0) {
-        //영문 소문자, 대문자, 숫자, 특수문자를 랜덤하게 섞은 임시비밀번호 10자리 생성
-        tmpPassword = generateRandomChar(10, 'password');
+        const token = crypto.randomBytes(20).toString('hex'); //토큰 생성
+        const expireTime = timeToString(new Date(Date.now() + 1000 * 60 * 30)); // 만료시간 30분
+        const url = process.env.NODE_ENV === 'production' ? `https://keylog.hopto.org/resetPassword/${token}` : `http://localhost:3000/resetPassword/${token}`;
 
         mailOptions = {
           from: 'verify@keylog.io',
           to: user.items[0].USER_EMAIL,
-          subject: 'Keylog 임시비밀번호 발급',
-          text: `Keylog 임시비밀번호는 ${tmpPassword} 입니다. 로그인 후 비밀번호를 반드시 변경해주세요.`,
+          subject: 'Keylog 비밀번호 변경 인증 메일',
+          html:
+            `
+          <html>
+            <body>
+            <div>
+              안녕하세요 ${user.items[0].USER_NICKNAME}님<br><br>
+    
+              계정 비밀번호를 재설정하기 위해 아래의 링크를 클릭하여 주세요.<br><br>
+              
+              <a href='` +
+            url +
+            `'>비밀번호 재설정</a><br><br>
+              
+              위 링크는 ${timeFormat(expireTime)}까지 유효합니다.
+            </div>
+            </body>
+          </html>
+          `,
         };
 
         try {
-          await transporter.sendMail(mailOptions);
-          params.password = tmpPassword;
-          params.type = 'updatePassword';
-          params.amntDttm = timeToString(new Date());
+          await transporter.sendMail(mailOptions); // 메일 전송
+          //DB에 토큰과 사용자ID, 만료시간을 저장
+          params.type = 'insertUserToken';
+          params.token = token;
+          params.id = user.items[0].USER_ID;
+          params.expireTime = expireTime;
+          params.rgsnDttm = timeToString(new Date());
           await handleMySql(params);
         } catch (error) {
           console.log(error);
@@ -81,8 +90,8 @@ export default async function SendMailHandler(request: NextApiRequest, response:
 
       try {
         await transporter.sendMail(mailOptions);
-        params.verifyCode = verifyCode;
         params.type = 'insertVerifyCode';
+        params.verifyCode = verifyCode;
         params.expireTime = expireTimeToStr;
         params.rgsnDttm = timeToString(new Date());
         const veryfyCodeId = await handleMySql(params);

@@ -20,7 +20,7 @@ const ForgotPassword = () => {
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       const userCnt = res.data.totalItems;
       if (userCnt > 0) {
-        alert('해당 계정의 이메일로 임시비밀번호가 발송되었습니다.\n로그인 후 비밀번호를 변경해주세요.');
+        alert('해당 계정의 이메일로 비밀번호 재설정을 위한 인증메일을 전송하였습니다.\n인증 메일의 링크를 클릭하여 비밀번호를 재설정하세요.');
         router.replace('/');
       } else {
         document.querySelector('.errMsg')!.innerHTML = '<div class="mt5">해당 정보로 가입된 계정 정보가 없습니다.</div>';
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
   return (
     <div className={loginStyle.login_div}>
       <span className={`${loginStyle.login_title} mb15`}>keylog</span>
-      <span className={loginStyle.login_forgot_pw_infoText}>비밀번호 찾기 : 임시비밀번호 발급 </span>
+      <span className={loginStyle.login_forgot_pw_infoText}>비밀번호 찾기</span>
       <form onSubmit={checkId} className={loginStyle.login_form}>
         <div className={`${loginStyle.login_input_div}`}>
           <div className={`${loginStyle.login_emoji} btlr`}>

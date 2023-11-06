@@ -29,9 +29,10 @@ export const handleMySql = async (params: any) => {
   let rgsnDttm: string;
   let amntDttm: string;
 
-  //회원가입 인증코드, 만료시간
+  //인증코드, 토큰, 만료시간
   let verifyCodeId: string;
   let verifyCode: string;
+  let token: string;
   let expireTime: string;
 
   await connection.connect();
@@ -127,13 +128,38 @@ export const handleMySql = async (params: any) => {
                   , VERIFY_CODE
                   , EXPIRATION_TIME 
                FROM VERIFY_CODE
-              WHERE VERIFY_CODE_ID = ${verifyCodeId}`;
+              WHERE VERIFY_CODE_ID = '${verifyCodeId}'`;
       break;
     case 'deleteVerifyCode':
       verifyCodeId = params.verifyCodeId;
       sql = `DELETE 
                FROM VERIFY_CODE
-              WHERE VERIFY_CODE_ID = ${verifyCodeId}`;
+              WHERE VERIFY_CODE_ID = '${verifyCodeId}'`;
+      break;
+    case 'insertUserToken':
+      token = params.token;
+      userId = params.id;
+      expireTime = params.expireTime;
+      rgsnDttm = params.rgsnDttm;
+      sql = `INSERT INTO USER_TOKEN
+                         (TOKEN, USER_ID, EXPIRE_TIME, RGSN_DTTM)
+                   VALUES('${token}', '${userId}', '${expireTime}', '${rgsnDttm}')`;
+      break;
+    case 'getUserToken':
+      token = params.token;
+      sql = `SELECT TOKEN 
+                  , USER_ID
+                  , EXPIRE_TIME
+               FROM USER_TOKEN
+              WHERE TOKEN = '${token}'`;
+      break;
+    case 'deleteUserToken':
+      token = params.token;
+      userId = params.id;
+      sql = `DELETE 
+               FROM USER_TOKEN
+              WHERE TOKEN = '${token}'
+                AND USER_ID = '${userId}'`;
       break;
   }
 
