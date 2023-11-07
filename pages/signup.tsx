@@ -23,6 +23,8 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [emailValidate, setEmailValidate] = useState<boolean>(true);
 
+  const [sendMailLoading, setSendMailLoading] = useState(false);
+
   //이메일 인증번호 ID
   const [verifyCode, setVerifyCode] = useState('');
   const [verifyCodeId, setVerifyCodeId] = useState('');
@@ -174,11 +176,18 @@ const Signup = () => {
     router.push('/');
   };
 
-  const sendEmailCode = async () => {
+  const mailHandler = async () => {
     if (!(await emailCheck(email))) {
       return;
     }
-    alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
+    if (!sendMailLoading) {
+      alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
+      setSendMailLoading(true);
+      sendMail();
+    }
+  };
+
+  const sendMail = async () => {
     //기존에 인증번호가 있고 재진행하는 경우라면 기존 인증번호 데이터는 삭제
     if (verifyCodeId) {
       axios.post('/api/HandleUser', { data: { type: 'deleteVerifyCode', verifyCodeId: verifyCodeId } });
@@ -187,6 +196,7 @@ const Signup = () => {
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       setVerifyCodeId(res.data.insertId);
     });
+    setSendMailLoading(false);
   };
 
   const verifyCodeCheck = async () => {
@@ -286,7 +296,7 @@ const Signup = () => {
             }}
           ></input>
           <div className={`${signupStyle.signup_vrfy_code_btn_div}`}>
-            <button id='signup_vrfy_code_btn' className={`${signupStyle.signup_vrfy_code_btn}`} onClick={() => sendEmailCode()}>
+            <button id='signup_vrfy_code_btn' className={`${signupStyle.signup_vrfy_code_btn}`} onClick={() => mailHandler()}>
               인증번호 요청
             </button>
           </div>

@@ -56,7 +56,6 @@ const ResetPassword = () => {
     const params = { token: token, password: password };
     await axios.post('/api/CheckVerifyToken', { data: params }).then((res) => {
       const isValid = res.data.isValid;
-      debugger;
       if (isValid) {
         setShowNoti(true);
       } else {

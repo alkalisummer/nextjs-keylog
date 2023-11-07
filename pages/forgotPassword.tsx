@@ -6,17 +6,23 @@ import { useRouter } from 'next/router';
 const ForgotPassword = () => {
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [sendMailLoading, setSendMailLoading] = useState(false);
   const router = useRouter();
 
-  const checkId = async (e: React.FormEvent<HTMLFormElement>) => {
+  const mailHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailCheck(email)) {
       return;
     }
 
-    const params = { id: id.replaceAll(' ', ''), email: email.replaceAll(' ', ''), mode: 'forgotPassword' };
+    if (!sendMailLoading) {
+      setSendMailLoading(true);
+      sendMail();
+    }
+  };
 
+  const sendMail = async () => {
+    const params = { id: id.replaceAll(' ', ''), email: email.replaceAll(' ', ''), mode: 'forgotPassword' };
     await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
       const userCnt = res.data.totalItems;
       if (userCnt > 0) {
@@ -25,6 +31,7 @@ const ForgotPassword = () => {
       } else {
         document.querySelector('.errMsg')!.innerHTML = '<div class="mt5">해당 정보로 가입된 계정 정보가 없습니다.</div>';
       }
+      setSendMailLoading(false);
     });
   };
 
@@ -33,10 +40,8 @@ const ForgotPassword = () => {
     let isValidate = emailRegEx.test(email);
 
     if (!isValidate) {
-      setEmailValidate(false);
       document.querySelector('.emailErrMsg')!.innerHTML = '<div class="mt5">이메일 형식이 올바르지 않습니다.</div>';
     } else {
-      setEmailValidate(true);
       document.querySelector('.emailErrMsg')!.innerHTML = '';
     }
 
@@ -47,7 +52,7 @@ const ForgotPassword = () => {
     <div className={loginStyle.login_div}>
       <span className={`${loginStyle.login_title} mb15`}>keylog</span>
       <span className={loginStyle.login_forgot_pw_infoText}>비밀번호 찾기</span>
-      <form onSubmit={checkId} className={loginStyle.login_form}>
+      <form onSubmit={mailHandler} className={loginStyle.login_form}>
         <div className={`${loginStyle.login_input_div}`}>
           <div className={`${loginStyle.login_emoji} btlr`}>
             <i className={'fa-solid fa-user'}></i>
