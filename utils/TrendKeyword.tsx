@@ -286,7 +286,6 @@ const TrendKeyword = () => {
       openNoti('autoPost');
       return;
     }
-    debugger;
     const chatCompletion = await ChatGptHandle('auto-post', chatMsg);
     const contentDiv = document.querySelector('.post_auto_daily_content');
     let gptMsg = '';
