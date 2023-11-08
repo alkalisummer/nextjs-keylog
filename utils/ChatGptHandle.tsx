@@ -14,7 +14,7 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
     chatMessage = [{ role: 'system', content: 'You are a professional blogger' }, chatContent];
   }
   const chatCompletion = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo-16k',
+    model: 'gpt-3.5-turbo-1106',
     temperature: 1.0,
     messages: chatMessage,
     stream: true,

@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { formatDate } from '@/utils/CommonUtils';
 import axios from 'axios';
 
 interface naverArticle {
@@ -36,7 +37,7 @@ const getArticles = async (keyword: string) => {
   let articles: article[] = [];
 
   const searchParams = {
-    params: { query: keyword, display: 100, sort: 'date' },
+    params: { query: keyword, display: 100, sort: 'sim' },
     headers: {
       'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
       'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
@@ -115,8 +116,8 @@ const getArticles = async (keyword: string) => {
         articles.push({ title: title, content: content });
       }
     });
-    //5개의 기사만 크롤링
-    if (articles.length === 4) {
+    //3개의 기사만 크롤링
+    if (articles.length === 3) {
       break;
     }
   }
@@ -145,6 +146,25 @@ const getImages = async (keyword: string, pageNum: number) => {
   return images;
 };
 
+const getInterestOverTime = async (keywordArr: string, startDate: string, endDate: string) => {
+  const serachParams = {
+    startDate: startDate,
+    endDate: endDate,
+    timeUnit: 'date',
+    keywordGroups: keywordArr,
+  };
+  const headers = {
+    'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
+    'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
+    'Content-Type': 'application/json',
+  };
+  const result = await axios.post('https://openapi.naver.com/v1/datalab/search', serachParams, { headers: headers }).then((res) => {
+    return res.data.results;
+  });
+
+  return result;
+};
+
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
   const googleTrends = require('google-trends-api');
 
@@ -169,8 +189,9 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
       break;
     case 'interestOverTime':
       const keyWordArr = request.body.params.keyword;
-      const startTm = new Date(Date.now() - 1000 * 60 * 60 * 24 * 185); // 단위: ms
-      const interestRes = await googleTrends.interestOverTime({ keyword: keyWordArr, geo: 'KR', hl: 'ko', granularTimeResolution: true, startTime: startTm });
+      const startTm = formatDate(new Date(new Date().setFullYear(new Date().getFullYear() - 1)));
+      const endTm = formatDate(new Date(new Date().setDate(new Date().getDate() - 1)));
+      const interestRes = await getInterestOverTime(keyWordArr, startTm, endTm);
       res = interestRes;
       break;
     case 'articlePrompt':

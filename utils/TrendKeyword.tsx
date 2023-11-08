@@ -60,6 +60,11 @@ interface imgData {
   title: string;
 }
 
+interface lineKeyword {
+  groupName: string;
+  keywords: string[];
+}
+
 const TrendKeyword = () => {
   const wChartDom = useRef(null);
   const lChartDom = useRef(null);
@@ -74,14 +79,15 @@ const TrendKeyword = () => {
 
   const [linkage, setLinkage] = useState<string[]>([]);
 
-  const [lineKeyword, setLineKeyword] = useState<string[]>([]);
-  const [newKeyword, setNewKeyword] = useState('');
+  const [lineKeyword, setLineKeyword] = useState<lineKeyword[]>([]);
+  const [newKeyword, setNewKeyword] = useState<lineKeyword>();
 
   const [selectedKey, setSelectedKey] = useState<seletedKey>();
   const [articles, setArticles] = useState<article[]>([]);
   const [baseDate, setBaseDate] = useState('');
 
   const [imgLoading, setImgLoading] = useState(false);
+  const [autoPostLoading, setAutoPostLoading] = useState(false);
 
   const [autoKeyword, setAutoKeyword] = useState('');
   const [imgKeyword, setImgKeyword] = useState('');
@@ -106,7 +112,7 @@ const TrendKeyword = () => {
           wordCloud.setOption(WordCloudOpt(keyArr));
           //wordcloud 키워드 클릭 이벤트
           wordCloud.on('click', (params) => {
-            setLineKeyword([params.name]);
+            setLineKeyword([{ groupName: params.name, keywords: [params.name] }]);
             const queryParams = { type: 'relatedQueries', keyword: params.name };
             //선택한 키워드의 연관 검색어
             axios.get('/api/HandleKeyword', { params: queryParams }).then((result) => {
@@ -164,9 +170,9 @@ const TrendKeyword = () => {
       const getLineChart = async () => {
         const queryParams = { type: 'interestOverTime', keyword: lineKeyword };
         await axios.post('/api/HandleKeyword', { params: queryParams }).then((result) => {
-          let interestRes: any;
+          let interestResArr: any;
           try {
-            interestRes = JSON.parse(result.data);
+            interestResArr = result.data;
           } catch (error) {
             console.log(error);
             getLineChart();
@@ -174,6 +180,7 @@ const TrendKeyword = () => {
 
           let lineChartDate: string[] = [];
           let lineChartValueArr = [];
+          let lineChartkeywordArr: string[] = [];
 
           const randomColor = () => {
             return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
@@ -181,21 +188,21 @@ const TrendKeyword = () => {
 
           const timeLineData = (num: number) => {
             let res = [];
-            if (interestRes) {
-              for (let data of interestRes.default.timelineData) {
-                res.push(data.value[num]);
-                if (lineChartDate.length !== interestRes.default.timelineData.length) {
-                  lineChartDate.push(data.formattedAxisTime);
+            if (interestResArr) {
+              lineChartkeywordArr.push(interestResArr[num].title);
+              for (let value of interestResArr[num].data) {
+                res.push(value.ratio);
+                if (lineChartDate.length !== interestResArr[num].data.length) {
+                  lineChartDate.push(value.period);
                 }
               }
             }
-
             return res;
           };
 
           for (let i = 0; i < lineKeyword.length; i++) {
             lineChartValueArr.push({
-              name: lineKeyword[i],
+              name: lineKeyword[i].groupName,
               type: 'line',
               symbol: 'none',
               sampling: 'lttb',
@@ -210,7 +217,7 @@ const TrendKeyword = () => {
             if (!lineChart) {
               lineChart = echarts.init(lChartDom.current);
             }
-            const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineKeyword });
+            const lineChartOpt = LineChartOpt({ dateArr: lineChartDate, valueArr: lineChartValueArr, legendArr: lineChartkeywordArr });
             lineChart.clear();
             lineChart.setOption(lineChartOpt);
           }
@@ -228,18 +235,26 @@ const TrendKeyword = () => {
 
     keywordInput.className = 'post_line_keyword';
     keywordInput.placeholder = '검색어 추가';
-    keywordInput.value = newKeyword;
+    keywordInput.value = '';
     keywordInput.onchange = (e: Event) => {
-      setNewKeyword((e.target as HTMLInputElement).value);
+      const value = (e.target as HTMLInputElement).value;
+      if (value) {
+        setNewKeyword({ groupName: value, keywords: [value] });
+      }
     };
-    keywordInput.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
+    keywordInput.addEventListener('keydown', function (event: KeyboardEvent) {
+      if (event.key === 'Enter' && keywordInput.value) {
         setShowAddterm(true);
-        setLineKeyword((prev) => [...prev, keywordInput.value]);
-        if (keywordInput.parentNode) {
-          keywordInput.parentNode.removeChild(keywordInput);
+        //중복제거
+        if (lineKeyword.findIndex((obj) => obj.groupName === keywordInput.value) === -1) {
+          setLineKeyword((prev) => [...prev, { groupName: keywordInput.value, keywords: [keywordInput.value] }]);
         }
-        setNewKeyword('');
+        //input 제거 및 초기화
+        keywordInput.remove();
+        setNewKeyword({ groupName: '', keywords: [] });
+      } else if (event.key === 'Escape') {
+        setShowAddterm(true);
+        keywordInput.remove();
       }
     });
     parentDiv?.append(keywordInput);
@@ -251,29 +266,39 @@ const TrendKeyword = () => {
     setLineKeyword(resultArr);
   };
 
-  const autoPostDaily = async () => {
+  const autoPostHandler = () => {
     if (!autoKeyword) {
       setShowNoti(true);
       setNotiMsg('키워드를 입력해주세요.');
       return;
     }
 
-    clearPost();
+    setAutoPostLoading(true);
+    if (!autoPostLoading) {
+      clearPost();
+      autoPostDaily();
+    }
+  };
+
+  const autoPostDaily = async () => {
     const chatMsg = await ArticlePrompt(autoKeyword);
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');
       return;
     }
-
+    debugger;
     const chatCompletion = await ChatGptHandle('auto-post', chatMsg);
     const contentDiv = document.querySelector('.post_auto_daily_content');
     let gptMsg = '';
 
     for await (const chunk of chatCompletion) {
+      if (chunk.choices[0].finish_reason) {
+        setAutoPostLoading(false);
+      }
       const chunkText = chunk.choices[0].delta.content;
       if (chunkText) {
         gptMsg += chunkText;
-        contentDiv!.innerHTML = gptMsg;
+        contentDiv!.innerHTML = gptMsg.replaceAll('```html', '').replaceAll('```', '');
       }
     }
   };
@@ -395,7 +420,7 @@ const TrendKeyword = () => {
           <span className='post_sub_title'>
             Interest Change Chart
             <span>
-              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'해당 키워드의 최근 6개월동안 관심도 변화를 차트로 표출합니다.<br/> 복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드와 비교시 수치가 달라질 수 있습니다.'}></i>
+              <i className='fa-regular fa-circle-question tooltip' data-tooltip-id='line-tooltip' data-tooltip-html={'해당 키워드의 1년 검색추이 차트로 표출합니다.<br/> 복수의 키워드 비교는 최대 5개까지 가능합니다. <br/> 키워드 비교는 상대적인 수치로 표출되기 때문에 다른 키워드와 비교시 수치가 달라질 수 있습니다.'}></i>
             </span>
           </span>
 
@@ -405,10 +430,10 @@ const TrendKeyword = () => {
         </div>
         <div className='post_line_chart_div' style={{ display: showLineChart ? '' : 'none' }}>
           <div className='post_line_keyword_div'>
-            {lineKeyword.map((obj: string, idx: number) => {
+            {lineKeyword.map((obj: lineKeyword, idx: number) => {
               return (
                 <div key={idx} id={idx.toString()} className='post_line_keyword'>
-                  <span>{obj}</span>
+                  <span>{obj.groupName}</span>
                   <span>
                     <i className='fa-solid fa-xmark post_line_keyword_delete' onClick={() => deleteTerm(idx.toString())}></i>
                   </span>
@@ -498,7 +523,7 @@ const TrendKeyword = () => {
               <div className='post_auto_left_btn'>
                 <span className='post_auto_keyword_title'>키워드 : </span>&nbsp;
                 <input type='text' className='post_auto_input' value={autoKeyword} onChange={(e) => setAutoKeyword(e.target.value)} />
-                <button className='post_auto_button' onClick={() => autoPostDaily()}>
+                <button className='post_auto_button' onClick={() => autoPostHandler()}>
                   <span>
                     <i className='fa-solid fa-pen'></i>
                   </span>
@@ -574,7 +599,7 @@ const TrendKeyword = () => {
               {imgArr.length > 0 &&
                 imgArr.map((img, idx) => (
                   <div className='w100' key={idx}>
-                    <Image ref={imgArr.length - 1 === idx ? ref : null} width={100} height={100} style={{ borderRadius: '10px', width: '100%', height: 'auto' }} onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' loading='eager' />
+                    <Image ref={imgArr.length - 1 === idx ? ref : null} width={100} height={100} style={{ borderRadius: '10px', width: '100%', height: 'auto' }} onClick={(e) => selectImg(e.target)} src={img.link} alt='검색 이미지' />
                   </div>
                 ))}
             </div>
