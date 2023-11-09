@@ -20,7 +20,7 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
     seriealized += msg.role + msg.content;
   }
 
-  //사용가능한 토큰 계산()
+  //사용가능한 토큰 계산
   const availableTokens = 16375 - encoding.encode(seriealized).length;
 
   const chatCompletion = await openai.chat.completions.create({

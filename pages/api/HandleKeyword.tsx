@@ -116,8 +116,8 @@ const getArticles = async (keyword: string) => {
         articles.push({ title: title, content: content });
       }
     });
-    //3개의 기사만 크롤링
-    if (articles.length === 3) {
+    //4개의 기사만 크롤링
+    if (articles.length === 4) {
       break;
     }
   }
