@@ -121,7 +121,7 @@ const TrendKeyword = () => {
             });
             setSelectedKey({ name: params.name, cnt: params.value as number });
             const articleData = JSON.parse(JSON.stringify(params.data)).articles;
-            setArticles(articleData.filter((obj: any) => obj.image));
+            setKeywordArticles(articleData, params.name);
             setAutoKeyword(params.name);
             setImgKeyword(params.name);
             setPageNum(0);
@@ -159,8 +159,6 @@ const TrendKeyword = () => {
       document.querySelector('.write_div')?.scrollTo(0, 0);
     }, 300);
   }, []);
-
-  useEffect(() => {}, [showLineChart]);
 
   useEffect(() => {
     if (lineKeyword.length > 0) {
@@ -264,6 +262,27 @@ const TrendKeyword = () => {
     const resultArr = JSON.parse(JSON.stringify(lineKeyword));
     resultArr.splice(parseInt(keyId), 1);
     setLineKeyword(resultArr);
+  };
+
+  const setKeywordArticles = async (articles: article[], keyword: string) => {
+    //제목에 키워드가 없는 기사 필터링
+    let resultArticles = [];
+    let keywordArr = [];
+    keywordArr = keyword.replaceAll(' ', '').split('');
+    for (let article of articles) {
+      if (article.image) {
+        for (let i = 0; i < keywordArr.length; i++) {
+          if (article.title.toUpperCase().indexOf(keywordArr[i].toUpperCase()) === -1) {
+            break;
+          }
+          if (i === keywordArr.length - 1) {
+            resultArticles.push(article);
+          }
+        }
+      }
+    }
+
+    setArticles(resultArticles);
   };
 
   const autoPostHandler = () => {
