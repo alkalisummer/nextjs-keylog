@@ -280,8 +280,13 @@ const TrendKeyword = () => {
     }
   };
 
+  interface message {
+    role: string;
+    content: string;
+  }
+
   const autoPostDaily = async () => {
-    const chatMsg = await ArticlePrompt(autoKeyword);
+    const chatMsg = (await ArticlePrompt(autoKeyword)) as message;
     if (Object.keys(chatMsg).length === 0) {
       openNoti('autoPost');
       return;
