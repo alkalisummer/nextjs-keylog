@@ -191,7 +191,7 @@ const TrendKeyword = () => {
             if (interestResArr) {
               lineChartkeywordArr.push(interestResArr[num].title);
               for (let value of interestResArr[num].data) {
-                res.push(value.ratio);
+                res.push(Math.round(value.ratio));
                 if (lineChartDate.length !== interestResArr[num].data.length) {
                   lineChartDate.push(value.period);
                 }
