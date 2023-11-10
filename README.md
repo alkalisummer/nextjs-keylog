@@ -8,7 +8,7 @@ AutoPosting 기능으로 해당 키워드로 작성된 최근 기사들의 내�
 
 ## 👀  keylog 구경하기
 - 📎 [https://keylog.hopto.org](https://keylog.hopto.org)
-- 📎 [Github Repository](https://github.com/alkalisummer/nextjs-keylog.git)
+
 <br/>
 <br/>
 
@@ -154,9 +154,9 @@ nextjs-keylog
  ┃ ┣ icon
  ┃ ┣ favicon.ico
  ┃ ┗ vercel.svg
- ┣ reducer 
+ ┣ reducer : redux, redux-saga 
  ┃ ┗ blogUser.ts
- ┣ store
+ ┣ store 
  ┃ ┣ index.ts
  ┃ ┗ redux.d.ts
  ┣ styles
