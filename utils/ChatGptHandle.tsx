@@ -21,14 +21,14 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
   }
 
   //사용가능한 토큰 계산
-  const availableTokens = 16375 - encoding.encode(seriealized).length;
+  const availableTokens = type === 'common' ? undefined : 16375 - encoding.encode(seriealized).length;
 
   const chatCompletion = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo-16k',
     temperature: 1.0,
     messages: chatMessage,
     stream: true,
-    max_tokens: type === 'common' ? null : availableTokens!,
+    max_tokens: availableTokens,
   });
 
   return chatCompletion;
