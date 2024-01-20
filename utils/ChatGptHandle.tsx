@@ -28,7 +28,7 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
     temperature: 1.0,
     messages: chatMessage,
     stream: true,
-    max_tokens: type === 'common' ? null : availableTokens,
+    max_tokens: type === 'common' ? null : availableTokens!,
   });
 
   return chatCompletion;
