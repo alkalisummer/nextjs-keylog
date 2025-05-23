@@ -45,6 +45,14 @@ export function timeFormat(currTime: string) {
   return fullTimeFormat;
 }
 
+export function currentDate() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}.${month}.${day}`;
+}
+
 export function formatDate(date: Date) {
   var year = date.getFullYear();
   var month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -61,7 +69,12 @@ export function removeHtml(str: string) {
 }
 
 export function timeAgoFormat(str: string) {
-  const replaceTimeAgo = str.replaceAll('h', '시간').replaceAll('d', '일').replaceAll('m', '분').replaceAll('s', '초').replaceAll('ago', '전');
+  const replaceTimeAgo = str
+    .replaceAll('h', '시간')
+    .replaceAll('d', '일')
+    .replaceAll('m', '분')
+    .replaceAll('s', '초')
+    .replaceAll('ago', '전');
   return replaceTimeAgo;
 }
 

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { formatDate } from '@/utils/CommonUtils';
+import GoogleTrendsApi from '@shaivpidadi/trends-js';
 import axios from 'axios';
 
 interface naverArticle {
@@ -24,8 +25,7 @@ interface imgData {
 }
 
 export const getDailyTrends = async (hl: string) => {
-  const googleTrends = require('google-trends-api');
-  const result = await googleTrends.dailyTrends({ geo: 'KR', hl: hl });
+  const result = await GoogleTrendsApi.dailyTrends({ geo: 'KR', lang: hl });
   return result;
 };
 

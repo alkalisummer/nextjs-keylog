@@ -4,13 +4,22 @@ import React, { useEffect, useState } from 'react';
 import IndexLayout from '../components/IndexLayout';
 import { getDailyTrends } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { removeHtml, timeAgoFormat, timeFormat, getValueToNum } from '../utils/CommonUtils';
+import { removeHtml, timeAgoFormat, getValueToNum, currentDate } from '../utils/CommonUtils';
 import Link from 'next/link';
 
-interface keyword {
-  name: string;
-  value: string;
-  articles: [];
+interface trend {
+  title: string;
+  traffic: string;
+  trafficGrowthRate: string;
+  activeTime: string;
+  relatedKeywords: string[];
+  articleKeys: articleKey[];
+}
+
+interface articleKey {
+  keyNum: number;
+  lang: string;
+  geo: string;
 }
 
 interface article {
@@ -26,8 +35,8 @@ interface article {
   url: string;
 }
 
-const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: string }) => {
-  const [keyArr, setKeyArr] = useState<keyword[]>(keywordArr);
+const HomePage = ({ trends, pubDate }: { trends: trend[]; pubDate: string }) => {
+  const [keyArr, setKeyArr] = useState<trend[]>(trends);
   const [baseDate, setBaseDate] = useState<string>(pubDate);
   const [articles, setArticles] = useState<article[]>();
   const [selectKey, setSelectKey] = useState('');
@@ -35,29 +44,29 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
 
   useEffect(() => {
     //중복제거
-    let removeDuplicate: keyword[] = [];
-    for (let keyword of keywordArr) {
-      keyword.name = keyword.name.toLowerCase();
-      const index = removeDuplicate.findIndex((obj) => obj.name.toLowerCase() === keyword.name);
+    let removeDuplicate: trend[] = [];
+    for (let trend of trends) {
+      trend.title = trend.title.toLowerCase();
+      const index = removeDuplicate.findIndex(obj => obj.title.toLowerCase() === trend.title);
       if (index === -1) {
-        removeDuplicate.push(keyword);
+        removeDuplicate.push(trend);
       }
     }
     // 검색횟수 내림차순 정렬
-    removeDuplicate.sort((a: keyword, b: keyword) => getValueToNum(b.value) - getValueToNum(a.value));
+    removeDuplicate.sort((a: trend, b: trend) => Number(b.traffic) - Number(a.traffic));
 
     setKeyArr(removeDuplicate);
     setBaseDate(pubDate);
     init(removeDuplicate);
-  }, [keywordArr, pubDate]);
+  }, [trends, pubDate]);
 
-  const init = async (keyArr: keyword[]) => {
-    const initKeyword = keyArr[0].name;
-    const initArticles = keyArr[0].articles;
-    const initValue = keyArr[0].value;
+  const init = async (keyArr: trend[]) => {
+    const initKeyword = keyArr[0].title;
+    // const initArticles = keyArr[0].articles;
+    const initValue = keyArr[0].traffic;
 
     setSelectKey(initKeyword);
-    setKeywordArticles(initArticles, initKeyword, initValue);
+    // setKeywordArticles(initArticles, initKeyword, initValue);
     setSelectKeyValue(initValue);
   };
 
@@ -83,38 +92,48 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   };
 
   return (
-    <IndexLayout tabName='keyword'>
-      <div className='index_main_div'>
-        <div className='index_main_title_div'>
-          <div className='index_main_title'>
-            <span className='mr30'>{`# ${selectKey}`}</span>
-            <span className='index_main_value'>
+    <IndexLayout tabName="keyword">
+      <div className="index_main_div">
+        <div className="index_main_title_div">
+          <div className="index_main_title">
+            <span className="mr30">{`# ${selectKey}`}</span>
+            <span className="index_main_value">
               {selectKeyValue.toString().replaceAll('+', '')}
-              <i className='fa-solid fa-up-long index_main_value_ico'></i>
-              <span className='index_main_cnt'>(검색 횟수)</span>
+              <i className="fa-solid fa-up-long index_main_value_ico"></i>
+              <span className="index_main_cnt">(검색 횟수)</span>
             </span>
           </div>
         </div>
-        <div className='index_main_keyword_div'>
+        <div className="index_main_keyword_div">
           {keyArr.map((keyword, idx) => (
-            <span key={idx} id={keyword.name} className={`index_main_keyword ${keyword.name === selectKey ? 'index_highlight' : ''}`} onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}>{`#${keyword.name}`}</span>
+            <span
+              key={idx}
+              id={keyword.title}
+              className={`index_main_keyword ${keyword.title === selectKey ? 'index_highlight' : ''}`}
+              // onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}
+            >{`#${keyword.title}`}</span>
           ))}
         </div>
         {articles && articles.length > 0 ? (
           <>
-            <div className='w100 df jc_e mb10'>
-              <span className='index_article_date'>{baseDate}</span>
+            <div className="w100 df jc_e mb10">
+              <span className="index_article_date">{baseDate}</span>
             </div>
-            <div className='index_article_div'>
+            <div className="index_article_div">
               {articles.map((article, idx) => (
-                <Link key={idx} href={article.url} target='_blank'>
-                  <div className='index_article'>
-                    {article.image ? <img className='index_article_img' src={article.image.imageUrl} alt='articleImg'></img> : <></>}
+                <Link key={idx} href={article.url} target="_blank">
+                  <div className="index_article">
+                    {article.image ? (
+                      <img className="index_article_img" src={article.image.imageUrl} alt="articleImg"></img>
+                    ) : (
+                      <></>
+                    )}
                     <div className={`index_article_info ${article.image ? '' : 'btlr bblr'}`}>
-                      <span className='index_article_title'>{removeHtml(article.title)}</span>
-                      <span className='index_article_desc'>{removeHtml(article.snippet)}</span>
-                      <div className='index_article_bottom'>
-                        <span className='index_article_comp'>{article.source}</span>•<span className='index_article_time'>{timeAgoFormat(article.timeAgo)}</span>
+                      <span className="index_article_title">{removeHtml(article.title)}</span>
+                      <span className="index_article_desc">{removeHtml(article.snippet)}</span>
+                      <div className="index_article_bottom">
+                        <span className="index_article_comp">{article.source}</span>•
+                        <span className="index_article_time">{timeAgoFormat(article.timeAgo)}</span>
                       </div>
                     </div>
                   </div>
@@ -130,23 +149,15 @@ const HomePage = ({ keywordArr, pubDate }: { keywordArr: keyword[]; pubDate: str
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const result = await getDailyTrends('ko');
-  const resArr = JSON.parse(result).default.trendingSearchesDays;
-  const pubDate = `(인기 급상승 검색어 기준일: ${timeFormat(resArr[resArr.length - 1].date)} - ${timeFormat(resArr[0].date)})`;
-  let trendKeyData: any[] = [];
-  for (let dateData of resArr) {
-    dateData.trendingSearches.map((obj: any) => {
-      trendKeyData.push(obj);
-    });
-  }
-
-  const keyArr = trendKeyData.map((obj) => ({ name: obj.title.query.replaceAll("'", ''), value: obj.formattedTraffic, articles: obj.articles }));
+  const trends = result.data.trends;
+  const pubDate = `(인기 급상승 검색어 기준일: ${currentDate()})`;
 
   return {
     props: {
-      keywordArr: keyArr,
-      pubDate: pubDate,
+      trends,
+      pubDate,
     },
   };
 };
