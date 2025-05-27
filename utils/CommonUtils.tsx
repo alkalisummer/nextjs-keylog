@@ -68,14 +68,12 @@ export function removeHtml(str: string) {
   return plainText;
 }
 
-export function timeAgoFormat(str: string) {
-  const replaceTimeAgo = str
-    .replaceAll('h', '시간')
-    .replaceAll('d', '일')
-    .replaceAll('m', '분')
-    .replaceAll('s', '초')
-    .replaceAll('ago', '전');
-  return replaceTimeAgo;
+export function timeAgoFormat(pressDate: number) {
+  const date = new Date(pressDate);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate.getTime() - date.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
 }
 
 export async function onUploadImage(imgFile: any) {

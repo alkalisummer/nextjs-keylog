@@ -16,6 +16,12 @@ interface article {
   content: string;
 }
 
+interface articleKey {
+  keyNum: number;
+  lang: string;
+  geo: string;
+}
+
 interface imgData {
   link: string;
   sizeheight: string;
@@ -24,9 +30,14 @@ interface imgData {
   title: string;
 }
 
-export const getDailyTrends = async (hl: string) => {
-  const result = await GoogleTrendsApi.dailyTrends({ geo: 'KR', lang: hl });
+export const getDailyTrends = async (lang: string) => {
+  const result = await GoogleTrendsApi.dailyTrends({ geo: 'KR', lang });
   return result;
+};
+
+export const getGoogleArticles = async (articleKeys: articleKey[], articleCount: number) => {
+  const articles = await GoogleTrendsApi.trendingArticles({ articleKeys, articleCount });
+  return articles;
 };
 
 const getArticles = async (keyword: string) => {
@@ -62,13 +73,16 @@ const getArticles = async (keyword: string) => {
   });
 
   //해당 키워드를 포함하고 네이버 뉴스에 제공된 기사만 parsing
-  await axios.get('https://openapi.naver.com/v1/search/news.json', searchParams).then(async (res) => {
+  await axios.get('https://openapi.naver.com/v1/search/news.json', searchParams).then(async res => {
     const result = res.data.items;
     let keywordArr = [];
     if (keyword.indexOf(' ') !== -1) {
       let resultArr = [];
       keywordArr = keyword.replaceAll(' ', '').split('');
-      resultArr = result.filter((article: naverArticle) => article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1);
+      resultArr = result.filter(
+        (article: naverArticle) =>
+          article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1,
+      );
 
       for (let article of resultArr) {
         for (let i = 0; i < keywordArr.length; i++) {
@@ -81,11 +95,16 @@ const getArticles = async (keyword: string) => {
         }
       }
     } else {
-      naverArticles = result.filter((article: naverArticle) => article.title.indexOf(keyword) !== -1 && article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1);
+      naverArticles = result.filter(
+        (article: naverArticle) =>
+          article.title.indexOf(keyword) !== -1 &&
+          article.link.indexOf('naver') !== -1 &&
+          article.originallink.indexOf('nocutnews') === -1,
+      );
     }
   });
   for (let article of naverArticles) {
-    await axios.get(article.link).then(async (res) => {
+    await axios.get(article.link).then(async res => {
       const $ = cheerio.load(res.data);
       const host = res.request.host;
       const path = res.request.path;
@@ -138,11 +157,11 @@ const getImages = async (keyword: string, pageNum: number) => {
   //해당 키워드와 관련된 이미지를 검색
   await axios
     .get('https://openapi.naver.com/v1/search/image', searchParams)
-    .then((res) => {
+    .then(res => {
       const result = res.data.items;
       images = result.filter((obj: imgData) => obj.link.indexOf('naver') !== -1);
     })
-    .catch((error) => console.log());
+    .catch(error => console.log());
   return images;
 };
 
@@ -158,9 +177,11 @@ const getInterestOverTime = async (keywordArr: string, startDate: string, endDat
     'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
     'Content-Type': 'application/json',
   };
-  const result = await axios.post('https://openapi.naver.com/v1/datalab/search', serachParams, { headers: headers }).then((res) => {
-    return res.data.results;
-  });
+  const result = await axios
+    .post('https://openapi.naver.com/v1/datalab/search', serachParams, { headers: headers })
+    .then(res => {
+      return res.data.results;
+    });
 
   return result;
 };
@@ -184,7 +205,9 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
       break;
     case 'relatedQueries':
       const searchKeyword = request.query.keyword;
-      const suggestRes = await axios.get(`https://suggestqueries.google.com/complete/search?client=chrome-omni&q=${searchKeyword}&hl=ko&gl=KR&oe=utf-8`);
+      const suggestRes = await axios.get(
+        `https://suggestqueries.google.com/complete/search?client=chrome-omni&q=${searchKeyword}&hl=ko&gl=KR&oe=utf-8`,
+      );
       res = suggestRes.data[1];
       break;
     case 'interestOverTime':

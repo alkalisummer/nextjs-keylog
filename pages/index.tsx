@@ -2,9 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import IndexLayout from '../components/IndexLayout';
-import { getDailyTrends } from './api/HandleKeyword';
+import { getDailyTrends, getGoogleArticles } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { removeHtml, timeAgoFormat, getValueToNum, currentDate } from '../utils/CommonUtils';
+import { removeHtml, timeAgoFormat, currentDate } from '../utils/CommonUtils';
 import Link from 'next/link';
 
 interface trend {
@@ -23,74 +23,28 @@ interface articleKey {
 }
 
 interface article {
-  image: {
-    imageUrl: string;
-    newsUrl: string;
-    source: string;
-  };
-  snippet: string;
-  source: string;
-  timeAgo: string;
   title: string;
-  url: string;
+  link: string;
+  mediaCompany: string;
+  pressDate: number;
+  image: string;
 }
 
-const HomePage = ({ trends, pubDate }: { trends: trend[]; pubDate: string }) => {
+const HomePage = ({
+  trends,
+  pubDate,
+  firstTrendKeywordArticles,
+}: {
+  trends: trend[];
+  pubDate: string;
+  firstTrendKeywordArticles: article[];
+}) => {
   const [keyArr, setKeyArr] = useState<trend[]>(trends);
   const [baseDate, setBaseDate] = useState<string>(pubDate);
-  const [articles, setArticles] = useState<article[]>();
-  const [selectKey, setSelectKey] = useState('');
-  const [selectKeyValue, setSelectKeyValue] = useState('');
-
-  useEffect(() => {
-    //중복제거
-    let removeDuplicate: trend[] = [];
-    for (let trend of trends) {
-      trend.title = trend.title.toLowerCase();
-      const index = removeDuplicate.findIndex(obj => obj.title.toLowerCase() === trend.title);
-      if (index === -1) {
-        removeDuplicate.push(trend);
-      }
-    }
-    // 검색횟수 내림차순 정렬
-    removeDuplicate.sort((a: trend, b: trend) => Number(b.traffic) - Number(a.traffic));
-
-    setKeyArr(removeDuplicate);
-    setBaseDate(pubDate);
-    init(removeDuplicate);
-  }, [trends, pubDate]);
-
-  const init = async (keyArr: trend[]) => {
-    const initKeyword = keyArr[0].title;
-    // const initArticles = keyArr[0].articles;
-    const initValue = keyArr[0].traffic;
-
-    setSelectKey(initKeyword);
-    // setKeywordArticles(initArticles, initKeyword, initValue);
-    setSelectKeyValue(initValue);
-  };
-
-  const setKeywordArticles = async (articles: article[], keyword: string, value: string) => {
-    //제목에 키워드가 없는 기사 필터링
-    let resultArticles = [];
-    let keywordArr = [];
-    keywordArr = keyword.replaceAll(' ', '').split('');
-    for (let article of articles) {
-      for (let i = 0; i < keywordArr.length; i++) {
-        if (article.title.toUpperCase().indexOf(keywordArr[i].toUpperCase()) === -1) {
-          break;
-        }
-        if (i === keywordArr.length - 1) {
-          resultArticles.push(article);
-        }
-      }
-    }
-
-    setArticles(resultArticles);
-    setSelectKey(keyword);
-    setSelectKeyValue(value);
-  };
-
+  const [articles, setArticles] = useState<article[]>(firstTrendKeywordArticles);
+  const [selectKey, setSelectKey] = useState(trends[0].title);
+  const [selectKeyValue, setSelectKeyValue] = useState(trends[0].traffic);
+  debugger;
   return (
     <IndexLayout tabName="keyword">
       <div className="index_main_div">
@@ -121,19 +75,18 @@ const HomePage = ({ trends, pubDate }: { trends: trend[]; pubDate: string }) => 
             </div>
             <div className="index_article_div">
               {articles.map((article, idx) => (
-                <Link key={idx} href={article.url} target="_blank">
+                <Link key={idx} href={article.link} target="_blank">
                   <div className="index_article">
                     {article.image ? (
-                      <img className="index_article_img" src={article.image.imageUrl} alt="articleImg"></img>
+                      <img className="index_article_img" src={article.image} alt="articleImg"></img>
                     ) : (
                       <></>
                     )}
                     <div className={`index_article_info ${article.image ? '' : 'btlr bblr'}`}>
                       <span className="index_article_title">{removeHtml(article.title)}</span>
-                      <span className="index_article_desc">{removeHtml(article.snippet)}</span>
                       <div className="index_article_bottom">
-                        <span className="index_article_comp">{article.source}</span>•
-                        <span className="index_article_time">{timeAgoFormat(article.timeAgo)}</span>
+                        <span className="index_article_comp">{article.mediaCompany}</span>•
+                        <span className="index_article_time">{timeAgoFormat(article.pressDate)}</span>
                       </div>
                     </div>
                   </div>
@@ -151,13 +104,19 @@ const HomePage = ({ trends, pubDate }: { trends: trend[]; pubDate: string }) => 
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const result = await getDailyTrends('ko');
-  const trends = result.data.trends;
+  const trends = result.data;
   const pubDate = `(인기 급상승 검색어 기준일: ${currentDate()})`;
 
+  // 검색 횟수 내림차순 정렬
+  trends.sort((a: trend, b: trend) => Number(b.traffic) - Number(a.traffic));
+
+  const firstTrendKeywordInfo = trends[0];
+  const firstTrendKeywordArticles = await getGoogleArticles(firstTrendKeywordInfo.articleKeys, 10);
   return {
     props: {
       trends,
       pubDate,
+      firstTrendKeywordArticles,
     },
   };
 };
