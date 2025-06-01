@@ -20,9 +20,9 @@ const CreatePost = ({ post, hashtagArr }: { post: any; hashtagArr: string[] }) =
   const { postId, keyword } = router.query;
 
   return (
-    <div className='write_div'>
-      <div className='write_header_div'>
-        <span className='write_header_logo' onClick={() => router.push('/')}>
+    <div className="write_div">
+      <div className="write_header_div">
+        <span className="write_header_logo" onClick={() => router.push('/')}>
           keylog
         </span>
         <Navbar></Navbar>
@@ -30,7 +30,7 @@ const CreatePost = ({ post, hashtagArr }: { post: any; hashtagArr: string[] }) =
       <div className={`write_main_div ${keyword ? '' : 'jc_c'}`}>
         <ToastEditor postId={postId as string | undefined} post={post} tagArr={hashtagArr} />
         {keyword ? (
-          <div className='write_keyword_div'>
+          <div className="write_keyword_div">
             <TrendKeyword />
           </div>
         ) : (
@@ -41,17 +41,17 @@ const CreatePost = ({ post, hashtagArr }: { post: any; hashtagArr: string[] }) =
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const postId = context.query.postId;
   let post: any;
   let hashtagArr: any;
 
   if (postId) {
-    const currUserId = await getSession(context).then((res) => res?.user?.id);
+    const currUserId = await getSession(context).then(res => res?.user?.id);
     const params = { type: 'read', postId: postId };
     await handlePost(params)
-      .then((res) => JSON.stringify(res))
-      .then((res) => {
+      .then(res => JSON.stringify(res))
+      .then(res => {
         const result = JSON.parse(res);
         post = result.items[0];
         hashtagArr = result.hashtagArr.map((hashtag: hashtag) => hashtag.HASHTAG_NAME);
@@ -59,8 +59,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     params.type = 'getHashtag';
     await handleHashtag(params)
-      .then((res) => JSON.stringify(res))
-      .then((res) => {
+      .then(res => JSON.stringify(res))
+      .then(res => {
         const result = JSON.parse(res).items;
         hashtagArr = result.map((hashtag: hashtag) => hashtag.HASHTAG_NAME);
       });

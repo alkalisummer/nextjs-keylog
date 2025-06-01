@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import IndexLayout from '../components/IndexLayout';
 import { getDailyTrends, getGoogleArticles } from './api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { removeHtml, timeAgoFormat, currentDate } from '../utils/CommonUtils';
+import { removeHtml, timeAgoFormat, formatCurrentDate, formatTraffic } from '../utils/CommonUtils';
 import Link from 'next/link';
 
 interface trend {
-  title: string;
+  keyword: string;
   traffic: string;
   trafficGrowthRate: string;
   activeTime: string;
@@ -26,46 +26,54 @@ interface article {
   title: string;
   link: string;
   mediaCompany: string;
-  pressDate: number;
+  pressDate: number[];
   image: string;
 }
 
 const HomePage = ({
   trends,
-  pubDate,
+  baseDate,
   firstTrendKeywordArticles,
 }: {
   trends: trend[];
-  pubDate: string;
+  baseDate: string;
   firstTrendKeywordArticles: article[];
 }) => {
-  const [keyArr, setKeyArr] = useState<trend[]>(trends);
-  const [baseDate, setBaseDate] = useState<string>(pubDate);
+  const [trendKeywords, setTrendKeywords] = useState<trend[]>(trends);
   const [articles, setArticles] = useState<article[]>(firstTrendKeywordArticles);
-  const [selectKey, setSelectKey] = useState(trends[0].title);
-  const [selectKeyValue, setSelectKeyValue] = useState(trends[0].traffic);
-  debugger;
+  const [selectedKeyword, setSelectedKeyword] = useState(trends[0]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     debugger;
+  //     const trendArticles = await getGoogleArticles(selectedKeyword.articleKeys, 9);
+  //     setArticles(trendArticles);
+  //   })();
+  // }, [selectedKeyword]);
+
   return (
     <IndexLayout tabName="keyword">
       <div className="index_main_div">
         <div className="index_main_title_div">
           <div className="index_main_title">
-            <span className="mr30">{`# ${selectKey}`}</span>
+            <span className="mr30">{`# ${selectedKeyword.keyword}`}</span>
             <span className="index_main_value">
-              {selectKeyValue.toString().replaceAll('+', '')}
+              {formatTraffic(selectedKeyword.traffic)}
               <i className="fa-solid fa-up-long index_main_value_ico"></i>
               <span className="index_main_cnt">(검색 횟수)</span>
             </span>
           </div>
         </div>
         <div className="index_main_keyword_div">
-          {keyArr.map((keyword, idx) => (
+          {trendKeywords.map((trendKeyword, idx) => (
             <span
               key={idx}
-              id={keyword.title}
-              className={`index_main_keyword ${keyword.title === selectKey ? 'index_highlight' : ''}`}
-              // onClick={() => setKeywordArticles(keyword.articles, keyword.name, keyword.value)}
-            >{`#${keyword.title}`}</span>
+              id={trendKeyword.keyword}
+              className={`index_main_keyword ${
+                trendKeyword.keyword === selectedKeyword.keyword ? 'index_highlight' : ''
+              }`}
+              onClick={() => setSelectedKeyword(trendKeyword)}
+            >{`#${trendKeyword.keyword}`}</span>
           ))}
         </div>
         {articles && articles.length > 0 ? (
@@ -105,17 +113,17 @@ const HomePage = ({
 export const getServerSideProps: GetServerSideProps = async context => {
   const result = await getDailyTrends('ko');
   const trends = result.data;
-  const pubDate = `(인기 급상승 검색어 기준일: ${currentDate()})`;
+  const baseDate = `(인기 급상승 검색어 기준일: ${formatCurrentDate()})`;
 
   // 검색 횟수 내림차순 정렬
   trends.sort((a: trend, b: trend) => Number(b.traffic) - Number(a.traffic));
 
   const firstTrendKeywordInfo = trends[0];
-  const firstTrendKeywordArticles = await getGoogleArticles(firstTrendKeywordInfo.articleKeys, 10);
+  const firstTrendKeywordArticles = await getGoogleArticles(firstTrendKeywordInfo.articleKeys, 9);
   return {
     props: {
       trends,
-      pubDate,
+      baseDate,
       firstTrendKeywordArticles,
     },
   };

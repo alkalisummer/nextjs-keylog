@@ -3,7 +3,6 @@ import React from 'react';
 interface wDataArr {
   name: string;
   value: number;
-  articles: [];
 }
 
 export const WordCloudOpt = (dataArr: wDataArr[]) => {
@@ -31,7 +30,13 @@ export const WordCloudOpt = (dataArr: wDataArr[]) => {
           // Color can be a callback function or a color string
           color: function () {
             // Random color
-            return 'rgb(' + [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(',') + ')';
+            return (
+              'rgb(' +
+              [Math.round(Math.random() * 160), Math.round(Math.random() * 160), Math.round(Math.random() * 160)].join(
+                ',',
+              ) +
+              ')'
+            );
           },
         },
         emphasis: {

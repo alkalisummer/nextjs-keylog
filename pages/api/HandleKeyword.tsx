@@ -31,8 +31,8 @@ interface imgData {
 }
 
 export const getDailyTrends = async (lang: string) => {
-  const result = await GoogleTrendsApi.dailyTrends({ geo: 'KR', lang });
-  return result;
+  const dailyTrends = await GoogleTrendsApi.dailyTrends({ geo: 'KR', lang });
+  return dailyTrends;
 };
 
 export const getGoogleArticles = async (articleKeys: articleKey[], articleCount: number) => {
@@ -165,25 +165,9 @@ const getImages = async (keyword: string, pageNum: number) => {
   return images;
 };
 
-const getInterestOverTime = async (keywordArr: string, startDate: string, endDate: string) => {
-  const serachParams = {
-    startDate: startDate,
-    endDate: endDate,
-    timeUnit: 'date',
-    keywordGroups: keywordArr,
-  };
-  const headers = {
-    'X-Naver-Client-Id': process.env.X_NAVER_CLIENT_ID,
-    'X-Naver-Client-Secret': process.env.X_NAVER_CLIENT_SECRET,
-    'Content-Type': 'application/json',
-  };
-  const result = await axios
-    .post('https://openapi.naver.com/v1/datalab/search', serachParams, { headers: headers })
-    .then(res => {
-      return res.data.results;
-    });
-
-  return result;
+const getInterestOverTime = async (keyword: string, geo: string) => {
+  const interests = await GoogleTrendsApi.interestOverTime({ keyword, geo });
+  return interests;
 };
 
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
@@ -200,8 +184,8 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
 
   switch (type) {
     case 'dailyTrends':
-      const hl = request.query.hl as string;
-      res = await getDailyTrends(hl);
+      const lang = request.query.lang as string;
+      res = await getDailyTrends(lang);
       break;
     case 'relatedQueries':
       const searchKeyword = request.query.keyword;
@@ -211,10 +195,8 @@ export default async function HandleKeyword(request: NextApiRequest, response: N
       res = suggestRes.data[1];
       break;
     case 'interestOverTime':
-      const keyWordArr = request.body.params.keyword;
-      const startTm = formatDate(new Date(new Date().setFullYear(new Date().getFullYear() - 1)));
-      const endTm = formatDate(new Date(new Date().setDate(new Date().getDate() - 1)));
-      const interestRes = await getInterestOverTime(keyWordArr, startTm, endTm);
+      const interestOverTimekeyword = request.body.params.keyword;
+      const interestRes = await getInterestOverTime(interestOverTimekeyword, 'KR');
       res = interestRes;
       break;
     case 'articlePrompt':

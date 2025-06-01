@@ -45,7 +45,7 @@ export function timeFormat(currTime: string) {
   return fullTimeFormat;
 }
 
-export function currentDate() {
+export function formatCurrentDate() {
   const date = new Date();
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -68,12 +68,20 @@ export function removeHtml(str: string) {
   return plainText;
 }
 
-export function timeAgoFormat(pressDate: number) {
-  const date = new Date(pressDate);
-  const currentDate = new Date();
-  const diffTime = Math.abs(currentDate.getTime() - date.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+export function timeAgoFormat(pressDateArr: number[]) {
+  if (!Array.isArray(pressDateArr) || pressDateArr.length === 0) return '';
+  const pressDate = pressDateArr[0] * 1000; // 초 → 밀리초
+  const now = Date.now();
+  const diffMs = now - pressDate;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return '방금 전';
+  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffHour < 24) return `${diffHour}시간 전`;
+  return `${diffDay}일 전`;
 }
 
 export async function onUploadImage(imgFile: any) {
@@ -162,4 +170,14 @@ export function storePathValues(url: string) {
   const prevPath = storage.getItem('currentPath') ?? '/';
   storage.setItem('prevPath', prevPath);
   storage.setItem('currentPath', url ? url : globalThis.location.pathname);
+}
+
+export function formatTraffic(traffic: string) {
+  if (traffic.includes('0000')) {
+    return traffic.replace('0000', '') + '만';
+  }
+  if (traffic.includes('000')) {
+    return traffic.replace('000', '') + '천';
+  }
+  return traffic;
 }
