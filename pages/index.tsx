@@ -114,12 +114,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const result = await getDailyTrends('ko');
   const trends = result.data;
   const baseDate = `(인기 급상승 검색어 기준일: ${formatCurrentDate()})`;
-
   // 검색 횟수 내림차순 정렬
   trends.sort((a: trend, b: trend) => Number(b.traffic) - Number(a.traffic));
 
   const firstTrendKeywordInfo = trends[0];
-  const firstTrendKeywordArticles = await getGoogleArticles(firstTrendKeywordInfo.articleKeys, 9);
+  const firstTrendKeywordArticles = (await getGoogleArticles(firstTrendKeywordInfo.articleKeys, 9)).data;
   return {
     props: {
       trends,

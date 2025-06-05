@@ -91,7 +91,7 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
       };
 
       const getTempPost = async () => {
-        await axios.get('/api/HandlePost', { params: param }).then(async (res) => {
+        await axios.get('/api/HandlePost', { params: param }).then(async res => {
           if (res.data.items.length > 0) {
             const tmpPost = res.data.items[0];
             if (confirm(`${timeFormat(tmpPost.RGSN_DTTM)} 에 저장된 임시 글이 있습니다. \n 이어서 작성하시겠습니까?`)) {
@@ -220,8 +220,8 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
       };
       await axios
         .post('/api/HandlePost', { data: postData })
-        .then((response) => response.data)
-        .then((res) => {
+        .then(response => response.data)
+        .then(res => {
           if (!postId && type === 'insert' && saveType === 'publish') {
             // 신규등록인 경우
             router.push(`/${userId}/posts/${res.postId}`);
@@ -283,14 +283,21 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
 
   return (
     <div className={`${keyword ? '' : 'w70'} post_write_div`}>
-      <div className='post_title_created'>
-        <input type='text' className='post_title_input' placeholder='제목을 입력하세요' value={title} maxLength={300} onChange={(e) => setTitle(e.target.value)} />
+      <div className="post_title_created">
+        <input
+          type="text"
+          className="post_title_input"
+          placeholder="제목을 입력하세요"
+          value={title}
+          maxLength={300}
+          onChange={e => setTitle(e.target.value)}
+        />
       </div>
       <Editor
         ref={editorRef}
-        height='86%'
-        initialEditType='wysiwyg'
-        initialValue='내용을 입력하세요.'
+        height="86%"
+        initialEditType="wysiwyg"
+        initialValue="내용을 입력하세요."
         toolbarItems={[
           ['bold', 'italic', 'strike', 'hr'],
           ['image', 'table'],
@@ -299,20 +306,20 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
         ]}
         plugins={[colorSyntax]}
         hooks={{
-          addImageBlobHook: (imgFile, callBack) => {
-            onUploadImage(imgFile).then((res) => {
+          addImageBlobHook: (imgFile: any, callBack: any) => {
+            onUploadImage(imgFile).then(res => {
               setImgFileArr((arr: any) => [...arr, res.imgName]);
               callBack(res.imgUrl, res.imgName); // 첫번째 인자 : return 받은 이미지 url, 두번째 인자: alt 속성
             });
           },
         }}
       />
-      <div className='post_hashtag_div'>
+      <div className="post_hashtag_div">
         {hashtagArr.length > 0 ? (
           hashtagArr.map((hashtag, idx) => (
-            <span className='post_hashtag_txt' key={idx}>
+            <span className="post_hashtag_txt" key={idx}>
               #{hashtag}
-              <i className='fa-solid fa-xmark post_hashtag_del_btn' onClick={() => deleteTag(idx)}></i>
+              <i className="fa-solid fa-xmark post_hashtag_del_btn" onClick={() => deleteTag(idx)}></i>
             </span>
           ))
         ) : (
@@ -320,27 +327,27 @@ const ToastEditor = ({ postId, post, tagArr }: { postId: string | undefined; pos
         )}
         <Hashtag hashtag={hashtag} setHashtag={setHashtag} hashtagArr={hashtagArr} setHashtagArr={setHashtagArr} />
       </div>
-      <div className='post_btn_div'>
-        <button className='post_cancel_btn' onClick={hadleCancel} type='button'>
+      <div className="post_btn_div">
+        <button className="post_cancel_btn" onClick={hadleCancel} type="button">
           취소
         </button>
         <div>
-          <button className='post_tmp_btn' onClick={() => savePost('temp')}>
+          <button className="post_tmp_btn" onClick={() => savePost('temp')}>
             임시저장
           </button>
-          <button className='post_submit_btn' onClick={() => savePost('publish')}>
+          <button className="post_submit_btn" onClick={() => savePost('publish')}>
             완료
           </button>
         </div>
       </div>
       <Snackbar
         open={showNoti}
-        message='포스트가 임시저장되었습니다.'
+        message="포스트가 임시저장되었습니다."
         autoHideDuration={3000}
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button color='primary' size='small' onClick={closeNoti}>
+            <Button color="primary" size="small" onClick={closeNoti}>
               확인
             </Button>
           </React.Fragment>

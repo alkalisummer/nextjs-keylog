@@ -177,7 +177,7 @@ const TrendKeyword = () => {
       const getLineChart = async () => {
         const queryParams = { type: 'interestOverTime', keyword: selectedKeyword.keyword };
         await axios.post('/api/HandleKeyword', { params: queryParams }).then(result => {
-          const interestResArr = result.data;
+          const interestResArr = result.data.data;
 
           setChartKeywordData([...chartKeywordData, interestResArr]);
 
@@ -197,6 +197,7 @@ const TrendKeyword = () => {
 
           const timeLineData = (chartKeyword: chartKeyword) => {
             let res = [];
+            debugger;
             if (chartKeyword) {
               lineChartkeywordArr.push(chartKeyword.keyword);
               for (let value of chartKeyword.values) {

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { formatDate } from '@/utils/CommonUtils';
-import GoogleTrendsApi from '@shaivpidadi/trends-js';
+import GoogleTrendsApi from '@alkalisummer/trends-js';
 import axios from 'axios';
+import Crawler from 'crawler';
 
 interface naverArticle {
   title: string;
@@ -41,7 +41,6 @@ export const getGoogleArticles = async (articleKeys: articleKey[], articleCount:
 };
 
 const getArticles = async (keyword: string) => {
-  const Crawler = require('crawler');
   const cheerio = require('cheerio');
 
   let naverArticles: naverArticle[] = [];
@@ -57,7 +56,7 @@ const getArticles = async (keyword: string) => {
 
   const c = new Crawler({
     maxConnections: 10,
-    callback: (error: Error, res: any, done: any) => {
+    callback: (error: unknown, res: any, done: any) => {
       if (error) {
         console.log(error);
       } else {
@@ -171,8 +170,6 @@ const getInterestOverTime = async (keyword: string, geo: string) => {
 };
 
 export default async function HandleKeyword(request: NextApiRequest, response: NextApiResponse) {
-  const googleTrends = require('google-trends-api');
-
   let res;
   let type;
 

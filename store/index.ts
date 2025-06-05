@@ -13,7 +13,7 @@ const createStore = () => {
   const sagaMiddleware = createSagaMiddleware();
   const store = configureStore({
     reducer: rootReducer,
-    middleware: [sagaMiddleware],
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(sagaMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
   });
 
