@@ -4,8 +4,8 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { handleMySql as handlePost } from './api/HandlePost';
-import { handleMySql as handleHashtag } from './api/HandleHashtag';
+import { handleMySql as handlePost } from '@/app/api/HandlePost';
+import { handleMySql as handleHashtag } from '@/app/api/HandleHashtag';
 import { getSession } from 'next-auth/react';
 const ToastEditor = dynamic(() => import('@/utils/ToastEditor'), { ssr: false });
 

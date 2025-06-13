@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alkalisummer/trends-js": "^0.0.6",
+    "@alkalisummer/google-trends-js": "^0.1.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",

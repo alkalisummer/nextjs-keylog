@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import GoogleTrendsApi from '@alkalisummer/trends-js';
+import GoogleTrendsApi from '@alkalisummer/google-trends-js';
 import axios from 'axios';
 import Crawler from 'crawler';
 

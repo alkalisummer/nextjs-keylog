@@ -2,9 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import IndexLayout from '../components/IndexLayout';
-import { getDailyTrends, getGoogleArticles } from './api/HandleKeyword';
+import { getDailyTrends, getGoogleArticles } from '@/app/api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { removeHtml, timeAgoFormat, formatCurrentDate, formatTraffic } from '../utils/CommonUtils';
+import { removeHtml, timeAgoFormat, formatCurrentDate, formatTraffic } from '../src/utils/CommonUtils';
 import Link from 'next/link';
 
 interface trend {
