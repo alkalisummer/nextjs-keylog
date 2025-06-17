@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
+'use client';
 import React, { useEffect, useState } from 'react';
-import IndexLayout from '../components/IndexLayout';
+import IndexLayout from '@/widgets/IndexLayout';
 import { getDailyTrends, getGoogleArticles } from '@/app/api/HandleKeyword';
 import { GetServerSideProps } from 'next';
-import { removeHtml, timeAgoFormat, formatCurrentDate, formatTraffic } from '../src/utils/CommonUtils';
+import { removeHtml, timeAgoFormat, formatCurrentDate, formatTraffic } from '../../utils/CommonUtils';
 import Link from 'next/link';
 
 interface trend {

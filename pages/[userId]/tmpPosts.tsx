@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react';
-import BlogLayout from '../../components/BlogLayout';
+import BlogLayout from '../../src/widgets/BlogLayout';
 import Error from '@/pages/_error';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -29,7 +29,7 @@ const TmpPosts = ({ tmpPosts, pageNum }: { tmpPosts: posts; pageNum: number }) =
   const currentUserId = session?.user?.id;
   const { userId } = router.query;
   const [isValidate, setIsValisdate] = useState(true);
-  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
+  const userInfo = useAppSelector(state => state.blogUser.userInfo);
 
   useEffect(() => {
     if (status === 'unauthenticated' || currentUserId !== userId) {
@@ -70,7 +70,11 @@ const TmpPosts = ({ tmpPosts, pageNum }: { tmpPosts: posts; pageNum: number }) =
         <BlogLayout>
           <div className={listStyle.home_div}>
             <div className={listStyle.home_header_div}>
-              <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
+              <img
+                src={userInfo.image ? userInfo.image : '../../icon/person.png'}
+                className={listStyle.home_profile_img}
+                alt="profile img"
+              />
               <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
               <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
             </div>
@@ -85,17 +89,25 @@ const TmpPosts = ({ tmpPosts, pageNum }: { tmpPosts: posts; pageNum: number }) =
                 })}
               </div>
               <div className={listStyle.home_page_nav}>
-                <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
+                <span className={listStyle.home_page_nav_prev} onClick={e => handlePagination(Number(pageNum) - 1)}>
                   <span className={listStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
                 </span>
                 {totalPostsArr.map((obj: number, idx: number) => {
                   return (
-                    <span key={idx} className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num} onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
+                    <span
+                      key={idx}
+                      className={
+                        Number(pageNum) === idx + 1
+                          ? cx(listStyle.home_page_num, listStyle.home_page_slct_num)
+                          : listStyle.home_page_num
+                      }
+                      onClick={e => handlePagination(Number(e.currentTarget.textContent!))}
+                    >
                       {obj}
                     </span>
                   );
                 })}
-                <span className={listStyle.home_page_nav_next} onClick={(e) => handlePagination(Number(pageNum) + 1)}>
+                <span className={listStyle.home_page_nav_next} onClick={e => handlePagination(Number(pageNum) + 1)}>
                   Next&nbsp;&nbsp; <span className={listStyle.home_page_nav_arr}>&gt;</span>
                 </span>
               </div>
@@ -121,7 +133,7 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
     let imgFileArr: string[] = [];
 
     // 임시 게시글에 포함된 이미지 삭제를 위해 게시글 이미지 추출
-    await axios.get('/api/HandlePost', { params: param }).then((res) => {
+    await axios.get('/api/HandlePost', { params: param }).then(res => {
       const post = res.data.items[0];
 
       const htmlCntn = Buffer.from(post.POST_HTML_CNTN).toString();
@@ -148,17 +160,28 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
       {POST_THMB_IMG_URL ? (
         <div className={listStyle.home_post_thumb}>
           <div className={listStyle.home_thumb_content}>
-            <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
+            <span
+              className={`${listStyle.home_post_title} pointer`}
+              onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}
+            >
               {POST_TITLE}
             </span>
-            <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
+            <p
+              className={`${listStyle.home_post_content} pointer`}
+              onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}
+            >
               {POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}
             </p>
             <span className={listStyle.home_post_created}>{timeFormat(RGSN_DTTM)}</span>
           </div>
           <div className={listStyle.home_thumb_img_div}>
-            <img className={`${listStyle.home_thumb_img} pointer`} src={POST_THMB_IMG_URL} alt='thumbImg' onClick={() => router.push(`write?postId=${POST_ID}&keyword=true`)} />
-            <div className='w100 df jc_e mt17'>
+            <img
+              className={`${listStyle.home_thumb_img} pointer`}
+              src={POST_THMB_IMG_URL}
+              alt="thumbImg"
+              onClick={() => router.push(`write?postId=${POST_ID}&keyword=true`)}
+            />
+            <div className="w100 df jc_e mt17">
               <span className={`${listStyle.home_post_del_btn} pointer`} onClick={() => deletePost(POST_ID)}>
                 삭제
               </span>
@@ -167,10 +190,16 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
         </div>
       ) : (
         <div>
-          <span className={`${listStyle.home_post_title} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
+          <span
+            className={`${listStyle.home_post_title} pointer`}
+            onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}
+          >
             {POST_TITLE}
           </span>
-          <p className={`${listStyle.home_post_content} pointer`} onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}>
+          <p
+            className={`${listStyle.home_post_content} pointer`}
+            onClick={() => router.push(`/write?postId=${POST_ID}&keyword=true`)}
+          >
             {POST_CNTN ? POST_CNTN : '작성된 내용이 없습니다.'}
           </p>
           <div className={listStyle.home_post_bottom}>
@@ -185,7 +214,7 @@ const TmpPostItem = ({ tmpPost, userId }: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async context => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   const userId = context.query.userId as string;
   let tmpPosts = {};
@@ -198,8 +227,8 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
   await store.sagaTask?.toPromise();
 
   await handlePost(params)
-    .then((res) => JSON.stringify(res))
-    .then((res) => {
+    .then(res => JSON.stringify(res))
+    .then(res => {
       tmpPosts = JSON.parse(res);
     });
 

@@ -1,5 +1,5 @@
 // 오라클 클라우드 api key
-import API_KEY from '@/config/bucket_url_config';
+import API_KEY from '@/shared/config/Bucket';
 
 export function timeToString(dateParam: Date) {
   let year: number | string = dateParam.getFullYear();

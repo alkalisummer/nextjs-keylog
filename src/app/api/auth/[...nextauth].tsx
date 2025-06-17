@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { handleMySql } from '@/pages/api/HandleUser';
+import { handleMySql } from '@/app/api/HandleUser';
 import { verifyPassword } from '@/utils/Bcypt';
 
 export default NextAuth({
@@ -21,12 +21,18 @@ export default NextAuth({
         const password = credentials?.password;
 
         const params = { type: 'getUser', id: id };
-        const user = await handleMySql(params).then((res) => {
+        const user = await handleMySql(params).then(res => {
           return res.items[0];
         });
         const isValid = await verifyPassword(password!, user.USER_PASSWORD);
         if (user && isValid) {
-          return { id: user.USER_ID, email: user.USER_EMAIL, name: user.USER_NICKNAME, image: user.USER_THMB_IMG_URL ? user.USER_THMB_IMG_URL : '', blogName: user.USER_BLOG_NAME };
+          return {
+            id: user.USER_ID,
+            email: user.USER_EMAIL,
+            name: user.USER_NICKNAME,
+            image: user.USER_THMB_IMG_URL ? user.USER_THMB_IMG_URL : '',
+            blogName: user.USER_BLOG_NAME,
+          };
         } else {
           return null;
         }

@@ -1,10 +1,10 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { HYDRATE } from 'next-redux-wrapper';
 import { combineReducers } from '@reduxjs/toolkit';
-import { handleMySql as handleUser } from '@/pages/api/HandleUser';
-import { handleMySql as handlePost } from '@/pages/api/HandlePost';
-import { handleMySql as handleComment } from '@/pages/api/HandleComment';
-import { handleMySql as handleHashtag } from '@/pages/api/HandleHashtag';
+import { handleMySql as handleUser } from '@/app/api/HandleUser';
+import { handleMySql as handlePost } from '@/app/api/HandlePost';
+import { handleMySql as handleComment } from '@/app/api/HandleComment';
+import { handleMySql as handleHashtag } from '@/app/api/HandleHashtag';
 
 // 액션 타입
 const FETCH_BLOG_USER = 'FETCH_BLOG_USER';
@@ -57,7 +57,7 @@ export const getUserInfo = async (userId: string) => {
   const params = { type: 'getUser', id: userId };
   let user;
   try {
-    user = await handleUser(params).then((res) => {
+    user = await handleUser(params).then(res => {
       return res.totalItems === 0 ? {} : JSON.parse(JSON.stringify(res.items[0]));
     });
   } catch (error) {
@@ -70,7 +70,7 @@ export const getUserInfo = async (userId: string) => {
 export const getRecentPost = async (userId: string) => {
   const params = { type: 'getRecentPost', id: userId };
   let recentPosts;
-  await handlePost(params).then((res) => {
+  await handlePost(params).then(res => {
     const result = JSON.parse(JSON.stringify(res));
     recentPosts = result.items;
   });
@@ -80,7 +80,7 @@ export const getRecentPost = async (userId: string) => {
 export const getPopularPost = async (userId: string) => {
   const params = { type: 'getPopularPost', id: userId };
   let popularPosts;
-  await handlePost(params).then((res) => {
+  await handlePost(params).then(res => {
     const result = JSON.parse(JSON.stringify(res));
     popularPosts = result.items;
   });
@@ -89,7 +89,7 @@ export const getPopularPost = async (userId: string) => {
 
 export const getRecentComment = async (userId: string) => {
   const params = { type: 'getRecentComment', id: userId };
-  const recentComments = await handleComment(params).then((res) => {
+  const recentComments = await handleComment(params).then(res => {
     const result = JSON.parse(JSON.stringify(res));
     return result.items;
   });
@@ -98,7 +98,7 @@ export const getRecentComment = async (userId: string) => {
 
 export const getHashtags = async (userId: string) => {
   const params = { type: 'getHashtagCnt', id: userId };
-  const hashtags = await handleHashtag(params).then((res) => {
+  const hashtags = await handleHashtag(params).then(res => {
     const result = JSON.parse(JSON.stringify(res));
     return result.items;
   });
@@ -123,7 +123,10 @@ function* fetchBlogUserInfo(action: actionType) {
       blogName: user.USER_BLOG_NAME ?? null,
     };
 
-    yield put({ type: FETCH_BLOG_USER_SUCCESS, payload: { userInfo, recentPosts, popularPosts, recentComments, hashtagCnt } });
+    yield put({
+      type: FETCH_BLOG_USER_SUCCESS,
+      payload: { userInfo, recentPosts, popularPosts, recentComments, hashtagCnt },
+    });
   } catch (error) {
     if (error) {
       yield put({ type: FETCH_BLOG_USER_FAIL, payload: error });

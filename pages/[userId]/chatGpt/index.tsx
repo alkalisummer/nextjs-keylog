@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BlogLayout from '../../../components/BlogLayout';
+import BlogLayout from '../../../src/widgets/BlogLayout';
 import ChatGptHandle from '@/utils/ChatGptHandle';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ const ChatGpt = () => {
   const [chatContent, setChatContent] = useState<{ role: string; content: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const router = useRouter();
-  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
+  const userInfo = useAppSelector(state => state.blogUser.userInfo);
 
   useEffect(() => {
     if (userInfo.id) {
@@ -31,7 +31,8 @@ const ChatGpt = () => {
       footer.style.display = 'none';
       leftArea.style.backgroundColor = '#202123';
       blogName.style.color = '#d1d1d1';
-      createBtn.style.filter = 'invert(100%) sepia(100%) saturate(0%) hue-rotate(10deg) brightness(103%) contrast(101%)';
+      createBtn.style.filter =
+        'invert(100%) sepia(100%) saturate(0%) hue-rotate(10deg) brightness(103%) contrast(101%)';
       chatGptBtn.style.filter = 'invert(35%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
 
       return () => {
@@ -40,7 +41,8 @@ const ChatGpt = () => {
         leftArea.style.backgroundColor = '#009bf2';
         blogName.style.color = '#5c5c5c';
         createBtn.style.filter = 'unset';
-        chatGptBtn.style.filter = 'invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
+        chatGptBtn.style.filter =
+          'invert(50%) sepia(1%) saturate(0%) hue-rotate(100deg) brightness(101%) contrast(89%)';
       };
     }
   }, []);
@@ -58,7 +60,7 @@ const ChatGpt = () => {
     //setIsLoading(true);
     setUserInput('');
 
-    const tmpChat = chatContent.map((obj) => obj);
+    const tmpChat = chatContent.map(obj => obj);
 
     // gpt 응답을 받기전까지 사용자 input disabled
     const userInputEl = document.getElementsByClassName('user_input')[0] as HTMLInputElement;
@@ -112,19 +114,25 @@ const ChatGpt = () => {
 
   return (
     <BlogLayout>
-      <form className='chat_div' onSubmit={handleSubmit}>
-        <div className='chat_header_div'>
-          <span className='chat_back_arrow' onClick={() => router.back()}>
+      <form className="chat_div" onSubmit={handleSubmit}>
+        <div className="chat_header_div">
+          <span className="chat_back_arrow" onClick={() => router.back()}>
             &lt;
           </span>
-          <span className='chat_header_title'>ChatGPT</span>
-          <button type='button' className='char_clear_btn' onClick={clearChat}></button>
+          <span className="chat_header_title">ChatGPT</span>
+          <button type="button" className="char_clear_btn" onClick={clearChat}></button>
         </div>
-        <div className='chat_content_div'></div>
-        <div className='user_input_div'>
-          <input type='text' className='user_input' value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder='Send a message' />
-          <div className='chat_submit_btn_div'>
-            <button type='submit' className='chat_submit_btn'></button>
+        <div className="chat_content_div"></div>
+        <div className="user_input_div">
+          <input
+            type="text"
+            className="user_input"
+            value={userInput}
+            onChange={e => setUserInput(e.target.value)}
+            placeholder="Send a message"
+          />
+          <div className="chat_submit_btn_div">
+            <button type="submit" className="chat_submit_btn"></button>
           </div>
         </div>
       </form>
@@ -132,7 +140,7 @@ const ChatGpt = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async context => {
   const userId = context.query.userId as string;
 
   store.dispatch(fetchBlogUser(userId as string));

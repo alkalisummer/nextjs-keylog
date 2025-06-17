@@ -1,7 +1,7 @@
 import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
 
-import RefreshTokenHandler from '../components/RefreshTokenHandler';
+import RefreshTokenHandler from '../src/widgets/RefreshTokenHandler';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -10,7 +10,7 @@ import Script from 'next/script';
 import { storePathValues } from '@/utils/CommonUtils';
 
 //redux, redux-saga
-import wrapper from '@/store';
+import wrapper from '../store';
 
 //css
 import '@/styles/globals.css';
@@ -32,17 +32,17 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <SessionProvider session={session} refetchInterval={sessionRefetchInterval}>
-      <div className='main_area'>
-        <Script src='https://kit.fontawesome.com/25678e103e.js' crossOrigin='anonymous' />
+      <div className="main_area">
+        <Script src="https://kit.fontawesome.com/25678e103e.js" crossOrigin="anonymous" />
         <Head>
           <title> keylog </title>
-          <meta property='og:type' content='website'></meta>
-          <meta property='og:title' content='Keylog'></meta>
-          <meta property='og:site_name' content='Keylog'></meta>
-          <meta property='og:url' content='https://keylog.hopto.org'></meta>
-          <meta property='og:image' content='https://keylog.hopto.org/keyword.png'></meta>
-          <meta property='og:description' content='인기 키워드를 활용한 블로그 포스팅'></meta>
-          <meta name='viewport' content='initial-scale=1.0, user-scalable=no, maximum-scale=1, width=device-width' />
+          <meta property="og:type" content="website"></meta>
+          <meta property="og:title" content="Keylog"></meta>
+          <meta property="og:site_name" content="Keylog"></meta>
+          <meta property="og:url" content="https://keylog.hopto.org"></meta>
+          <meta property="og:image" content="https://keylog.hopto.org/keyword.png"></meta>
+          <meta property="og:description" content="인기 키워드를 활용한 블로그 포스팅"></meta>
+          <meta name="viewport" content="initial-scale=1.0, user-scalable=no, maximum-scale=1, width=device-width" />
         </Head>
         <Component {...pageProps} />
       </div>

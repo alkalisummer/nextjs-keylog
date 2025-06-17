@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import BlogLayout from '../../components/BlogLayout';
+import BlogLayout from '../../src/widgets/BlogLayout';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
 import listStyle from '../../styles/List.module.css';
@@ -27,7 +27,7 @@ const ListPage = ({ posts, pageNum }: { posts: posts; pageNum: number }) => {
   const router = useRouter();
   const { userId, tagId } = router.query;
   let totalPageNum: number;
-  const userInfo = useAppSelector((state) => state.blogUser.userInfo);
+  const userInfo = useAppSelector(state => state.blogUser.userInfo);
 
   if (!userInfo.id) {
     return <Error statusCode={404} />;
@@ -58,14 +58,20 @@ const ListPage = ({ posts, pageNum }: { posts: posts; pageNum: number }) => {
     <BlogLayout>
       <div className={listStyle.home_div}>
         <div className={listStyle.home_header_div}>
-          <img src={userInfo.image ? userInfo.image : '../../icon/person.png'} className={listStyle.home_profile_img} alt='profile img' />
+          <img
+            src={userInfo.image ? userInfo.image : '../../icon/person.png'}
+            className={listStyle.home_profile_img}
+            alt="profile img"
+          />
           <span className={listStyle.home_blog_name}>{userInfo.blogName}</span>
           <span className={listStyle.home_header_title}>{userInfo.nickname}</span>
         </div>
         <div className={listStyle.home_main}>
           <div className={listStyle.home_post}>
             <div className={listStyle.home_header}>
-              <span className={listStyle.home_post_cnt}>{`${tagId ? `'${posts.items[0].HASHTAG_NAME}' 태그의 글 목록` : '전체 글'}(${posts.totalItems})`}</span>
+              <span className={listStyle.home_post_cnt}>{`${
+                tagId ? `'${posts.items[0].HASHTAG_NAME}' 태그의 글 목록` : '전체 글'
+              }(${posts.totalItems})`}</span>
               {CheckAuth() ? (
                 <div className={listStyle.home_header_btn}>
                   <Link href={`/${userId}/chatGpt`}>
@@ -85,17 +91,25 @@ const ListPage = ({ posts, pageNum }: { posts: posts; pageNum: number }) => {
             })}
           </div>
           <div className={listStyle.home_page_nav}>
-            <span className={listStyle.home_page_nav_prev} onClick={(e) => handlePagination(Number(pageNum) - 1)}>
+            <span className={listStyle.home_page_nav_prev} onClick={e => handlePagination(Number(pageNum) - 1)}>
               <span className={listStyle.home_page_nav_arr}>&lt;</span> &nbsp;&nbsp;Prev
             </span>
             {totalPostsArr.map((obj: number, idx: number) => {
               return (
-                <span key={idx} className={Number(pageNum) === idx + 1 ? cx(listStyle.home_page_num, listStyle.home_page_slct_num) : listStyle.home_page_num} onClick={(e) => handlePagination(Number(e.currentTarget.textContent!))}>
+                <span
+                  key={idx}
+                  className={
+                    Number(pageNum) === idx + 1
+                      ? cx(listStyle.home_page_num, listStyle.home_page_slct_num)
+                      : listStyle.home_page_num
+                  }
+                  onClick={e => handlePagination(Number(e.currentTarget.textContent!))}
+                >
                   {obj}
                 </span>
               );
             })}
-            <span className={listStyle.home_page_nav_next} onClick={(e) => handlePagination(Number(pageNum) + 1)}>
+            <span className={listStyle.home_page_nav_next} onClick={e => handlePagination(Number(pageNum) + 1)}>
               Next&nbsp;&nbsp; <span className={listStyle.home_page_nav_arr}>&gt;</span>
             </span>
           </div>
@@ -118,7 +132,7 @@ const PostItem = ({ post, userId }: any) => {
               <span className={listStyle.home_post_created}>{timeFormat(RGSN_DTTM)}</span>
             </div>
             <div className={listStyle.home_thumb_img_div}>
-              <img className={listStyle.home_thumb_img} src={POST_THMB_IMG_URL} alt='thumbImg' />
+              <img className={listStyle.home_thumb_img} src={POST_THMB_IMG_URL} alt="thumbImg" />
             </div>
           </div>
         ) : (
@@ -133,7 +147,7 @@ const PostItem = ({ post, userId }: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(store => async context => {
   const pageNum = context.query.pageNum ? context.query.pageNum : 1;
   const userId = context.query.userId as string;
   const tagId = context.query.tagId as string;
@@ -147,8 +161,8 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
   await store.sagaTask?.toPromise();
 
   await handlePost(params)
-    .then((res) => JSON.stringify(res))
-    .then((res) => {
+    .then(res => JSON.stringify(res))
+    .then(res => {
       posts = JSON.parse(res);
     });
 

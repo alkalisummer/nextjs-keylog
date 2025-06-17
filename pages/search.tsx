@@ -9,7 +9,7 @@ import { handleMySql as handlePost } from './api/HandlePost';
 
 //게시물 검색 무한 스크롤
 import { useInView } from 'react-intersection-observer';
-import IndexLayout from '../components/IndexLayout';
+import IndexLayout from '../src/widgets/IndexLayout';
 
 interface post {
   POST_ID: string;
