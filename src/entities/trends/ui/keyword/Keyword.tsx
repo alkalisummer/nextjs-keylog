@@ -1,3 +1,5 @@
+'use client';
+
 import { Trend } from '../../model';
 import css from './keyword.module.scss';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';

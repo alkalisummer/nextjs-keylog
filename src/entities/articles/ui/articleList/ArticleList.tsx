@@ -9,7 +9,7 @@ interface ArticleListProps {
 }
 
 export const ArticleList = ({ articles }: ArticleListProps) => {
-  const baseDate = formatFullDate(new Date(), '.');
+  const baseDate = `(인기 급상승 검색어 기준일: ${formatFullDate(new Date(), '.')})`;
 
   return (
     <Fragment>

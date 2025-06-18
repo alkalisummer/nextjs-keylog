@@ -1,5 +1,7 @@
-import css from './keywordList.module.scss';
+'use client';
+
 import { Trend } from '../../model';
+import css from './keywordList.module.scss';
 
 interface KeywordListProps {
   trends: Trend[];
