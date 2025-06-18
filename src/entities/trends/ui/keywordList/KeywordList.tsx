@@ -1,10 +1,10 @@
 import css from './keywordList.module.scss';
-import { trend } from '../../model';
+import { Trend } from '../../model';
 
 interface KeywordListProps {
-  trends: trend[];
-  selectedKeyword: trend;
-  setSelectedKeyword: (trend: trend) => void;
+  trends: Trend[];
+  selectedKeyword: Trend;
+  setSelectedKeyword: (trend: Trend) => void;
 }
 
 export const KeywordList = ({ trends, selectedKeyword, setSelectedKeyword }: KeywordListProps) => {

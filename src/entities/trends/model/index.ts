@@ -1,1 +1,1 @@
-export type { trend, articleKey, article } from './type';
+export type { Trend } from './type';
