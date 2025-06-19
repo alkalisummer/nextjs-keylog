@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Fragment } from 'react';
 import css from './articleList.module.scss';
@@ -24,7 +26,7 @@ export const ArticleList = ({ articles }: ArticleListProps) => {
               <div className={`${css.articleInfo} ${article.image ? css.noImg : ''}`}>
                 <span className={css.articleTitle}>{article.title}</span>
                 <div className={css.articleBottom}>
-                  <span>{article.mediaCompany}</span>•<span>{article.pressDate}</span>
+                  <span>{article.mediaCompany}</span>•<span>{article.formattedPressDate}</span>
                 </div>
               </div>
             </div>

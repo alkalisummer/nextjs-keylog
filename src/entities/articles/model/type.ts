@@ -8,7 +8,7 @@ export interface Article {
   title: string;
   link: string;
   mediaCompany: string;
-  pressDateArr: number[];
-  pressDate?: string;
+  pressDate: number[];
+  formattedPressDate?: string;
   image: string;
 }

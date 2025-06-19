@@ -2,7 +2,6 @@ import { Trend } from '../model';
 import { formatTraffic } from './transform';
 
 export const createDailyTrends = (trends: Trend[]) => {
-  debugger;
   return trends.map(
     trend =>
       <Trend>{

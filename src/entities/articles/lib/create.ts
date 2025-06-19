@@ -8,8 +8,8 @@ export const createArticles = (articles: Article[]) => {
         title: removeHtml(article.title),
         link: article.link,
         mediaCompany: article.mediaCompany,
-        pressDateArr: article.pressDateArr,
-        pressDate: formatTimeAgo(article.pressDateArr),
+        pressDate: article.pressDate,
+        formattedPressDate: formatTimeAgo(article.pressDate),
         image: article.image,
       },
   );
