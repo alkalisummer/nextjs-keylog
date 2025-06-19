@@ -1,3 +1,5 @@
+'use client';
+
 import { useSession } from 'next-auth/react';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
@@ -5,7 +7,7 @@ interface Props {
   setSessionRefetchInterval: Dispatch<SetStateAction<number>>;
 }
 
-const RefreshTokenHandler = ({ setSessionRefetchInterval }: Props) => {
+export const RefreshToken = ({ setSessionRefetchInterval }: Props) => {
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -23,5 +25,3 @@ const RefreshTokenHandler = ({ setSessionRefetchInterval }: Props) => {
 
   return null;
 };
-
-export default RefreshTokenHandler;

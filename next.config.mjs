@@ -7,7 +7,6 @@ const __dirname = path.dirname(__filename);
 
 const nextConfig = {
   output: 'standalone',
-
   env: {
     BASE_URL: process.env.BASE_URL,
 
@@ -33,7 +32,8 @@ const nextConfig = {
     X_NAVER_CLIENT_SECRET: process.env.X_NAVER_CLIENT_SECRET,
 
     //NEXT_AUTH
-    SECRET: process.env.SECRET,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
 
     //Gmail Account
     MAIL_SERVICE: process.env.MAIL_SERVICE,

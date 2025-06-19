@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "pages/_error.tsx",
     "pages/404.tsx",
-    "pages/500.tsx"
+    "pages/500.tsx",
+    "src/app/api/auth/[...nextauth]/next-auth.d.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -9,21 +9,26 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
   const token = await getToken({ req, secret, raw: true });
   const { pathname } = req.nextUrl;
 
+  // 루트 경로를 /home으로 리다이렉트
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/home', req.url));
+  }
+
   //로그인이 되어 있는 경우 로그인, 회원가입 화면 접근 불가
   if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
     if (token) {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/home', req.url));
     }
   }
 
   //로그인이 되어 있지 않은 경우 글 쓰기 화면 접근 불가
   if (pathname.startsWith('/write')) {
     if (!token) {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/home', req.url));
     }
   }
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/write'],
+  matcher: ['/', '/login', '/signup', '/write'],
 };

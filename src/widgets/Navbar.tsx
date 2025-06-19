@@ -1,8 +1,11 @@
+'use client';
+
 /* eslint-disable @next/next/no-img-element */
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+
 import axios from 'axios';
 
 import { onUploadImage, getImgName, timeToString, storePathValues } from '@/utils/CommonUtils';
@@ -22,8 +25,9 @@ const Navbar = () => {
   //사용자 세션
   const { data: session, status, update } = useSession();
 
-  const router = useRouter();
-  const { userId, id } = router.query;
+  const searchParams = useSearchParams();
+  const userId = searchParams?.get('userId');
+  const id = searchParams?.get('id');
 
   //로그인시 메뉴 토글
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -116,7 +120,12 @@ const Navbar = () => {
 
     if (status === 'authenticated') {
       const userId = session?.user?.id;
-      const params = { type: 'updateNicknameBlogName', nickname: nickname.replaceAll('\\', '\\\\'), blogName: blogName.replaceAll('\\', '\\\\'), id: userId };
+      const params = {
+        type: 'updateNicknameBlogName',
+        nickname: nickname.replaceAll('\\', '\\\\'),
+        blogName: blogName.replaceAll('\\', '\\\\'),
+        id: userId,
+      };
       await axios.get('/api/HandleUser', { params: params });
       await update({ nickname, blogName });
     }
@@ -139,7 +148,7 @@ const Navbar = () => {
 
     //현재 비밀번호 일치유무 확인
     const params = { password: currPassword, id: session?.user?.id };
-    await axios.post('/api/CheckCurrentPassword', { data: params }).then((res) => {
+    await axios.post('/api/CheckCurrentPassword', { data: params }).then(res => {
       const result = res.data.isValid;
       if (!result) {
         isValidate = false;
@@ -175,7 +184,7 @@ const Navbar = () => {
     const userId = session?.user?.id;
     const amntDttm = timeToString(new Date());
     const params = { type: 'updatePassword', password: newPassword, id: userId, amntDttm: amntDttm };
-    axios.post('/api/HandleUser', { data: params }).then((res) => {
+    axios.post('/api/HandleUser', { data: params }).then(res => {
       alert('비밀번호가 변경되었습니다.');
       setCurrPassword('');
       setNewPassword('');
@@ -196,7 +205,7 @@ const Navbar = () => {
     const userId = session?.user?.id;
     const params = { type: 'dropOut', id: userId };
 
-    await axios.post('/api/HandleUser', { data: params }).then((res) => {
+    await axios.post('/api/HandleUser', { data: params }).then(res => {
       setOpenModal(false);
       logout();
     });
@@ -223,7 +232,7 @@ const Navbar = () => {
     }
 
     const params = { type: 'updateEmail', id: userId, email: email };
-    await axios.post('/api/HandleUser', { data: params }).then(async (res) => {
+    await axios.post('/api/HandleUser', { data: params }).then(async res => {
       await update({ email });
       setShowEmailInput(false);
     });
@@ -246,20 +255,24 @@ const Navbar = () => {
   };
 
   return (
-    <div className='nav_div'>
+    <div className="nav_div">
       {status === 'authenticated' ? (
-        <div className='df'>
+        <div className="df">
           <div className={showCreateBtn ? '' : 'dn'}>
-            <Link href={`/write?keyword=true`} className='nav_create_link'>
-              <button className='nav_create_btn'>새 글 작성</button>
+            <Link href={`/write?keyword=true`} className="nav_create_link">
+              <button className="nav_create_btn">새 글 작성</button>
             </Link>
           </div>
-          <div onClick={openToggle} className='nav_menu_div'>
-            <img id='nav_menu_img' src={session.user?.image ? session.user?.image : '/icon/person.png'} alt='userImage'></img>
+          <div onClick={openToggle} className="nav_menu_div">
+            <img
+              id="nav_menu_img"
+              src={session.user?.image ? session.user?.image : '/icon/person.png'}
+              alt="userImage"
+            ></img>
             <div>▾</div>
           </div>
           <Menu
-            id='basic-menu'
+            id="basic-menu"
             anchorEl={anchorEl}
             open={toggleOpen}
             onClose={closeToggle}
@@ -269,12 +282,12 @@ const Navbar = () => {
           >
             <MenuItem>
               <Link href={`/${session.user?.id}`}>
-                <i className='fa-brands fa-kickstarter nav_menu_item_ico'></i>내 키로그
+                <i className="fa-brands fa-kickstarter nav_menu_item_ico"></i>내 키로그
               </Link>
             </MenuItem>
             <MenuItem>
               <Link href={`/${session.user?.id}/tmpPosts`}>
-                <i className='fa-solid fa-file-signature nav_menu_item_ico'></i>임시 글
+                <i className="fa-solid fa-file-signature nav_menu_item_ico"></i>임시 글
               </Link>
             </MenuItem>
             <MenuItem
@@ -283,24 +296,24 @@ const Navbar = () => {
                 closeToggle();
               }}
             >
-              <i className='fa-solid fa-user nav_menu_item_ico'></i>계정 관리
+              <i className="fa-solid fa-user nav_menu_item_ico"></i>계정 관리
             </MenuItem>
             <MenuItem onClick={() => logout()}>
-              <i className='fa-solid fa-right-from-bracket nav_menu_item_ico'></i>로그아웃
+              <i className="fa-solid fa-right-from-bracket nav_menu_item_ico"></i>로그아웃
             </MenuItem>
           </Menu>
         </div>
       ) : (
         <div>
-          <Link href={'/login'} className='nav_login_btn'>
+          <Link href={'/login'} className="nav_login_btn">
             로그인
           </Link>
         </div>
       )}
-      <Modal open={openModal} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
-        <div className='nav_modal_div'>
+      <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+        <div className="nav_modal_div">
           <button
-            className='nav_modal_close_btn'
+            className="nav_modal_close_btn"
             onClick={() => {
               setOpenModal(false);
               setShowNameInput(false);
@@ -309,25 +322,29 @@ const Navbar = () => {
           >
             ✕
           </button>
-          <div className='nav_modal_profile'>
-            <div className='nav_profile_img_div'>
-              <img id='nav_profile_img' src={session?.user?.image ? session.user?.image : '/icon/person.png'} alt='userImage'></img>
-              <label htmlFor='fileInput' className='nav_img_upload_btn'>
+          <div className="nav_modal_profile">
+            <div className="nav_profile_img_div">
+              <img
+                id="nav_profile_img"
+                src={session?.user?.image ? session.user?.image : '/icon/person.png'}
+                alt="userImage"
+              ></img>
+              <label htmlFor="fileInput" className="nav_img_upload_btn">
                 이미지 업로드
               </label>
-              <input type='file' id='fileInput' accept='image/*' onChange={(e) => uploadImg(e)} className='dn' />
-              <button className='nav_img_del_btn' onClick={() => deleteImg()}>
+              <input type="file" id="fileInput" accept="image/*" onChange={e => uploadImg(e)} className="dn" />
+              <button className="nav_img_del_btn" onClick={() => deleteImg()}>
                 이미지 삭제
               </button>
             </div>
-            <div className='nav_profile_detail_div'>
-              <div className='nav_modal_nickname_div'>
+            <div className="nav_profile_detail_div">
+              <div className="nav_modal_nickname_div">
                 {!showNameInput ? (
-                  <div className='df fd_c w100'>
-                    <div className='df jc_sb w100 mb5'>
-                      <span id='nav_modal_nickname'>{session?.user?.name}</span>
+                  <div className="df fd_c w100">
+                    <div className="df jc_sb w100 mb5">
+                      <span id="nav_modal_nickname">{session?.user?.name}</span>
                       <span
-                        className='nav_modal_text_update_btn lh25'
+                        className="nav_modal_text_update_btn lh25"
                         onClick={() => {
                           setShowNameInput(true);
                           setNickname(session?.user?.name);
@@ -337,18 +354,33 @@ const Navbar = () => {
                       </span>
                     </div>
                     <div>
-                      <span className='nav_modal_email'>{session?.user?.blogName}</span>
+                      <span className="nav_modal_email">{session?.user?.blogName}</span>
                     </div>
                   </div>
                 ) : (
-                  <div className='df fd_c w100'>
-                    <input className='nav_modal_input' type='text' placeholder='닉네임' value={nickname ? nickname : ''} onChange={(e) => setNickname(e.target.value)} />
-                    <input className='nav_modal_input' type='text' placeholder='블로그 이름' value={blogName} onChange={(e) => setBlogName(e.target.value)} />
-                    <div className='df jc_e'>
-                      <button className='nav_modal_profile_btn' onClick={() => updateNicknameBlogName()}>
+                  <div className="df fd_c w100">
+                    <input
+                      className="nav_modal_input"
+                      type="text"
+                      placeholder="닉네임"
+                      value={nickname ? nickname : ''}
+                      onChange={e => setNickname(e.target.value)}
+                    />
+                    <input
+                      className="nav_modal_input"
+                      type="text"
+                      placeholder="블로그 이름"
+                      value={blogName}
+                      onChange={e => setBlogName(e.target.value)}
+                    />
+                    <div className="df jc_e">
+                      <button className="nav_modal_profile_btn" onClick={() => updateNicknameBlogName()}>
                         저장
                       </button>
-                      <button className='nav_modal_profile_btn nav_modal_cancel' onClick={() => setShowNameInput(false)}>
+                      <button
+                        className="nav_modal_profile_btn nav_modal_cancel"
+                        onClick={() => setShowNameInput(false)}
+                      >
                         취소
                       </button>
                     </div>
@@ -357,15 +389,15 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-          <div className='nav_modal_sub_div'>
-            <span className='nav_modal_sub_title'>이메일</span>
+          <div className="nav_modal_sub_div">
+            <span className="nav_modal_sub_title">이메일</span>
 
-            <div className='nav_modal_sub fd_i jc_sb'>
+            <div className="nav_modal_sub fd_i jc_sb">
               {!showEmailInput ? (
                 <>
-                  <span className='nav_modal_email'>{session?.user?.email}</span>
+                  <span className="nav_modal_email">{session?.user?.email}</span>
                   <span
-                    className='nav_modal_text_update_btn lh19'
+                    className="nav_modal_text_update_btn lh19"
                     onClick={() => {
                       setShowEmailInput(true);
                     }}
@@ -375,54 +407,78 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <input type='text' value={email} placeholder='이메일을 입력하세요.' className='nav_modal_input w80 mb0' onChange={(e) => setEmail(e.target.value)} />
-                  <button className='nav_modal_profile_btn mb0' onClick={() => updateEmail()}>
+                  <input
+                    type="text"
+                    value={email}
+                    placeholder="이메일을 입력하세요."
+                    className="nav_modal_input w80 mb0"
+                    onChange={e => setEmail(e.target.value)}
+                  />
+                  <button className="nav_modal_profile_btn mb0" onClick={() => updateEmail()}>
                     저장
                   </button>
                 </>
               )}
             </div>
           </div>
-          <div className='nav_modal_sub_div'>
-            <span className='nav_modal_sub_title'>비밀번호</span>
-            <div className='nav_modal_sub'>
+          <div className="nav_modal_sub_div">
+            <span className="nav_modal_sub_title">비밀번호</span>
+            <div className="nav_modal_sub">
               {!showPwInput ? (
-                <button className='nav_modal_password_btn' onClick={() => setShowPwInput(true)}>
+                <button className="nav_modal_password_btn" onClick={() => setShowPwInput(true)}>
                   비밀번호 변경
                 </button>
               ) : (
-                <div className='nav_modal_pw_div'>
-                  <input type='password' value={currPassword} placeholder='현재 비밀번호' className='nav_modal_pw_input mb15' onChange={(e) => setCurrPassword(e.target.value)} />
-                  <input type='password' value={newPassword} placeholder='새 비밀번호' className='nav_modal_pw_input mb5' onChange={(e) => setNewPassword(e.target.value)} />
-                  <input type='password' value={checkPassword} placeholder='새 비밀번호 확인' className='nav_modal_pw_input mb5' onChange={(e) => setCheckPassword(e.target.value)} />
-                  <button className='nav_modal_password_btn wa mt10' onClick={() => updatePassword()}>
+                <div className="nav_modal_pw_div">
+                  <input
+                    type="password"
+                    value={currPassword}
+                    placeholder="현재 비밀번호"
+                    className="nav_modal_pw_input mb15"
+                    onChange={e => setCurrPassword(e.target.value)}
+                  />
+                  <input
+                    type="password"
+                    value={newPassword}
+                    placeholder="새 비밀번호"
+                    className="nav_modal_pw_input mb5"
+                    onChange={e => setNewPassword(e.target.value)}
+                  />
+                  <input
+                    type="password"
+                    value={checkPassword}
+                    placeholder="새 비밀번호 확인"
+                    className="nav_modal_pw_input mb5"
+                    onChange={e => setCheckPassword(e.target.value)}
+                  />
+                  <button className="nav_modal_password_btn wa mt10" onClick={() => updatePassword()}>
                     확인
                   </button>
                 </div>
               )}
             </div>
           </div>
-          <div className='nav_modal_sub_div bbn'>
-            <span className='nav_modal_sub_title mb25'>회원 탈퇴</span>
-            <div className='nav_modal_sub'>
-              <button className='nav_modal_leave_btn' onClick={() => setShowNoti(true)}>
+          <div className="nav_modal_sub_div bbn">
+            <span className="nav_modal_sub_title mb25">회원 탈퇴</span>
+            <div className="nav_modal_sub">
+              <button className="nav_modal_leave_btn" onClick={() => setShowNoti(true)}>
                 회원 탈퇴
               </button>
-              <span className='nav_modal_leave_text'>※ 탈퇴시 작성하신 포스트가 모두 삭제되어 복구되지 않습니다.</span>
+              <span className="nav_modal_leave_text">※ 탈퇴시 작성하신 포스트가 모두 삭제되어 복구되지 않습니다.</span>
             </div>
           </div>
         </div>
       </Modal>
       <Snackbar
         open={showNoti}
-        message='정말로 탈퇴하시겠습니까?'
+        message="정말로 탈퇴하시겠습니까?"
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button color='primary' size='small' onClick={dropOut}>
+            <Button color="primary" size="small" onClick={dropOut}>
               확인
             </Button>
-            <Button color='inherit' size='small' onClick={closeNoti}>
+            <Button color="inherit" size="small" onClick={closeNoti}>
               취소
             </Button>
           </React.Fragment>

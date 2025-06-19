@@ -5,6 +5,7 @@ import { Article } from '@/entities/articles/model';
 import { Keyword, KeywordList } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
 import { useState } from 'react';
+import { Header } from '@/widgets/header';
 
 export const View = ({ trends, articles }: { trends: Trend[]; articles: Article[] }) => {
   const [selectedKeyword, setSelectedKeyword] = useState<Trend>(trends[0]);

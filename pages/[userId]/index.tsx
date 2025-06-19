@@ -6,15 +6,15 @@ import { timeFormat } from '@/utils/CommonUtils';
 import listStyle from '../../styles/List.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
-import { handleMySql as handlePost } from '../api/HandlePost';
+import { handleMySql as handlePost } from '@/app/api/HandlePost';
 import CheckAuth from '@/utils/CheckAuth';
 //error Page
-import Error from '@/pages/_error';
+import Error from '../../pages/_error';
 
 //redux, redux-saga
-import wrapper from '@/store/index';
-import { fetchBlogUser } from '@/reducer/blogUser';
-import { useAppSelector } from '@/hooks/reduxHooks';
+import wrapper from '../../store/index';
+import { fetchBlogUser } from '../../reducer/blogUser';
+import { useAppSelector } from '../../hooks/reduxHooks';
 import { END } from 'redux-saga';
 
 interface posts {
