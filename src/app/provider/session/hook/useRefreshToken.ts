@@ -1,15 +1,14 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface Props {
   setSessionRefetchInterval: Dispatch<SetStateAction<number>>;
+  session: Session;
 }
 
-export const RefreshToken = ({ setSessionRefetchInterval }: Props) => {
-  const { data: session } = useSession();
-
+export const useRefreshToken = ({ setSessionRefetchInterval, session }: Props) => {
   useEffect(() => {
     // 토큰 만료시간(초)
     const tokenExp = session?.user?.tokenExp;
@@ -22,6 +21,4 @@ export const RefreshToken = ({ setSessionRefetchInterval }: Props) => {
       setSessionRefetchInterval(timeRemaining > 0 ? timeRemaining : 0);
     }
   }, [session, setSessionRefetchInterval]);
-
-  return null;
 };

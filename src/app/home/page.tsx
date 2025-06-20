@@ -15,7 +15,7 @@ export const Page = async () => {
     articleCount: 9,
   });
 
-  return <View trends={dailyTrends} articles={firstTrendKeywordArticles} />;
+  return <View trends={dailyTrends} initialArticles={firstTrendKeywordArticles} />;
 };
 
 export default Page;

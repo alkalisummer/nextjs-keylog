@@ -1,0 +1,1 @@
+export { queryKey } from './queryKey';

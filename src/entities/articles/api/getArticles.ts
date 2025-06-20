@@ -1,7 +1,7 @@
 'use server';
 
-import { Article, ArticleKey } from '../model';
 import { createArticles } from '../lib';
+import { Article, ArticleKey } from '../model';
 import GoogleTrendsApi from '@alkalisummer/google-trends-js';
 
 interface GetArticlesProps {

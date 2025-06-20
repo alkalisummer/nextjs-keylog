@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { SessionProvider } from './provider';
+import { QueryProvider, SessionProvider } from './provider';
 
 export const metadata = {
   title: 'Keylog',
@@ -9,7 +9,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="kr">
       <body>
-        <SessionProvider>{children}</SessionProvider>
+        <QueryProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryProvider>
       </body>
     </html>
   );

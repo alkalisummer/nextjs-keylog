@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import Head from 'next/head';
-import Script from 'next/script';
 import { storePathValues } from '@/utils/CommonUtils';
 
 //redux, redux-saga
@@ -28,7 +27,6 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <div className="main_area">
-      <Script src="https://kit.fontawesome.com/25678e103e.js" crossOrigin="anonymous" />
       <Head>
         <title> keylog </title>
         <meta property="og:type" content="website"></meta>

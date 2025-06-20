@@ -15,9 +15,9 @@ export const Keyword = ({ trend }: KeywordProps) => {
       <div className={css.trend}>
         <span className={css.keyword}>{`# ${trend.keyword}`}</span>
         <span className={css.traffic}>
-          {trend.traffic}
+          {`${trend.traffic}`}
           <FontAwesomeIcon icon={faArrowUp} className={css.ico} />
-          <span className={css.cnt}>(검색 횟수)</span>
+          <span className={css.cnt}>(검색량)</span>
         </span>
       </div>
     </div>

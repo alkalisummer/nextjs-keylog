@@ -527,7 +527,7 @@ const TrendKeyword = () => {
             {selectedKeyword ? (
               <div className="post_selected_div">
                 <span className="post_selected_key">{selectedKeyword.keyword}</span>
-                <span className="post_selected_cnt">{`(검색 횟수: ${selectedKeyword.traffic}K+)`}</span>
+                <span className="post_selected_cnt">{`(검색량: ${selectedKeyword.traffic}K+)`}</span>
               </div>
             ) : (
               ''
