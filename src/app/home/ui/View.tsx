@@ -5,7 +5,7 @@ import { Trend } from '@/entities/trends/model';
 import { Article } from '@/entities/articles/model';
 import { ArticleList } from '@/entities/articles/ui';
 import { Keyword, KeywordList } from '@/entities/trends/ui';
-import { useArticlesQuery } from '@/entities/articles/query/useArticlesQuery';
+import { useArticlesQuery } from '@/entities/articles/query';
 
 export const View = ({ trends, initialArticles }: { trends: Trend[]; initialArticles: Article[] }) => {
   const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
