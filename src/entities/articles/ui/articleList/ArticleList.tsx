@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Fragment } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import css from './articleList.module.scss';
 import { formatFullDate } from '@/shared/lib/util';
 import { Article } from '@/entities/articles/model';
