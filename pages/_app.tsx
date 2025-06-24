@@ -10,15 +10,15 @@ import { storePathValues } from '@/utils/CommonUtils';
 import wrapper from '../store';
 
 //css
-import '../styles/globals.css';
-import '../styles/Post.css';
-import '../styles/ChatGpt.css';
-import '../styles/Navbar.css';
-import '../styles/Index.css';
-import '../styles/Error.css';
-import '../styles/leftArea.css';
-import '../styles/rightArea.css';
-import '../styles/write.css';
+import '@/styles/globals.css';
+import '@/styles/Post.css';
+import '@/styles/ChatGpt.css';
+import '@/styles/Navbar.css';
+import '@/styles/Index.css';
+import '@/styles/Error.css';
+import '@/styles/leftArea.css';
+import '@/styles/rightArea.css';
+import '@/styles/write.css';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();

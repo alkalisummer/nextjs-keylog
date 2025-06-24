@@ -45,6 +45,41 @@
   src: url('/font/FiraMono-Regular.ttf') format('ttf');
 }
 
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 300;
+  src: url('/font/Figtree-Light.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 400;
+  src: url('/font/Figtree-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 500;
+  src: url('/font/Figtree-Medium.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 600;
+  src: url('/font/Figtree-SemiBold.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 700;
+  src: url('/font/Figtree-Bold.ttf') format('truetype');
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

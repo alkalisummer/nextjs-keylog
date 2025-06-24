@@ -1,5 +1,5 @@
 import { Article } from '../model';
-import { formatTimeAgo, removeHtml } from './transform';
+import { formatTimeAgo } from './transform';
 
 export const createArticles = (articles: Article[]) => {
   return articles

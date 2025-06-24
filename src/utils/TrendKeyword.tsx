@@ -126,7 +126,7 @@ const TrendKeyword = () => {
               const suggestRes = result.data;
               setLinkage(suggestRes);
             });
-            debugger;
+
             const currentTrend = res.trends.find((trend: trend) => trend.keyword === params.name);
             setSelectedKeyword(currentTrend);
             // const articleData = JSON.parse(JSON.stringify(params.data)).articles;
@@ -197,7 +197,7 @@ const TrendKeyword = () => {
 
           const timeLineData = (chartKeyword: chartKeyword) => {
             let res = [];
-            debugger;
+
             if (chartKeyword) {
               lineChartkeywordArr.push(chartKeyword.keyword);
               for (let value of chartKeyword.values) {

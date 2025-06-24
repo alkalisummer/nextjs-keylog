@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import css from './articleList.module.scss';
 import { formatFullDate } from '@/shared/lib/util';
 import { Article } from '@/entities/articles/model';
@@ -23,7 +23,7 @@ export const ArticleList = ({ articles }: ArticleListProps) => {
           <Link key={idx} href={article.link} target="_blank">
             <div className={css.article}>
               {article.image ? <img src={article.image} alt="articleImg"></img> : <></>}
-              <div className={`${css.articleInfo} ${article.image ? css.noImg : ''}`}>
+              <div className={`${css.articleInfo} ${article.image ? '' : css.noImg}`}>
                 <span className={css.articleTitle}>{article.title}</span>
                 <div className={css.articleBottom}>
                   <span>{article.mediaCompany}</span>•<span>{article.formattedPressDate}</span>

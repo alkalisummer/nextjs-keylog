@@ -12,12 +12,12 @@ export const createDailyTrends = (trends: Trend[]) => {
       trend =>
         <Trend>{
           keyword: decodeURIComponent(trend.keyword),
-          traffic: formatTraffic(trend.traffic),
+          traffic: trend.traffic,
           trafficGrowthRate: trend.trafficGrowthRate,
           activeTime: trend.activeTime,
           relatedKeywords: trend.relatedKeywords,
           articleKeys: trend.articleKeys,
         },
-    ) // traffic 내림 차순
+    ) // traffic 내림 차순 정렬
     .sort((a, b) => Number(b.traffic) - Number(a.traffic));
 };

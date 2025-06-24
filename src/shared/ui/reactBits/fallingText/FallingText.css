@@ -1,0 +1,59 @@
+.falling-text-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 2em;
+  overflow: hidden;
+}
+
+.falling-text-target {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.word {
+  margin: 0 10px;
+  user-select: none;
+  white-space: nowrap;
+  font-weight: 500;
+  transition: font-size 0.3s ease;
+}
+
+.highlighted {
+  color: cyan;
+  font-weight: bold;
+}
+
+.falling-text-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+  .falling-text-container {
+    padding-top: 1em;
+  }
+
+  .word {
+    margin: 0 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .falling-text-container {
+    padding-top: 0.5em;
+  }
+
+  .word {
+    margin: 0 3px;
+  }
+}

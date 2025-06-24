@@ -3,7 +3,7 @@ import Link from 'next/link';
 import BlogLayout from '../../src/widgets/BlogLayout';
 import { useRouter } from 'next/router';
 import { timeFormat } from '@/utils/CommonUtils';
-import listStyle from '../../styles/List.module.css';
+import listStyle from '@/styles/List.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '@/app/api/HandlePost';

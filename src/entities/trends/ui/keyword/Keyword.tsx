@@ -2,6 +2,7 @@
 
 import { Trend } from '../../model';
 import css from './keyword.module.scss';
+import { formatTraffic } from '../../lib';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -15,7 +16,7 @@ export const Keyword = ({ trend }: KeywordProps) => {
       <div className={css.trend}>
         <span className={css.keyword}>{`# ${trend.keyword}`}</span>
         <span className={css.traffic}>
-          {`${trend.traffic}`}
+          {`${formatTraffic(trend.traffic)}`}
           <FontAwesomeIcon icon={faArrowUp} className={css.ico} />
           <span className={css.cnt}>(검색량)</span>
         </span>
