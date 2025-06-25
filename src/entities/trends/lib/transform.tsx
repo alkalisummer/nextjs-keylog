@@ -16,5 +16,8 @@ export const stringifyKeywords = (trends: Trend[]) => {
 };
 
 export const parseKeywordsArray = (trends: Trend[]) => {
-  return trends.map(trend => ({ content: <p className={css.keyword}>{trend.keyword}</p> }));
+  return trends.map(trend => ({
+    content: <p className={css.keyword}>{trend.keyword}</p>,
+    data: trend,
+  }));
 };

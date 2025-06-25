@@ -7,6 +7,7 @@ gsap.registerPlugin(Observer);
 
 interface InfiniteScrollItem {
   content: ReactNode;
+  data?: any;
 }
 
 interface InfiniteScrollProps {
@@ -15,12 +16,14 @@ interface InfiniteScrollProps {
   negativeMargin?: string;
   items?: InfiniteScrollItem[];
   itemMinHeight?: number;
+  itemMinWidth?: number;
   isTilted?: boolean;
   tiltDirection?: 'left' | 'right';
   autoplay?: boolean;
   autoplaySpeed?: number;
   autoplayDirection?: 'down' | 'up';
   pauseOnHover?: boolean;
+  onClick?: (data?: any) => void;
 }
 
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
@@ -28,13 +31,15 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   maxHeight = '100%',
   negativeMargin = '-0.5em',
   items = [],
-  itemMinHeight = 150,
+  itemMinHeight = 130,
+  itemMinWidth = 300,
   isTilted = false,
   tiltDirection = 'left',
   autoplay = false,
   autoplaySpeed = 0.5,
   autoplayDirection = 'down',
   pauseOnHover = false,
+  onClick,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,13 +63,18 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     const itemStyle = getComputedStyle(firstItem);
     const itemHeight = firstItem.offsetHeight;
     const itemMarginTop = parseFloat(itemStyle.marginTop) || 0;
-    const totalItemHeight = itemHeight + itemMarginTop;
-    const totalHeight = itemHeight * items.length + itemMarginTop * (items.length - 1);
+
+    // 실제 아이템 간 간격 (음수 마진 포함)
+    const actualItemSpacing = itemHeight + itemMarginTop;
+
+    // 무한 루프를 위한 전체 높이 계산
+    // 마지막 아이템과 첫 번째 아이템 사이도 같은 간격을 유지
+    const totalHeight = items.length * actualItemSpacing;
 
     const wrapFn = gsap.utils.wrap(-totalHeight, totalHeight);
 
     divItems.forEach((child, i) => {
-      const y = i * totalItemHeight;
+      const y = i * actualItemSpacing;
       gsap.set(child, { y });
     });
 
@@ -152,6 +162,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   
           .infinite-scroll-container {
             width: ${width};
+            min-width: ${itemMinWidth}px;
           }
   
           .infinite-scroll-item {
@@ -169,8 +180,8 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
           }}
         >
           {items.map((item, i) => (
-            <div className="infinite-scroll-item" key={i}>
-              {item.content}
+            <div className="infinite-scroll-item" key={i} onClick={() => onClick?.(item.data)}>
+              <span>{item.content}</span>
             </div>
           ))}
         </div>

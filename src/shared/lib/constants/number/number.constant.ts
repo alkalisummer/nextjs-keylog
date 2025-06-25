@@ -1,5 +1,9 @@
-export const enum NUMBER_CONSTANTS {
-  ARTICLE_COUNT = 3,
-  FALLING_TEXT_GRAVITY = 0.56,
-  FALLING_TEXT_MOUSE_CONSTRAINT_STIFFNESS = 0.9,
-}
+export const NUMBER_CONSTANTS = {
+  ARTICLE_COUNT: 3,
+};
+
+export const DEFAULT_SPEEDS = {
+  desktop: 1.2,
+  tablet: 1.0,
+  mobile: 0.7,
+};

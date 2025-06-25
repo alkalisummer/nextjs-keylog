@@ -1,1 +1,1 @@
-export type { Trend } from './type';
+export type { Trend, SpeedBreakpoints } from './type';
