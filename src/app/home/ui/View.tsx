@@ -13,7 +13,6 @@ import { useTrend } from '@/entities/trends/container/TrendsContainer';
 export const View = ({ trends, initialArticles }: { trends: Trend[]; initialArticles: Article[] }) => {
   const { trend, setTrend } = useTrend();
 
-  // 렌더링 중이 아닌 useEffect에서 상태 업데이트
   useEffect(() => {
     if (trends.length > 0) {
       setTrend(trends[0]);
