@@ -1,15 +1,16 @@
 'use client';
 
+import { useTrend } from '../../container/TrendsContainer';
 import { Trend } from '../../model';
 import css from './keywordList.module.scss';
 
 interface KeywordListProps {
   trends: Trend[];
-  selectedTrend: Trend;
   setSelectedTrend: (trend: Trend) => void;
 }
 
-export const KeywordList = ({ trends, selectedTrend, setSelectedTrend }: KeywordListProps) => {
+export const KeywordList = ({ trends, setSelectedTrend }: KeywordListProps) => {
+  const { trend: selectedTrend } = useTrend();
   return (
     <div className={css.module}>
       {trends.map((trend, idx) => (

@@ -1,15 +1,14 @@
 'use client';
 
-import { JSX } from 'react';
 import { Trend } from '../../model';
 import { InfiniteScroll } from '@/shared/ui';
 import css from './keywordScroll.module.scss';
 import { parseKeywordsArray } from '../../lib/transform';
 import { useAutoplaySpeed } from '../../hook';
+import { KeywordList } from '../keywordList/KeywordList';
 
 interface KeywordScrollProps {
   trends: Trend[];
-  components?: JSX.Element[];
   customSpeeds?: {
     desktop?: number;
     tablet?: number;
@@ -18,15 +17,13 @@ interface KeywordScrollProps {
   onClick?: (trend: Trend) => void;
 }
 
-export const KeywordScroll = ({ trends, components, customSpeeds, onClick }: KeywordScrollProps) => {
-  const trendItems = parseKeywordsArray(trends);
+export const KeywordScroll = ({ trends, customSpeeds, onClick }: KeywordScrollProps) => {
   const autoplaySpeed = useAutoplaySpeed(customSpeeds);
+  const trendItems = parseKeywordsArray(trends);
+  const keywordList = <KeywordList trends={trends} setSelectedTrend={onClick || (() => {})} />;
 
   // components가 있는 경우 앞에 추가
-  const items =
-    components && components.length > 0
-      ? [...components.map(component => ({ content: component })), ...trendItems]
-      : trendItems;
+  const items = [{ content: keywordList }, ...trendItems];
 
   const handleItemClick = (data?: any) => {
     // data가 Trend 객체인 경우에만 onClick 호출

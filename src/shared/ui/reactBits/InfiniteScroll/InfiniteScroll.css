@@ -39,6 +39,8 @@
   width: fit-content;
   max-width: 700px;
   border: 1px solid #000;
+  border-top: none;
+  border-bottom: none;
 }
 
 .infinite-scroll-item {

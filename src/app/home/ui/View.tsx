@@ -1,31 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import css from './view.module.scss';
 import { Trend } from '@/entities/trends/model';
 import { Article } from '@/entities/articles/model';
 import { KeywordScroll } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
-import { Keyword, KeywordList } from '@/entities/trends/ui';
-import { useArticlesQuery } from '@/entities/articles/query';
+import { Keyword } from '@/entities/trends/ui';
+import { useTrend } from '@/entities/trends/container/TrendsContainer';
+import { useEffect } from 'react';
 
 export const View = ({ trends, initialArticles }: { trends: Trend[]; initialArticles: Article[] }) => {
-  const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
-  const { data: articles = [] } = useArticlesQuery({ trends, selectedTrend, initialData: initialArticles });
-  const keywordList = <KeywordList trends={trends} selectedTrend={selectedTrend} setSelectedTrend={setSelectedTrend} />;
+  const { trend, setTrend } = useTrend();
+
+  // 렌더링 중이 아닌 useEffect에서 상태 업데이트
+  useEffect(() => {
+    if (trends.length > 0) {
+      setTrend(trends[0]);
+    }
+  }, [trends, setTrend]);
 
   return (
-    <div>
-      <Keyword trend={selectedTrend} />
+    <div className={css.module}>
+      <Keyword />
       <KeywordScroll
         trends={trends}
-        components={[keywordList]}
         customSpeeds={{
           desktop: 1.0,
           mobile: 0.8,
         }}
-        onClick={setSelectedTrend}
+        onClick={setTrend}
       />
-      {articles.length > 0 && <ArticleList articles={articles} />}
+      {initialArticles.length > 0 && <ArticleList trends={trends} initialArticles={initialArticles} />}
     </div>
   );
 };
