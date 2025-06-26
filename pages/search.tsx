@@ -5,7 +5,7 @@ import { timeFormat } from '../src/utils/CommonUtils';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { handleMySql as handlePost } from './api/HandlePost';
+import { handleMySql as handlePost } from '../src/app/api/HandlePost';
 
 //게시물 검색 무한 스크롤
 import { useInView } from 'react-intersection-observer';
