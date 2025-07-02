@@ -1,17 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
 import css from './view.module.scss';
 import { Keyword } from '@/entities/trends/ui';
 import { HomeTabs } from './homeTabs/HomeTabs';
 import { Trend } from '@/entities/trends/model';
+import { SearchPost } from '@/entities/posts/ui';
 import { Article } from '@/entities/articles/model';
 import { KeywordScroll } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
+import { Fragment, useEffect, useState } from 'react';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
+import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 
 export const View = ({ trends, initialArticles }: { trends: Trend[]; initialArticles: Article[] }) => {
   const { trend, setTrend } = useTrend();
+  const [currentTab, setCurrentTab] = useState('keyword');
 
   useEffect(() => {
     if (trends.length > 0) {
@@ -21,17 +24,16 @@ export const View = ({ trends, initialArticles }: { trends: Trend[]; initialArti
 
   return (
     <div className={css.module}>
-      <HomeTabs />
-      <Keyword />
-      <KeywordScroll
-        trends={trends}
-        customSpeeds={{
-          desktop: 1.0,
-          mobile: 0.8,
-        }}
-        onClick={setTrend}
-      />
-      {initialArticles.length > 0 && <ArticleList trends={trends} initialArticles={initialArticles} />}
+      <HomeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      {currentTab === 'keyword' ? (
+        <Fragment>
+          <Keyword />
+          <KeywordScroll trends={trends} onClick={setTrend} />
+          {initialArticles.length > 0 && <ArticleList trends={trends} initialArticles={initialArticles} />}
+        </Fragment>
+      ) : (
+        <SearchPost initPosts={[]} initPostsTotalCnt={0} />
+      )}
     </div>
   );
 };

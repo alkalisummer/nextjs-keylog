@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useDebounce } from '../hooks/useDebounce';
 import signupStyle from '../styles/Signup.module.css';
 import { timeToString } from '@/utils/CommonUtils';
 import axios from 'axios';
@@ -71,8 +71,17 @@ const Signup = () => {
 
     axios.post('/api/HandleUser', { data: { type: 'deleteVerifyCode', verifyCodeId: verifyCodeId } });
     const currentTime = timeToString(new Date());
-    const params = { type: 'signup', id: id, email: email, nickname: nickname.replaceAll(' ', '').replaceAll('\\', '\\\\'), password: password, blogName: blogName.replaceAll('\\', '\\\\'), rgsnDttm: currentTime, amntDttm: currentTime };
-    await axios.post('/api/HandleUser', { data: params }).then((res) => {
+    const params = {
+      type: 'signup',
+      id: id,
+      email: email,
+      nickname: nickname.replaceAll(' ', '').replaceAll('\\', '\\\\'),
+      password: password,
+      blogName: blogName.replaceAll('\\', '\\\\'),
+      rgsnDttm: currentTime,
+      amntDttm: currentTime,
+    };
+    await axios.post('/api/HandleUser', { data: params }).then(res => {
       setShowNoti(true);
     });
   };
@@ -84,10 +93,11 @@ const Signup = () => {
 
     if (!isValidate) {
       setIdValidate(false);
-      document.querySelector('.idErrMsg')!.innerHTML = '<div class="mt5">아이디는 5-20자의 영문 소문자, 숫자만 사용 가능합니다. </div>';
+      document.querySelector('.idErrMsg')!.innerHTML =
+        '<div class="mt5">아이디는 5-20자의 영문 소문자, 숫자만 사용 가능합니다. </div>';
     } else {
       //ID 중복검사
-      await axios.post('/api/HandleUser', { data: params }).then((res) => {
+      await axios.post('/api/HandleUser', { data: params }).then(res => {
         const userCnt = res.data.totalItems;
         if (userCnt > 0) {
           isValidate = false;
@@ -123,7 +133,8 @@ const Signup = () => {
 
     if (!isValidate) {
       setPasswordValidate(false);
-      document.querySelector('.passwordErrMsg')!.innerHTML = '<div class="mt5">비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 조합하여 입력하세요.</div>';
+      document.querySelector('.passwordErrMsg')!.innerHTML =
+        '<div class="mt5">비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 조합하여 입력하세요.</div>';
     } else {
       setPasswordValidate(true);
       document.querySelector('.passwordErrMsg')!.innerHTML = '';
@@ -181,7 +192,9 @@ const Signup = () => {
       return;
     }
     if (!sendMailLoading) {
-      alert('입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ');
+      alert(
+        '입력하신 이메일 주소로 인증번호가 발송되었습니다.\n인증번호는 발송시간을 기준으로 24시간동안 유효합니다. ',
+      );
       setSendMailLoading(true);
       sendMail();
     }
@@ -193,7 +206,7 @@ const Signup = () => {
       axios.post('/api/HandleUser', { data: { type: 'deleteVerifyCode', verifyCodeId: verifyCodeId } });
     }
     const params = { mode: 'sendMailCode', mailAddress: email };
-    await axios.post('/api/SendMailHandler', { data: params }).then((res) => {
+    await axios.post('/api/SendMailHandler', { data: params }).then(res => {
       setVerifyCodeId(res.data.insertId);
     });
     setSendMailLoading(false);
@@ -234,29 +247,29 @@ const Signup = () => {
             <i className={'fa-solid fa-user'}></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={id}
             className={`${signupStyle.signup_input_text} ${idValidate ? '' : signupStyle.validateErr} btrr`}
-            placeholder='아이디'
-            autoComplete='off'
+            placeholder="아이디"
+            autoComplete="off"
             required
-            onChange={(e) => {
+            onChange={e => {
               setId(e.target.value);
             }}
           ></input>
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${passwordValidate ? '' : signupStyle.validateErr}`}>
-            <i className='fa-solid fa-lock'></i>
+            <i className="fa-solid fa-lock"></i>
           </div>
           <input
-            type='password'
+            type="password"
             value={password}
             className={`${signupStyle.signup_input_text} ${passwordValidate ? '' : signupStyle.validateErr}`}
-            placeholder='비밀번호'
+            placeholder="비밀번호"
             required
-            autoComplete='off'
-            onChange={(e) => {
+            autoComplete="off"
+            onChange={e => {
               setPassword(e.target.value);
               passwordCheck(e.target.value);
             }}
@@ -264,16 +277,16 @@ const Signup = () => {
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${pwDoubleValidate ? '' : signupStyle.validateErr}`}>
-            <i className='fa-solid fa-check'></i>
+            <i className="fa-solid fa-check"></i>
           </div>
           <input
-            type='password'
+            type="password"
             value={pwDoubleCheckText}
             className={`${signupStyle.signup_input_text} ${pwDoubleValidate ? '' : signupStyle.validateErr}`}
-            placeholder='비밀번호 확인'
+            placeholder="비밀번호 확인"
             required
-            autoComplete='off'
-            onChange={(e) => {
+            autoComplete="off"
+            onChange={e => {
               setPwDoubleCheckText(e.target.value);
               passwordDoubleCheck(e.target.value);
             }}
@@ -284,52 +297,56 @@ const Signup = () => {
             <i className={'fa-solid fa-envelope'}></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={email}
             className={`${signupStyle.signup_input_text} ${emailValidate ? '' : signupStyle.validateErr} brn`}
-            placeholder='이메일'
-            autoComplete='off'
+            placeholder="이메일"
+            autoComplete="off"
             required
-            onChange={(e) => {
+            onChange={e => {
               setEmail(e.target.value);
               emailCheck(e.target.value);
             }}
           ></input>
           <div className={`${signupStyle.signup_vrfy_code_btn_div}`}>
-            <button id='signup_vrfy_code_btn' className={`${signupStyle.signup_vrfy_code_btn}`} onClick={() => mailHandler()}>
+            <button
+              id="signup_vrfy_code_btn"
+              className={`${signupStyle.signup_vrfy_code_btn}`}
+              onClick={() => mailHandler()}
+            >
               인증번호 요청
             </button>
           </div>
         </div>
         <div className={signupStyle.signup_input_div}>
           <div className={`${signupStyle.signup_emoji} ${verifyCodeValidate ? '' : signupStyle.validateErr}`}>
-            <i className='fa-solid fa-user-check'></i>
+            <i className="fa-solid fa-user-check"></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={verifyCode}
             className={`${signupStyle.signup_input_text} ${verifyCodeValidate ? '' : signupStyle.validateErr}`}
-            placeholder='인증번호'
-            autoComplete='off'
+            placeholder="인증번호"
+            autoComplete="off"
             required
-            onChange={(e) => {
+            onChange={e => {
               setVerifyCode(e.target.value);
             }}
           ></input>
         </div>
         <div className={`${signupStyle.signup_input_div}`}>
           <div className={`${signupStyle.signup_emoji} ${blogNameValidate ? '' : signupStyle.validateErr}`}>
-            <i className='fa-solid fa-star'></i>
+            <i className="fa-solid fa-star"></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={blogName}
             className={`${signupStyle.signup_input_text} ${blogNameValidate ? '' : signupStyle.validateErr}`}
             maxLength={30}
-            placeholder='블로그 이름'
+            placeholder="블로그 이름"
             required
-            autoComplete='off'
-            onChange={(e) => {
+            autoComplete="off"
+            onChange={e => {
               setBlogName(e.target.value);
               blogNameCheck(e.target.value);
             }}
@@ -337,17 +354,17 @@ const Signup = () => {
         </div>
         <div className={`${signupStyle.signup_input_div} mb10`}>
           <div className={`${signupStyle.signup_emoji} ${nicknameValidate ? '' : signupStyle.validateErr} bb bblr`}>
-            <i className='fa-solid fa-address-card'></i>
+            <i className="fa-solid fa-address-card"></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={nickname}
             className={`${signupStyle.signup_input_text} ${nicknameValidate ? '' : signupStyle.validateErr} bb bbrr`}
             maxLength={20}
-            placeholder='닉네임'
+            placeholder="닉네임"
             required
-            autoComplete='off'
-            onChange={(e) => {
+            autoComplete="off"
+            onChange={e => {
               setNickname(e.target.value);
               nicknameCheck(e.target.value);
             }}
@@ -360,17 +377,17 @@ const Signup = () => {
         <div className={`nicknameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`blogNameErrMsg ${signupStyle.validateErrMsg}`}></div>
         <div className={`verifyCodeErrMsg ${signupStyle.validateErrMsg}`}></div>
-        <button type='submit' className={signupStyle.signup_btn}>
+        <button type="submit" className={signupStyle.signup_btn}>
           가입하기
         </button>
       </form>
       <Snackbar
         open={showNoti}
-        message='회원가입이 완료되었습니다.'
+        message="회원가입이 완료되었습니다."
         onClose={closeNoti}
         action={
           <React.Fragment>
-            <Button color='primary' size='small' onClick={closeNoti}>
+            <Button color="primary" size="small" onClick={closeNoti}>
               확인
             </Button>
           </React.Fragment>

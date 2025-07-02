@@ -10,6 +10,9 @@ const nextConfig = {
   env: {
     BASE_URL: process.env.BASE_URL,
 
+    //KEYLOG API URL
+    NEXT_PUBLIC_KEYLOG_API_URL: process.env.KEYLOG_API_URL,
+
     //Oracle Cloud Instance DB(MySQL)
     CLOUD_MYSQL_HOST: process.env.CLOUD_MYSQL_HOST,
     CLOUD_MYSQL_PORT: process.env.CLOUD_MYSQL_PORT,

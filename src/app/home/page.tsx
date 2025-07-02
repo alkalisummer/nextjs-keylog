@@ -1,13 +1,23 @@
 'use server';
 
 import { View } from './ui/View';
+import { queryKey } from '../provider/query/lib';
 import { getArticles } from '@/entities/articles/api';
 import { getDailyTrends } from '@/entities/trends/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
-import { TrendsProvider } from '@/entities/trends/container/TrendsContainer';
+import { TrendsContainer } from '@/entities/trends/container/TrendsContainer';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async () => {
-  const dailyTrends = await getDailyTrends({ geo: 'KR', lang: 'ko' });
+  const queryClient = new QueryClient();
+
+  const dailyTrendsQueryOptions = {
+    queryKey: queryKey().trend().trendsList(),
+    queryFn: () => getDailyTrends({ geo: 'KR', hl: 'ko' }),
+  };
+
+  await queryClient.prefetchQuery(dailyTrendsQueryOptions);
+  const dailyTrends = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
 
   const firstTrendKeywordInfo = dailyTrends[0];
   const firstTrendKeywordArticles = await getArticles({
@@ -15,10 +25,14 @@ export const Page = async () => {
     articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
   });
 
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <TrendsProvider>
-      <View trends={dailyTrends} initialArticles={firstTrendKeywordArticles} />
-    </TrendsProvider>
+    <HydrationBoundary state={dehydratedState}>
+      <TrendsContainer>
+        <View trends={dailyTrends} initialArticles={firstTrendKeywordArticles} />
+      </TrendsContainer>
+    </HydrationBoundary>
   );
 };
 

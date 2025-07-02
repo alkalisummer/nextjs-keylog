@@ -1,31 +1,30 @@
 'use client';
 
-import { useState } from 'react';
 import css from './homeTabs.module.scss';
-import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-export const HomeTabs = () => {
-  const router = useRouter();
-  const [currTab, setCurrTab] = useState('keyword');
+interface HomeTabsProps {
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
+}
+
+export const HomeTabs = ({ currentTab, setCurrentTab }: HomeTabsProps) => {
   return (
     <div className={css.module}>
       <span
-        className={`${css.tab} ${currTab === 'keyword' ? css.activeTab : ''}`}
+        className={`${css.tab} ${currentTab === 'keyword' ? css.activeTab : ''}`}
         onClick={e => {
-          router.push('/home');
-          setCurrTab('keyword');
+          setCurrentTab('keyword');
         }}
       >
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.ico} />
         <span className={css.text}>급상승 키워드</span>
       </span>
       <span
-        className={`${css.tab} ${currTab === 'postings' ? css.activeTab : ''}`}
+        className={`${css.tab} ${currentTab === 'post' ? css.activeTab : ''}`}
         onClick={e => {
-          router.push('/search');
-          setCurrTab('post');
+          setCurrentTab('post');
         }}
       >
         <FontAwesomeIcon icon={faMagnifyingGlass} className={css.ico} />

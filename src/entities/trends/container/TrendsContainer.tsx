@@ -11,7 +11,7 @@ interface TrendContextType {
 
 const TrendsContext = createContext<TrendContextType | null>(null);
 
-export const TrendsProvider = ({ children }: { children: React.ReactNode }) => {
+export const TrendsContainer = ({ children }: { children: React.ReactNode }) => {
   const [trend, setTrend] = useState<Trend>(initTrend());
 
   const value = {
