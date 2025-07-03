@@ -9,14 +9,21 @@ export const queryKey = () => ({
   }),
   post: () => ({
     all: () => ['post'],
-    postList: (
-      searchWord?: string,
-      tagId?: string,
-      authorId?: string,
-      currPageNum?: number,
-      perPage?: number,
-      tempYn?: string,
-    ) => [
+    postList: ({
+      searchWord,
+      tagId,
+      authorId,
+      currPageNum,
+      perPage,
+      tempYn,
+    }: {
+      searchWord?: string;
+      tagId?: string;
+      authorId?: string;
+      currPageNum?: number;
+      perPage?: number;
+      tempYn?: string;
+    }) => [
       ...queryKey().post().all(),
       'postList',
       searchWord ?? '',

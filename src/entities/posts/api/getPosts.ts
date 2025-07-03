@@ -2,6 +2,7 @@
 
 import { client } from '@/shared/lib/client';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+import { Post } from '../model';
 
 interface GetPostsProps {
   authorId?: string;
@@ -20,7 +21,7 @@ export const getPosts = async ({
   tempYn = 'N',
   tagId,
 }: GetPostsProps) => {
-  const result = await client.get('/posts', {
+  return await client.get<Post[]>('/posts', {
     searchParams: {
       authorId,
       perPage,
@@ -30,5 +31,4 @@ export const getPosts = async ({
       tagId,
     },
   });
-  return result.data;
 };

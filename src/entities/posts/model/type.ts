@@ -3,14 +3,13 @@ export interface Post {
   totalItems: number;
   postId: number;
   postTitle: string;
-  postContent: string;
-  postThumbnailImageUrl: string;
-  registerId: string;
-  registrationDateTime: string;
-  amendmentDateTime: string;
+  postCntn: string;
+  postThmbImgUrl: string;
+  authorId: string;
+  rgsnDttm: Date;
   userNickname: string;
-  userThumbnailImageUrl: string;
-  commentCount: number;
-  likeCount: number;
+  userThmbImgUrl: string;
+  commentCnt: number;
+  likeCnt: number;
   hashtagName?: string;
 }

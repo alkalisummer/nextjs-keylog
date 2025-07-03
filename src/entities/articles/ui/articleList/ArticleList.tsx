@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import css from './articleList.module.scss';
 import { useArticlesQuery } from '../../query';
 import { Trend } from '@/entities/trends/model';
-import { formatFullDate } from '@/shared/lib/util';
+import { formatDate } from '@/shared/lib/util';
 import { Article } from '@/entities/articles/model';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
 
@@ -15,7 +15,7 @@ interface ArticleListProps {
 }
 
 export const ArticleList = ({ trends, initialArticles }: ArticleListProps) => {
-  const baseDate = `(인기 급상승 검색어 기준일: ${formatFullDate(new Date(), '.')})`;
+  const baseDate = `(인기 급상승 검색어 기준일: ${formatDate({ date: new Date(), seperator: '.' })}`;
   const { trend } = useTrend();
   const { data: articles = [] } = useArticlesQuery({ trends, selectedTrend: trend, initialData: initialArticles });
 
