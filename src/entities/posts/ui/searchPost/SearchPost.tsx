@@ -2,17 +2,13 @@
 
 import { Post } from '../../model';
 import { getPosts } from '../../api';
-import { useForm } from 'react-hook-form';
+import { SearchForm } from '../index';
 import { Fragment, useState } from 'react';
-import css from './searchPost.module.scss';
 import { useSearchParams } from 'next/navigation';
 import { PostLists } from '../postLists/PostLists';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SearchForm, SearchSchema } from '../../model';
+import { SearchForm as SearchFormType } from '../../model';
 import { useIntersectionObserver } from '@/shared/lib/hooks';
 import { SearchTagPost } from '../searchTagPost/SearchTagPost';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 interface SearchPostProps {
   initPosts: Post[];
@@ -24,6 +20,7 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
   const [searchWord, setSearchWord] = useState('');
   const [posts, setPosts] = useState<Post[]>(initPosts);
   const [postCnt, setPostCnt] = useState(initPostsTotalCnt);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
 
   const searchParams = useSearchParams();
   const tagId = searchParams?.get('tagId') ?? '';
@@ -41,18 +38,11 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
     once: true,
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm<SearchForm>({
-    resolver: zodResolver(SearchSchema),
-  });
-
-  const onSubmit = async (data: SearchForm) => {
+  const onSubmit = async (data: SearchFormType) => {
     const keyword = data.searchWord;
     setSearchWord(keyword);
     setPageNum(1);
+    setIsSubmitSuccessful(true);
 
     const postsResult = await getPosts({ searchWord: keyword, tagId: tagId, currPageNum: 1 });
     if (!postsResult.ok) throw new Error('getPosts failed');
@@ -69,28 +59,7 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
       {tagName ? (
         <SearchTagPost tagName={tagName} postCnt={postCnt} />
       ) : (
-        <>
-          <form onSubmit={handleSubmit(onSubmit)} className={css.searchForm}>
-            <input
-              className={css.searchInput}
-              type="text"
-              placeholder="검색어를 입력하세요"
-              {...register('searchWord')}
-            ></input>
-            <button className={css.searchBtn} type="submit">
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
-          </form>
-          <div className={css.searchCnt}>
-            {isSubmitSuccessful ? (
-              <span>
-                총 <span>{postCnt}</span>개의 포스트를 찾았습니다.
-              </span>
-            ) : (
-              <></>
-            )}
-          </div>
-        </>
+        <SearchForm onSubmit={onSubmit} isSubmitSuccessful={isSubmitSuccessful} postCnt={postCnt} />
       )}
       <PostLists posts={posts} setTarget={setTarget} />
     </Fragment>

@@ -5,6 +5,8 @@ import { Post } from '../../model';
 import css from './postLists.module.scss';
 import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface PostListsProps {
   posts: Post[];
@@ -58,10 +60,10 @@ export const PostLists = ({ posts, setTarget }: PostListsProps) => {
               <span className={css.userText}>by</span>
               <span className={css.nickname}>{post.userNickname}</span>
             </div>
-            <span className={css.likeText}>
-              <i className="fa-solid fa-heart mr10"></i>
+            <div className={css.likeText}>
+              <FontAwesomeIcon icon={faHeart} className={css.likeIcon} />
               {post.likeCnt}
-            </span>
+            </div>
           </div>
         </div>
       ))}
