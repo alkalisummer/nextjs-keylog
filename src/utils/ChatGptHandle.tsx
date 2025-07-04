@@ -13,7 +13,13 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
     // 대화의 맥락을 이어가기 위해 이전 대화를 넣어줌
     chatMessage = [{ role: 'system', content: 'You are a helpful assistant.' }, ...chatContent];
   } else {
-    chatMessage = [{ role: 'system', content: 'you are an expert blog post writer specializing in writing long 8000+ word blog post about.' }, chatContent];
+    chatMessage = [
+      {
+        role: 'system',
+        content: 'you are an expert blog post writer specializing in writing long 8000+ word blog post about.',
+      },
+      chatContent,
+    ];
   }
   let seriealized = '';
   for (let msg of chatMessage) {

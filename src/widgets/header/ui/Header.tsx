@@ -8,10 +8,12 @@ export const Header = () => {
   const router = useRouter();
   return (
     <div className={css.module}>
-      <span className={css.logo} onClick={() => router.push('/')}>
-        keylog
-      </span>
-      <Navbar />
+      <div className={css.header}>
+        <span className={css.logo} onClick={() => router.push('/')}>
+          keylog
+        </span>
+        <Navbar />
+      </div>
     </div>
   );
 };

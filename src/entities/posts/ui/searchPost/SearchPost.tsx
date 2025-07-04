@@ -29,16 +29,16 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
   const tagId = searchParams?.get('tagId') ?? '';
   const tagName = searchParams?.get('tagName');
 
-  const { setTarget, isIntersecting } = useIntersectionObserver({
+  const { setTarget } = useIntersectionObserver({
     onShow: async () => {
       setPageNum(prev => prev + 1);
-      const posts = await getPosts({ searchWord: searchWord, tagId: tagId, currPageNum: pageNum + 1 });
+      const postsResult = await getPosts({ searchWord: searchWord, tagId: tagId, currPageNum: pageNum + 1 });
 
-      if (!posts.ok) throw new Error('getPosts failed');
+      if (!postsResult.ok) throw new Error('getPosts failed');
 
-      setPosts(prev => [...prev, ...posts.data]);
-      setPostCnt(posts.data.length);
+      setPosts(prev => [...prev, ...postsResult.data]);
     },
+    once: true,
   });
 
   const {
@@ -49,10 +49,19 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
     resolver: zodResolver(SearchSchema),
   });
 
-  const onSubmit = (data: SearchForm) => {
+  const onSubmit = async (data: SearchForm) => {
     const keyword = data.searchWord;
     setSearchWord(keyword);
-    getPosts({ searchWord: keyword, tagId: tagId, currPageNum: 1 });
+    setPageNum(1);
+
+    const postsResult = await getPosts({ searchWord: keyword, tagId: tagId, currPageNum: 1 });
+    if (!postsResult.ok) throw new Error('getPosts failed');
+
+    const posts = postsResult.data;
+    const totalPosCnt = posts[0]?.totalItems ?? 0;
+
+    setPosts(posts);
+    setPostCnt(totalPosCnt);
   };
 
   return (

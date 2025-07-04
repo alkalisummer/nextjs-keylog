@@ -1,5 +1,8 @@
+'use client';
+
+import Image from 'next/image';
 import { Post } from '../../model';
-import css from './postCard.module.scss';
+import css from './postLists.module.scss';
 import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
 
@@ -10,46 +13,52 @@ interface PostListsProps {
 
 export const PostLists = ({ posts, setTarget }: PostListsProps) => {
   const router = useRouter();
-
   return (
     <div className={css.module}>
       {posts.map((post, idx) => (
         <div
           key={post.postId}
           ref={posts.length - 1 === idx ? setTarget : null}
-          className="index_search_post"
+          className={css.post}
           onClick={() => router.push(`/${post}/posts/${post.postId}`)}
         >
-          <div className="index_search_post_summary">
+          <div className={css.postSummary}>
             {post.postThmbImgUrl ? (
-              <div className="index_search_post_img_div">
-                <img className="index_search_post_img" src={post.postThmbImgUrl} alt="postImg"></img>
+              <div className={css.postImgDiv}>
+                <Image
+                  className={css.postImg}
+                  src={`${post.postThmbImgUrl}`}
+                  alt="postImg"
+                  width={100}
+                  height={100}
+                  priority={false}
+                ></Image>
               </div>
             ) : (
               <></>
             )}
-            <div className="index_search_post_title_cntn">
-              <span className="index_search_post_title">{post.postTitle}</span>
-              <p className="index_search_post_cntn">{post.postCntn}</p>
+            <div className={css.postTitleContent}>
+              <span className={css.postTitle}>{post.postTitle}</span>
+              <p className={css.postContent}>{post.postCntn}</p>
               <div>
-                <span className="index_search_post_bottom">
+                <span className={css.postBottom}>
                   {formatDate({ date: post.rgsnDttm, seperator: '.' })}&nbsp;•&nbsp;
                 </span>
-                <span className="index_search_post_bottom">{`${post.commentCnt}개의 댓글`}</span>
+                <span className={css.postBottom}>{`${post.commentCnt}개의 댓글`}</span>
               </div>
             </div>
           </div>
-          <div className="index_search_post_author">
+          <div className={css.postAuthor}>
             <div className="df ai_c">
               <img
-                className="index_search_user_img"
+                className={css.userImg}
                 src={post.userThmbImgUrl ? post.userThmbImgUrl : '/../../icon/person.png'}
                 alt="userImg"
               ></img>
-              <span className="index_search_user_text">by</span>
-              <span className="index_search_user_text">{post.userNickname}</span>
+              <span className={css.userText}>by</span>
+              <span className={css.nickname}>{post.userNickname}</span>
             </div>
-            <span className="index_like_text">
+            <span className={css.likeText}>
               <i className="fa-solid fa-heart mr10"></i>
               {post.likeCnt}
             </span>

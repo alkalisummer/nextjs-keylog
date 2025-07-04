@@ -8,7 +8,7 @@ const _fetch = async function <T>({
   searchParams,
   headers: header,
 }: FetchProps): Promise<ApiResponse<T>> {
-  const url = process.env.NEXT_PUBLIC_KEYLOG_API_URL + endpoint + buildSearchParams(searchParams);
+  const url = process.env.KEYLOG_API_URL + endpoint + buildSearchParams(searchParams);
 
   const requestOptions: RequestInit = {
     method,

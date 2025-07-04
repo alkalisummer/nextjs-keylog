@@ -11,7 +11,7 @@ const nextConfig = {
     BASE_URL: process.env.BASE_URL,
 
     //KEYLOG API URL
-    NEXT_PUBLIC_KEYLOG_API_URL: process.env.KEYLOG_API_URL,
+    KEYLOG_API_URL: process.env.KEYLOG_API_URL,
 
     //Oracle Cloud Instance DB(MySQL)
     CLOUD_MYSQL_HOST: process.env.CLOUD_MYSQL_HOST,
@@ -27,7 +27,6 @@ const nextConfig = {
     OPENAI_ORGANIZAION_ID: process.env.OPENAI_ORGANIZAION_ID,
 
     //Chat GPT API KEY
-    NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 
     //Naver API KEY
@@ -47,7 +46,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'objectstorage.ap-chuncheon-1.oraclecloud.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'imgnews.naver.net' },
+      { protocol: 'https', hostname: 'imgnews.naver.net', pathname: '/**' },
     ],
   },
 

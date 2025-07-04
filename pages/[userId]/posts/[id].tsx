@@ -6,13 +6,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { timeFormat, timeToString } from '@/utils/CommonUtils';
-import PostLayout from '@/components/PostLayout';
+import PostLayout from '../../../src/widgets/PostLayout';
 import { GetServerSideProps } from 'next';
 
-import { handleMySql as handlePostSql } from '@/pages/api/HandlePost';
-import { handleMySql as handleCommentSql } from '@/pages/api/HandleComment';
-import { handleMySql as handleLikeSql } from '@/pages/api/HandleLike';
-import { handleMySql as handleHashtag } from '@/pages/api/HandleHashtag';
+import { handleMySql as handlePostSql } from '@/app/api/HandlePost';
+import { handleMySql as handleCommentSql } from '@/app/api/HandleComment';
+import { handleMySql as handleLikeSql } from '@/app/api/HandleLike';
+import { handleMySql as handleHashtag } from '@/app/api/HandleHashtag';
 import CheckAuth from '@/utils/CheckAuth';
 import ClipboardJS from 'clipboard';
 
@@ -24,13 +24,13 @@ import Button from '@mui/material/Button';
 import { useSession } from 'next-auth/react';
 
 //redux, redux-saga
-import wrapper from '@/store/index';
-import { fetchBlogUser } from '@/reducer/blogUser';
-import { useAppSelector } from '@/hooks/reduxHooks';
+import wrapper from '../../../store/index';
+import { fetchBlogUser } from '../../../reducer/blogUser';
+import { useAppSelector } from '../../../hooks/reduxHooks';
 import { END } from 'redux-saga';
 
 //error Page
-import Error from '@/pages/_error';
+import Error from '../../../pages/_error';
 
 interface post {
   POST_ID: string;

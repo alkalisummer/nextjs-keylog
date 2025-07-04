@@ -1,8 +1,8 @@
 'use server';
 
+import { Post } from '../model';
 import { client } from '@/shared/lib/client';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
-import { Post } from '../model';
 
 interface GetPostsProps {
   authorId?: string;
@@ -21,7 +21,7 @@ export const getPosts = async ({
   tempYn = 'N',
   tagId,
 }: GetPostsProps) => {
-  return await client.get<Post[]>('/posts', {
+  return await client.get<Post[]>('/post', {
     searchParams: {
       authorId,
       perPage,
