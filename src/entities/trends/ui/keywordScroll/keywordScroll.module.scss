@@ -1,0 +1,28 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+  height: 450px;
+  font-family: 'NanumSquareNeo';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .keywordScroll {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+
+    .traffic {
+      font-size: 12px;
+      margin-left: 5px;
+      color: #868e96;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    height: 350px;
+  }
+}

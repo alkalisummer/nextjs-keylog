@@ -1,0 +1,46 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10%;
+    line-height: 4rem;
+
+    .logo {
+      font-family: 'Fira Mono', monospace;
+      font-size: 1.2rem;
+      @media (max-width: $breakpoint-medium) {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: $breakpoint-small) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-large) {
+  .header {
+    width: 1376px;
+  }
+}
+
+@media (max-width: $breakpoint-medium) {
+  .header {
+    width: 1000px;
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .header {
+    width: 100%;
+    padding: 0 16px;
+  }
+}

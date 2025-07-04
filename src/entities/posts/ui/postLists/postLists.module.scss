@@ -1,0 +1,149 @@
+@use 'variable' as *;
+
+// Variables
+$color-text-primary: #333;
+$color-text-secondary: #868e96;
+$color-text-title: #525252;
+$color-background-card: white;
+$color-border-light: #efefef;
+
+// Shadows and transitions
+$card-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
+$card-shadow-hover: 0px 10px 20px rgba(0, 0, 0, 0.1);
+$card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+
+// Mixins
+@mixin text-ellipsis($lines) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  line-height: 1.5rem;
+  word-wrap: break-word;
+}
+
+// Base styles
+.module {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 30px;
+  column-gap: 30px;
+  width: 100%;
+  justify-items: center;
+  padding-bottom: 30px;
+}
+
+.post {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-background-card;
+  border-radius: 5px;
+  box-shadow: $card-shadow;
+  transition: $card-transition;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $card-shadow-hover;
+  }
+}
+
+.postImgDiv {
+  position: relative;
+  width: 100%;
+  padding-top: 50%;
+  box-shadow: $card-shadow;
+  transition: $card-transition;
+}
+
+.postImg {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  object-fit: cover;
+  position: absolute;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.postTitleContent {
+  padding: 15px;
+}
+
+.postTitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: $color-text-title;
+  @include text-ellipsis(1);
+}
+
+.postContent {
+  font-size: 14px;
+  color: $color-text-title;
+  font-weight: 300;
+  @include text-ellipsis(3);
+  margin-block-start: 5px;
+}
+
+.postBottom {
+  font-size: 0.75rem;
+  color: $color-text-secondary;
+  font-weight: 400;
+}
+
+.postAuthor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-top: 1px solid $color-border-light;
+}
+
+.userImg {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.userText {
+  font-size: 12px;
+  color: $color-text-secondary;
+  margin-right: 5px;
+}
+
+.nickname {
+  font-size: 12px;
+  font-weight: bold;
+  color: $color-text-title;
+}
+
+.likeText {
+  font-size: 12px;
+  color: $color-text-title;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// Media queries
+@media (max-width: $breakpoint-medium) {
+  .module {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .module {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    grid-template-columns: 1fr;
+  }
+}
