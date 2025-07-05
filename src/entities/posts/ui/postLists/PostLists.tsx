@@ -40,13 +40,13 @@ export const PostLists = ({ posts, setTarget }: PostListsProps) => {
               <></>
             )}
             <div className={css.postTitleContent}>
-              <span className={css.postTitle}>{post.postTitle}</span>
-              <p className={css.postContent}>{post.postCntn}</p>
-              <div>
-                <span className={css.postBottom}>
-                  {formatDate({ date: post.rgsnDttm, seperator: '.' })}&nbsp;•&nbsp;
-                </span>
-                <span className={css.postBottom}>{`${post.commentCnt}개의 댓글`}</span>
+              <div className={css.postTitleContentTop}>
+                <span className={css.postTitle}>{post.postTitle}</span>
+                <p className={post.postThmbImgUrl ? css.postContentClamp : css.postContentWrapper}>{post.postCntn}</p>
+              </div>
+              <div className={css.postBottom}>
+                <span>{formatDate({ date: post.rgsnDttm, seperator: '.' })}&nbsp;•&nbsp;</span>
+                <span>{`${post.commentCnt}개의 댓글`}</span>
               </div>
             </div>
           </div>

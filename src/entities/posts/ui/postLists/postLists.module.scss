@@ -27,106 +27,131 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 .module {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
   row-gap: 30px;
   column-gap: 30px;
   width: 100%;
   justify-items: center;
   padding-bottom: 30px;
-}
 
-.post {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: $color-background-card;
-  border-radius: 5px;
-  box-shadow: $card-shadow;
-  transition: $card-transition;
-  cursor: pointer;
+  .post {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: $color-background-card;
+    border-radius: 5px;
+    box-shadow: $card-shadow;
+    transition: $card-transition;
+    cursor: pointer;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: $card-shadow-hover;
+    .postSummary {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .postImgDiv {
+      position: relative;
+      width: 100%;
+      padding-top: 50%;
+      box-shadow: $card-shadow;
+      transition: $card-transition;
+
+      .postImg {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        object-fit: cover;
+        position: absolute;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+      }
+    }
+
+    .postTitleContent {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1 1;
+
+      .postTitleContentTop {
+        .postTitle {
+          font-size: 16px;
+          font-weight: bold;
+          color: $color-text-title;
+          @include text-ellipsis(1);
+        }
+
+        .postContentClamp {
+          font-size: 14px;
+          color: $color-text-title;
+          font-weight: 300;
+          @include text-ellipsis(3);
+          margin-block-start: 5px;
+          height: 4.8rem;
+        }
+
+        .postContentWrapper {
+          font-size: 14px;
+          color: $color-text-title;
+          font-weight: 300;
+          @include text-ellipsis(9);
+          margin-block-start: 5px;
+          height: 13.8rem;
+        }
+      }
+      .postBottom {
+        margin-top: 10px;
+        font-size: 0.75rem;
+        color: $color-text-secondary;
+        font-weight: 400;
+      }
+    }
+
+    .postAuthor {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      border-top: 1px solid $color-border-light;
+
+      .userImg {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+      }
+
+      .userText {
+        font-size: 12px;
+        color: $color-text-secondary;
+        margin-right: 5px;
+      }
+
+      .nickname {
+        font-size: 12px;
+        font-weight: bold;
+        color: $color-text-title;
+      }
+
+      .likeText {
+        font-size: 12px;
+        color: $color-text-title;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $card-shadow-hover;
+    }
   }
-}
-
-.postImgDiv {
-  position: relative;
-  width: 100%;
-  padding-top: 50%;
-  box-shadow: $card-shadow;
-  transition: $card-transition;
-}
-
-.postImg {
-  width: 100%;
-  height: 100%;
-  top: 0;
-  object-fit: cover;
-  position: absolute;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-}
-
-.postTitleContent {
-  padding: 15px;
-}
-
-.postTitle {
-  font-size: 16px;
-  font-weight: bold;
-  color: $color-text-title;
-  @include text-ellipsis(1);
-}
-
-.postContent {
-  font-size: 14px;
-  color: $color-text-title;
-  font-weight: 300;
-  @include text-ellipsis(3);
-  margin-block-start: 5px;
-}
-
-.postBottom {
-  font-size: 0.75rem;
-  color: $color-text-secondary;
-  font-weight: 400;
-}
-
-.postAuthor {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  border-top: 1px solid $color-border-light;
-}
-
-.userImg {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
-.userText {
-  font-size: 12px;
-  color: $color-text-secondary;
-  margin-right: 5px;
-}
-
-.nickname {
-  font-size: 12px;
-  font-weight: bold;
-  color: $color-text-title;
-}
-
-.likeText {
-  font-size: 12px;
-  color: $color-text-title;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 // Media queries
