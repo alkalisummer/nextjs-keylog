@@ -1,0 +1,33 @@
+.title {
+  margin: 24px 0 0 16px;
+  font-size: 18px;
+  line-height: 1.44;
+  color: #222;
+  font-weight: 700;
+}
+
+.skeleton {
+  width: calc(100% - 32px); // 양옆 16px씩 여백을 위해 전체 폭 조정
+  margin: 16px; // 상하좌우 기본 마진 설정
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box; // border와 padding이 width에 포함되도록 설정
+
+  // 펄스 애니메이션
+  animation: pulse 1.5s infinite ease-in-out;
+  animation-delay: calc(var(--random-delay, 0) * 1s);
+
+  @keyframes pulse {
+    0% {
+      background-color: #f2f2f2;
+    }
+    50% {
+      background-color: #e8e8e8;
+    }
+    100% {
+      background-color: #f2f2f2;
+    }
+  }
+}

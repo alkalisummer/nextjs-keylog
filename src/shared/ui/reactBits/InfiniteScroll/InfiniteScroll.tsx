@@ -204,7 +204,11 @@ export const InfiniteScroll = React.memo<InfiniteScrollProps>(
             }}
           >
             {items.map((item, i) => (
-              <div className="infinite-scroll-item" key={i} onClick={() => handleItemClick(item.data)}>
+              <div
+                className={`infinite-scroll-item ${i === 1 ? 'first-item' : ''}`}
+                key={i}
+                onClick={() => handleItemClick(item.data)}
+              >
                 {i === 0 ? item.content : <span>{item.content}</span>}
               </div>
             ))}

@@ -1,14 +1,16 @@
 'use client';
 
 import css from './view.module.scss';
+import { HomeInitData } from '../model';
+import { BoxError, BoxSkeleton } from '@/shared/ui';
 import { Keyword } from '@/entities/trends/ui';
 import { HomeTabs } from './homeTabs/HomeTabs';
 import { SearchPost } from '@/entities/posts/ui';
+import { AsyncBoundary } from '@/shared/boundary';
 import { KeywordScroll } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
 import { Fragment, useEffect, useState } from 'react';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
-import { HomeInitData } from '../model';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
   const { trend, setTrend } = useTrend();
@@ -25,12 +27,22 @@ export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) =>
       <HomeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'keyword' ? (
         <Fragment>
-          <Keyword />
-          <KeywordScroll trends={trends} onClick={setTrend} />
-          {initialArticles.length > 0 && <ArticleList trends={trends} initialArticles={initialArticles} />}
+          <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={50} />}>
+            <Keyword />
+          </AsyncBoundary>
+          <AsyncBoundary pending={<BoxSkeleton height={350} />} error={<BoxError height={350} />}>
+            <KeywordScroll trends={trends} onClick={setTrend} />
+          </AsyncBoundary>
+          {initialArticles.length > 0 && (
+            <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+              <ArticleList trends={trends} initialArticles={initialArticles} />
+            </AsyncBoundary>
+          )}
         </Fragment>
       ) : (
-        <SearchPost initPosts={initialPosts} initPostsTotalCnt={initialPosts.length} />
+        <AsyncBoundary pending={<BoxSkeleton height={500} />} error={<BoxError height={500} />}>
+          <SearchPost initPosts={initialPosts} initPostsTotalCnt={initialPosts.length} />
+        </AsyncBoundary>
       )}
     </div>
   );

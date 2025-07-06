@@ -58,6 +58,28 @@
   position: relative;
   cursor: pointer;
 
+  &.first-item {
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -1.5em; /* negative margin 값과 동일 */
+      left: 0;
+      right: 0;
+      top: 0;
+      background-color: #337bb5;
+      z-index: -1; /* 텍스트 뒤에 배치 */
+    }
+    &:hover {
+      background-color: #5d98c9;
+      &::before {
+        background-color: #5d98c9;
+      }
+    }
+    span {
+      color: #fff !important;
+    }
+  }
+
   &:hover {
     background-color: #f0f0f0;
     &::before {

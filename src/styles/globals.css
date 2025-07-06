@@ -126,6 +126,11 @@ a {
   text-decoration: none !important;
 }
 
+button {
+  all: unset;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif' !important;
+}
+
 .bb {
   border-bottom: 1px solid #c7c7c7 !important;
 }

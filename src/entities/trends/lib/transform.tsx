@@ -8,7 +8,7 @@ interface FormatTrafficProps {
 
 export const formatTraffic = ({ traffic, isKor = true }: FormatTrafficProps) => {
   if (traffic.includes('0000')) {
-    return traffic.replace('0000', '') + (isKor ? '만' : 'K');
+    return traffic.replace('0000', '') + (isKor ? '만' : 'M');
   }
   if (traffic.includes('000')) {
     return traffic.replace('000', '') + (isKor ? '천' : 'K');
