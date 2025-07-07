@@ -67,7 +67,7 @@
     border-right: 1px solid #000;
   }
 
-  &.first-item {
+  &.selected-item {
     &::before {
       background-color: #337bb5;
     }

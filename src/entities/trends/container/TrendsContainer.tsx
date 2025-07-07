@@ -1,8 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
 import { Trend } from '@/entities/trends/model/type';
-import { initTrend } from './model';
+import { createContext, useContext, useState } from 'react';
 
 interface TrendContextType {
   trend: Trend;

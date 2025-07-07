@@ -9,6 +9,7 @@ import { KeywordList } from '../keywordList/KeywordList';
 
 interface KeywordScrollProps {
   trends: Trend[];
+  selectedTrend: Trend;
   customSpeeds?: {
     desktop?: number;
     tablet?: number;
@@ -17,7 +18,7 @@ interface KeywordScrollProps {
   onClick?: (trend: Trend) => void;
 }
 
-export const KeywordScroll = ({ trends, customSpeeds, onClick }: KeywordScrollProps) => {
+export const KeywordScroll = ({ trends, selectedTrend, customSpeeds, onClick }: KeywordScrollProps) => {
   const autoplaySpeed = useAutoplaySpeed(customSpeeds);
   const trendItems = parseKeywordsArray(trends);
   const keywordList = <KeywordList trends={trends} setSelectedTrend={onClick || (() => {})} />;
@@ -37,6 +38,7 @@ export const KeywordScroll = ({ trends, customSpeeds, onClick }: KeywordScrollPr
       <div className={css.keywordScroll}>
         <InfiniteScroll
           items={items}
+          selectedItemInitData={selectedTrend}
           autoplay={true}
           autoplayDirection="up"
           autoplaySpeed={autoplaySpeed}

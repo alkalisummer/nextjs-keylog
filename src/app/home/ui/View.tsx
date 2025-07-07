@@ -14,7 +14,7 @@ import { ArticleListSkeleton } from '@/entities/articles/ui';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
-  const { setTrend } = useTrend();
+  const { trend, setTrend } = useTrend();
 
   const [currentTab, setCurrentTab] = useState('keyword');
 
@@ -24,7 +24,7 @@ export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) =>
       {currentTab === 'keyword' ? (
         <Fragment>
           <Keyword />
-          <KeywordScroll trends={trends} onClick={setTrend} />
+          <KeywordScroll trends={trends} selectedTrend={trend} onClick={setTrend} />
           {initialArticles.length > 0 && (
             <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={150} />}>
               <ArticleList trends={trends} initialArticles={initialArticles} />

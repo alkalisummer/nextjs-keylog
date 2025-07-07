@@ -19,5 +19,6 @@ export const createDailyTrends = (trends: Trend[]) => {
           articleKeys: trend.articleKeys,
         },
     ) // traffic 내림 차순 정렬
-    .sort((a, b) => Number(b.traffic) - Number(a.traffic));
+    .sort((a, b) => Number(b.traffic) - Number(a.traffic))
+    .slice(0, 10);
 };

@@ -22,7 +22,7 @@ export const PostLists = ({ posts, setTarget }: PostListsProps) => {
           key={post.postId}
           ref={posts.length - 1 === idx ? setTarget : null}
           className={css.post}
-          onClick={() => router.push(`/${post}/posts/${post.postId}`)}
+          onClick={() => router.push(`/${post.authorId}/${post.postId}`)}
         >
           <div className={css.postSummary}>
             {post.postThmbImgUrl ? (

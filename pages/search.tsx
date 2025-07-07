@@ -135,7 +135,7 @@ const HomePage = ({ initPosts, initTotalCnt }: { initPosts: post[]; initTotalCnt
                   key={post.POST_ID}
                   ref={posts.length - 1 === idx ? ref : null}
                   className="index_search_post"
-                  onClick={() => router.push(`/${post.RGSR_ID}/posts/${post.POST_ID}`)}
+                  onClick={() => router.push(`/${post.RGSR_ID}/post/${post.POST_ID}`)}
                 >
                   <div className="index_search_post_summary">
                     {post.POST_THMB_IMG_URL ? (
