@@ -1,7 +1,7 @@
 'use client';
 
 import { Article } from '../model';
-import { getArticles } from '../api';
+import { getArticlesClient } from '../api';
 import { Trend } from '@/entities/trends/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -17,7 +17,7 @@ export const useArticlesQuery = ({ trends, selectedTrend, initialData }: UseArti
   return useSuspenseQuery({
     queryKey: queryKey().article().articleList(selectedTrend.keyword),
     queryFn: () =>
-      getArticles({
+      getArticlesClient({
         articleKeys: selectedTrend.articleKeys,
         articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
       }),

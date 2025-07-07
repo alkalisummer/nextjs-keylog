@@ -48,3 +48,15 @@ export interface FetchProps {
   body?: Record<string, any>;
   searchParams?: SearchParams;
 }
+
+export interface HttpClientRequestProps {
+  endpoint?: string;
+  options?: Partial<ExtendedFetchOptions>;
+}
+
+export interface HttpClient {
+  get: <T>({ endpoint, options }: HttpClientRequestProps) => Promise<ApiResponse<T>>;
+  post: <T>({ endpoint, options }: HttpClientRequestProps) => Promise<ApiResponse<T>>;
+  put: <T>({ endpoint, options }: HttpClientRequestProps) => Promise<ApiResponse<T>>;
+  delete: <T>({ endpoint, options }: HttpClientRequestProps) => Promise<ApiResponse<T>>;
+}

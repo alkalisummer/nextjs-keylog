@@ -3,8 +3,8 @@
 import { Trend } from '../../model';
 import { InfiniteScroll } from '@/shared/ui';
 import css from './keywordScroll.module.scss';
-import { parseKeywordsArray } from '../../lib/transform';
 import { useAutoplaySpeed } from '../../hook';
+import { parseKeywordsArray } from '../../lib/transform';
 import { KeywordList } from '../keywordList/KeywordList';
 
 interface KeywordScrollProps {

@@ -21,14 +21,16 @@ export const getPosts = async ({
   tempYn = 'N',
   tagId,
 }: GetPostsProps) => {
-  return await client.get<Post[]>('/post', {
-    searchParams: {
-      authorId,
-      perPage,
-      currPageNum,
-      searchWord,
-      tempYn,
-      tagId,
+  return await client.post().get<Post[]>({
+    options: {
+      searchParams: {
+        authorId,
+        perPage,
+        currPageNum,
+        searchWord,
+        tempYn,
+        tagId,
+      },
     },
   });
 };

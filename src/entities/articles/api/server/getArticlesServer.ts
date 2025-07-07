@@ -1,7 +1,7 @@
 'use server';
 
-import { createArticles } from '../lib';
-import { Article, ArticleKey } from '../model';
+import { createArticles } from '../../lib';
+import { Article, ArticleKey } from '../../model';
 import GoogleTrendsApi from '@alkalisummer/google-trends-js';
 
 interface GetArticlesProps {
@@ -9,7 +9,7 @@ interface GetArticlesProps {
   articleCount: number;
 }
 
-export const getArticles = async ({ articleKeys, articleCount }: GetArticlesProps): Promise<Article[]> => {
+export const getArticlesServer = async ({ articleKeys, articleCount }: GetArticlesProps): Promise<Article[]> => {
   const result = await GoogleTrendsApi.trendingArticles({ articleKeys, articleCount });
   return result.data?.length > 0 ? createArticles(result.data) : [];
 };

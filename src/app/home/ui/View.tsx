@@ -1,8 +1,8 @@
 'use client';
 
 import css from './view.module.scss';
+import { BoxError } from '@/shared/ui';
 import { HomeInitData } from '../model';
-import { BoxError, BoxSkeleton } from '@/shared/ui';
 import { Keyword } from '@/entities/trends/ui';
 import { HomeTabs } from './homeTabs/HomeTabs';
 import { SearchPost } from '@/entities/posts/ui';
@@ -10,11 +10,17 @@ import { AsyncBoundary } from '@/shared/boundary';
 import { KeywordScroll } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
 import { Fragment, useEffect, useState } from 'react';
+import { ArticleListSkeleton } from '@/entities/articles/ui';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
-  const { trend, setTrend } = useTrend();
-  const [currentTab, setCurrentTab] = useState('keyword');
+  const router = useRouter();
+  const { setTrend } = useTrend();
+
+  const searchParams = useSearchParams();
+  const tab = searchParams?.get('tab') || 'keyword';
+  const [currentTab, setCurrentTab] = useState(tab);
 
   useEffect(() => {
     if (trends.length > 0) {
@@ -22,27 +28,25 @@ export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) =>
     }
   }, [trends, setTrend]);
 
+  useEffect(() => {
+    router.replace(`?tab=${currentTab}`);
+  }, [currentTab]);
+
   return (
     <div className={css.module}>
       <HomeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'keyword' ? (
         <Fragment>
-          <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={50} />}>
-            <Keyword />
-          </AsyncBoundary>
-          <AsyncBoundary pending={<BoxSkeleton height={350} />} error={<BoxError height={350} />}>
-            <KeywordScroll trends={trends} onClick={setTrend} />
-          </AsyncBoundary>
+          <Keyword />
+          <KeywordScroll trends={trends} onClick={setTrend} />
           {initialArticles.length > 0 && (
-            <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+            <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={150} />}>
               <ArticleList trends={trends} initialArticles={initialArticles} />
             </AsyncBoundary>
           )}
         </Fragment>
       ) : (
-        <AsyncBoundary pending={<BoxSkeleton height={500} />} error={<BoxError height={500} />}>
-          <SearchPost initPosts={initialPosts} initPostsTotalCnt={initialPosts.length} />
-        </AsyncBoundary>
+        <SearchPost initPosts={initialPosts} initPostsTotalCnt={initialPosts.length} />
       )}
     </div>
   );

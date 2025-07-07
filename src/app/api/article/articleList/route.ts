@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getArticles } from '@/entities/articles/api';
+import { getArticlesServer } from '@/entities/articles/api';
 
 export const POST = async (req: NextRequest) => {
-  const { articleKeys, articleCount } = await req.json();
+  const body = await req.json();
+  const { articleKeys, articleCount } = body;
 
-  const articles = await getArticles({
+  const articles = await getArticlesServer({
     articleKeys,
-    articleCount: Number(articleCount),
+    articleCount,
   });
 
   return NextResponse.json(articles);

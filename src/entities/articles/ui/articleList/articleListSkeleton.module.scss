@@ -1,0 +1,154 @@
+@use 'variable' as *;
+
+@keyframes pulse {
+  0% {
+    background-color: #f2f2f2;
+  }
+  50% {
+    background-color: #e8e8e8;
+  }
+  100% {
+    background-color: #f2f2f2;
+  }
+}
+
+@mixin skeletonBase {
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+  animation-delay: calc(var(--random-delay, 0) * 1s);
+}
+
+@mixin card-border-radius($side) {
+  border-top-#{$side}-radius: 15px;
+  border-bottom-#{$side}-radius: 15px;
+}
+
+// Date skeleton
+.dateSkeletonWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.dateSkeleton {
+  width: 200px;
+  height: 12px;
+  @include skeletonBase;
+}
+
+// Article list skeleton
+.articleListSkeleton {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 27px;
+  column-gap: 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+  align-content: baseline;
+}
+
+.articleSkeleton {
+  display: flex;
+}
+
+.imageSkeleton {
+  width: 100px;
+  height: 118.9px;
+  border-radius: 15px 0 0 15px;
+  @include skeletonBase;
+  @include card-border-radius(left);
+}
+
+.infoSkeleton {
+  display: flex;
+  width: -webkit-fill-available;
+  height: 118.9px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 15px;
+  background: white;
+  border-radius: 0 15px 15px 0;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
+  @include card-border-radius(right);
+}
+
+.titleSkeleton {
+  width: 85%;
+  height: 15px;
+  margin: 10px 0 5px;
+  @include skeletonBase;
+}
+
+.titleSecondLineSkeleton {
+  width: 60%;
+  height: 15px;
+  margin: 0 0 5px;
+  @include skeletonBase;
+}
+
+.bottomSkeleton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 0 5px;
+}
+
+.companySkeleton {
+  width: 60px;
+  height: 13px;
+  @include skeletonBase;
+}
+
+.dateSeparator {
+  width: 3px;
+  height: 3px;
+  background-color: #e8e8e8;
+  border-radius: 50%;
+}
+
+.pressDateSkeleton {
+  width: 50px;
+  height: 13px;
+  @include skeletonBase;
+}
+
+@media (max-width: $breakpoint-medium) {
+  .articleListSkeleton {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .articleListSkeleton {
+    grid-template-columns: 1fr;
+    row-gap: 15px;
+  }
+
+  .dateSkeleton {
+    width: 150px;
+    height: 10px;
+  }
+
+  .imageSkeleton {
+    height: 106.9px;
+  }
+
+  .infoSkeleton {
+    height: 106.9px;
+  }
+
+  .titleSkeleton,
+  .titleSecondLineSkeleton {
+    height: 13px;
+  }
+
+  .companySkeleton,
+  .pressDateSkeleton {
+    height: 11px;
+  }
+}

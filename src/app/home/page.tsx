@@ -3,9 +3,9 @@
 import { View } from './ui/View';
 import { queryKey } from '../provider/query/lib';
 import { getPosts } from '@/entities/posts/api';
-import { getArticles } from '@/entities/articles/api';
 import { getDailyTrends } from '@/entities/trends/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+import { getArticlesServer } from '@/entities/articles/api';
 import { TrendsContainer } from '@/entities/trends/container/TrendsContainer';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -25,7 +25,10 @@ export const Page = async () => {
   const articlesQueryOptions = {
     queryKey: queryKey().article().articleList(initTrendKeywordInfo.keyword),
     queryFn: () =>
-      getArticles({ articleKeys: initTrendKeywordInfo.articleKeys, articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT }),
+      getArticlesServer({
+        articleKeys: initTrendKeywordInfo.articleKeys,
+        articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
+      }),
   };
   await queryClient.prefetchQuery(articlesQueryOptions);
   const articles = await queryClient.ensureQueryData(articlesQueryOptions);
