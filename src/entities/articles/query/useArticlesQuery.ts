@@ -20,7 +20,7 @@ export const useArticlesQuery = ({ trends, selectedTrend, initialData }: UseArti
       getArticlesClient({
         articleKeys: selectedTrend.articleKeys,
         articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
-      }),
+      }).then(articles => articles?.sort((a, b) => b.pressDate[0] - a.pressDate[0])),
     initialData: selectedTrend.keyword === trends[0].keyword ? initialData : undefined,
   });
 };

@@ -51,7 +51,7 @@ export const PostLists = ({ posts, setTarget }: PostListsProps) => {
             </div>
           </div>
           <div className={css.postAuthor}>
-            <div className="df ai_c">
+            <div className={css.userInfo}>
               <img
                 className={css.userImg}
                 src={post.userThmbImgUrl ? post.userThmbImgUrl : '/../../icon/person.png'}

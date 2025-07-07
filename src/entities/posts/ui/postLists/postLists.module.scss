@@ -118,24 +118,29 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
       padding: 10px 15px;
       border-top: 1px solid $color-border-light;
 
-      .userImg {
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 10px;
-      }
+      .userInfo {
+        display: flex;
+        align-items: center;
 
-      .userText {
-        font-size: 12px;
-        color: $color-text-secondary;
-        margin-right: 5px;
-      }
+        .userImg {
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 10px;
+        }
 
-      .nickname {
-        font-size: 12px;
-        font-weight: bold;
-        color: $color-text-title;
+        .userText {
+          font-size: 12px;
+          color: $color-text-secondary;
+          margin-right: 5px;
+        }
+
+        .nickname {
+          font-size: 12px;
+          font-weight: bold;
+          color: $color-text-title;
+        }
       }
 
       .likeText {

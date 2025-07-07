@@ -1,8 +1,8 @@
 'use client';
 
-import { useTrend } from '../../container/TrendsContainer';
 import { Trend } from '../../model';
 import css from './keywordList.module.scss';
+import { useTrend } from '../../container/TrendsContainer';
 
 interface KeywordListProps {
   trends: Trend[];

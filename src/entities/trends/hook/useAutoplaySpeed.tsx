@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { SpeedBreakpoints } from '../model';
 import { DEFAULT_SPEEDS } from '@/shared/lib/constants';
 
 export const useAutoplaySpeed = (customSpeeds?: SpeedBreakpoints) => {
   const [autoplaySpeed, setAutoplaySpeed] = useState(1);
 
-  const speeds = { ...DEFAULT_SPEEDS, ...customSpeeds };
+  const speeds = useMemo(() => {
+    return { ...DEFAULT_SPEEDS, ...customSpeeds };
+  }, [customSpeeds]);
 
   useEffect(() => {
     const updateSpeed = () => {
@@ -22,7 +24,10 @@ export const useAutoplaySpeed = (customSpeeds?: SpeedBreakpoints) => {
         newSpeed = speeds.mobile;
       }
 
-      setAutoplaySpeed(newSpeed);
+      setAutoplaySpeed(prevSpeed => {
+        if (prevSpeed === newSpeed) return prevSpeed;
+        return newSpeed;
+      });
     };
 
     // 초기 속도 설정

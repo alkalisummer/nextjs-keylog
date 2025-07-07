@@ -32,6 +32,7 @@ export const Page = async () => {
   };
   await queryClient.prefetchQuery(articlesQueryOptions);
   const articles = await queryClient.ensureQueryData(articlesQueryOptions);
+  const sortedArticles = articles?.sort((a, b) => b.pressDate[0] - a.pressDate[0]);
 
   //posts init data
   const postsQueryOptions = {
@@ -47,8 +48,8 @@ export const Page = async () => {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <TrendsContainer>
-        <View trends={dailyTrends} initialArticles={articles} initialPosts={posts.data} />
+      <TrendsContainer initialTrend={initTrendKeywordInfo}>
+        <View trends={dailyTrends} initialArticles={sortedArticles} initialPosts={posts.data} />
       </TrendsContainer>
     </HydrationBoundary>
   );

@@ -11,26 +11,12 @@ import { KeywordScroll } from '@/entities/trends/ui';
 import { ArticleList } from '@/entities/articles/ui';
 import { Fragment, useEffect, useState } from 'react';
 import { ArticleListSkeleton } from '@/entities/articles/ui';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useTrend } from '@/entities/trends/container/TrendsContainer';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
-  const router = useRouter();
   const { setTrend } = useTrend();
 
-  const searchParams = useSearchParams();
-  const tab = searchParams?.get('tab') || 'keyword';
-  const [currentTab, setCurrentTab] = useState(tab);
-
-  useEffect(() => {
-    if (trends.length > 0) {
-      setTrend(trends[0]);
-    }
-  }, [trends, setTrend]);
-
-  useEffect(() => {
-    router.replace(`?tab=${currentTab}`);
-  }, [currentTab]);
+  const [currentTab, setCurrentTab] = useState('keyword');
 
   return (
     <div className={css.module}>
