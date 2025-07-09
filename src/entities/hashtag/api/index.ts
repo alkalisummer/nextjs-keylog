@@ -1,0 +1,1 @@
+export { getHashtags } from './getHashtags';

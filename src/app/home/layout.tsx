@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-import { Header } from '@/widgets/header';
-import { Fragment } from 'react';
+import { Header } from '@/widgets';
+import { ReactNode, Fragment } from 'react';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

@@ -3,7 +3,7 @@
 import { gsap } from 'gsap';
 import './InfiniteScroll.css';
 import { Observer } from 'gsap/Observer';
-import { Trend } from '@/entities/trends/model';
+import { Trend } from '@/entities/trend/model';
 import React, { useRef, useEffect, ReactNode, useMemo, useCallback, useState } from 'react';
 
 gsap.registerPlugin(Observer);

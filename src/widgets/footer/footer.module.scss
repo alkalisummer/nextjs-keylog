@@ -1,0 +1,35 @@
+@use 'variable' as *;
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 5%;
+  padding-left: 16rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .footerContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    font-size: 12px;
+
+    max-width: 1200px;
+    border-top: 1px solid #dadada;
+
+    .description {
+      color: #6bacce;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .footer {
+    display: none;
+  }
+}

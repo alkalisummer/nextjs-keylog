@@ -1,0 +1,19 @@
+@use 'variable' as *;
+
+.module {
+  padding-left: 16rem;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #dadada;
+
+  .article {
+    width: 90%;
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .module {
+    padding-left: 0;
+  }
+}

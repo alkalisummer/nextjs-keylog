@@ -11,7 +11,7 @@ interface HomeTabsProps {
 
 export const HomeTabs = ({ currentTab, setCurrentTab }: HomeTabsProps) => {
   return (
-    <div className={css.module}>
+    <nav className={css.module}>
       <span
         className={`${css.tab} ${currentTab === 'keyword' ? css.activeTab : ''}`}
         onClick={e => {
@@ -30,6 +30,6 @@ export const HomeTabs = ({ currentTab, setCurrentTab }: HomeTabsProps) => {
         <FontAwesomeIcon icon={faMagnifyingGlass} className={css.ico} />
         <span className={css.text}>포스트</span>
       </span>
-    </div>
+    </nav>
   );
 };

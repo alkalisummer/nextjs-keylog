@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getArticlesServer } from '@/entities/articles/api';
+import { getArticlesServer } from '@/entities/article/api';
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json();

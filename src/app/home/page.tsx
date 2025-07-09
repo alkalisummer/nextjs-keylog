@@ -2,11 +2,11 @@
 
 import { View } from './ui/View';
 import { queryKey } from '../provider/query/lib';
-import { getPosts } from '@/entities/posts/api';
-import { getDailyTrends } from '@/entities/trends/api';
+import { getPosts } from '@/entities/post/api';
+import { getDailyTrends } from '@/entities/trend/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
-import { getArticlesServer } from '@/entities/articles/api';
-import { TrendsContainer } from '@/entities/trends/container/TrendsContainer';
+import { getArticlesServer } from '@/entities/article/api';
+import { TrendContainer } from '@/entities/trend/container/TrendContainer';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async () => {
@@ -42,15 +42,15 @@ export const Page = async () => {
   await queryClient.prefetchQuery(postsQueryOptions);
   const posts = await queryClient.ensureQueryData(postsQueryOptions);
 
-  if (!posts.data) throw new Error('posts fetch error');
+  if (!posts.ok) throw new Error('posts fetch error');
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <TrendsContainer initialTrend={initTrendKeywordInfo}>
+      <TrendContainer initialTrend={initTrendKeywordInfo}>
         <View trends={dailyTrends} initialArticles={sortedArticles} initialPosts={posts.data} />
-      </TrendsContainer>
+      </TrendContainer>
     </HydrationBoundary>
   );
 };

@@ -1,7 +1,7 @@
 'use server';
 
 export const Page = async () => {
-  return <div>PostDetailPage</div>;
+  return <article>PostDetailPage</article>;
 };
 
 export default Page;

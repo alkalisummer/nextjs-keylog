@@ -1,17 +1,16 @@
 'use client';
 
-import css from './view.module.scss';
+import { useState } from 'react';
 import { BoxError } from '@/shared/ui';
 import { HomeInitData } from '../model';
-import { Keyword } from '@/entities/trends/ui';
+import { Keyword } from '@/entities/trend/ui';
 import { HomeTabs } from './homeTabs/HomeTabs';
-import { SearchPost } from '@/entities/posts/ui';
+import { SearchPost } from './searchPost/SearchPost';
 import { AsyncBoundary } from '@/shared/boundary';
-import { KeywordScroll } from '@/entities/trends/ui';
-import { ArticleList } from '@/entities/articles/ui';
-import { Fragment, useEffect, useState } from 'react';
-import { ArticleListSkeleton } from '@/entities/articles/ui';
-import { useTrend } from '@/entities/trends/container/TrendsContainer';
+import { KeywordScroll } from '@/entities/trend/ui';
+import { ArticleList } from '@/entities/article/ui';
+import { ArticleListSkeleton } from '@/entities/article/ui';
+import { useTrend } from '@/entities/trend/container/TrendContainer';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
   const { trend, setTrend } = useTrend();
@@ -19,10 +18,10 @@ export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) =>
   const [currentTab, setCurrentTab] = useState('keyword');
 
   return (
-    <div className={css.module}>
+    <>
       <HomeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 'keyword' ? (
-        <Fragment>
+        <main>
           <Keyword />
           <KeywordScroll trends={trends} selectedTrend={trend} onClick={setTrend} />
           {initialArticles.length > 0 && (
@@ -30,10 +29,10 @@ export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) =>
               <ArticleList trends={trends} initialArticles={initialArticles} />
             </AsyncBoundary>
           )}
-        </Fragment>
+        </main>
       ) : (
         <SearchPost initPosts={initialPosts} initPostsTotalCnt={initialPosts.length} />
       )}
-    </div>
+    </>
   );
 };

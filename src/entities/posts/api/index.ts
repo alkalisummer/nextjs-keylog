@@ -1,1 +1,0 @@
-export { getPosts } from './getPosts';

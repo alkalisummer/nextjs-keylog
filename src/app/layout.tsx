@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { Scaffold } from '@/shared/ui/layout';
 import { QueryProvider, SessionProvider } from './provider';
 
 export const metadata = {
@@ -10,7 +11,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="kr">
       <body>
         <QueryProvider>
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider>
+            <Scaffold>{children}</Scaffold>
+          </SessionProvider>
         </QueryProvider>
       </body>
     </html>

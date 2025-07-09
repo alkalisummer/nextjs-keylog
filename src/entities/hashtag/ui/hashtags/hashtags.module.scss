@@ -1,0 +1,60 @@
+// Variables
+$color-text-primary: #525252;
+$color-text-gray: gray;
+$color-text-light: #c0c0c0;
+$color-border-light: #dadada;
+
+// Transitions
+$hover-transition: all 0.2s ease-in-out;
+
+// Mixins
+@mixin text-ellipsis($lines) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  line-height: 1.2rem;
+  word-wrap: break-word;
+}
+
+.module {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  margin-bottom: 15px;
+  padding-right: 0.5rem;
+
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-text-primary;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+  }
+
+  .hashtag {
+    padding: 2px 0px 6px 0px;
+    font-size: 14px;
+    font-weight: 400;
+    color: $color-text-gray;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: $hover-transition;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  .name {
+    @include text-ellipsis(1);
+  }
+
+  .count {
+    color: $color-text-light;
+  }
+}

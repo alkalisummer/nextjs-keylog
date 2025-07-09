@@ -34,5 +34,19 @@ export const queryKey = () => ({
       tempYn ?? '',
     ],
     postDetail: (postId: string) => [...queryKey().post().all(), 'postDetail', postId],
+    recentPost: (userId: string) => [...queryKey().post().all(), 'recentPost', userId],
+    popularPost: (userId: string) => [...queryKey().post().all(), 'popularPost', userId],
+  }),
+  user: () => ({
+    all: () => ['user'],
+    userInfo: (userId: string) => [...queryKey().user().all(), 'userInfo', userId],
+  }),
+  comment: () => ({
+    all: () => ['comment'],
+    recentComment: (userId: string) => [...queryKey().comment().all(), 'recentComment', userId],
+  }),
+  hashtag: () => ({
+    all: () => ['hashtag'],
+    hashtagList: (userId: string) => [...queryKey().hashtag().all(), 'hashtagList', userId],
   }),
 });

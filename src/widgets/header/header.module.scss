@@ -1,0 +1,33 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    line-height: 4rem;
+
+    .logo {
+      font-family: 'Fira Mono', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+
+      @media (max-width: $breakpoint-medium) {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: $breakpoint-small) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-medium-small) {
+    .header {
+      height: 3.5rem;
+    }
+  }
+}
