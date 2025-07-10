@@ -6,7 +6,7 @@ import { getPosts } from '@/entities/post/api';
 import { useSearchParams } from 'next/navigation';
 import { SearchForm } from '@/entities/post/ui/index';
 import { useIntersectionObserver } from '@/shared/lib/hooks';
-import { PostLists } from '@/entities/post/ui/postLists/PostLists';
+import { SearchPostList } from '@/entities/post/ui/searchPostList/SearchPostList';
 import { SearchForm as SearchFormType } from '@/entities/post/model';
 import { SearchTagPost } from '@/entities/post/ui/searchTagPost/SearchTagPost';
 
@@ -61,7 +61,7 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
       ) : (
         <SearchForm onSubmit={onSubmit} isSubmitSuccessful={isSubmitSuccessful} postCnt={postCnt} />
       )}
-      <PostLists posts={posts} setTarget={setTarget} />
+      <SearchPostList posts={posts} setTarget={setTarget} />
     </Fragment>
   );
 };

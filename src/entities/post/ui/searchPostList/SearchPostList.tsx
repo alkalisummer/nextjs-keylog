@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Post } from '../../model';
-import css from './postLists.module.scss';
+import css from './searchPostList.module.scss';
 import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ interface PostListsProps {
   setTarget: (element: Element | null) => void;
 }
 
-export const PostLists = ({ posts, setTarget }: PostListsProps) => {
+export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
   const router = useRouter();
 
   return (

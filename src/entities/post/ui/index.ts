@@ -1,5 +1,7 @@
-export { SearchPost } from '../../../app/home/ui/searchPost/SearchPost';
-export { SearchTagPost } from './searchTagPost/SearchTagPost';
 export { SearchForm } from './searchForm/SearchForm';
-export { PopularPosts } from './popularPosts/PopularPosts';
 export { RecentPosts } from './recentPosts/RecentPosts';
+export { PopularPosts } from './popularPosts/PopularPosts';
+export { SearchTagPost } from './searchTagPost/SearchTagPost';
+export { PostPagination } from './postPagination/PostPagination';
+export { BlogPostList } from './blogPostList/BlogPostList';
+export { BlogPostItem } from './blogPostItem/blogPostItem';

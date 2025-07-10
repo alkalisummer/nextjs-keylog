@@ -11,21 +11,19 @@ interface UsePostsQueryProps {
   currPageNum?: number;
   perPage?: number;
   tempYn?: string;
-  initialData?: Post[];
 }
 
 export const usePostsQuery = ({
   searchWord = '',
-  initialData,
   tagId,
   authorId,
   currPageNum = 1,
   perPage = NUMBER_CONSTANTS.POST_PER_PAGE,
   tempYn = 'N',
 }: UsePostsQueryProps) => {
-  return useQuery({
-    queryKey: queryKey().post().postList(searchWord),
+  const { data } = useQuery({
+    queryKey: queryKey().post().postList({ searchWord, tagId, authorId, currPageNum, perPage, tempYn }),
     queryFn: () => getPosts({ searchWord, tagId, authorId, currPageNum, perPage, tempYn }),
-    initialData,
   });
+  return data;
 };

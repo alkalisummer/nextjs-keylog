@@ -1,0 +1,136 @@
+@use 'variable' as *;
+
+// Colors
+$color-primary: #333;
+$color-secondary: #5c5c5c;
+$color-tertiary: #aaa;
+$color-border: #efefef;
+
+// Font sizes
+$font-size-title: 25px;
+$font-size-content: 15px;
+$font-size-created: 12px;
+
+.postTitleContent {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid $color-border;
+  word-break: break-all;
+
+  a {
+    text-decoration-line: none !important;
+    color: black;
+  }
+}
+
+.postThumb {
+  display: flex;
+  justify-content: space-between;
+}
+
+.thumbContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.postTitle {
+  text-decoration-line: none !important;
+  font-size: $font-size-title;
+  color: $color-primary;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.4em;
+}
+
+.postContent {
+  font-size: $font-size-content;
+  color: $color-secondary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1.4em;
+  height: 6.9em;
+}
+
+.postCreated {
+  font-size: $font-size-created;
+  color: $color-tertiary;
+}
+
+.thumbImgDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.thumbImg {
+  width: 150px;
+  height: 150px;
+  margin-left: 15px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+// Responsive styles
+@media (max-width: $breakpoint-medium-small) {
+  .postContent {
+    -webkit-line-clamp: 3 !important;
+    height: 3.9em !important;
+  }
+}
+
+@media (max-width: 834px) {
+  .postTitle {
+    font-size: 20px !important;
+  }
+
+  .postContent {
+    font-size: 15px !important;
+  }
+
+  .postCreated {
+    font-size: 13px !important;
+  }
+
+  .thumbImg {
+    width: 130px !important;
+    height: 130px !important;
+    margin-left: 10px !important;
+  }
+
+  .postContent {
+    -webkit-line-clamp: 3 !important;
+    height: 3.9em !important;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .postTitle {
+    font-size: 14px !important;
+    font-weight: 500;
+  }
+
+  .postContent {
+    font-size: 12px !important;
+  }
+
+  .postCreated {
+    font-size: 11px !important;
+  }
+
+  .thumbImg {
+    width: 100px !important;
+    height: 100px !important;
+    margin-left: 10px !important;
+  }
+}

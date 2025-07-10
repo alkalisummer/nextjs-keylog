@@ -1,0 +1,106 @@
+// Variables
+$color-text-primary: #5c5c5c;
+$color-text-white: white;
+$color-background-selected: #6bacce;
+$font-size-base: 14px;
+$font-size-small: 12px;
+
+// Layout
+$nav-height: 5%;
+$nav-line-height: 33px;
+$prev-margin-right: 35px;
+$next-margin-left: 25px;
+$num-margin-right: 10px;
+$num-width: 30px;
+$num-height: 30px;
+
+// Transitions
+$hover-transition: all 0.2s ease-in-out;
+
+// Mixins
+@mixin nav-button-base {
+  cursor: pointer;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+}
+
+@mixin page-number-base {
+  margin-right: $num-margin-right;
+  width: $num-width;
+  cursor: pointer;
+  color: $color-text-primary;
+}
+
+// Base styles
+.module {
+  height: $nav-height;
+  text-align: center;
+  line-height: $nav-line-height;
+  color: $color-text-primary;
+  font-size: $font-size-base;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .prev {
+    @include nav-button-base;
+    margin-right: $prev-margin-right;
+  }
+
+  .next {
+    @include nav-button-base;
+    margin-left: $next-margin-left;
+  }
+
+  .num {
+    @include page-number-base;
+
+    &.selected {
+      background-color: $color-background-selected;
+      height: $num-height;
+      width: $num-width;
+      color: $color-text-white;
+      border-radius: 50%;
+    }
+  }
+
+  .arrow {
+    font-weight: bolder;
+    cursor: pointer;
+  }
+}
+
+// Media queries
+@media (max-width: 1150px) {
+  .nav {
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 834px) {
+  .nav {
+    .prev,
+    .next {
+      font-size: $font-size-small;
+    }
+
+    .num {
+      font-size: $font-size-small;
+      line-height: 26px;
+      margin-top: 4px;
+
+      &.selected {
+        height: 25px;
+        width: 25px;
+      }
+    }
+  }
+}
+
+@media (max-width: 634px) {
+  .module {
+    width: 100%;
+    background-color: white;
+    padding-bottom: 5px;
+  }
+}

@@ -1,0 +1,1 @@
+export { calculateTotalPage } from './calculate';

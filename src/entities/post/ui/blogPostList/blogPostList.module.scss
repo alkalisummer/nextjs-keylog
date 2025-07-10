@@ -1,0 +1,151 @@
+@use 'variable' as *;
+
+// Colors
+$color-primary: #333;
+$color-secondary: #5c5c5c;
+$color-tertiary: #98a1a9;
+$color-border: #efefef;
+$color-button: #009bf2;
+$color-white: white;
+
+// Font sizes
+$font-size-large: 35px;
+$font-size-medium: 20px;
+$font-size-small: 12px;
+
+.module {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerDiv {
+  display: none;
+}
+
+.post {
+  width: 1100px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.header {
+  border-bottom: 1px solid $color-border;
+  padding-bottom: 15px;
+}
+
+.postCnt {
+  font-weight: normal;
+  font-size: $font-size-medium;
+  color: $color-secondary;
+}
+
+.headerBtn {
+  display: none;
+}
+
+.profileImg {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.blogName {
+  font-weight: 400;
+  font-size: $font-size-large;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: $color-secondary;
+}
+
+.headerTitle {
+  font-size: $font-size-medium;
+  color: $color-tertiary;
+}
+
+.createBtn {
+  background-image: none;
+  background-color: $color-button;
+  width: 60px;
+  height: 25px;
+  font-size: $font-size-small;
+  color: $color-white;
+  border: none !important;
+  cursor: pointer;
+  font-family: 'Spoqa Han Sans Neo';
+  border-radius: 5px;
+}
+
+// Responsive styles
+@media (max-width: 1380px) {
+  .post {
+    width: 900px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .post {
+    width: 950px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    line-height: 23px;
+  }
+
+  .headerDiv {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background: $color-white;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid $color-border;
+  }
+
+  .headerBtn {
+    display: flex;
+    align-items: flex-end;
+    margin-right: 10px;
+    display: initial;
+  }
+}
+
+@media (max-width: 990px) {
+  .post {
+    width: 800px;
+  }
+}
+
+@media (max-width: 834px) {
+  .post {
+    width: 600px;
+  }
+
+  .postCnt {
+    font-size: 17px !important;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .post {
+    width: calc(100% - 2rem);
+  }
+
+  .profileImg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .blogName {
+    font-size: 30px;
+  }
+
+  .headerTitle {
+    font-size: 18px;
+  }
+}
