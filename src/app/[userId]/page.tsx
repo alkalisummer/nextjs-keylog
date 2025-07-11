@@ -6,7 +6,6 @@ import { getPosts } from '@/entities/post/api';
 import { queryKey } from '../provider/query/lib';
 import { AsyncBoundary } from '@/shared/boundary';
 import { BlogPostList } from '@/entities/post/ui';
-import { PostPagination } from '@/entities/post/ui';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -45,17 +44,12 @@ export const Page = async ({
     throw new Error('Posts fetch error');
   }
 
-  const totalPageNum = posts.data?.[0]?.totalItems ?? 0;
-
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
         <BlogPostList author={user.data} posts={posts.data} />
-      </AsyncBoundary>
-      <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={35} />}>
-        <PostPagination totalPageNum={totalPageNum} />
       </AsyncBoundary>
     </HydrationBoundary>
   );

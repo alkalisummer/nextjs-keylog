@@ -2,7 +2,7 @@
 import { ReactNode } from 'react';
 import { getUser } from '@/entities/user/api';
 import { queryKey } from '../provider/query/lib';
-import { Header, Sidebar, Footer, Article } from '@/widgets';
+import { Header, Sidebar, Article } from '@/widgets';
 import { getRecentPosts } from '@/entities/post/api';
 import { getHashtags } from '@/entities/hashtag/api';
 import { getPopularPosts } from '@/entities/post/api';
@@ -72,7 +72,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
         hashtags={hashtag.data}
       />
       <Article>{children}</Article>
-      <Footer />
     </HydrationBoundary>
   );
 };

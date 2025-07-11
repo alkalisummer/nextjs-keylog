@@ -6,7 +6,7 @@ import { User } from '@/entities/user/model';
 import { Post } from '@/entities/post/model';
 import { useSearchParams } from 'next/navigation';
 import { useCheckAuth } from '@/shared/lib/hooks';
-import { BlogPostItem } from '@/entities/post/ui';
+import { BlogPostItem, PostPagination } from '@/entities/post/ui';
 
 interface BlogPostListProps {
   author: User;
@@ -18,8 +18,8 @@ export const BlogPostList = ({ author, posts }: BlogPostListProps) => {
   const tagId = searchParms?.get('tagId');
   const isAuthorized = useCheckAuth(author.userId);
 
-  const hashtagName = posts[0].hashtagName;
-  const totalItems = posts[0].totalItems;
+  const hashtagName = posts[0]?.hashtagName ?? '';
+  const totalItems = posts[0]?.totalItems ?? 0;
 
   return (
     <div className={css.module}>
@@ -55,6 +55,7 @@ export const BlogPostList = ({ author, posts }: BlogPostListProps) => {
           return <BlogPostItem key={post.postId} post={post} userId={author.userId} />;
         })}
       </div>
+      <PostPagination totalPageNum={totalItems} />
     </div>
   );
 };

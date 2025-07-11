@@ -15,7 +15,7 @@ interface GetPostsProps {
 
 export const getPosts = async ({
   authorId,
-  perPage = NUMBER_CONSTANTS.POST_PER_PAGE,
+  perPage = NUMBER_CONSTANTS.BLOG_POST_PER_PAGE,
   currPageNum = 1,
   searchWord = '',
   tempYn = 'N',

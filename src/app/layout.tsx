@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
-import { Scaffold } from '@/shared/ui/layout';
 import { QueryProvider, SessionProvider } from './provider';
+import { Scaffold } from '@/shared/ui/layout';
 
 export const metadata = {
   title: 'Keylog',

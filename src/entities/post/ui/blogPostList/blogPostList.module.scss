@@ -16,6 +16,10 @@ $font-size-small: 12px;
 .module {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .headerDiv {
@@ -23,7 +27,6 @@ $font-size-small: 12px;
 }
 
 .post {
-  width: 1100px;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -79,13 +82,11 @@ $font-size-small: 12px;
 // Responsive styles
 @media (max-width: 1380px) {
   .post {
-    width: 900px;
   }
 }
 
 @media (max-width: 1150px) {
   .post {
-    width: 950px;
   }
 
   .header {
@@ -117,13 +118,11 @@ $font-size-small: 12px;
 
 @media (max-width: 990px) {
   .post {
-    width: 800px;
   }
 }
 
 @media (max-width: 834px) {
   .post {
-    width: 600px;
   }
 
   .postCnt {
@@ -133,7 +132,6 @@ $font-size-small: 12px;
 
 @media (max-width: $breakpoint-small) {
   .post {
-    width: calc(100% - 2rem);
   }
 
   .profileImg {

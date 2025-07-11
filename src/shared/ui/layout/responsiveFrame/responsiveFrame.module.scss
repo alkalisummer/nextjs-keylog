@@ -1,0 +1,25 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: $breakpoint-large) {
+  .module {
+    width: 1376px;
+  }
+}
+
+@media (max-width: $breakpoint-medium) {
+  .module {
+    width: 1000px;
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .module {
+    width: 100%;
+    padding: 0 16px;
+  }
+}
