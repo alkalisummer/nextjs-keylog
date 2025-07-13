@@ -3,6 +3,11 @@
 .module {
   width: 100%;
 
+  .blogHeader {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .header {
     display: flex;
     align-items: center;

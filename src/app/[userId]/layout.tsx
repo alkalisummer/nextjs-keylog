@@ -63,7 +63,7 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Header />
+      <Header type="blog" />
       <Sidebar
         userInfo={user.data}
         recentPosts={recentPost.data}
