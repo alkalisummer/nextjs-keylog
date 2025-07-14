@@ -11,7 +11,7 @@ interface BlogPostItemProps {
 }
 
 export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
-  const { postId, postTitle, postCntn, postThmbImgUrl, rgsnDttm } = post || {};
+  const { postId, postTitle, postCntn, postThmbImgUrl, hashtagName, rgsnDttm } = post || {};
 
   return (
     <div className={css.postTitleContent}>
@@ -20,10 +20,11 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
           <div className={css.postThumb}>
             <div className={css.thumbContent}>
               <span className={css.postTitle}>{postTitle}</span>
-              <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
               <span className={css.postCreated}>
                 {formatDate({ date: rgsnDttm, seperator: '.', isExtendTime: true })}
+                <span>{hashtagName ? `• ${hashtagName}` : ''}</span>
               </span>
+              <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
             </div>
             <div className={css.thumbImgDiv}>
               <img className={css.thumbImg} src={postThmbImgUrl} alt="thumbImg" />
@@ -32,10 +33,11 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
         ) : (
           <div>
             <span className={css.postTitle}>{postTitle}</span>
-            <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
             <span className={css.postCreated}>
               {formatDate({ date: rgsnDttm, seperator: '.', isExtendTime: true })}
+              <span>{hashtagName ? `• ${hashtagName}` : ''}</span>
             </span>
+            <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
           </div>
         )}
       </Link>

@@ -7,7 +7,7 @@ $color-tertiary: #aaa;
 $color-border: #efefef;
 
 // Font sizes
-$font-size-title: 25px;
+$font-size-title: 24px;
 $font-size-content: 15px;
 $font-size-created: 12px;
 
@@ -32,6 +32,7 @@ $font-size-created: 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  row-gap: 0.5rem;
 }
 
 .postTitle {
@@ -54,11 +55,11 @@ $font-size-created: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   line-height: 1.4em;
-  height: 6.9em;
+  height: 4.1em;
 }
 
 .postCreated {
@@ -83,13 +84,6 @@ $font-size-created: 12px;
 
 // Responsive styles
 @media (max-width: $breakpoint-medium-small) {
-  .postContent {
-    -webkit-line-clamp: 3 !important;
-    height: 3.9em !important;
-  }
-}
-
-@media (max-width: 834px) {
   .postTitle {
     font-size: 20px !important;
   }
@@ -107,14 +101,15 @@ $font-size-created: 12px;
     height: 130px !important;
     margin-left: 10px !important;
   }
-
-  .postContent {
-    -webkit-line-clamp: 3 !important;
-    height: 3.9em !important;
-  }
 }
 
 @media (max-width: $breakpoint-small) {
+  .postThumb {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    row-gap: 0.5rem;
+  }
+
   .postTitle {
     font-size: 14px !important;
     font-weight: 500;

@@ -27,6 +27,7 @@ $font-size-small: 12px;
 }
 
 .post {
+  width: 1100px;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -79,14 +80,11 @@ $font-size-small: 12px;
   border-radius: 5px;
 }
 
-// Responsive styles
-@media (max-width: 1380px) {
+@media (max-width: $post-breakpoint-large) {
   .post {
-  }
-}
-
-@media (max-width: 1150px) {
-  .post {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .header {
@@ -102,10 +100,8 @@ $font-size-small: 12px;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background: $color-white;
-    padding-top: 5rem;
+    padding-top: 1rem;
     padding-bottom: 5rem;
-    border-bottom: 1px solid $color-border;
   }
 
   .headerBtn {
@@ -116,24 +112,13 @@ $font-size-small: 12px;
   }
 }
 
-@media (max-width: 990px) {
-  .post {
-  }
-}
-
 @media (max-width: 834px) {
-  .post {
-  }
-
   .postCnt {
     font-size: 17px !important;
   }
 }
 
 @media (max-width: $breakpoint-small) {
-  .post {
-  }
-
   .profileImg {
     width: 80px;
     height: 80px;

@@ -41,6 +41,8 @@ $hover-transition: all 0.2s ease-in-out;
   display: flex;
   justify-content: center;
   width: 100%;
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
 
   .prev {
     @include nav-button-base;
