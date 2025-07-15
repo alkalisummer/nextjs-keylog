@@ -17,6 +17,9 @@ $color-background-main: #f8f9fa;
   background-color: $color-background-main;
   border-right: 1px solid #dadada;
 
+  // Animation
+  transition: transform 0.3s ease-in-out;
+
   .leftArea {
     width: 100%;
     display: flex;
@@ -31,8 +34,8 @@ $color-background-main: #f8f9fa;
 }
 
 // Media queries
-@media (max-width: $post-breakpoint-large) {
+@media (max-width: $post-breakpoint) {
   .module {
-    display: none !important;
+    transform: translateX(-100%);
   }
 }

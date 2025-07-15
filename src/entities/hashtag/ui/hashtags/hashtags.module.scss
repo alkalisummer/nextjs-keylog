@@ -2,6 +2,7 @@
 $color-text-primary: #525252;
 $color-text-gray: gray;
 $color-text-light: #c0c0c0;
+$color-text-selected: #6bacce;
 $color-border-light: #dadada;
 
 // Transitions
@@ -44,6 +45,12 @@ $hover-transition: all 0.2s ease-in-out;
     cursor: pointer;
     transition: $hover-transition;
 
+    .icon {
+      width: 0.75rem;
+      height: 1rem;
+      margin-right: 0.5rem;
+    }
+
     &:hover {
       text-decoration: underline;
       text-underline-offset: 2px;
@@ -56,5 +63,10 @@ $hover-transition: all 0.2s ease-in-out;
 
   .count {
     color: $color-text-light;
+  }
+
+  .selected {
+    color: $color-text-selected;
+    font-weight: 500;
   }
 }

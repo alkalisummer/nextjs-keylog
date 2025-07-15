@@ -129,6 +129,8 @@ a {
 button {
   all: unset;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif' !important;
+  cursor: pointer;
+  text-align: center;
 }
 
 .bb {

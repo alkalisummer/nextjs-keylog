@@ -6,6 +6,7 @@ import { User } from '@/entities/user/model';
 import { Post } from '@/entities/post/model';
 import { useSearchParams } from 'next/navigation';
 import { useCheckAuth } from '@/shared/lib/hooks';
+import { HashtagButtons } from '@/entities/hashtag/ui';
 import { BlogPostItem, PostPagination } from '@/entities/post/ui';
 
 interface BlogPostListProps {
@@ -37,17 +38,12 @@ export const BlogPostList = ({ author, posts }: BlogPostListProps) => {
           <span className={css.postCnt}>{`${
             tagId ? `'${hashtagName}' 태그의 글 목록` : '전체 글'
           }(${totalItems})`}</span>
-          {isAuthorized ? (
+          {isAuthorized && (
             <div className={css.headerBtn}>
-              <Link href={`/${author.userId}/chatGpt`}>
-                <button className={css.chatgptBtn}>ChatGPT</button>
-              </Link>
               <Link href={`/write?keyword=true`}>
                 <button className={css.createBtn}>글쓰기</button>
               </Link>
             </div>
-          ) : (
-            <></>
           )}
         </div>
 

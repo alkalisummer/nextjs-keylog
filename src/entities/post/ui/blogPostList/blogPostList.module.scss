@@ -68,19 +68,16 @@ $font-size-small: 12px;
 }
 
 .createBtn {
-  background-image: none;
+  display: block;
   background-color: $color-button;
   width: 60px;
   height: 25px;
   font-size: $font-size-small;
   color: $color-white;
-  border: none !important;
-  cursor: pointer;
-  font-family: 'Spoqa Han Sans Neo';
   border-radius: 5px;
 }
 
-@media (max-width: $post-breakpoint-large) {
+@media (max-width: $post-breakpoint) {
   .post {
     width: 100%;
     padding-left: 1rem;
@@ -107,8 +104,6 @@ $font-size-small: 12px;
   .headerBtn {
     display: flex;
     align-items: flex-end;
-    margin-right: 10px;
-    display: initial;
   }
 }
 

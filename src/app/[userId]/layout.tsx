@@ -3,10 +3,10 @@ import { ReactNode } from 'react';
 import { getUser } from '@/entities/user/api';
 import { queryKey } from '../provider/query/lib';
 import { Header, Sidebar, Article } from '@/widgets';
-import { getRecentPosts } from '@/entities/post/api';
 import { getHashtags } from '@/entities/hashtag/api';
 import { getPopularPosts } from '@/entities/post/api';
 import { getRecentComments } from '@/entities/comment/api';
+import { getPosts, getRecentPosts } from '@/entities/post/api';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 const Layout = async ({ children, params }: { children: ReactNode; params: Promise<{ userId: string }> }) => {
@@ -59,6 +59,15 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
   const hashtag = await queryClient.ensureQueryData(hashtagQueryOptions);
   if (!hashtag.ok) throw new Error('hashtag fetch error');
 
+  //posts
+  const postsQueryOptions = {
+    queryKey: queryKey().post().postList({ currPageNum: 1, authorId: userId }),
+    queryFn: () => getPosts({ currPageNum: 1, authorId: userId }),
+  };
+  await queryClient.prefetchQuery(postsQueryOptions);
+  const posts = await queryClient.ensureQueryData(postsQueryOptions);
+  if (!posts.ok) throw new Error('posts fetch error');
+
   const dehydratedState = dehydrate(queryClient);
 
   return (
@@ -70,6 +79,7 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
         popularPosts={popularPost.data}
         recentComments={recentComment.data}
         hashtags={hashtag.data}
+        posts={posts.data}
       />
       <Article>{children}</Article>
     </HydrationBoundary>

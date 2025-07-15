@@ -4,7 +4,7 @@
 $color-primary: #333;
 $color-secondary: #5c5c5c;
 $color-tertiary: #aaa;
-$color-border: #efefef;
+$color-border: #dadada;
 
 // Font sizes
 $font-size-title: 24px;
@@ -12,10 +12,12 @@ $font-size-content: 15px;
 $font-size-created: 12px;
 
 .postTitleContent {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-bottom: 1px solid $color-border;
   word-break: break-all;
+  height: 18rem;
 
   a {
     text-decoration-line: none !important;
@@ -26,6 +28,8 @@ $font-size-created: 12px;
 .postThumb {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  column-gap: 1.5rem;
 }
 
 .thumbContent {
@@ -69,16 +73,11 @@ $font-size-created: 12px;
 
 .thumbImgDiv {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 
 .thumbImg {
-  width: 150px;
-  height: 150px;
-  margin-left: 15px;
-  border-radius: 10px;
+  width: 16rem;
+  height: 16rem;
   object-fit: cover;
 }
 
@@ -95,19 +94,19 @@ $font-size-created: 12px;
   .postCreated {
     font-size: 13px !important;
   }
-
-  .thumbImg {
-    width: 130px !important;
-    height: 130px !important;
-    margin-left: 10px !important;
-  }
 }
 
 @media (max-width: $breakpoint-small) {
+  .postTitleContent {
+    height: auto;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
   .postThumb {
     flex-direction: column-reverse;
     align-items: flex-start;
-    row-gap: 0.5rem;
+    row-gap: 1.5rem;
   }
 
   .postTitle {
@@ -123,9 +122,12 @@ $font-size-created: 12px;
     font-size: 11px !important;
   }
 
+  .thumbImgDiv {
+    width: 100%;
+  }
+
   .thumbImg {
-    width: 100px !important;
-    height: 100px !important;
-    margin-left: 10px !important;
+    width: 100% !important;
+    height: 300px !important;
   }
 }
