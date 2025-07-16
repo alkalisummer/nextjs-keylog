@@ -32,8 +32,7 @@
 }
 
 @media (max-width: $post-breakpoint-large) {
-  .headerBtn {
-    display: flex;
-    align-items: flex-end;
+  .module {
+    display: none;
   }
 }

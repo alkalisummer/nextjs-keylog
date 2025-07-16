@@ -1,5 +1,5 @@
 export interface HashtagInfo {
-  hashtagId: number;
+  hashtagId: number | null;
   hashtagName: string;
   hashtagCnt: number;
 }

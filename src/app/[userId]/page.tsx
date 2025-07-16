@@ -8,6 +8,8 @@ import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
 import { BlogPostList } from '@/entities/post/ui';
 import { BlogPostHeader } from '@/entities/post/ui';
+import { getHashtags } from '@/entities/hashtag/api';
+import { HashtagButtons } from '@/entities/hashtag/ui';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -46,6 +48,15 @@ export const Page = async ({
     throw new Error('Posts fetch error');
   }
 
+  //hashtags
+  const hashtagQueryOptions = {
+    queryKey: queryKey().hashtag().hashtagList(userId),
+    queryFn: () => getHashtags(userId),
+  };
+  await queryClient.prefetchQuery(hashtagQueryOptions);
+  const hashtag = await queryClient.ensureQueryData(hashtagQueryOptions);
+  if (!hashtag.ok) throw new Error('hashtag fetch error');
+
   const dehydratedState = dehydrate(queryClient);
 
   return (
@@ -53,6 +64,7 @@ export const Page = async ({
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
         <PostUserInfo author={user.data} />
         <BlogPostHeader author={user.data} posts={posts.data} />
+        <HashtagButtons hashtags={hashtag.data} userId={user.data.userId} />
         <BlogPostList author={user.data} posts={posts.data} />
       </AsyncBoundary>
     </HydrationBoundary>

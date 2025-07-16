@@ -1,4 +1,55 @@
+@use 'variable' as *;
+
 .module {
-  display: flex;
-  gap: 10px;
+  display: none;
+}
+
+@media (max-width: $post-breakpoint-large) {
+  .module {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 0.5rem;
+
+    .title {
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hashtags {
+      display: none;
+
+      &.open {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+      }
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .button {
+      white-space: nowrap;
+      border-radius: 0.5rem;
+      padding-left: 12px;
+      padding-right: 12px;
+      border-radius: 12px;
+      background-color: #eeeeee;
+      color: #212529;
+      height: 2rem;
+      font-size: 12px;
+      line-height: 1.5;
+
+      &.selected {
+        background-color: #6bacce;
+        color: #fff;
+      }
+    }
+  }
 }
