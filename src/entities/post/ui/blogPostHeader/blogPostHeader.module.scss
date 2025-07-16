@@ -1,0 +1,39 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  .header {
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 15px;
+  }
+
+  .postCnt {
+    font-weight: normal;
+    font-size: 20px;
+    color: #5c5c5c;
+  }
+
+  .headerBtn {
+    display: none;
+
+    button {
+      display: block;
+      background-color: #009bf2;
+      width: 60px;
+      height: 25px;
+      font-size: 12px;
+      color: #fff;
+      border-radius: 5px;
+    }
+  }
+}
+
+@media (max-width: $post-breakpoint-large) {
+  .headerBtn {
+    display: flex;
+    align-items: flex-end;
+  }
+}

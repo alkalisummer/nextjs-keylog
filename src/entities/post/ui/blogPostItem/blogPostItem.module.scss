@@ -12,6 +12,7 @@ $font-size-content: 15px;
 $font-size-created: 12px;
 
 .postTitleContent {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,6 +34,7 @@ $font-size-created: 12px;
 }
 
 .thumbContent {
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -48,6 +50,7 @@ $font-size-created: 12px;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   line-height: 1.4em;
@@ -60,6 +63,7 @@ $font-size-created: 12px;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   line-height: 1.4em;

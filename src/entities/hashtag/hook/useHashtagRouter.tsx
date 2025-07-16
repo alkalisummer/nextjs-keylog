@@ -4,15 +4,15 @@ import { useRouter } from 'next/navigation';
 
 interface UseHashtagRouterProps {
   userId: string;
-  setHashtagId: (hashtagId: number | null) => void;
+  setSelectedHashtag: (hashtagId: number | null) => void;
 }
 
-export const useHashtagRouter = ({ userId, setHashtagId }: UseHashtagRouterProps) => {
+export const useHashtagRouter = ({ userId, setSelectedHashtag }: UseHashtagRouterProps) => {
   const router = useRouter();
 
   return {
     route: (hashtagId: number | null) => {
-      setHashtagId(hashtagId);
+      setSelectedHashtag(hashtagId);
       if (hashtagId === null) {
         router.push(`/${userId}`);
       } else {

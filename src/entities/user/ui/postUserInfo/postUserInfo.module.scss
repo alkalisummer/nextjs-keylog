@@ -1,0 +1,68 @@
+@use 'variable' as *;
+
+.module {
+  display: none;
+}
+
+.headerBtn {
+  display: none;
+}
+
+.profileImg {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.blogName {
+  font-weight: 400;
+  font-size: 35px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: #5c5c5c;
+}
+
+.headerTitle {
+  font-size: 20px;
+  color: #98a1a9;
+}
+
+@media (max-width: $post-breakpoint-large) {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    line-height: 23px;
+  }
+
+  .module {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+  }
+
+  .headerBtn {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .profileImg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .blogName {
+    font-size: 30px;
+  }
+
+  .headerTitle {
+    font-size: 18px;
+  }
+}

@@ -34,7 +34,7 @@ $color-background-main: #f8f9fa;
 }
 
 // Media queries
-@media (max-width: $post-breakpoint) {
+@media (max-width: $post-breakpoint-large) {
   .module {
     transform: translateX(-100%);
   }

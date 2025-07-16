@@ -3,7 +3,6 @@
 import React from 'react';
 import { useState } from 'react';
 import css from './hashtags.module.scss';
-import { useRouter } from 'next/navigation';
 import { Post } from '@/entities/post/model/type';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
@@ -17,8 +16,8 @@ interface HashtagsProps {
 }
 
 export const Hashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
-  const [selectedTag, setSelectedTag] = useState<number | null>(null);
-  const router = useHashtagRouter({ userId, setHashtagId: setSelectedTag });
+  const [selectedHashtag, setSelectedHashtag] = useState<number | null>(null);
+  const router = useHashtagRouter({ userId, setSelectedHashtag });
   const totalPostCnt = posts[0]?.totalItems ?? 0;
 
   return (
@@ -26,21 +25,21 @@ export const Hashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
       <span className={css.title}>태그 목록</span>
       {hashtags.length > 0 && (
         <span
-          className={`${css.hashtag} ${selectedTag === null ? css.selected : ''}`}
+          className={`${css.hashtag} ${selectedHashtag === null ? css.selected : ''}`}
           onClick={() => router.route(null)}
         >
           전체보기 <span className={css.count}>&nbsp;{`(${totalPostCnt})`}</span>
         </span>
       )}
-      {hashtags.map((tag: HashtagInfo) => (
+      {hashtags.map((hashtag: HashtagInfo) => (
         <span
-          key={tag.hashtagId}
-          className={`${css.hashtag} ${selectedTag === tag.hashtagId ? css.selected : ''}`}
-          onClick={() => router.route(tag.hashtagId)}
+          key={hashtag.hashtagId}
+          className={`${css.hashtag} ${selectedHashtag === hashtag.hashtagId ? css.selected : ''}`}
+          onClick={() => router.route(hashtag.hashtagId)}
         >
           <FontAwesomeIcon icon={faTag} className={css.icon} />
-          <span className={css.name}>{tag.hashtagName}</span>
-          <span className={css.count}>&nbsp;{`(${tag.hashtagCnt})`}</span>
+          <span className={css.name}>{hashtag.hashtagName}</span>
+          <span className={css.count}>&nbsp;{`(${hashtag.hashtagCnt})`}</span>
         </span>
       ))}
     </div>

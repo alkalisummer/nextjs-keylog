@@ -5,3 +5,4 @@ export { SearchTagPost } from './searchTagPost/SearchTagPost';
 export { PostPagination } from './postPagination/PostPagination';
 export { BlogPostList } from './blogPostList/BlogPostList';
 export { BlogPostItem } from './blogPostItem/BlogPostItem';
+export { BlogPostHeader } from './blogPostHeader/BlogPostHeader';

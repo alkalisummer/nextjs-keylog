@@ -11,14 +11,14 @@ interface HashtagButtonsProps {
 }
 
 export const HashtagButtons = ({ hashtags, userId }: HashtagButtonsProps) => {
-  const [selectedTag, setSelectedTag] = useState<number | null>(null);
-  const router = useHashtagRouter({ userId, setHashtagId: setSelectedTag });
+  const [selectedHashtag, setSelectedHashtag] = useState<number | null>(null);
+  const router = useHashtagRouter({ userId, setSelectedHashtag });
 
   return (
     <div className={css.module}>
-      {hashtags.map(tag => (
-        <button key={tag.hashtagId} className={css.button} onClick={() => router.route(tag.hashtagId)}>
-          {tag.hashtagName}
+      {hashtags.map((hashtag: HashtagInfo) => (
+        <button key={hashtag.hashtagId} className={css.button} onClick={() => router.route(hashtag.hashtagId)}>
+          {hashtag.hashtagName}
         </button>
       ))}
     </div>

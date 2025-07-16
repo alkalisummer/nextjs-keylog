@@ -5,7 +5,9 @@ import { getUser } from '@/entities/user/api';
 import { getPosts } from '@/entities/post/api';
 import { queryKey } from '../provider/query/lib';
 import { AsyncBoundary } from '@/shared/boundary';
+import { PostUserInfo } from '@/entities/user/ui';
 import { BlogPostList } from '@/entities/post/ui';
+import { BlogPostHeader } from '@/entities/post/ui';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -49,6 +51,8 @@ export const Page = async ({
   return (
     <HydrationBoundary state={dehydratedState}>
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
+        <PostUserInfo author={user.data} />
+        <BlogPostHeader author={user.data} posts={posts.data} />
         <BlogPostList author={user.data} posts={posts.data} />
       </AsyncBoundary>
     </HydrationBoundary>
