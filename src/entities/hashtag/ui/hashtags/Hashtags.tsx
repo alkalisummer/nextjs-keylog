@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { useState } from 'react';
 import css from './hashtags.module.scss';
 import { Post } from '@/entities/post/model/type';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { useHashtagRouter } from '@/entities/hashtag/hook';
+import { useHashtag } from '../../container/HashtagContainer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface HashtagsProps {
@@ -16,7 +16,7 @@ interface HashtagsProps {
 }
 
 export const Hashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
-  const [selectedHashtag, setSelectedHashtag] = useState<number | null>(null);
+  const { selectedHashtag, setSelectedHashtag } = useHashtag();
   const router = useHashtagRouter({ userId, setSelectedHashtag });
   const totalPostCnt = posts[0]?.totalItems ?? 0;
 

@@ -47,6 +47,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'objectstorage.ap-chuncheon-1.oraclecloud.com', pathname: '/**' },
       { protocol: 'https', hostname: 'imgnews.naver.net', pathname: '/**' },
+      { protocol: 'https', hostname: 'imgnews.pstatic.net', pathname: '/**' },
     ],
   },
 

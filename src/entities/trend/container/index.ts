@@ -1,0 +1,1 @@
+export { TrendContainer } from './TrendContainer';

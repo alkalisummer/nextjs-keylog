@@ -1,1 +1,0 @@
-export { useAutoplaySpeed } from './useAutoplaySpeed';

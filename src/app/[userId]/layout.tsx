@@ -7,6 +7,7 @@ import { getHashtags } from '@/entities/hashtag/api';
 import { getPopularPosts } from '@/entities/post/api';
 import { getRecentComments } from '@/entities/comment/api';
 import { getPosts, getRecentPosts } from '@/entities/post/api';
+import { HashtagContainer } from '@/entities/hashtag/container';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 const Layout = async ({ children, params }: { children: ReactNode; params: Promise<{ userId: string }> }) => {
@@ -72,16 +73,18 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Header type="blog" />
-      <Sidebar
-        userInfo={user.data}
-        recentPosts={recentPost.data}
-        popularPosts={popularPost.data}
-        recentComments={recentComment.data}
-        hashtags={hashtag.data}
-        posts={posts.data}
-      />
-      <Article>{children}</Article>
+      <HashtagContainer>
+        <Header type="blog" />
+        <Sidebar
+          userInfo={user.data}
+          recentPosts={recentPost.data}
+          popularPosts={popularPost.data}
+          recentComments={recentComment.data}
+          hashtags={hashtag.data}
+          posts={posts.data}
+        />
+        <Article>{children}</Article>
+      </HashtagContainer>
     </HydrationBoundary>
   );
 };

@@ -6,7 +6,7 @@ import { getPosts } from '@/entities/post/api';
 import { getDailyTrends } from '@/entities/trend/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 import { getArticlesServer } from '@/entities/article/api';
-import { TrendContainer } from '@/entities/trend/container/TrendContainer';
+import { TrendContainer } from '@/entities/trend/container';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async () => {

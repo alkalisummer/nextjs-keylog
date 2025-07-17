@@ -1,1 +1,0 @@
-export { getDailyTrends } from './getDailyTrends';

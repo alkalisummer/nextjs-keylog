@@ -9,7 +9,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Header type="home" />
         {children}
       </ResponsiveFrame>
-      z
     </Fragment>
   );
 };
