@@ -15,7 +15,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
 
   return (
     <div className={css.postTitleContent}>
-      <Link href={`/${userId}/posts/${postId}`}>
+      <Link href={`/${userId}/${postId}`}>
         {postThmbImgUrl ? (
           <div className={css.postThumb}>
             <div className={css.thumbContent}>

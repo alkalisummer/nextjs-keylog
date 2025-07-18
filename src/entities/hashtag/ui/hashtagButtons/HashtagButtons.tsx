@@ -4,7 +4,7 @@ import { useState } from 'react';
 import css from './hashtagButtons.module.scss';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { useHashtagRouter } from '@/entities/hashtag/hook';
-import { useHashtag } from '../../container/HashtagContainer';
+import { useBlog } from '@/app/[userId]/container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,7 +14,7 @@ interface HashtagButtonsProps {
 }
 
 export const HashtagButtons = ({ hashtags, userId }: HashtagButtonsProps) => {
-  const { selectedHashtag, setSelectedHashtag } = useHashtag();
+  const { selectedHashtag, setSelectedHashtag } = useBlog();
   const [isOpen, setIsOpen] = useState(false);
   const router = useHashtagRouter({ userId, setSelectedHashtag });
 

@@ -8,7 +8,7 @@ import { Hashtags } from '@/entities/hashtag/ui';
 import { Post } from '@/entities/post/model/type';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { RecentComments } from '@/entities/comment/ui';
-import { RecentComment } from '@/entities/comment/model';
+import { Comment } from '@/entities/comment/model';
 import { RecentPosts, PopularPosts } from '@/entities/post/ui';
 import { RecentPost, PopularPost } from '@/entities/post/model';
 
@@ -17,7 +17,7 @@ interface SidebarProps {
   hashtags: HashtagInfo[];
   recentPosts: RecentPost[];
   popularPosts: PopularPost[];
-  recentComments: RecentComment[];
+  recentComments: Partial<Comment>[];
   posts: Post[];
 }
 

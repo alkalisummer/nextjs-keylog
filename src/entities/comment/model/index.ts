@@ -1,1 +1,1 @@
-export type { CommentListItem, RecentComment, CommentResponse } from './type';
+export type { Comment, CommentRes } from './type';

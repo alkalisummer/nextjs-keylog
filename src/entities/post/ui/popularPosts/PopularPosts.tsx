@@ -18,11 +18,7 @@ export const PopularPosts = ({ popularPosts, userId }: PopularPostsProps) => {
     <div className={css.module}>
       <span className={css.title}>인기 글</span>
       {popularPosts.map((post: PopularPost) => (
-        <div
-          key={`post_${post.postId}`}
-          className={css.item}
-          onClick={() => router.push(`/${userId}/posts/${post.postId}`)}
-        >
+        <div key={`post_${post.postId}`} className={css.item} onClick={() => router.push(`/${userId}/${post.postId}`)}>
           <div className={css.info}>
             <span className={css.postTitle}>{post.postTitle}</span>
             <span className={css.date}>{timeFormat(post.rgsnDttm)}</span>

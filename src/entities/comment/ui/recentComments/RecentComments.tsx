@@ -3,12 +3,12 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import css from './recentComments.module.scss';
-import { RecentComment } from '@/entities/comment/model';
+import { Comment } from '@/entities/comment/model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 interface RecentCommentsProps {
-  recentComments: RecentComment[];
+  recentComments: Partial<Comment>[];
   userId: string;
 }
 
@@ -18,11 +18,11 @@ export const RecentComments = ({ recentComments, userId }: RecentCommentsProps) 
   return (
     <div className={css.module}>
       <span className={css.title}>최근 댓글</span>
-      {recentComments.map((comment: RecentComment) => (
+      {recentComments.map((comment: Partial<Comment>) => (
         <div
           key={`comment_${comment.commentId}`}
           className={css.item}
-          onClick={() => router.push(`/${userId}/posts/${comment.postId}`)}
+          onClick={() => router.push(`/${userId}/${comment.postId}`)}
         >
           <div className={css.info}>
             <span className={css.commentContent}>

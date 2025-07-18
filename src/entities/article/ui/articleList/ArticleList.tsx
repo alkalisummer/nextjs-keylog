@@ -6,7 +6,7 @@ import { useArticlesQuery } from '../../query';
 import { Trend } from '@/entities/trend/model';
 import { formatDate } from '@/shared/lib/util';
 import { Article } from '@/entities/article/model';
-import { useTrend } from '@/entities/trend/container/TrendContainer';
+import { useHome } from '@/app/home/container';
 
 interface ArticleListProps {
   trends: Trend[];
@@ -15,7 +15,7 @@ interface ArticleListProps {
 
 export const ArticleList = ({ trends, initialArticles }: ArticleListProps) => {
   const baseDate = `(인기 급상승 검색어 기준일: ${formatDate({ date: new Date(), seperator: '.' })}`;
-  const { trend } = useTrend();
+  const { trend } = useHome();
   const { data: articles = [] } = useArticlesQuery({ trends, selectedTrend: trend, initialData: initialArticles });
 
   return (

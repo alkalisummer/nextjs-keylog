@@ -4,10 +4,10 @@ import css from './keyword.module.scss';
 import { formatTraffic } from '../../lib';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useTrend } from '../../container/TrendContainer';
+import { useHome } from '@/app/home/container';
 
 export const Keyword = () => {
-  const { trend } = useTrend();
+  const { trend } = useHome();
   return (
     <section className={css.module}>
       <div className={css.trend}>

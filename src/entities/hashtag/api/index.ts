@@ -1,1 +1,2 @@
-export { getHashtags } from './getHashtags';
+export { getPostHashtags } from './getPostHashtags';
+export { getAuthorHashtags } from './getAuhorHashtags';

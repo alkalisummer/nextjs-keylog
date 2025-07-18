@@ -1,4 +1,5 @@
-export interface CommentListItem {
+export interface Comment {
+  postId: number;
   commentId: number;
   commentDepth: number;
   commentOriginId: number;
@@ -10,18 +11,9 @@ export interface CommentListItem {
   replyCnt: number;
 }
 
-export interface RecentComment {
-  commentId: number;
-  commentCntn: string;
-  rgsnDttm: string;
-  postId: number;
-  authorId: string;
-  userNickname: string;
-}
-
-export interface CommentResponse {
+export interface CommentRes {
   totalItems: number;
-  items: CommentListItem[];
+  items: Comment[];
   commentId?: number;
-  refreshList?: CommentListItem[];
+  refreshList?: Comment[];
 }

@@ -1,1 +1,0 @@
-export { TrendContainer } from './TrendContainer';

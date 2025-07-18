@@ -14,6 +14,15 @@ export interface Post {
   hashtagName?: string;
 }
 
+export interface PostDetail {
+  postId: number;
+  postTitle: string;
+  postHtmlCntn: string;
+  authorId: string;
+  tempYn: string;
+  amntDttm: string;
+}
+
 export interface RecentPost {
   postId: number;
   postTitle: string;

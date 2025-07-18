@@ -8,8 +8,8 @@ import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
 import { BlogPostList } from '@/entities/post/ui';
 import { BlogPostHeader } from '@/entities/post/ui';
-import { getHashtags } from '@/entities/hashtag/api';
 import { HashtagButtons } from '@/entities/hashtag/ui';
+import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -27,9 +27,9 @@ export const Page = async ({
     queryFn: () => getUser(userId),
   };
   await queryClient.prefetchQuery(userQueryOptions);
-  const user = await queryClient.ensureQueryData(userQueryOptions);
+  const userRes = await queryClient.ensureQueryData(userQueryOptions);
 
-  if (!user.ok) {
+  if (!userRes.ok) {
     throw new Error('User fetch error');
   }
 
@@ -42,30 +42,30 @@ export const Page = async ({
   };
 
   await queryClient.prefetchQuery(postsQueryOptions);
-  const posts = await queryClient.ensureQueryData(postsQueryOptions);
+  const postsRes = await queryClient.ensureQueryData(postsQueryOptions);
 
-  if (!posts.ok) {
+  if (!postsRes.ok) {
     throw new Error('Posts fetch error');
   }
 
   //hashtags
   const hashtagQueryOptions = {
     queryKey: queryKey().hashtag().hashtagList(userId),
-    queryFn: () => getHashtags(userId),
+    queryFn: () => getAuthorHashtags(userId),
   };
   await queryClient.prefetchQuery(hashtagQueryOptions);
-  const hashtag = await queryClient.ensureQueryData(hashtagQueryOptions);
-  if (!hashtag.ok) throw new Error('hashtag fetch error');
+  const hashtagRes = await queryClient.ensureQueryData(hashtagQueryOptions);
+  if (!hashtagRes.ok) throw new Error('hashtag fetch error');
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
-        <PostUserInfo author={user.data} />
-        <BlogPostHeader author={user.data} posts={posts.data} />
-        <HashtagButtons hashtags={hashtag.data} userId={user.data.userId} />
-        <BlogPostList author={user.data} posts={posts.data} />
+        <PostUserInfo author={userRes.data} />
+        <BlogPostHeader author={userRes.data} posts={postsRes.data} />
+        <HashtagButtons hashtags={hashtagRes.data} userId={userRes.data.userId} />
+        <BlogPostList author={userRes.data} posts={postsRes.data} />
       </AsyncBoundary>
     </HydrationBoundary>
   );

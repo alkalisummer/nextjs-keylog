@@ -2,7 +2,7 @@
 
 import { Trend } from '../../model';
 import css from './keywordList.module.scss';
-import { useTrend } from '../../container/TrendContainer';
+import { useHome } from '@/app/home/container';
 
 interface KeywordListProps {
   trends: Trend[];
@@ -10,7 +10,7 @@ interface KeywordListProps {
 }
 
 export const KeywordList = ({ trends, setSelectedTrend }: KeywordListProps) => {
-  const { trend: selectedTrend } = useTrend();
+  const { trend: selectedTrend } = useHome();
   return (
     <div className={css.module}>
       {trends.map((trend, idx) => (

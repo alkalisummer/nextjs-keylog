@@ -43,10 +43,16 @@ export const queryKey = () => ({
   }),
   comment: () => ({
     all: () => ['comment'],
+    commentList: (postId: string) => [...queryKey().comment().all(), 'commentList', postId],
     recentComment: (userId: string) => [...queryKey().comment().all(), 'recentComment', userId],
   }),
   hashtag: () => ({
     all: () => ['hashtag'],
     hashtagList: (userId: string) => [...queryKey().hashtag().all(), 'hashtagList', userId],
+    postHashtags: (postId: string) => [...queryKey().hashtag().all(), 'postHashtags', postId],
+  }),
+  like: () => ({
+    all: () => ['like'],
+    likeCnt: (postId: string) => [...queryKey().like().all(), 'likeCnt', postId],
   }),
 });
