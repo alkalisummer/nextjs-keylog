@@ -1,0 +1,76 @@
+@use 'variable' as *;
+
+// Variables
+$color-text-primary: #222;
+$color-text-secondary: #a7a7a7;
+$color-border-light: #efefef;
+
+$font-size-title-large: 34px;
+$font-size-created-large: 13px;
+$font-size-title-small: 25px;
+$font-size-created-small: 10px;
+
+$margin-small: 10px;
+$margin-bottom-title: 15px;
+$margin-bottom-created: 15px;
+
+// Mixins
+@mixin utility-margin-right($size) {
+  margin-right: $size;
+}
+
+@mixin utility-margin-left($size) {
+  margin-left: $size;
+}
+
+// Base styles
+.module {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid $color-border-light;
+
+  .postTitle {
+    font-weight: normal;
+    font-size: $font-size-title-large;
+    color: $color-text-primary;
+    margin-bottom: $margin-bottom-title;
+  }
+
+  .postCreated {
+    font-size: $font-size-created-large;
+    color: $color-text-secondary;
+    margin-bottom: $margin-bottom-created;
+    text-align: right;
+
+    a {
+      text-decoration: none;
+      color: $color-text-secondary;
+    }
+  }
+
+  // Utility classes
+  .marginRight {
+    @include utility-margin-right($margin-small);
+  }
+
+  .marginLeft {
+    @include utility-margin-left($margin-small);
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+}
+
+// Media queries
+@media (max-width: $breakpoint-small) {
+  .module {
+    .postTitle {
+      font-size: $font-size-title-small;
+    }
+
+    .postCreated {
+      font-size: $font-size-created-small;
+    }
+  }
+}

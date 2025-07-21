@@ -23,6 +23,7 @@ const nextConfig = {
     //Oracle Cloud Bucket(Objejct Storage)
     CLOUD_BUCKET_NAME_SPACE: process.env.CLOUD_BUCKET_NAME_SPACE,
     CLOUD_BUCKET_NAME: process.env.CLOUD_BUCKET_NAME,
+    CLOUD_BUCKET_URL: process.env.CLOUD_BUCKET_URL,
 
     OPENAI_ORGANIZAION_ID: process.env.OPENAI_ORGANIZAION_ID,
 

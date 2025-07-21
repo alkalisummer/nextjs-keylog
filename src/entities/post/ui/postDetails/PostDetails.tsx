@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import css from './postDetail.module.scss';
+import css from './postDetails.module.scss';
 import { User } from '@/entities/user/model';
 import { formatDate } from '@/shared/lib/util';
 import { useCheckAuth } from '@/shared/lib/hooks';
@@ -17,29 +17,30 @@ interface PostDetailProps {
 
 export const PostDetails = ({ post, user }: PostDetailProps) => {
   const isAuthorized = useCheckAuth(user.userId);
-  const postHtmlCntn = Buffer.from(post.postHtmlCntn).toString();
+  const postHtmlCntn = Buffer.from(post.postHtmlCntn ?? '').toString();
   const imgFiles = parseImgfileArr(postHtmlCntn);
 
   const { deletePostMutation } = useDeletePost({
     postQueryKey: queryKey().post().postList({ authorId: user.userId }),
     userId: user.userId,
+    imgFileArr: imgFiles,
   });
 
   return (
-    <div className="post_title_created">
-      <span className="post_title">{post.postTitle}</span>
-      <div className="post_created">
-        <span className="mg-r-10 pointer">
+    <div className={css.module}>
+      <span className={css.postTitle}>{post.postTitle}</span>
+      <div className={css.postCreated}>
+        <span className={`${css.marginRight} ${css.pointer}`}>
           {formatDate({ date: post.amntDttm, seperator: '.', isExtendTime: true })}
         </span>
         {isAuthorized ? (
           <>
             |
             <Link href={`/write?postId=${post.postId}`}>
-              <span className="mg-r-10 mg-l-10">수정</span>
+              <span className={`${css.marginRight} ${css.marginLeft}`}>수정</span>
             </Link>
             |
-            <span className="mg-l-10 pointer" onClick={() => deletePostMutation(post.postId)}>
+            <span className={`${css.marginLeft} ${css.pointer}`} onClick={() => deletePostMutation(post.postId)}>
               삭제
             </span>
           </>

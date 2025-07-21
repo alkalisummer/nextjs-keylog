@@ -1,7 +1,9 @@
 'use server';
 
 import { BoxError } from '@/shared/ui';
+import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
+import { PostDetails } from '@/entities/post/ui';
 import { getLikeCnt } from '@/entities/like/api';
 import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
@@ -12,6 +14,19 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
   const { userId, postId } = await params;
 
   const queryClient = new QueryClient();
+
+  //user
+  const userQueryOptions = {
+    queryKey: queryKey().user().userInfo(userId),
+    queryFn: () => getUser(userId),
+  };
+
+  await queryClient.prefetchQuery(userQueryOptions);
+  const userRes = await queryClient.ensureQueryData(userQueryOptions);
+
+  if (!userRes.ok) {
+    throw new Error('User fetch error');
+  }
 
   //post detail
   const postQueryOptions = {
@@ -65,7 +80,7 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     throw new Error('Hashtags fetch error');
   }
 
-  return <div>PostDetailPage</div>;
+  return <PostDetails post={postRes.data} user={userRes.data} />;
 };
 
 export default Page;

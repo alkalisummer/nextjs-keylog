@@ -1,16 +1,17 @@
 'use client';
 
-import { deletePost } from '../api';
 import { useRouter } from 'next/navigation';
+import { deleteImg, deletePost } from '../api';
 import { queryKey } from '@/app/provider/query/lib';
 import { useMutation, useQueryClient, QueryKey } from '@tanstack/react-query';
 
 interface Props {
   postQueryKey: QueryKey;
   userId: string;
+  imgFileArr: string[];
 }
 
-export const useDeletePost = ({ postQueryKey, userId }: Props) => {
+export const useDeletePost = ({ postQueryKey, userId, imgFileArr }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const recentPostQueryKey = queryKey().post().recentPost(userId);
@@ -35,6 +36,7 @@ export const useDeletePost = ({ postQueryKey, userId }: Props) => {
       queryClient.invalidateQueries({ queryKey: postQueryKey });
       queryClient.invalidateQueries({ queryKey: recentPostQueryKey });
       queryClient.invalidateQueries({ queryKey: popularPostQueryKey });
+      deleteImg(imgFileArr);
       router.push(`/${userId}`);
     },
   });

@@ -1,6 +1,3 @@
-// 오라클 클라우드 api key
-import API_KEY from '@/shared/config/Bucket';
-
 export function timeToString(dateParam: Date) {
   let year: number | string = dateParam.getFullYear();
   let month: number | string = dateParam.getMonth() + 1;
@@ -86,7 +83,7 @@ export function timeAgoFormat(pressDateArr: number[]) {
 
 export async function onUploadImage(imgFile: any) {
   //반환 이미지 url
-  const imgURL = API_KEY.CLOUD_BUCKET_URL;
+  const imgURL = process.env.CLOUD_BUCKET_URL;
   const imgName = `IMG${timeToString(new Date())}`;
   const newImgFile = new File([imgFile], imgName, { type: imgFile.type });
   const form = new FormData();

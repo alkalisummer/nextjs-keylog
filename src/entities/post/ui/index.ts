@@ -1,8 +1,9 @@
 export { SearchForm } from './searchForm/SearchForm';
+export { PostDetails } from './postDetails/PostDetails';
 export { RecentPosts } from './recentPosts/RecentPosts';
+export { BlogPostItem } from './blogPostItem/BlogPostItem';
+export { BlogPostList } from './blogPostList/BlogPostList';
 export { PopularPosts } from './popularPosts/PopularPosts';
 export { SearchTagPost } from './searchTagPost/SearchTagPost';
 export { PostPagination } from './postPagination/PostPagination';
-export { BlogPostList } from './blogPostList/BlogPostList';
-export { BlogPostItem } from './blogPostItem/BlogPostItem';
 export { BlogPostHeader } from './blogPostHeader/BlogPostHeader';
