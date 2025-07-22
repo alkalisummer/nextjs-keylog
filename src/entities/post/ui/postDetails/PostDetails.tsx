@@ -48,6 +48,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
           <></>
         )}
       </div>
+      <div className={css.postContent} dangerouslySetInnerHTML={{ __html: postHtmlCntn }}></div>
     </div>
   );
 };
