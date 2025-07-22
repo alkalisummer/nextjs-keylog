@@ -7,7 +7,7 @@ import { getLikeCnt } from '@/entities/like/api';
 import { queryKey } from '@/app/provider/query/lib';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useLikePost = (postId: string) => {
+export const useLikePost = (postId: number) => {
   const queryClient = useQueryClient();
   const { data: session, status } = useSession();
   const userId = session?.user?.id ?? '';
@@ -21,6 +21,7 @@ export const useLikePost = (postId: string) => {
   });
 
   const isLiked = likeRes?.ok && likeRes.data.items.some(like => like.userId === userId);
+  const likeCnt = likeRes?.ok ? likeRes.data.totalItems : 0;
 
   const { mutate: like } = useMutation({
     mutationFn: () => likePost({ postId, userId }),
@@ -74,5 +75,5 @@ export const useLikePost = (postId: string) => {
     },
   });
 
-  return { isLiked, like, unlike };
+  return { isLiked, likeCnt, like, unlike };
 };

@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRefreshToken } from '../hook';
+import { useRefreshToken } from '../hooks';
 
 interface Props {
   setSessionRefetchInterval: Dispatch<SetStateAction<number>>;

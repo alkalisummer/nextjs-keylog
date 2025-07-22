@@ -33,7 +33,7 @@ export const queryKey = () => ({
       perPage ?? 10,
       tempYn ?? '',
     ],
-    postDetail: (postId: string) => [...queryKey().post().all(), 'postDetail', postId],
+    postDetail: (postId: number) => [...queryKey().post().all(), 'postDetail', postId],
     recentPost: (userId: string) => [...queryKey().post().all(), 'recentPost', userId],
     popularPost: (userId: string) => [...queryKey().post().all(), 'popularPost', userId],
   }),
@@ -43,16 +43,16 @@ export const queryKey = () => ({
   }),
   comment: () => ({
     all: () => ['comment'],
-    commentList: (postId: string) => [...queryKey().comment().all(), 'commentList', postId],
+    commentList: (postId: number) => [...queryKey().comment().all(), 'commentList', postId],
     recentComment: (userId: string) => [...queryKey().comment().all(), 'recentComment', userId],
   }),
   hashtag: () => ({
     all: () => ['hashtag'],
     hashtagList: (userId: string) => [...queryKey().hashtag().all(), 'hashtagList', userId],
-    postHashtags: (postId: string) => [...queryKey().hashtag().all(), 'postHashtags', postId],
+    postHashtags: (postId: number) => [...queryKey().hashtag().all(), 'postHashtags', postId],
   }),
   like: () => ({
     all: () => ['like'],
-    likeCnt: (postId: string) => [...queryKey().like().all(), 'likeCnt', postId],
+    likeCnt: (postId: number) => [...queryKey().like().all(), 'likeCnt', postId],
   }),
 });

@@ -4,7 +4,7 @@ import { client } from '@/shared/lib/client';
 import { LikeRes } from '@/entities/like/model';
 
 interface UnlikePostProps {
-  postId: string;
+  postId: number;
   userId: string;
 }
 

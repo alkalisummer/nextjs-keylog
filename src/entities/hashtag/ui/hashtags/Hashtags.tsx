@@ -5,7 +5,7 @@ import css from './hashtags.module.scss';
 import { Post } from '@/entities/post/model/type';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
-import { useHashtagRouter } from '@/entities/hashtag/hook';
+import { useHashtagRouter } from '@/entities/hashtag/hooks';
 import { useBlog } from '@/app/[userId]/container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

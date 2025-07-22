@@ -9,8 +9,9 @@ import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
+import { PostInteractions } from '@/entities/like/ui';
 
-export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
+export const Page = async ({ params }: { params: Promise<{ userId: string; postId: number }> }) => {
   const { userId, postId } = await params;
 
   const queryClient = new QueryClient();
@@ -80,7 +81,12 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     throw new Error('Hashtags fetch error');
   }
 
-  return <PostDetails post={postRes.data} user={userRes.data} />;
+  return (
+    <>
+      <PostDetails post={postRes.data} user={userRes.data} />
+      <PostInteractions postId={postId} postTitle={postRes.data.postTitle} />
+    </>
+  );
 };
 
 export default Page;

@@ -8,7 +8,7 @@ import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { parseImgfileArr } from '@/entities/post/lib';
-import { useDeletePost } from '@/features/post/delete/hook';
+import { useDeletePost } from '@/features/post/delete/hooks';
 
 interface PostDetailProps {
   post: PostDetail;

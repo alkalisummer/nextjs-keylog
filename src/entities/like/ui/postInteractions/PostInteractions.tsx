@@ -1,35 +1,51 @@
 'use client';
 
-import { Like } from '@/entities/like/model';
+import { useEffect, useState } from 'react';
 import css from './postInteractions.module.scss';
+import { useClipboard } from '@/shared/lib/hooks';
+import { useLikePost } from '@/features/like/hooks';
+import { facebookShare, twitterShare } from '@/entities/like/lib';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 
 interface PostInteractionsProps {
-  like: Like;
+  postId: number;
+  postTitle: string;
 }
 
-export const PostInteractions = ({ like }: PostInteractionsProps) => {
+export const PostInteractions = ({ postId, postTitle }: PostInteractionsProps) => {
+  const { isLiked, likeCnt, like, unlike } = useLikePost(postId);
+  const [url, setUrl] = useState('');
+
+  useClipboard({ elementId: 'clipboard' });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUrl(window.location.href);
+    }
+  }, []);
+
   return (
-    <div className="post_scrap_div">
-      <div className="post_scrap_ico w52" onClick={() => likeHandle(post.POST_ID)}>
-        {likeYn ? <i className="fa-solid fa-heart"></i> : <i className="fa-regular fa-heart"></i>}
-        <span className="post_like_cnt">{likeCnt}</span>
+    <div className={css.module}>
+      <div className={`${css.scrapIco} ${css.likeButton}`} onClick={() => (isLiked ? unlike() : like())}>
+        {isLiked ? (
+          <FontAwesomeIcon icon={faHeartSolid} className={css.icon} />
+        ) : (
+          <FontAwesomeIcon icon={faHeartRegular} className={css.icon} />
+        )}
+        <span className={css.likeCnt}>{likeCnt}</span>
       </div>
-      <div className="post_scrap_ico" onClick={() => scrapPost('facebook')}>
-        <i className="fa-brands fa-facebook-f"></i>
+      <div className={css.scrapIco} onClick={() => facebookShare(url)}>
+        <FontAwesomeIcon icon={faFacebookF} className={css.icon} />
       </div>
-      <div className="post_scrap_ico" onClick={() => scrapPost('twitter')}>
-        <i className="fa-brands fa-twitter"></i>
+      <div className={css.scrapIco} onClick={() => twitterShare(url, postTitle)}>
+        <FontAwesomeIcon icon={faTwitter} className={css.icon} />
       </div>
-      <div
-        id="post_url_copy"
-        data-clipboard-action="copy"
-        data-clipboard-target="#currentUrl"
-        className="post_scrap_ico"
-        onClick={() => scrapPost('cilpboard')}
-      >
-        <i className="fa-solid fa-paperclip"></i>
+      <div id="clipboard" data-clipboard-text={url} className={css.scrapIco}>
+        <FontAwesomeIcon icon={faPaperclip} className={css.icon} />
       </div>
-      <input id="currentUrl" className="post_scrap_url" type="text" value={currUrl} readOnly />
     </div>
   );
 };

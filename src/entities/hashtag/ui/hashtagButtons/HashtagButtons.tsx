@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import css from './hashtagButtons.module.scss';
 import { HashtagInfo } from '@/entities/hashtag/model';
-import { useHashtagRouter } from '@/entities/hashtag/hook';
+import { useHashtagRouter } from '@/entities/hashtag/hooks';
 import { useBlog } from '@/app/[userId]/container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
