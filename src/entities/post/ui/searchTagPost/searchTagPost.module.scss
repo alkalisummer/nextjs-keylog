@@ -10,8 +10,8 @@
     font-size: 45px;
     font-family: 'NanumSquareNeo';
     font-weight: 500;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
   }
 
   .searchTagDesc {
@@ -31,9 +31,9 @@
 
 @media (max-width: $breakpoint-small) {
   .searchTag {
-    padding-left: 15px;
     .searchTagName {
       font-size: 35px;
+      margin-bottom: 2rem;
     }
     .searchTagDesc {
       font-size: 13px;

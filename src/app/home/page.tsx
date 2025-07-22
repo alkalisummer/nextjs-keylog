@@ -9,7 +9,12 @@ import { getArticlesServer } from '@/entities/article/api';
 import { HomeContainer } from './container';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-export const Page = async () => {
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+};
+
+export const Page = async ({ searchParams }: PageProps) => {
+  const { tagId } = await searchParams;
   const queryClient = new QueryClient();
 
   //trends init data
@@ -36,8 +41,8 @@ export const Page = async () => {
 
   //posts init data
   const postsQueryOptions = {
-    queryKey: queryKey().post().postList({ searchWord: '', currPageNum: 1 }),
-    queryFn: () => getPosts({ searchWord: '', currPageNum: 1 }),
+    queryKey: queryKey().post().postList({ currPageNum: 1, tagId }),
+    queryFn: () => getPosts({ currPageNum: 1, tagId }),
   };
   await queryClient.prefetchQuery(postsQueryOptions);
   const posts = await queryClient.ensureQueryData(postsQueryOptions);

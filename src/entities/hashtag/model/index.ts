@@ -1,1 +1,1 @@
-export type { HashtagInfo } from './type';
+export type { HashtagInfo, PostHashtags } from './type';

@@ -1,13 +1,13 @@
 'use client';
 
-import { Fragment, useState } from 'react';
 import { Post } from '@/entities/post/model';
 import { getPosts } from '@/entities/post/api';
 import { useSearchParams } from 'next/navigation';
 import { SearchForm } from '@/entities/post/ui/index';
+import { Fragment, useState, useEffect } from 'react';
 import { useIntersectionObserver } from '@/shared/lib/hooks';
-import { SearchPostList } from '@/entities/post/ui/searchPostList/SearchPostList';
 import { SearchForm as SearchFormType } from '@/entities/post/model';
+import { SearchPostList } from '@/entities/post/ui/searchPostList/SearchPostList';
 import { SearchTagPost } from '@/entities/post/ui/searchTagPost/SearchTagPost';
 
 interface SearchPostProps {
@@ -25,6 +25,10 @@ export const SearchPost = ({ initPosts, initPostsTotalCnt }: SearchPostProps) =>
   const searchParams = useSearchParams();
   const tagId = searchParams?.get('tagId') ?? '';
   const tagName = searchParams?.get('tagName');
+
+  useEffect(() => {
+    setPosts(initPosts);
+  }, [tagId, tagName]);
 
   const { setTarget } = useIntersectionObserver({
     onShow: async () => {

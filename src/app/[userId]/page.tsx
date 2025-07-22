@@ -8,7 +8,7 @@ import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
 import { BlogPostList } from '@/entities/post/ui';
 import { BlogPostHeader } from '@/entities/post/ui';
-import { HashtagButtons } from '@/entities/hashtag/ui';
+import { PostListHashtags } from '@/entities/hashtag/ui';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -64,7 +64,7 @@ export const Page = async ({
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
         <PostUserInfo author={userRes.data} />
         <BlogPostHeader author={userRes.data} posts={postsRes.data} />
-        <HashtagButtons hashtags={hashtagRes.data} userId={userRes.data.userId} />
+        <PostListHashtags hashtags={hashtagRes.data} userId={userRes.data.userId} />
         <BlogPostList author={userRes.data} posts={postsRes.data} />
       </AsyncBoundary>
     </HydrationBoundary>

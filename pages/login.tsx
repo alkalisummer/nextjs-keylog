@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import loginStyle from '../styles/Login.module.css';
+import loginStyle from '/styles/Login.module.css';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
@@ -28,7 +28,7 @@ const Login = () => {
       redirect: false,
       id: id.replaceAll(' ', ''),
       password: password,
-    }).then((res) => {
+    }).then(res => {
       if (!res?.error) {
         if (saveId) {
           setCookies('userId', id.replaceAll(' ', ''), { maxAge: 60 * 60 * 24 * 7 }); //아이디 저장 체크시 일주일동안 쿠키에 저장
@@ -37,7 +37,8 @@ const Login = () => {
         }
         router.push(link as string);
       } else {
-        document.querySelector('.loginErrMsg')!.innerHTML = '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
+        document.querySelector('.loginErrMsg')!.innerHTML =
+          '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
       }
     });
   };
@@ -55,34 +56,39 @@ const Login = () => {
             <i className={'fa-solid fa-user'}></i>
           </div>
           <input
-            type='text'
+            type="text"
             value={id}
             className={`${loginStyle.login_input_text} btrr`}
-            placeholder='ID'
+            placeholder="ID"
             required
-            onChange={(e) => {
+            onChange={e => {
               setId(e.target.value);
             }}
           ></input>
         </div>
         <div className={`${loginStyle.login_input_div} mb10`}>
           <div className={`${loginStyle.login_emoji} bb bblr`}>
-            <i className='fa-solid fa-lock'></i>
+            <i className="fa-solid fa-lock"></i>
           </div>
           <input
-            type='password'
+            type="password"
             value={password}
             className={`${loginStyle.login_input_text} bb bbrr`}
-            placeholder='Password'
+            placeholder="Password"
             required
-            onChange={(e) => {
+            onChange={e => {
               setPassword(e.target.value);
             }}
           ></input>
         </div>
         <div className={loginStyle.login_sub_div}>
           <label className={loginStyle.login_label}>
-            <input type='checkbox' className={loginStyle.login_checkbox} checked={saveId} onChange={() => setSaveId(!saveId)}></input>
+            <input
+              type="checkbox"
+              className={loginStyle.login_checkbox}
+              checked={saveId}
+              onChange={() => setSaveId(!saveId)}
+            ></input>
             아이디 저장
           </label>
           <span className={loginStyle.login_forgot_pw_btn} onClick={() => forgotPassword()}>
@@ -90,7 +96,7 @@ const Login = () => {
           </span>
         </div>
         <div className={`loginErrMsg ${loginStyle.validateErrMsg}`}></div>
-        <button type='submit' className={loginStyle.login_btn}>
+        <button type="submit" className={loginStyle.login_btn}>
           로그인
         </button>
         <div className={loginStyle.signup_btn_div}>

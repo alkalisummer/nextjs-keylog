@@ -4,12 +4,13 @@ import { BoxError } from '@/shared/ui';
 import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { PostDetails } from '@/entities/post/ui';
-import { getLikeCnt } from '@/entities/like/api';
+import { AsyncBoundary } from '@/shared/boundary';
 import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
+import { PostHashtags } from '@/entities/hashtag/ui';
+import { PostInteractions } from '@/entities/like/ui';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
-import { PostInteractions } from '@/entities/like/ui';
 
 export const Page = async ({ params }: { params: Promise<{ userId: string; postId: number }> }) => {
   const { userId, postId } = await params;
@@ -55,19 +56,6 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     throw new Error('Comments fetch error');
   }
 
-  //like
-  const likeQueryOptions = {
-    queryKey: queryKey().like().likeCnt(postId),
-    queryFn: () => getLikeCnt(postId),
-  };
-
-  await queryClient.prefetchQuery(likeQueryOptions);
-  const likeRes = await queryClient.ensureQueryData(likeQueryOptions);
-
-  if (!likeRes.ok) {
-    throw new Error('Like fetch error');
-  }
-
   //hashtags
   const hashtagsQueryOptions = {
     queryKey: queryKey().hashtag().postHashtags(postId),
@@ -82,10 +70,11 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
   }
 
   return (
-    <>
+    <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
       <PostDetails post={postRes.data} user={userRes.data} />
       <PostInteractions postId={postId} postTitle={postRes.data.postTitle} />
-    </>
+      <PostHashtags hashtags={postHashtagsRes.data} />
+    </AsyncBoundary>
   );
 };
 

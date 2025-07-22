@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import css from './hashtags.module.scss';
+import css from './sidebarHashtags.module.scss';
 import { Post } from '@/entities/post/model/type';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +15,7 @@ interface HashtagsProps {
   posts: Post[];
 }
 
-export const Hashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
+export const SidebarHashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
   const { selectedHashtag, setSelectedHashtag } = useBlog();
   const router = useHashtagRouter({ userId, setSelectedHashtag });
   const totalPostCnt = posts[0]?.totalItems ?? 0;

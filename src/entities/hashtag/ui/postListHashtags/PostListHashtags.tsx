@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import css from './hashtagButtons.module.scss';
+import css from './postListHashtags.module.scss';
+import { useBlog } from '@/app/[userId]/container';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { useHashtagRouter } from '@/entities/hashtag/hooks';
-import { useBlog } from '@/app/[userId]/container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +13,7 @@ interface HashtagButtonsProps {
   userId: string;
 }
 
-export const HashtagButtons = ({ hashtags, userId }: HashtagButtonsProps) => {
+export const PostListHashtags = ({ hashtags, userId }: HashtagButtonsProps) => {
   const { selectedHashtag, setSelectedHashtag } = useBlog();
   const [isOpen, setIsOpen] = useState(false);
   const router = useHashtagRouter({ userId, setSelectedHashtag });

@@ -1,6 +1,6 @@
 import { Header } from '@/widgets';
 import { ReactNode, Fragment } from 'react';
-import { Scaffold, ResponsiveFrame } from '@/shared/ui/layout';
+import { ResponsiveFrame } from '@/shared/ui/layout';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

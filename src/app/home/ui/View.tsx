@@ -1,20 +1,23 @@
 'use client';
 
-import { useState, Fragment } from 'react';
+import { useHome } from '../container';
 import { BoxError } from '@/shared/ui';
 import { HomeInitData } from '../model';
+import { useState, Fragment } from 'react';
 import { Keyword } from '@/entities/trend/ui';
 import { HomeTabs } from './homeTabs/HomeTabs';
 import { AsyncBoundary } from '@/shared/boundary';
+import { useSearchParams } from 'next/navigation';
 import { KeywordScroll } from '@/entities/trend/ui';
 import { ArticleList } from '@/entities/article/ui';
 import { SearchPost } from './searchPost/SearchPost';
 import { ArticleListSkeleton } from '@/entities/article/ui';
-import { useHome } from '../container';
 
 export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
+  const searchParams = useSearchParams();
+  const tab = searchParams?.get('tab');
   const { trend, setTrend } = useHome();
-  const [currentTab, setCurrentTab] = useState('keyword');
+  const [currentTab, setCurrentTab] = useState(tab || 'keyword');
 
   return (
     <Fragment>

@@ -14,7 +14,12 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
   return (
     <header className={css.module}>
       <div className={`${css.header} ${type === 'blog' ? css.blogHeader : ''}`}>
-        <span className={css.logo} onClick={() => router.push('/')}>
+        <span
+          className={css.logo}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
           keylog
         </span>
         <Navbar />

@@ -4,11 +4,11 @@ import React from 'react';
 import css from './sidebar.module.scss';
 import { User } from '@/entities/user/model';
 import { UserInfo } from '@/entities/user/ui';
-import { Hashtags } from '@/entities/hashtag/ui';
 import { Post } from '@/entities/post/model/type';
+import { Comment } from '@/entities/comment/model';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { RecentComments } from '@/entities/comment/ui';
-import { Comment } from '@/entities/comment/model';
+import { SidebarHashtags } from '@/entities/hashtag/ui';
 import { RecentPosts, PopularPosts } from '@/entities/post/ui';
 import { RecentPost, PopularPost } from '@/entities/post/model';
 
@@ -31,7 +31,7 @@ export const Sidebar = ({ userInfo, recentPosts, popularPosts, recentComments, h
         <RecentPosts recentPosts={recentPosts} userId={userId} />
         <PopularPosts popularPosts={popularPosts} userId={userId} />
         <RecentComments recentComments={recentComments} userId={userId} />
-        <Hashtags hashtags={hashtags} userId={userId} posts={posts} />
+        <SidebarHashtags hashtags={hashtags} userId={userId} posts={posts} />
       </div>
     </aside>
   );
