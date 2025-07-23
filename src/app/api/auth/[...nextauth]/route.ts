@@ -1,8 +1,7 @@
-// src/app/api/auth/[...nextauth]/route.ts
+import { getUser } from '@/entities/user/api';
+import { verifyPassword } from '@/utils/Bcypt';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { handleMySql } from '@/app/api/HandleUser';
-import { verifyPassword } from '@/utils/Bcypt';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -25,20 +24,22 @@ export const authOptions: NextAuthOptions = {
 
         const { id, password } = credentials;
 
-        // DB 조회
-        const params = { type: 'getUser', id };
-        const user = (await handleMySql(params)).items[0];
+        const userRes = await getUser(id);
+
+        if (!userRes.ok) return null;
+
+        const user = userRes.data;
 
         // 비밀번호 검증
-        const valid = await verifyPassword(password, user?.USER_PASSWORD);
+        const valid = await verifyPassword(password, user.userPassword);
         if (!user || !valid) return null;
 
         return {
-          id: user.USER_ID,
-          email: user.USER_EMAIL,
-          name: user.USER_NICKNAME,
-          image: user.USER_THMB_IMG_URL ?? '',
-          blogName: user.USER_BLOG_NAME,
+          id: user.userId,
+          email: user.userEmail,
+          name: user.userNickname,
+          image: user.userThmbImgUrl ?? '',
+          blogName: user.userBlogName,
         };
       },
     }),

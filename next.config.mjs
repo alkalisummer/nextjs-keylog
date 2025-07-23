@@ -9,6 +9,7 @@ const nextConfig = {
   output: 'standalone',
   env: {
     BASE_URL: process.env.BASE_URL,
+    NEXT_PUBLIC_COOKIE_DOMAIN: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
 
     //KEYLOG API URL
     KEYLOG_API_URL: process.env.KEYLOG_API_URL,

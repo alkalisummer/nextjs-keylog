@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { isClient } from '@/shared/lib/util';
 import css from './postInteractions.module.scss';
 import { useClipboard } from '@/shared/lib/hooks';
 import { useLikePost } from '@/features/like/hooks';
@@ -26,7 +27,7 @@ export const PostInteractions = ({ postId, postTitle }: PostInteractionsProps) =
   useClipboard({ elementId: 'clipboard' });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (isClient()) {
       setUrl(window.location.href);
     }
   }, []);

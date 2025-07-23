@@ -5,11 +5,14 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface Props {
   setSessionRefetchInterval: Dispatch<SetStateAction<number>>;
-  session: Session;
+  session?: Session;
 }
 
 export const useRefreshToken = ({ setSessionRefetchInterval, session }: Props) => {
   useEffect(() => {
+    // session이 없으면 early return
+    if (!session) return;
+
     // 토큰 만료시간(초)
     const tokenExp = session?.user?.tokenExp;
 
