@@ -30,7 +30,7 @@ export const UserInfo = ({ userInfo }: UserInfoProps) => {
       {isAuthorized && (
         <div className={css.btnDiv}>
           <Link href={`/write?keyword=true`}>
-            <button className="create_btn"></button>
+            <button className={css.createBtn}></button>
           </Link>
         </div>
       )}

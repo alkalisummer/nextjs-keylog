@@ -16,7 +16,7 @@ export const formatDate = ({
   if (isExtendTime) {
     const hour = date.getHours().toString().padStart(2, '0');
     const min = date.getMinutes().toString().padStart(2, '0');
-    return `${year}${seperator}${month}${seperator}${day}${seperator}${hour}:${min}`;
+    return `${year}${seperator}${month}${seperator}${day} ${hour}:${min}`;
   }
   return `${year}${seperator}${month}${seperator}${day}`;
 };
@@ -37,7 +37,7 @@ const formatStringDate = ({
   if (isExtendTime) {
     const hour = date.slice(8, 10);
     const min = date.slice(10, 12);
-    fullTimeFormat = `${year}${seperator}${month}${seperator}${day}${seperator}${hour}:${min}`;
+    fullTimeFormat = `${year}${seperator}${month}${seperator}${day} ${hour}:${min}`;
   } else {
     fullTimeFormat = `${year}${seperator}${month}${seperator}${day}`;
   }

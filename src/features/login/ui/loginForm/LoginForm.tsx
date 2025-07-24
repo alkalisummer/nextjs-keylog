@@ -18,6 +18,7 @@ export const LoginForm = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [saveId, setSaveId] = useState(false);
+  const [showErrorMsg, setShowErrorMsg] = useState(false);
 
   useEffect(() => {
     const userId = cookies.get('userId');
@@ -34,8 +35,7 @@ export const LoginForm = () => {
       saveId ? cookies.set('userId', id, { maxAge: 60 * 60 * 24 * 7 }) : cookies.remove('userId');
       router.push(redirect);
     } else {
-      document.querySelector('.loginErrMsg')!.innerHTML =
-        '<div class="mt5">아이디 또는 비밀번호를 잘못입력하였습니다.<br/>입력하신 내용을 다시 확인해주세요.</div>';
+      setShowErrorMsg(true);
     }
   };
 
@@ -83,11 +83,17 @@ export const LoginForm = () => {
             ></input>
             아이디 저장
           </label>
-          <span className={css.forgotPwBtn} onClick={() => router.replace('/forgotPassword')}>
+          <span className={css.forgotPwBtn} onClick={() => router.replace('/findPassword')}>
             비밀번호 찾기
           </span>
         </div>
-        <div className={`loginErrMsg ${css.validateErrMsg}`}></div>
+        {showErrorMsg && (
+          <div className={css.validateErrMsg}>
+            <span>아이디 또는 비밀번호를 잘못입력하였습니다.</span>
+            <br />
+            <span>입력하신 내용을 다시 확인해주세요.</span>
+          </div>
+        )}
         <button type="submit" className={css.btn}>
           로그인
         </button>
