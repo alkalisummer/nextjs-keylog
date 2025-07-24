@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { validateEmail } from '../../lib';
-import { useDebounce } from '@/shared/lib/hooks';
 import { useRouter } from 'next/navigation';
 import css from './findPassword.module.scss';
+import { sendPasswordMail } from '../../api';
+import { useDebounce } from '@/shared/lib/hooks';
 
 export const FindPassword = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ export const FindPassword = () => {
 
   const debouncedEmail = useDebounce(email, 500);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       setErrorMsg('이메일 형식이 올바르지 않습니다.');
@@ -23,7 +24,16 @@ export const FindPassword = () => {
     }
 
     if (!isSend) {
-      setIsSend(true);
+      const result = await sendPasswordMail({ id, email });
+      if (result.ok) {
+        setIsSend(true);
+        alert(
+          '해당 계정의 이메일로 비밀번호 재설정을 위한 인증메일을 전송하였습니다.\n인증 메일의 링크를 클릭하여 비밀번호를 재설정하세요.',
+        );
+        router.push('/');
+      } else {
+        setErrorMsg('이메일 형식이 올바르지 않습니다.');
+      }
     }
   };
 

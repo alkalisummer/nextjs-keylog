@@ -1,7 +1,8 @@
 'use server';
 
-import nodemailer from 'nodemailer';
 import { getUser } from '@/entities/user/api';
+import { saveUserToken } from './saveUserToken';
+import { createTransporter } from '@/shared/lib/util';
 import { createToken, createMailOptions } from '../lib';
 
 interface SendPasswordMailProps {
@@ -26,5 +27,23 @@ export const sendPasswordMail = async ({ id, email }: SendPasswordMailProps) => 
       ? `${process.env.NEXT_PUBLIC_KEYLOG_URL}/resetPassword/${token}`
       : `${process.env.BASE_URL}/resetPassword/${token}`;
 
+  const transporter = createTransporter();
   const mailOptions = createMailOptions({ user, expireTimeMin: expireTime, resetPasswordUrl: url });
+
+  try {
+    const [sendMailRes, saveTokenRes] = await Promise.all([
+      transporter.sendMail(mailOptions),
+      saveUserToken({ token, userId: id, expireTime }),
+    ]);
+
+    return {
+      ok: saveTokenRes.ok,
+      message: '메일 전송 완료',
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: '메일 전송 실패',
+    };
+  }
 };
