@@ -1,6 +1,8 @@
+'use server';
+
 import nodemailer from 'nodemailer';
 
-export const createTransporter = () => {
+export const createTransporter = async () => {
   return nodemailer.createTransport({
     service: process.env.MAIL_SERVICE,
     auth: {

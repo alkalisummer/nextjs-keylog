@@ -1,3 +1,5 @@
-export default function FindPassword() {
-  return <div>FindPassword</div>;
+import { FindPassword } from '@/features/login/ui';
+
+export default function FindPasswordPage() {
+  return <FindPassword />;
 }

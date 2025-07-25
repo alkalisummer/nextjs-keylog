@@ -1,0 +1,1 @@
+export { FindPasswordSchema } from './schema';

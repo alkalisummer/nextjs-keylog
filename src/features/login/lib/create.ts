@@ -4,7 +4,11 @@ import { formatDate } from '@/shared/lib/util/transform/date';
 
 export const createToken = ({ length, expireTimeMin }: { length: number; expireTimeMin: number }) => {
   const token = crypto.randomBytes(length).toString('hex');
-  const expireTime = formatDate({ date: new Date(Date.now() + 1000 * 60 * expireTimeMin), seperator: '.' });
+  const expireTime = formatDate({
+    date: new Date(Date.now() + 1000 * 60 * expireTimeMin),
+    seperator: '.',
+    isFullTime: true,
+  });
 
   return { token, expireTime };
 };
@@ -35,7 +39,7 @@ export const createMailOptions = ({
       resetPasswordUrl +
       `'>비밀번호 재설정</a><br><br>
               
-              위 링크는 ${expireTimeMin}까지 유효합니다.
+              위 링크는 ${formatDate({ date: expireTimeMin, seperator: '.', isExtendTime: true })}까지 유효합니다.
             </div>
             </body>
           </html>
