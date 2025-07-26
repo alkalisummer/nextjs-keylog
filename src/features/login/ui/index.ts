@@ -1,2 +1,3 @@
 export { LoginForm } from './loginForm/LoginForm';
-export { FindPassword } from './findPassword/FindPassword';
+export { FindPasswordForm } from './findPasswordForm/FindPasswordForm';
+export { UpdatePasswordForm } from './updatePasswordForm/UpdatePasswordForm';

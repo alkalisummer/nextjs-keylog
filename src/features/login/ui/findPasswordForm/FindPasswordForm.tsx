@@ -2,25 +2,27 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import css from './findPassword.module.scss';
 import { sendPasswordMail } from '../../api';
 import { FindPasswordSchema } from '../../model';
+import css from './findPasswordForm.module.scss';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FindPasswordForm } from '../../model/schema';
+import { FindPasswordForm as PasswordForm } from '../../model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FieldError } from '@/shared/ui';
 
-export const FindPassword = () => {
+export const FindPasswordForm = () => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FindPasswordForm>({
+  } = useForm<PasswordForm>({
     resolver: zodResolver(FindPasswordSchema),
+    mode: 'onChange',
   });
 
-  const onSubmit = async (data: FindPasswordForm) => {
+  const onSubmit = async (data: PasswordForm) => {
     const { id, email } = data;
     const result = await sendPasswordMail({ id, email });
     if (result.ok) {
@@ -62,7 +64,7 @@ export const FindPassword = () => {
             required
           ></input>
         </div>
-        {errors.email && <div className={`${css.validateErrMsg}`}>{errors.email.message}</div>}
+        <FieldError error={errors.email} />
         <button type="submit" className={css.loginBtn}>
           다음
         </button>
@@ -71,4 +73,4 @@ export const FindPassword = () => {
   );
 };
 
-export default FindPassword;
+export default FindPasswordForm;

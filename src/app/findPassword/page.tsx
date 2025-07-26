@@ -1,5 +1,5 @@
-import { FindPassword } from '@/features/login/ui';
+import { FindPasswordForm } from '@/features/login/ui';
 
 export default function FindPasswordPage() {
-  return <FindPassword />;
+  return <FindPasswordForm />;
 }
