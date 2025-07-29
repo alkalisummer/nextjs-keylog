@@ -1,5 +1,11 @@
 import { FindPasswordForm } from '@/features/login/ui';
 
-export default function FindPasswordPage() {
-  return <FindPasswordForm />;
-}
+export const Page = () => {
+  return (
+    <main>
+      <FindPasswordForm />
+    </main>
+  );
+};
+
+export default Page;

@@ -16,7 +16,11 @@ export const Page = async ({ params }: { params: Promise<{ token: string }> }) =
   const isValidToken = validateToken(userToken.data.expireTime);
   const userId = userToken.data.userId;
 
-  return <UpdatePasswordForm token={token} userId={userId} isValidToken={isValidToken} />;
+  return (
+    <main>
+      <UpdatePasswordForm token={token} userId={userId} isValidToken={isValidToken} />
+    </main>
+  );
 };
 
 export default Page;

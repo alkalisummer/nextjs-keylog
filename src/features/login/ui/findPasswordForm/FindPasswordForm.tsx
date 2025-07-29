@@ -1,5 +1,6 @@
 'use client';
 
+import { FieldError } from '@/shared/ui';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { sendPasswordMail } from '../../api';
@@ -9,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FindPasswordForm as PasswordForm } from '../../model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FieldError } from '@/shared/ui';
 
 export const FindPasswordForm = () => {
   const router = useRouter();
