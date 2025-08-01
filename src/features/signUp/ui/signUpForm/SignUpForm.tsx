@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import css from './signUpForm.module.scss';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ErrorMessage } from '@hookform/error-message';
 import { SignUpSchema, SignUpForm as Form } from '../../model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -45,6 +46,7 @@ export const SignUpForm = () => {
             required
             {...register('id')}
           ></input>
+          <ErrorMessage name="id" errors={errors} />
         </div>
         <div className={css.signup_input_div}>
           <div className={`${css.signup_emoji} ${errors.password ? '' : css.validateErr}`}>
@@ -58,6 +60,7 @@ export const SignUpForm = () => {
             autoComplete="off"
             {...register('password')}
           ></input>
+          <ErrorMessage name="password" errors={errors} />
         </div>
         <div className={css.signup_input_div}>
           <div className={`${css.signup_emoji} ${errors.passwordCheck ? '' : css.validateErr}`}>
@@ -71,6 +74,7 @@ export const SignUpForm = () => {
             autoComplete="off"
             {...register('passwordCheck')}
           ></input>
+          <ErrorMessage name="passwordCheck" errors={errors} />
         </div>
         <div className={css.signup_input_div}>
           <div className={`${css.signup_emoji} ${errors.email ? '' : css.validateErr}`}>
@@ -84,6 +88,7 @@ export const SignUpForm = () => {
             required
             {...register('email')}
           ></input>
+          <ErrorMessage name="email" errors={errors} />
           <div className={`${css.signup_vrfy_code_btn_div}`}>
             <button id="signup_vrfy_code_btn" className={`${css.signup_vrfy_code_btn}`} onClick={() => mailHandler()}>
               인증번호 요청
@@ -102,6 +107,7 @@ export const SignUpForm = () => {
             required
             {...register('verifyCode')}
           ></input>
+          <ErrorMessage name="verifyCode" errors={errors} />
         </div>
         <div className={`${css.signup_input_div}`}>
           <div className={`${css.signup_emoji} ${errors.blogName ? '' : css.validateErr}`}>
@@ -116,6 +122,7 @@ export const SignUpForm = () => {
             autoComplete="off"
             {...register('blogName')}
           ></input>
+          <ErrorMessage name="blogName" errors={errors} />
         </div>
         <div className={`${css.signup_input_div} mb10`}>
           <div className={`${css.signup_emoji} ${errors.nickname ? '' : css.validateErr} bb bblr`}>
@@ -130,6 +137,7 @@ export const SignUpForm = () => {
             autoComplete="off"
             {...register('nickname')}
           ></input>
+          <ErrorMessage name="nickname" errors={errors} />
         </div>
         <button type="submit" className={css.signup_btn}>
           가입하기

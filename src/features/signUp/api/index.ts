@@ -1,0 +1,1 @@
+export { getVerifyCode } from './getVerifyCode';

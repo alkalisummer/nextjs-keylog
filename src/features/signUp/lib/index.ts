@@ -1,1 +1,1 @@
-export { isDuplicateUserId } from './is';
+export { isDuplicateUserId, isVerifyCode } from './is';

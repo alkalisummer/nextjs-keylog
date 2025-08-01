@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import { isDuplicateUserId } from '../lib';
+import { isDuplicateUserId, isVerifyCode } from '../lib';
 
 export const SignUpSchema = z
   .object({
@@ -21,7 +21,13 @@ export const SignUpSchema = z
       }),
     passwordCheck: z.string().trim().min(1, { message: '비밀번호 확인을 입력해주세요.' }),
     email: z.email({ message: '이메일 형식이 올바르지 않습니다.' }),
-    verifyCode: z.string().trim().min(1, { message: '인증번호를 입력해주세요.' }),
+    verifyCode: z
+      .string()
+      .trim()
+      .min(1, { message: '인증번호를 입력해주세요.' })
+      .refine(async code => isVerifyCode(code), {
+        message: '인증번호가 일치하지 않습니다.',
+      }),
     blogName: z.string().trim().min(1, { message: '블로그 이름을 입력해주세요.' }),
     nickname: z.string().trim().min(1, { message: '닉네임을 입력해주세요.' }),
   })
