@@ -1,5 +1,11 @@
+import { SignUpForm } from '@/features/signup/ui';
+
 export const Page = () => {
-  return <main>signUp</main>;
+  return (
+    <main>
+      <SignUpForm />
+    </main>
+  );
 };
 
 export default Page;

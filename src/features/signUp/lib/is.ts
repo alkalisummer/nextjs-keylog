@@ -5,17 +5,11 @@ import { formatDate } from '@/shared/lib/util';
 export const isDuplicateUserId = async (userId: string) => {
   const userRes = await getUser(userId);
 
-  if (!userRes.ok) {
-    throw new Error('Fetch Get User Error');
+  if (userRes.status === 404) {
+    return false;
   }
 
-  const userData = userRes.data;
-
-  if (userData?.userId) {
-    return true;
-  }
-
-  return false;
+  return true;
 };
 
 export const isVerifyCode = async (code: string) => {

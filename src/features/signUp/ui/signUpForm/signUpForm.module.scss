@@ -1,0 +1,200 @@
+@use 'variable' as *;
+
+// Colors
+$color-title: $gray-2; // #525252
+$color-border: #c7c7c7;
+$color-border-hover: #c7c7c7;
+$color-button-primary: #7f7f7f;
+$color-icon: #7f7f7f;
+$color-background: white;
+$color-text: #000;
+$color-error: red;
+
+// Fonts
+$font-family-title: 'Fira Mono', monospace;
+$font-family-base: 'Spoqa Han Sans Neo';
+
+.module {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6rem;
+
+  .title {
+    font-family: $font-family-title;
+    font-size: 35px;
+    margin-bottom: 30px;
+    color: $color-title;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 15rem;
+
+    .inputDiv {
+      display: flex;
+
+      .emoji {
+        padding-left: 15px;
+        border: 1px solid $color-border;
+        color: $color-icon;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: none;
+        border-right: none;
+        background-color: $color-background;
+        height: 50px;
+
+        .icon {
+          width: 16px;
+          height: 16px;
+        }
+
+        &.validateErr {
+          color: $color-error !important;
+        }
+      }
+
+      .inputText {
+        font-family: $font-family-base;
+        font-size: 16px;
+        border: 1px solid $color-border;
+        background: transparent;
+        padding: 15px;
+        border-bottom: none;
+        border-left: none;
+        width: 100%;
+        height: 50px;
+        background-color: $color-background;
+
+        &.hasButton {
+          border-right: none;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0 30px $color-background inset;
+          -webkit-text-fill-color: $color-text;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+          transition: background-color 5000s ease-in-out 0s;
+        }
+
+        &.validateErr {
+          color: $color-error !important;
+          -webkit-text-fill-color: $color-error !important;
+        }
+      }
+
+      &:nth-of-type(1) {
+        .emoji {
+          border-top-left-radius: 15px;
+        }
+
+        .inputText {
+          &:not(.hasButton) {
+            border-top-right-radius: 15px;
+          }
+        }
+      }
+
+      &:nth-of-type(7) {
+        .emoji {
+          border-bottom: 1px solid $color-border;
+          border-bottom-left-radius: 15px;
+        }
+
+        .inputText {
+          border-bottom: 1px solid $color-border;
+          &:not(.hasButton) {
+            border-bottom-right-radius: 15px;
+          }
+        }
+
+        .verifyCodeBtnDiv {
+          border-bottom: 1px solid $color-border;
+          border-bottom-right-radius: 15px;
+        }
+      }
+
+      .verifyCodeBtnDiv {
+        display: flex;
+        align-items: center;
+        background-color: $color-background;
+        height: 50px;
+        border-top: 1px solid $color-border;
+        border-right: 1px solid $color-border;
+        padding-right: 5px;
+
+        .verifyCodeBtn {
+          border-radius: 10px;
+          border: none;
+          padding: 10px;
+          font-size: 12px;
+          font-family: $font-family-base;
+          font-weight: bold;
+          color: $color-background;
+          background-color: $color-button-primary;
+          cursor: pointer;
+          width: 95px;
+          height: 35px;
+
+          &:hover {
+            background-color: $color-border-hover;
+            transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+          }
+        }
+      }
+    }
+
+    .btn {
+      margin-top: 3rem;
+      border-radius: 10px;
+      border: none;
+      padding: 15px;
+      font-size: 15px;
+      font-family: $font-family-base;
+      font-weight: bold;
+      color: $color-background;
+      background-color: $color-button-primary;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-border-hover;
+        transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+      }
+    }
+  }
+}
+
+// Media queries
+@media (max-width: $breakpoint-small) {
+  .module {
+    .form {
+      width: 330px;
+
+      .inputDiv {
+        .verifyCodeBtnDiv {
+          .verifyCodeBtn {
+            font-size: 10px;
+            width: 80px;
+            height: 30px;
+          }
+        }
+      }
+    }
+  }
+}

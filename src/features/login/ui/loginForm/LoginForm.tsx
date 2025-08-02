@@ -44,13 +44,13 @@ export const LoginForm = () => {
       <span className={css.title}>keylog</span>
       <form onSubmit={onSubmit} className={css.form}>
         <div className={css.inputDiv}>
-          <div className={`${css.emoji} btlr`}>
+          <div className={css.emoji}>
             <FontAwesomeIcon icon={faUser} className={css.icon} />
           </div>
           <input
             type="text"
             value={id}
-            className={`${css.inputText} btrr`}
+            className={css.inputText}
             placeholder="ID"
             required
             onChange={e => {
@@ -58,14 +58,14 @@ export const LoginForm = () => {
             }}
           ></input>
         </div>
-        <div className={`${css.inputDiv} mb10`}>
-          <div className={`${css.emoji} bb bblr`}>
+        <div className={css.inputDiv}>
+          <div className={css.emoji}>
             <FontAwesomeIcon icon={faLock} className={css.icon} />
           </div>
           <input
             type="password"
             value={password}
-            className={`${css.inputText} bb bbrr`}
+            className={css.inputText}
             placeholder="Password"
             required
             onChange={e => {

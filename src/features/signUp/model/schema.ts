@@ -8,7 +8,7 @@ export const SignUpSchema = z
       .trim()
       .min(1, { message: 'ID를 입력해주세요.' })
       .regex(/^[a-z0-9]{5,20}$/, { message: 'ID는 5-20자의 영문 소문자, 숫자만 사용 가능합니다.' })
-      .refine(async userId => !isDuplicateUserId(userId), {
+      .refine(async id => !(await isDuplicateUserId(id)), {
         message: '이미 가입되어 있는 아이디입니다.',
         path: ['id'],
       }),
@@ -25,9 +25,17 @@ export const SignUpSchema = z
       .string()
       .trim()
       .min(1, { message: '인증번호를 입력해주세요.' })
-      .refine(async code => isVerifyCode(code), {
-        message: '인증번호가 일치하지 않습니다.',
-      }),
+      .refine(
+        async code => {
+          if (code === '') {
+            return true;
+          }
+          return await isVerifyCode(code);
+        },
+        {
+          message: '인증번호가 일치하지 않습니다.',
+        },
+      ),
     blogName: z.string().trim().min(1, { message: '블로그 이름을 입력해주세요.' }),
     nickname: z.string().trim().min(1, { message: '닉네임을 입력해주세요.' }),
   })

@@ -9,3 +9,8 @@ export const DEFAULT_SPEEDS = {
   tablet: 0.9,
   mobile: 0.8,
 };
+
+export const VERIFY_CODE = {
+  LENGTH: 6,
+  EXPIRE_TIME: 24,
+};

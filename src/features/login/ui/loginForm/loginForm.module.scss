@@ -40,10 +40,6 @@ $font-family-main: 'Spoqa Han Sans Neo';
     .inputDiv {
       display: flex;
 
-      &.mb10 {
-        margin-bottom: 10px;
-      }
-
       .emoji {
         padding-left: 15px;
         border: 1px solid $color-tertiary;
@@ -60,18 +56,6 @@ $font-family-main: 'Spoqa Han Sans Neo';
         .icon {
           width: 16px;
           height: 16px;
-        }
-
-        &.btlr {
-          border-top-left-radius: 4px;
-        }
-
-        &.bb {
-          border-bottom: 1px solid $color-tertiary;
-        }
-
-        &.bblr {
-          border-bottom-left-radius: 4px;
         }
       }
 
@@ -101,17 +85,31 @@ $font-family-main: 'Spoqa Han Sans Neo';
         &:-webkit-autofill:active {
           transition: background-color 5000s ease-in-out 0s;
         }
+      }
 
-        &.btrr {
-          border-top-right-radius: 4px;
+      // 첫 번째 inputDiv 스타일 (ID 필드)
+      &:first-child {
+        .emoji {
+          border-top-left-radius: 15px; // btlr
         }
 
-        &.bb {
-          border-bottom: 1px solid $color-tertiary;
+        .inputText {
+          border-top-right-radius: 15px; // btrr
+        }
+      }
+
+      // 두 번째 inputDiv 스타일 (Password 필드)
+      &:nth-child(2) {
+        margin-bottom: 10px; // mb10
+
+        .emoji {
+          border-bottom: 1px solid $color-tertiary; // bb
+          border-bottom-left-radius: 15px; // bblr
         }
 
-        &.bbrr {
-          border-bottom-right-radius: 4px;
+        .inputText {
+          border-bottom: 1px solid $color-tertiary; // bb
+          border-bottom-right-radius: 15px; // bbrr
         }
       }
     }

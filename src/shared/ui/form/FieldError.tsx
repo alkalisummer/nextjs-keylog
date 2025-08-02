@@ -11,7 +11,9 @@ export const FieldError = ({ error, errors, className = '' }: FieldErrorProps) =
   let displayMessage: string | undefined;
 
   if (errors) {
-    displayMessage = errors.find(err => err?.message)?.message;
+    displayMessage = errors
+      .map(err => err?.message ?? (Object.values(err || {})[0] as RHFFieldError)?.message)
+      .find(msg => !!msg);
   } else if (error) {
     displayMessage = error.message;
   }
