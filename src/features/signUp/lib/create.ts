@@ -2,8 +2,7 @@ export const createVerifyCode = (codeLength: number) => {
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
-  const symbols = '!@#$%^&*()_+[]{}|;:,.<>?';
-  const allCharacters = lowercase + uppercase + numbers + symbols;
+  const allCharacters = lowercase + uppercase + numbers;
 
   let randomChar = '';
 

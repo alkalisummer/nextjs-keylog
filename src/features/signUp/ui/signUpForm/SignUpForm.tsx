@@ -24,6 +24,7 @@ export const SignUpForm = () => {
     register,
     handleSubmit,
     getValues,
+    trigger,
     formState: { errors },
   } = useForm<Form>({
     resolver: zodResolver(SignUpSchema),
@@ -32,6 +33,9 @@ export const SignUpForm = () => {
   });
 
   const sendVerifyCode = async () => {
+    if (errors.email) {
+      return;
+    }
     const result = await sendVerifyCodeMail(getValues('email'));
     if (result.ok) {
       alert(result.message);

@@ -16,8 +16,9 @@ export const isVerifyCode = async (code: string) => {
   const verifyCodeRes = await getVerifyCode(code);
 
   if (!verifyCodeRes.ok) {
-    throw new Error('Fetch Get Verify Code Error');
+    return false;
   }
+
   const currTime = formatDate({ date: new Date(), seperator: '', isFullTime: true });
 
   const { verifyCode, expirationTime } = verifyCodeRes.data;
