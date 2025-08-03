@@ -24,7 +24,7 @@ export const SignUpSchema = z
     verifyCode: z
       .string()
       .trim()
-      .min(1, { message: '∙ 인증번호: 인증번호를 입력해주세요.' })
+      .min(1, { message: '∙ 인증코드: 인증코드를 입력해주세요.' })
       .refine(
         async code => {
           if (code === '') {
@@ -33,7 +33,7 @@ export const SignUpSchema = z
           return await isVerifyCode(code);
         },
         {
-          message: '∙ 인증번호: 인증번호가 일치하지 않습니다.',
+          message: '∙ 인증코드: 인증코드가 일치하지 않습니다.',
         },
       ),
     blogName: z.string().trim().min(1, { message: '∙ 블로그 이름: 블로그 이름을 입력해주세요.' }),

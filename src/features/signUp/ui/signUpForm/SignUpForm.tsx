@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { FieldError } from '@/shared/ui';
+import { signUp } from '../../api/signUp';
 import { useForm } from 'react-hook-form';
 import css from './signUpForm.module.scss';
 import { useRouter } from 'next/navigation';
@@ -19,30 +21,59 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export const SignUpForm = () => {
-  const rotuer = useRouter();
+  const router = useRouter();
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
     getValues,
-    trigger,
+    setError,
     formState: { errors },
   } = useForm<Form>({
     resolver: zodResolver(SignUpSchema),
     mode: 'onBlur',
-    reValidateMode: 'onBlur',
   });
 
   const sendVerifyCode = async () => {
-    if (errors.email) {
+    if (errors.email || isSendingCode) {
       return;
     }
+    setIsSendingCode(true);
     const result = await sendVerifyCodeMail(getValues('email'));
     if (result.ok) {
       alert(result.message);
     }
+    setIsSendingCode(false);
   };
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: Form) => {
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+
+    const result = await signUp(data);
+
+    if (result.ok) {
+      alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.');
+      router.push('/login');
+    } else {
+      alert(result.error);
+      // 서버 사이드 validation 에러 처리
+      if (result.data) {
+        Object.entries(result.data).forEach(([field, messages]) => {
+          setError(field as keyof Form, {
+            type: 'server',
+            message: messages[0],
+          });
+        });
+      }
+    }
+
+    setIsSubmitting(false);
+  };
 
   return (
     <div className={css.module}>
@@ -97,7 +128,7 @@ export const SignUpForm = () => {
           ></input>
           <div className={`${css.verifyCodeBtnDiv}`}>
             <button id="signup_vrfy_code_btn" className={`${css.verifyCodeBtn}`} onClick={() => sendVerifyCode()}>
-              인증번호 요청
+              인증코드 요청
             </button>
           </div>
         </div>
@@ -108,7 +139,7 @@ export const SignUpForm = () => {
           <input
             type="text"
             className={`${css.inputText} ${errors.verifyCode ? css.validateErr : ''}`}
-            placeholder="인증번호"
+            placeholder="인증코드"
             autoComplete="off"
             {...register('verifyCode')}
           ></input>
@@ -139,7 +170,7 @@ export const SignUpForm = () => {
             {...register('nickname')}
           ></input>
         </div>
-        <button type="submit" className={css.btn}>
+        <button type="submit" className={css.btn} disabled={isSubmitting}>
           가입하기
         </button>
         <FieldError

@@ -33,13 +33,16 @@ export const createMailOptions = ({
     to: email,
     subject: 'Keylog 회원가입 인증번호',
     html: `
-       Keylog 회원가입을 위한 인증번호입니다.
-        
-          아래의 인증번호를 입력하여 인증을 완료해주세요.
-        
-          인증번호 : ${verifyCode}
-        
-          인증번호는 ${expireTime}까지 유효합니다.
-          `,
+    <html>
+      <body>
+        <div>
+          <p>Keylog 회원가입을 위한 인증번호입니다.</p>
+          <p>아래의 인증번호를 입력하여 인증을 완료해주세요.</p>
+          <p>인증번호 : ${verifyCode}</p>
+          <p>인증번호는 ${expireTime} 까지 유효합니다.</p>
+        </div>
+        </body>
+      </html>
+    `,
   };
 };
