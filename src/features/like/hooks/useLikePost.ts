@@ -4,12 +4,13 @@ import { useSession } from 'next-auth/react';
 import { likePost, unlikePost } from '../api';
 import { LikeRes } from '@/entities/like/model';
 import { getLikeCnt } from '@/entities/like/api';
+import { ApiResponse } from '@/shared/lib/client';
 import { queryKey } from '@/app/provider/query/lib';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useLikePost = (postId: number) => {
   const queryClient = useQueryClient();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const userId = session?.user?.id ?? '';
 
   const postLikeQueryKey = queryKey().like().likeCnt(postId);
@@ -17,7 +18,6 @@ export const useLikePost = (postId: number) => {
   const { data: likeRes } = useQuery({
     queryKey: postLikeQueryKey,
     queryFn: () => getLikeCnt(postId),
-    enabled: status === 'authenticated',
   });
 
   const isLiked = likeRes?.ok && likeRes.data.items.some(like => like.userId === userId);
@@ -25,15 +25,19 @@ export const useLikePost = (postId: number) => {
 
   const { mutate: like } = useMutation({
     mutationFn: () => likePost({ postId, userId }),
-    onMutate: () => {
-      queryClient.cancelQueries({ queryKey: postLikeQueryKey });
-      const prev = queryClient.getQueryData(postLikeQueryKey);
-      queryClient.setQueryData(postLikeQueryKey, (old: LikeRes) => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: postLikeQueryKey });
+      const prev = queryClient.getQueryData<ApiResponse<LikeRes>>(postLikeQueryKey)?.data || {
+        totalItems: 0,
+        items: [],
+      };
+      queryClient.setQueryData(postLikeQueryKey, () => {
         return {
           ok: true,
+          status: 200,
           data: {
-            totalItems: old.totalItems + 1,
-            items: [...old.items, { userId, likeCnt: old.totalItems + 1 }],
+            totalItems: prev.totalItems + 1,
+            items: [...prev.items, { userId, likeCnt: prev.totalItems + 1 }],
           },
         };
       });
@@ -51,15 +55,19 @@ export const useLikePost = (postId: number) => {
 
   const { mutate: unlike } = useMutation({
     mutationFn: () => unlikePost({ postId, userId }),
-    onMutate: () => {
-      queryClient.cancelQueries({ queryKey: postLikeQueryKey });
-      const prev = queryClient.getQueryData(postLikeQueryKey);
-      queryClient.setQueryData(postLikeQueryKey, (old: LikeRes) => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: postLikeQueryKey });
+      const prev = queryClient.getQueryData<ApiResponse<LikeRes>>(postLikeQueryKey)?.data ?? {
+        totalItems: 0,
+        items: [],
+      };
+      queryClient.setQueryData(postLikeQueryKey, () => {
         return {
           ok: true,
+          status: 200,
           data: {
-            totalItems: old.totalItems - 1,
-            items: old.items.filter(like => like.userId !== userId),
+            totalItems: prev.totalItems - 1,
+            items: prev.items.filter(like => like.userId !== userId),
           },
         };
       });

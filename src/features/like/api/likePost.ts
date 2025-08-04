@@ -11,7 +11,7 @@ interface LikePostProps {
 export const likePost = async ({ postId, userId }: LikePostProps) => {
   return await client.like().post<LikeRes>({
     options: {
-      searchParams: {
+      body: {
         postId,
         userId,
       },

@@ -1,3 +1,5 @@
+'use server';
+
 import { LikeRes } from '../model';
 import { client } from '@/shared/lib/client';
 

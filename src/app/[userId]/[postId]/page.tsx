@@ -12,9 +12,8 @@ import { PostInteractions } from '@/entities/like/ui';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
 
-export const Page = async ({ params }: { params: Promise<{ userId: string; postId: number }> }) => {
+export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
   const { userId, postId } = await params;
-
   const queryClient = new QueryClient();
 
   //user
@@ -32,8 +31,8 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
 
   //post detail
   const postQueryOptions = {
-    queryKey: queryKey().post().postDetail(postId),
-    queryFn: () => getPost(postId),
+    queryKey: queryKey().post().postDetail(Number(postId)),
+    queryFn: () => getPost(Number(postId)),
   };
 
   await queryClient.prefetchQuery(postQueryOptions);
@@ -45,8 +44,8 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
 
   //comments
   const commentsQueryOptions = {
-    queryKey: queryKey().comment().commentList(postId),
-    queryFn: () => getCommentList(postId),
+    queryKey: queryKey().comment().commentList(Number(postId)),
+    queryFn: () => getCommentList(Number(postId)),
   };
 
   await queryClient.prefetchQuery(commentsQueryOptions);
@@ -58,8 +57,8 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
 
   //hashtags
   const hashtagsQueryOptions = {
-    queryKey: queryKey().hashtag().postHashtags(postId),
-    queryFn: () => getPostHashtags(postId),
+    queryKey: queryKey().hashtag().postHashtags(Number(postId)),
+    queryFn: () => getPostHashtags(Number(postId)),
   };
 
   await queryClient.prefetchQuery(hashtagsQueryOptions);
@@ -72,7 +71,7 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
   return (
     <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
       <PostDetails post={postRes.data} user={userRes.data} />
-      <PostInteractions postId={postId} postTitle={postRes.data.postTitle} />
+      <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
       <PostHashtags hashtags={postHashtagsRes.data} />
     </AsyncBoundary>
   );

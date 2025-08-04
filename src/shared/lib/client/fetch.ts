@@ -2,7 +2,7 @@ import { FetchProps, HttpMethod, ApiResponse, ExtendedFetchOptions, HttpClient, 
 import { buildSearchParams, handleResponse, handleNetworkError } from './util';
 
 const BASE_URL = process.env.BASE_URL ?? '';
-const KEYLOG_API_URL = process.env.KEYLOG_API_URL ?? '';
+const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_URL ?? '';
 
 export const client = {
   route: () => createFetchInstance(`${BASE_URL}/api`),
@@ -22,18 +22,20 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     endpoint,
     body,
     searchParams,
-    headers: header,
+    headers: customHeaders,
   }: FetchProps): Promise<ApiResponse<T>> {
     const url = baseUrl + endpoint + buildSearchParams(searchParams);
 
+    const headers: HeadersInit = {
+      Accept: 'application/json',
+      ...customHeaders,
+      ...(body && { 'Content-Type': 'application/json' }),
+    };
+
     const requestOptions: RequestInit = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...header,
-      },
-      ...(body && { body: JSON.stringify(body) }),
+      headers,
+      ...(body ? { body: JSON.stringify(body) } : {}),
     };
 
     try {
