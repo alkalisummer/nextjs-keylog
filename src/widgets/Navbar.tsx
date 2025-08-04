@@ -259,11 +259,6 @@ const Navbar = () => {
     <div className="nav_div">
       {status === 'authenticated' ? (
         <div className="df">
-          {showCreateBtn && (
-            <Link href={`/write?keyword=true`} className="nav_create_link">
-              <button className="nav_create_btn">새 글 작성</button>
-            </Link>
-          )}
           <div onClick={openToggle} className="nav_menu_div">
             <img
               id="nav_menu_img"

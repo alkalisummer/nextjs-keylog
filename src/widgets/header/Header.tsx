@@ -3,12 +3,15 @@
 import Navbar from '../Navbar';
 import css from './header.module.scss';
 import { useRouter } from 'next/navigation';
+import { AccountMenu } from '../accountMenu/ui';
+import { isAuthenticated } from '@/shared/lib/util';
 
 interface HeaderProps {
   type: 'home' | 'blog';
 }
 
 export const Header = ({ type = 'home' }: HeaderProps) => {
+  const isLoggedIn = isAuthenticated();
   const router = useRouter();
 
   return (
@@ -22,7 +25,16 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
         >
           keylog
         </span>
-        <Navbar />
+        {isLoggedIn ? (
+          <div className={css.accountMenu}>
+            <button className={css.writeBtn}>새 글 작성</button>
+            <AccountMenu />
+          </div>
+        ) : (
+          <button className={css.loginBtn} onClick={() => router.push('/login')}>
+            로그인
+          </button>
+        )}
       </div>
     </header>
   );
