@@ -1,14 +1,15 @@
 'use client';
 
+import { Session } from 'next-auth';
+import { RefreshToken } from './component';
 import { ReactNode, useState } from 'react';
 import { SessionProvider as AuthSessionProvider } from 'next-auth/react';
-import { RefreshToken } from './component';
 
-export function SessionProvider({ children }: { children: ReactNode }) {
+export function SessionProvider({ children, session }: { children: ReactNode; session: Session | null }) {
   const [sessionRefetchInterval, setSessionRefetchInterval] = useState(10000);
 
   return (
-    <AuthSessionProvider refetchInterval={sessionRefetchInterval}>
+    <AuthSessionProvider refetchInterval={sessionRefetchInterval} session={session}>
       <RefreshToken setSessionRefetchInterval={setSessionRefetchInterval} />
       {children}
     </AuthSessionProvider>

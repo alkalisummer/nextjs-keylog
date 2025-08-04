@@ -1,8 +1,8 @@
 'use client';
 
-import { Dispatch, SetStateAction } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRefreshToken } from '../hooks';
+import { useSession } from 'next-auth/react';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   setSessionRefetchInterval: Dispatch<SetStateAction<number>>;

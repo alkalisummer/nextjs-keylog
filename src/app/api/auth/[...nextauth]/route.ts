@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
           id: user.userId,
           email: user.userEmail,
           name: user.userNickname,
-          image: user.userThmbImgUrl ?? '',
+          image: user.userThmbImgUrl || '',
           blogName: user.userBlogName,
         };
       },
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user, trigger, session }) {
       // 최초 로그인 시
       if (user) {
         token.id = user.id;
