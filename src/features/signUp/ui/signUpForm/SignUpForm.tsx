@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { FieldError } from '@/shared/ui';
-import { signUp } from '../../api/signUp';
 import { useForm } from 'react-hook-form';
 import css from './signUpForm.module.scss';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignUpSchema, SignUpForm as Form } from '../../model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { signUp, deleteVerifyCode } from '@/features/signup/api';
 import { sendVerifyCodeMail } from '../../api/sendVerifyCodeMail';
 import {
   faUser,
@@ -57,6 +57,8 @@ export const SignUpForm = () => {
     const result = await signUp(data);
 
     if (result.ok) {
+      // 인증코드 삭제
+      deleteVerifyCode(data.verifyCode);
       alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.');
       router.push('/login');
     } else {

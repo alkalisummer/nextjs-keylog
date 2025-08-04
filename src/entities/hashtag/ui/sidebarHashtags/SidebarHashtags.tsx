@@ -24,19 +24,12 @@ export const SidebarHashtags = ({ hashtags, userId, posts }: HashtagsProps) => {
     <div className={css.module}>
       <span className={css.title}>태그 목록</span>
       {hashtags.length > 0 && (
-        <span
-          className={`${css.hashtag} ${selectedHashtag === null ? css.selected : ''}`}
-          onClick={() => router.route(null)}
-        >
+        <span className={css.hashtag} onClick={() => router.route(null)}>
           전체보기 <span className={css.count}>&nbsp;{`(${totalPostCnt})`}</span>
         </span>
       )}
       {hashtags.map((hashtag: HashtagInfo) => (
-        <span
-          key={hashtag.hashtagId}
-          className={`${css.hashtag} ${selectedHashtag === hashtag.hashtagId ? css.selected : ''}`}
-          onClick={() => router.route(hashtag.hashtagId)}
-        >
+        <span key={hashtag.hashtagId} className={css.hashtag} onClick={() => router.route(hashtag.hashtagId)}>
           <FontAwesomeIcon icon={faTag} className={css.icon} />
           <span className={css.name}>{hashtag.hashtagName}</span>
           <span className={css.count}>&nbsp;{`(${hashtag.hashtagCnt})`}</span>
