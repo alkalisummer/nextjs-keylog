@@ -14,9 +14,11 @@ export const AccountMenu = () => {
   const { data: session, status } = useSession();
   const [trigger, setTrigger] = useState<null | HTMLElement>(null);
   const toggleOpen = Boolean(trigger);
+
   const openToggle = (event: React.MouseEvent<HTMLDivElement>) => {
     setTrigger(event.currentTarget);
   };
+
   const closeToggle = () => {
     setTrigger(null);
   };
@@ -47,7 +49,7 @@ export const AccountMenu = () => {
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href={`/${session.user?.id}/tmpPosts`} className={css.menuLink}>
+              <Link href={`/${session.user?.id}?tempYn=Y`} className={css.menuLink}>
                 <FontAwesomeIcon icon={faFileSignature} className={css.menuItemIco} />
                 임시 글
               </Link>

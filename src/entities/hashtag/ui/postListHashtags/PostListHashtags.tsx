@@ -1,12 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import css from './postListHashtags.module.scss';
 import { useBlog } from '@/app/[userId]/container';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { useHashtagRouter } from '@/entities/hashtag/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 interface HashtagButtonsProps {
   hashtags: HashtagInfo[];
@@ -15,7 +12,6 @@ interface HashtagButtonsProps {
 
 export const PostListHashtags = ({ hashtags, userId }: HashtagButtonsProps) => {
   const { selectedHashtag, setSelectedHashtag } = useBlog();
-  const [isOpen, setIsOpen] = useState(false);
   const router = useHashtagRouter({ userId, setSelectedHashtag });
 
   const allHashtags = [
@@ -29,15 +25,7 @@ export const PostListHashtags = ({ hashtags, userId }: HashtagButtonsProps) => {
 
   return (
     <div className={css.module}>
-      <span className={css.title} onClick={() => setIsOpen(!isOpen)}>
-        태그 목록 &nbsp;
-        {isOpen ? (
-          <FontAwesomeIcon className={css.icon} icon={faCaretUp} />
-        ) : (
-          <FontAwesomeIcon className={css.icon} icon={faCaretDown} />
-        )}
-      </span>
-      <div className={`${css.hashtags} ${isOpen ? css.open : ''}`}>
+      <div className={css.hashtags}>
         {allHashtags.map((hashtag: HashtagInfo, index) => (
           <button
             key={hashtag.hashtagId ?? `all-${index}`}

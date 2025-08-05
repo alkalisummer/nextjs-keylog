@@ -7,7 +7,17 @@
 
   .header {
     border-bottom: 1px solid #dadada;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .tagListBtn {
+      display: none;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+    }
   }
 
   .postCnt {
@@ -17,8 +27,6 @@
   }
 
   .headerBtn {
-    display: none;
-
     button {
       display: block;
       background-color: #009bf2;
@@ -32,7 +40,9 @@
 }
 
 @media (max-width: $post-breakpoint-large) {
-  .module {
-    display: none;
+  .header {
+    .tagListBtn {
+      display: block !important;
+    }
   }
 }

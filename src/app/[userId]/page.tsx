@@ -6,10 +6,9 @@ import { getPosts } from '@/entities/post/api';
 import { queryKey } from '../provider/query/lib';
 import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
-import { BlogPostList } from '@/entities/post/ui';
-import { BlogPostHeader } from '@/entities/post/ui';
 import { PostListHashtags } from '@/entities/hashtag/ui';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
+import { BlogPostList, BlogPostHeader, TempPostList } from '@/entities/post/ui';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -17,9 +16,9 @@ export const Page = async ({
   searchParams,
 }: {
   params: Promise<{ userId: string }>;
-  searchParams: Promise<{ pageNum: string; tagId: string }>;
+  searchParams: Promise<{ pageNum: string; tagId: string; tempYn: string }>;
 }) => {
-  const [{ userId }, { pageNum = '1', tagId = '' }] = await Promise.all([params, searchParams]);
+  const [{ userId }, { pageNum = '1', tagId = '', tempYn = 'N' }] = await Promise.all([params, searchParams]);
   const queryClient = new QueryClient();
 
   const userQueryOptions = {
@@ -37,8 +36,8 @@ export const Page = async ({
   const postsQueryOptions = {
     queryKey: queryKey()
       .post()
-      .postList({ currPageNum: Number(pageNum), authorId: userId, tagId: tagId }),
-    queryFn: () => getPosts({ currPageNum: Number(pageNum), authorId: userId, tagId: tagId }),
+      .postList({ currPageNum: Number(pageNum), authorId: userId, tagId: tagId, tempYn: tempYn }),
+    queryFn: () => getPosts({ currPageNum: Number(pageNum), authorId: userId, tagId: tagId, tempYn: tempYn }),
   };
 
   await queryClient.prefetchQuery(postsQueryOptions);
@@ -63,9 +62,12 @@ export const Page = async ({
     <HydrationBoundary state={dehydratedState}>
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
         <PostUserInfo author={userRes.data} />
-        <BlogPostHeader author={userRes.data} posts={postsRes.data} />
-        <PostListHashtags hashtags={hashtagRes.data} userId={userRes.data.userId} />
-        <BlogPostList author={userRes.data} posts={postsRes.data} />
+        <BlogPostHeader posts={postsRes.data} hashtags={hashtagRes.data} userId={userRes.data.userId} />
+        {tempYn === 'Y' ? (
+          <TempPostList posts={postsRes.data} />
+        ) : (
+          <BlogPostList author={userRes.data} posts={postsRes.data} />
+        )}
       </AsyncBoundary>
     </HydrationBoundary>
   );

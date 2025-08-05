@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alkalisummer/google-trends-js": "^0.2.1",
+    "@alkalisummer/google-trends-js": "^0.2.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

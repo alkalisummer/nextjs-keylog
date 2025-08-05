@@ -4,6 +4,7 @@ export { RecentPosts } from './recentPosts/RecentPosts';
 export { BlogPostItem } from './blogPostItem/BlogPostItem';
 export { BlogPostList } from './blogPostList/BlogPostList';
 export { PopularPosts } from './popularPosts/PopularPosts';
+export { TempPostList } from './tempPostList/TempPostList';
 export { SearchTagPost } from './searchTagPost/SearchTagPost';
 export { PostPagination } from './postPagination/PostPagination';
 export { BlogPostHeader } from './blogPostHeader/BlogPostHeader';
