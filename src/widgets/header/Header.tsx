@@ -31,7 +31,7 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
             <AccountMenu />
           </div>
         ) : (
-          <button className={css.loginBtn} onClick={() => router.push('/login')}>
+          <button className={css.loginBtn} onClick={() => router.push(`/login?redirect=${window.location.href}`)}>
             로그인
           </button>
         )}
