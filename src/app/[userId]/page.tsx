@@ -6,9 +6,8 @@ import { getPosts } from '@/entities/post/api';
 import { queryKey } from '../provider/query/lib';
 import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
-import { PostListHashtags } from '@/entities/hashtag/ui';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
-import { BlogPostList, BlogPostHeader, TempPostList } from '@/entities/post/ui';
+import { BlogPostList, BlogPostHeader } from '@/entities/post/ui';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({
@@ -41,11 +40,6 @@ export const Page = async ({
   };
 
   await queryClient.prefetchQuery(postsQueryOptions);
-  const postsRes = await queryClient.ensureQueryData(postsQueryOptions);
-
-  if (!postsRes.ok) {
-    throw new Error('Posts fetch error');
-  }
 
   //hashtags
   const hashtagQueryOptions = {
@@ -62,12 +56,8 @@ export const Page = async ({
     <HydrationBoundary state={dehydratedState}>
       <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
         <PostUserInfo author={userRes.data} />
-        <BlogPostHeader posts={postsRes.data} hashtags={hashtagRes.data} userId={userRes.data.userId} />
-        {tempYn === 'Y' ? (
-          <TempPostList posts={postsRes.data} />
-        ) : (
-          <BlogPostList author={userRes.data} posts={postsRes.data} />
-        )}
+        <BlogPostHeader hashtags={hashtagRes.data} userId={userRes.data.userId} />
+        <BlogPostList author={userRes.data} />
       </AsyncBoundary>
     </HydrationBoundary>
   );

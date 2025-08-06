@@ -15,11 +15,12 @@ export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
 
   const userId = params?.userId;
   const pageNum = searchParams?.get('pageNum') || '1';
+  const tempYn = searchParams?.get('tempYn');
   const pageNavigationNumArr = calculateTotalPage(totalPageNum);
 
   const handlePagination = (pageNum: number | null, totalPageNum: number) => {
     if (pageNum && pageNum > 0 && pageNum <= totalPageNum) {
-      router.push(`/${userId}?pageNum=${pageNum}`);
+      router.push(`/${userId}?pageNum=${pageNum}${tempYn ? `&tempYn=${tempYn}` : ''}`);
     }
   };
 

@@ -5,84 +5,107 @@ $color-primary: #333;
 $color-secondary: #5c5c5c;
 $color-tertiary: #aaa;
 $color-border: #dadada;
+$color-delete-btn: #ffffff;
 
 // Font sizes
 $font-size-title: 24px;
 $font-size-content: 15px;
 $font-size-created: 12px;
 
-.postTitleContent {
-  width: 100%;
+.module {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  border-bottom: 1px solid $color-border;
-  word-break: break-all;
-  height: 18rem;
-
-  a {
-    text-decoration-line: none !important;
-    color: black;
-  }
-}
-
-.postThumb {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  column-gap: 1.5rem;
-}
-
-.thumbContent {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  row-gap: 0.5rem;
-}
+  border-bottom: 1px solid $color-border;
+  height: 18rem;
+  position: relative;
 
-.postTitle {
-  text-decoration-line: none !important;
-  font-size: $font-size-title;
-  color: $color-primary;
+  .postTitleContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    word-break: break-all;
+    padding: 0.5rem 0;
+    a {
+      text-decoration-line: none !important;
+      color: black;
+    }
+  }
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  line-height: 1.4em;
-}
+  .postThumb {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 1.5rem;
+  }
 
-.postContent {
-  font-size: $font-size-content;
-  color: $color-secondary;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  line-height: 1.4em;
-  height: 4.1em;
-}
+  .thumbContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    row-gap: 0.5rem;
+  }
 
-.postCreated {
-  font-size: $font-size-created;
-  color: $color-tertiary;
-}
+  .postTitle {
+    text-decoration-line: none !important;
+    font-size: $font-size-title;
+    color: $color-primary;
 
-.thumbImgDiv {
-  display: flex;
-}
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1.4em;
+  }
 
-.thumbImg {
-  width: 16rem;
-  height: 16rem;
-  object-fit: cover;
+  .postContent {
+    font-size: $font-size-content;
+    color: $color-secondary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1.4em;
+    height: 4.1em;
+  }
+
+  .postCreated {
+    font-size: $font-size-created;
+    color: $color-tertiary;
+  }
+
+  .thumbImgDiv {
+    display: flex;
+  }
+
+  .thumbImg {
+    width: 16rem;
+    height: 16rem;
+    object-fit: cover;
+  }
+  .deleteBtn {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0;
+    span {
+      width: 20px;
+      height: 20px;
+      background-color: $color-delete-btn;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 14px;
+      color: $color-secondary;
+    }
+  }
 }
 
 // Responsive styles
@@ -101,10 +124,10 @@ $font-size-created: 12px;
 }
 
 @media (max-width: $breakpoint-small) {
-  .postTitleContent {
+  .module {
     height: auto;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   .postThumb {

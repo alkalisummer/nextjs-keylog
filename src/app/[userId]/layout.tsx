@@ -1,5 +1,6 @@
 'use server';
 import { ReactNode } from 'react';
+import { BlogContainer } from './container';
 import { getUser } from '@/entities/user/api';
 import { queryKey } from '../provider/query/lib';
 import { Header, Sidebar, Article } from '@/widgets';
@@ -7,7 +8,6 @@ import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { getPopularPosts } from '@/entities/post/api';
 import { getRecentComments } from '@/entities/comment/api';
 import { getPosts, getRecentPosts } from '@/entities/post/api';
-import { BlogContainer } from './container';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 const Layout = async ({ children, params }: { children: ReactNode; params: Promise<{ userId: string }> }) => {

@@ -23,7 +23,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
   const { deletePostMutation } = useDeletePost({
     postQueryKey: queryKey().post().postList({ authorId: user.userId }),
     userId: user.userId,
-    imgFileArr: imgFiles,
+    postId: post.postId,
   });
 
   return (
@@ -40,7 +40,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
               <span className={`${css.marginRight} ${css.marginLeft}`}>수정</span>
             </Link>
             |
-            <span className={`${css.marginLeft} ${css.pointer}`} onClick={() => deletePostMutation(post.postId)}>
+            <span className={`${css.marginLeft} ${css.pointer}`} onClick={() => deletePostMutation()}>
               삭제
             </span>
           </>
