@@ -6,6 +6,7 @@ import { Fragment, useState } from 'react';
 import css from './accountMenu.module.scss';
 import { useSession } from 'next-auth/react';
 import MenuItem from '@mui/material/MenuItem';
+import { logout } from '@/features/logout/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKickstarter } from '@fortawesome/free-brands-svg-icons';
 import { faFileSignature, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
@@ -63,7 +64,7 @@ export const AccountMenu = () => {
               <FontAwesomeIcon icon={faUser} className={css.menuItemIco} />
               계정 관리
             </MenuItem>
-            <MenuItem onClick={() => {}}>
+            <MenuItem onClick={logout}>
               <FontAwesomeIcon icon={faRightFromBracket} className={css.menuItemIco} />
               로그아웃
             </MenuItem>
