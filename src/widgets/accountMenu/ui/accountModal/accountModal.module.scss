@@ -1,0 +1,341 @@
+@use 'variable' as *;
+
+// Colors
+$colorPrimary: #333;
+$colorSecondary: #525252;
+$colorTertiary: #868e96;
+$colorGray: gray;
+$colorWhite: white;
+$colorBlue: #009bf2;
+$colorBlueHover: #4ebeff;
+$colorOrange: hsl(35, 100%, 57%);
+$colorOrangeHover: hsl(35, 93%, 68%);
+$colorBorder: #dddddd;
+$colorBorderLight: #d0d0d0;
+$colorBackgroundGray: rgb(238, 238, 238);
+$colorBackdrop: rgba(0, 0, 0, 0.2);
+$colorShadow: rgba(0, 0, 0, 0.09);
+
+// Font families
+$fontFamilySpoqa: 'Spoqa Han Sans Neo', sans-serif;
+
+// Shadows
+$boxShadow: $colorShadow 0px 2px 12px 0px;
+
+.module {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 660px;
+  padding: 20px;
+  padding-top: 45px;
+  background-color: $colorWhite;
+  border-radius: 5px;
+  border: none;
+  box-shadow: $boxShadow;
+}
+
+.closeBtn {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  font-size: 20px;
+  color: $colorGray;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.profileImgDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  padding-right: 20px;
+  border-right: 1px solid $colorBorderLight;
+}
+
+.profileImg {
+  width: 8rem;
+  height: 8rem;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profileDetailDiv {
+  width: 65%;
+  padding: 15px 0 15px 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nicknameDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nickname {
+  font-size: 30px;
+  font-weight: 400;
+  color: $colorPrimary;
+}
+
+.input {
+  border: 1px solid $colorBorder;
+  border-radius: 5px;
+  height: 30px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+  font-family: $fontFamilySpoqa;
+}
+
+.textUpdateBtn {
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  color: $colorBlue;
+}
+
+.profileBtn {
+  background-color: $colorBlue;
+  font-family: $fontFamilySpoqa;
+  color: $colorWhite;
+  border: none;
+  width: 50px;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-left: 5px;
+
+  &:hover {
+    background-color: $colorBlueHover;
+  }
+
+  &.cancel {
+    background-color: $colorOrange;
+
+    &:hover {
+      background-color: $colorOrangeHover !important;
+    }
+  }
+}
+
+.email {
+  font-size: 20px;
+  color: $colorGray;
+}
+
+.imgUploadBtn {
+  width: 130px;
+  background-color: $colorBlue;
+  color: $colorWhite;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-color: $colorBlueHover;
+  }
+}
+
+.imgDelBtn {
+  width: 170px;
+  font-size: 16px;
+  font-family: $fontFamilySpoqa;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+  background: none;
+  border: none;
+  color: $colorBlue;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    background-color: $colorBackgroundGray;
+  }
+}
+
+.subDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $colorBorder;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.subTitle {
+  padding-left: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  color: $colorPrimary;
+  width: 35%;
+}
+
+.sub {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+
+.passwordBtn {
+  width: 130px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: $colorBlue;
+  color: $colorWhite;
+  border: none;
+  font-family: $fontFamilySpoqa;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $colorBlueHover;
+  }
+}
+
+.pwDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.pwInput {
+  font-family: $fontFamilySpoqa;
+  border: 1px solid $colorBorder;
+  border-radius: 5px;
+  height: 30px;
+  padding-left: 10px;
+}
+
+.leaveBtn {
+  width: 130px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: $colorOrange;
+  color: $colorWhite;
+  border: none;
+  font-family: $fontFamilySpoqa;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $colorOrangeHover;
+  }
+}
+
+.leaveText {
+  font-size: 13px;
+  color: $colorGray;
+  margin-top: 10px;
+}
+
+// Media queries
+@media (max-width: $breakpoint-small) {
+  .module {
+    width: 300px;
+    height: 620px;
+  }
+
+  .profileImgDiv {
+    width: 40%;
+  }
+
+  .profileDetailDiv {
+    width: 60%;
+  }
+
+  .profileImg {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .imgUploadBtn {
+    width: 70px;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .imgDelBtn {
+    width: 90px;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .nickname {
+    font-size: 18px;
+  }
+
+  .email {
+    font-size: 15px;
+  }
+
+  .textUpdateBtn {
+    line-height: 1.5rem !important;
+    font-size: 10px;
+  }
+
+  .profileBtn {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  .subTitle {
+    font-size: 14px;
+    padding-left: 5px;
+    width: 25%;
+  }
+
+  .sub {
+    width: 75%;
+  }
+
+  .passwordBtn {
+    font-size: 12px;
+    width: 100px;
+  }
+
+  .leaveBtn {
+    font-size: 12px;
+    width: 100px;
+  }
+
+  .input {
+    font-size: 12px;
+  }
+
+  .pwInput {
+    font-size: 12px;
+  }
+}

@@ -7,6 +7,7 @@ import css from './accountMenu.module.scss';
 import { useSession } from 'next-auth/react';
 import MenuItem from '@mui/material/MenuItem';
 import { logout } from '@/features/logout/api';
+import { AccountModal } from './accountModal/AccountModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKickstarter } from '@fortawesome/free-brands-svg-icons';
 import { faFileSignature, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
@@ -14,8 +15,9 @@ import { faFileSignature, faUser, faRightFromBracket } from '@fortawesome/free-s
 export const AccountMenu = () => {
   const { data: session, status } = useSession();
   const [trigger, setTrigger] = useState<null | HTMLElement>(null);
-  const toggleOpen = Boolean(trigger);
+  const [openModal, setOpenModal] = useState(false);
 
+  const toggleOpen = Boolean(trigger);
   const openToggle = (event: React.MouseEvent<HTMLDivElement>) => {
     setTrigger(event.currentTarget);
   };
@@ -45,7 +47,7 @@ export const AccountMenu = () => {
             }}
           >
             <MenuItem>
-              <Link href={`/${session.user?.id}`} className={css.menuLink}>
+              <Link href={`/${session.user?.id}`} className={css.menuLink} onClick={closeToggle}>
                 <FontAwesomeIcon icon={faKickstarter} className={css.menuItemIco} />내 키로그
               </Link>
             </MenuItem>
@@ -57,7 +59,7 @@ export const AccountMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                // setOpenModal(true);
+                setOpenModal(true);
                 closeToggle();
               }}
             >
@@ -69,6 +71,7 @@ export const AccountMenu = () => {
               로그아웃
             </MenuItem>
           </Menu>
+          <AccountModal openModal={openModal} setOpenModal={setOpenModal} />
         </div>
       ) : (
         <></>
