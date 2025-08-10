@@ -13,7 +13,6 @@ import { ImageFormSchema, ImageForm as Form } from '../../model';
 export const ImageForm = () => {
   const { data: session, update } = useSession();
   const [isUploading, setIsUploading] = useState(false);
-  const [avatarError, setAvatarError] = useState(false);
 
   const {
     register,
@@ -27,7 +26,9 @@ export const ImageForm = () => {
   });
 
   const onChangeImage = async (data: Form) => {
-    if (isUploading) {
+    const isValid = await trigger('image');
+
+    if (!isValid) {
       return;
     }
 
@@ -47,15 +48,24 @@ export const ImageForm = () => {
     }
   };
 
+  const deleteImage = async () => {
+    const userImageUrl = session?.user?.image || '';
+    if (!userImageUrl) {
+      return;
+    }
+    await deleteUserImage(userImageUrl);
+    await update({ type: 'deleteImg' });
+  };
+
   return (
     <form className={css.module}>
       <Image
         className={css.profileImg}
-        src={avatarError ? '/icon/person.png' : session?.user?.image ? session.user?.image : '/icon/person.png'}
+        src={session?.user?.image ? session.user.image : '/icon/person.png'}
         alt="userImage"
         width={128}
         height={128}
-        onError={() => setAvatarError(true)}
+        onError={e => (e.currentTarget.src = '/icon/person.png')}
       />
       <label htmlFor="fileInput" className={css.imgUploadBtn}>
         이미지 업로드
@@ -64,20 +74,16 @@ export const ImageForm = () => {
         type="file"
         id="fileInput"
         accept="image/*"
-        {...register('image')}
+        {...register('image', {
+          onChange: async e => {
+            const file = e.target.files?.[0];
+            setValue('image', file);
+            await onChangeImage({ image: file });
+          },
+        })}
         disabled={isUploading}
-        onChange={async e => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-          setValue('image', file);
-          const isValid = await trigger('image');
-          if (!isValid) {
-            return;
-          }
-          await onChangeImage({ image: file });
-        }}
       />
-      <button type="button" className={css.imgDelBtn} onClick={() => {}}>
+      <button type="button" className={css.imgDelBtn} onClick={deleteImage}>
         이미지 삭제
       </button>
       <FieldError error={errors.image} />

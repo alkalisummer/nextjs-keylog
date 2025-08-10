@@ -17,7 +17,6 @@ export const AccountMenu = () => {
   const { data: session, status } = useSession();
   const [trigger, setTrigger] = useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = useState(false);
-  const [avatarError, setAvatarError] = useState(false);
 
   const toggleOpen = Boolean(trigger);
   const openToggle = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -35,11 +34,11 @@ export const AccountMenu = () => {
           <div className={css.menu} onClick={openToggle}>
             <Image
               className={css.userImg}
-              src={avatarError ? '/icon/person.png' : session?.user?.image ?? '/icon/person.png'}
+              src={session?.user?.image ? session.user.image : '/icon/person.png'}
               alt="userImage"
               width={40}
               height={40}
-              onError={() => setAvatarError(true)}
+              onError={e => (e.currentTarget.src = '/icon/person.png')}
             />
             <div>▾</div>
           </div>
