@@ -1,11 +1,11 @@
 export const formatDate = ({
   date,
-  seperator = '.',
+  seperator = '',
   isExtendTime = false,
   isFullTime = false,
 }: {
   date: Date | string;
-  seperator: string;
+  seperator?: string;
   isExtendTime?: boolean;
   isFullTime?: boolean;
 }) => {
@@ -29,12 +29,12 @@ export const formatDate = ({
 
 const formatStringDate = ({
   date,
-  seperator = '.',
+  seperator = '',
   isExtendTime = false,
   isFullTime = false,
 }: {
   date: string;
-  seperator: string;
+  seperator?: string;
   isExtendTime?: boolean;
   isFullTime?: boolean;
 }) => {

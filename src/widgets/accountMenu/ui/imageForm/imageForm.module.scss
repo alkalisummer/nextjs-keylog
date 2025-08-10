@@ -1,0 +1,89 @@
+@use 'variable' as *;
+
+// Colors
+$color-primary-blue: #009bf2;
+$color-primary-blue-hover: #4ebeff;
+$color-text-inverse: #ffffff;
+$color-neutral-hover: #eeeeee;
+$color-neutral-border: #d0d0d0;
+
+.module {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35%;
+  padding-right: 20px;
+  border-right: 1px solid $color-neutral-border;
+  margin-bottom: 25px;
+
+  .profileImg {
+    width: 8rem;
+    height: 8rem;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  input[type='file'] {
+    display: none !important;
+  }
+
+  .imgUploadBtn {
+    width: 100%;
+    background-color: $color-primary-blue;
+    color: $color-text-inverse;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+
+    &:hover {
+      background-color: $color-primary-blue-hover;
+    }
+  }
+
+  .imgDelBtn {
+    width: 170px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: none;
+    border: none;
+    color: $color-primary-blue;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      background-color: $color-neutral-hover;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    width: 40%;
+    padding-right: 10px;
+    .profileImg {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    .imgUploadBtn {
+      width: 100%;
+      font-size: 12px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .imgDelBtn {
+      width: 100%;
+      font-size: 12px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}

@@ -71,6 +71,9 @@ const nextConfig = {
     reactCompiler: true,
     taint: true,
     serverSourceMaps: process.env.NODE_ENV === 'production' ? false : true,
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
   },
 
   webpack: (config, { isServer }) => {

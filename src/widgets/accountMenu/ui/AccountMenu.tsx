@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Menu from '@mui/material/Menu';
 import { Fragment, useState } from 'react';
 import css from './accountMenu.module.scss';
@@ -16,6 +17,7 @@ export const AccountMenu = () => {
   const { data: session, status } = useSession();
   const [trigger, setTrigger] = useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
 
   const toggleOpen = Boolean(trigger);
   const openToggle = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -28,10 +30,17 @@ export const AccountMenu = () => {
 
   return (
     <Fragment>
-      {status === 'authenticated' ? (
+      {status !== 'unauthenticated' ? (
         <div className={css.module}>
           <div className={css.menu} onClick={openToggle}>
-            <img className={css.userImg} src={session.user?.image ?? '/icon/person.png'} alt="userImage" />
+            <Image
+              className={css.userImg}
+              src={avatarError ? '/icon/person.png' : session?.user?.image ?? '/icon/person.png'}
+              alt="userImage"
+              width={40}
+              height={40}
+              onError={() => setAvatarError(true)}
+            />
             <div>▾</div>
           </div>
           <Menu
@@ -47,12 +56,12 @@ export const AccountMenu = () => {
             }}
           >
             <MenuItem>
-              <Link href={`/${session.user?.id}`} className={css.menuLink} onClick={closeToggle}>
+              <Link href={`/${session?.user?.id ?? ''}`} className={css.menuLink} onClick={closeToggle}>
                 <FontAwesomeIcon icon={faKickstarter} className={css.menuItemIco} />내 키로그
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href={`/${session.user?.id}?tempYn=Y`} className={css.menuLink}>
+              <Link href={`/${session?.user?.id ?? ''}?tempYn=Y`} className={css.menuLink}>
                 <FontAwesomeIcon icon={faFileSignature} className={css.menuItemIco} />
                 임시 글
               </Link>

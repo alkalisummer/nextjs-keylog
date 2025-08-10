@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { getPost } from '@/entities/post/api';
-import { deleteImg, deletePost } from '../api';
+import { deletePostImage, deletePost } from '../api';
 import { queryKey } from '@/app/provider/query/lib';
 import { useMutation, useQueryClient, useQuery, QueryKey } from '@tanstack/react-query';
 import { parseImgfileArr } from '@/entities/post/lib';
@@ -64,7 +64,7 @@ export const useDeletePost = ({ postQueryKey, userId, postId }: Props) => {
       queryClient.invalidateQueries({ queryKey: postListQueryKey });
       queryClient.invalidateQueries({ queryKey: recentPostQueryKey });
       queryClient.invalidateQueries({ queryKey: popularPostQueryKey });
-      deleteImg(imgFiles);
+      deletePostImage(imgFiles);
       !isTemp && router.push(`/${userId}`);
     },
   });
