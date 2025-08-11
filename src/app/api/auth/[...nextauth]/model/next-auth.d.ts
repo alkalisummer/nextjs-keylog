@@ -1,7 +1,7 @@
 import NextAuth, { DefaultSession, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
-interface UserInfo {
+export interface UserInfo {
   id: string;
   name?: string;
   email?: string;

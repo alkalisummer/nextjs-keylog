@@ -7,6 +7,7 @@ import { updateProfile } from '../../api';
 import css from './profileForm.module.scss';
 import { useSession } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { initUser } from '@/app/api/auth/[...nextauth]/model/init';
 import { ProfileFormSchema, type ProfileForm as Form } from '../../model';
 
 export const ProfileForm = () => {
@@ -14,9 +15,7 @@ export const ProfileForm = () => {
   const [showNameInput, setShowNameInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const userId = session?.user?.id ?? '';
-  const nickname = session?.user?.name ?? '';
-  const blogName = session?.user?.blogName ?? '';
+  const { id, name, blogName } = session?.user ?? initUser;
 
   const {
     register,
@@ -27,7 +26,7 @@ export const ProfileForm = () => {
     resolver: zodResolver(ProfileFormSchema),
     mode: 'onBlur',
     defaultValues: {
-      nickname: nickname,
+      nickname: name,
       blogName: blogName,
     },
   });
@@ -40,7 +39,7 @@ export const ProfileForm = () => {
     setIsSubmitting(true);
     try {
       const result = await updateProfile({
-        userId: userId,
+        userId: id,
         nickname: data.nickname,
         blogName: data.blogName,
       });
@@ -63,7 +62,7 @@ export const ProfileForm = () => {
         {!showNameInput ? (
           <div className={css.contentColumn}>
             <div className={css.headerRow}>
-              <span className={css.modalNickname}>{nickname}</span>
+              <span className={css.modalNickname}>{name}</span>
             </div>
             <div>
               <span className={css.modalEmail}>{blogName}</span>
@@ -73,7 +72,7 @@ export const ProfileForm = () => {
               onClick={() => {
                 setShowNameInput(true);
                 reset({
-                  nickname: nickname,
+                  nickname: name,
                   blogName: blogName,
                 });
               }}
