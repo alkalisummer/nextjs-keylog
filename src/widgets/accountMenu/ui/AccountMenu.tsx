@@ -11,7 +11,7 @@ import { logout } from '@/features/logout/api';
 import { AccountModal } from './accountModal/AccountModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKickstarter } from '@fortawesome/free-brands-svg-icons';
-import { faFileSignature, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faFileSignature, faUser, faRightFromBracket, faPen } from '@fortawesome/free-solid-svg-icons';
 
 export const AccountMenu = () => {
   const { data: session, status } = useSession();
@@ -38,6 +38,8 @@ export const AccountMenu = () => {
               alt="userImage"
               width={40}
               height={40}
+              quality={100}
+              priority
               onError={e => (e.currentTarget.src = '/icon/person.png')}
             />
             <div>▾</div>
@@ -57,6 +59,11 @@ export const AccountMenu = () => {
             <MenuItem>
               <Link href={`/${session?.user?.id ?? ''}`} className={css.menuLink} onClick={closeToggle}>
                 <FontAwesomeIcon icon={faKickstarter} className={css.menuItemIco} />내 키로그
+              </Link>
+            </MenuItem>
+            <MenuItem className={css.writeBtn}>
+              <Link href={`/write?keyword=true`} className={css.menuLink} onClick={closeToggle}>
+                <FontAwesomeIcon icon={faPen} className={css.menuItemIco} />새 글 작성
               </Link>
             </MenuItem>
             <MenuItem>

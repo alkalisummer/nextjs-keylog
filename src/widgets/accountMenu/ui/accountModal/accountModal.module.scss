@@ -25,6 +25,11 @@ $boxShadow: $colorShadow 0px 2px 12px 0px;
   box-shadow: $boxShadow;
 }
 
+.content {
+  display: flex;
+  width: 100%;
+}
+
 .closeBtn {
   width: 30px;
   height: 30px;

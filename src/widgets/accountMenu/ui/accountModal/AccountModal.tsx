@@ -3,8 +3,9 @@
 import { Modal } from '@mui/material';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import styles from './accountModal.module.scss';
+import css from './accountModal.module.scss';
 import { ImageForm } from '../imageForm/ImageForm';
+import { ProfileForm } from '../profileForm/ProfileForm';
 
 interface AccountModalProps {
   openModal: boolean;
@@ -22,17 +23,20 @@ export const AccountModal = ({ openModal, setOpenModal }: AccountModalProps) => 
 
   return (
     <Modal open={openModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <div className={styles.module}>
+      <div className={css.module}>
         <button
           type="button"
-          className={styles.closeBtn}
+          className={css.closeBtn}
           onClick={() => {
             setOpenModal(false);
           }}
         >
           ✕
         </button>
-        <ImageForm />
+        <div className={css.content}>
+          <ImageForm />
+          <ProfileForm />
+        </div>
       </div>
     </Modal>
   );

@@ -63,10 +63,10 @@
 @media (max-width: $breakpoint-medium) {
   .searchInput {
     width: 40% !important;
-    font-size: 22px;
-    padding-bottom: 2px;
+    font-size: 22px !important;
+    padding-bottom: 2px !important;
     &::placeholder {
-      font-size: 22px;
+      font-size: 22px !important;
     }
   }
 }
@@ -76,19 +76,19 @@
     margin-bottom: 1rem !important;
 
     .searchInput {
-      font-size: 22px;
-      padding-bottom: 3px;
+      font-size: 18px !important;
+      padding-bottom: 3px !important;
       &::placeholder {
-        font-size: 18px;
+        font-size: 18px !important;
       }
     }
 
     .searchBtn {
-      font-size: 20px;
-      padding-bottom: 3px;
+      font-size: 20px !important;
+      padding-bottom: 3px !important;
     }
   }
   .searchCnt {
-    font-size: 13px;
+    font-size: 13px !important;
   }
 }

@@ -50,11 +50,17 @@ export const ImageForm = () => {
 
   const deleteImage = async () => {
     const userImageUrl = session?.user?.image || '';
+
     if (!userImageUrl) {
       return;
     }
-    await deleteUserImage(userImageUrl);
-    await update({ type: 'deleteImg' });
+
+    const [deleteUserImageRes, _] = await Promise.all([deleteUserImage(userImageUrl), update({ type: 'deleteImg' })]);
+
+    if (!deleteUserImageRes?.ok) {
+      setError('image', { message: '이미지 삭제에 실패했습니다.' });
+      return;
+    }
   };
 
   return (
@@ -65,6 +71,8 @@ export const ImageForm = () => {
         alt="userImage"
         width={128}
         height={128}
+        quality={100}
+        priority
         onError={e => (e.currentTarget.src = '/icon/person.png')}
       />
       <label htmlFor="fileInput" className={css.imgUploadBtn}>

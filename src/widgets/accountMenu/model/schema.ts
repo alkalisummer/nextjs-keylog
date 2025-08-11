@@ -12,3 +12,10 @@ export const ImageFormSchema = z.object({
 });
 
 export type ImageForm = z.infer<typeof ImageFormSchema>;
+
+export const ProfileFormSchema = z.object({
+  nickname: z.string().trim().min(1, { message: '닉네임을 입력해주세요.' }),
+  blogName: z.string().trim().min(1, { message: '블로그 이름을 입력해주세요.' }),
+});
+
+export type ProfileForm = z.infer<typeof ProfileFormSchema>;

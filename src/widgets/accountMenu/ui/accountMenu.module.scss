@@ -44,4 +44,19 @@ $color-shadow: rgba(0, 0, 0, 0.086);
     display: inline-block !important;
     vertical-align: middle !important;
   }
+
+  .writeBtn {
+    display: none;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .writeBtn {
+    display: flex !important;
+  }
+
+  .userImg {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
 }

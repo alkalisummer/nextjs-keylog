@@ -1,0 +1,122 @@
+@use 'variable' as *;
+
+// Color variables (only colors)
+$color-text-primary: #333;
+$color-border: #dddddd;
+$color-link-primary: #009bf2;
+$color-link-primary-hover: #4ebeff;
+$color-warning: hsl(35, 100%, 57%);
+$color-warning-hover: hsl(35, 93%, 68%);
+$color-gray: gray;
+
+.module {
+  width: 65%;
+  padding: 15px 0 15px 15px;
+  display: flex;
+  flex-direction: column;
+
+  .contentColumn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .headerRow {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .actionsRow {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .modalNicknameDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .modalNickname {
+    font-size: 30px;
+    font-weight: 400;
+    color: $color-text-primary;
+  }
+
+  .modalTextUpdateBtn {
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    color: $color-link-primary;
+    line-height: 2.5rem;
+  }
+
+  .modalEmail {
+    font-size: 20px;
+    color: $color-gray;
+  }
+
+  .modalInput {
+    border: 1px solid $color-border;
+    border-radius: 5px;
+    height: 30px;
+    padding-left: 10px;
+    font-family: 'Spoqa Han Sans Neo';
+    margin-bottom: 10px;
+  }
+
+  .modalProfileBtn {
+    background-color: $color-link-primary;
+    font-family: 'Spoqa Han Sans Neo';
+    color: white;
+    border: none;
+    width: 50px;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-left: 5px;
+
+    &:hover {
+      background-color: $color-link-primary-hover;
+    }
+  }
+
+  .modalCancel {
+    background-color: $color-warning;
+
+    &:hover {
+      background-color: $color-warning-hover !important;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    width: 60%;
+
+    .modalNickname {
+      font-size: 18px;
+    }
+
+    .modalEmail {
+      font-size: 15px;
+    }
+
+    .modalTextUpdateBtn {
+      line-height: 1.5rem !important;
+      font-size: 10px;
+    }
+
+    .modalProfileBtn {
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    .modalInput {
+      font-size: 12px;
+    }
+  }
+}

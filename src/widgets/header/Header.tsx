@@ -1,17 +1,19 @@
 'use client';
 
 import css from './header.module.scss';
-import { useRouter } from 'next/navigation';
 import { AccountMenu } from '../accountMenu/ui';
 import { isAuthenticated } from '@/shared/lib/util';
+import { useRouter, useParams } from 'next/navigation';
 
 interface HeaderProps {
   type: 'home' | 'blog';
 }
 
 export const Header = ({ type = 'home' }: HeaderProps) => {
-  const isLoggedIn = isAuthenticated();
   const router = useRouter();
+  const params = useParams();
+  const authorId = params?.userId;
+  const isLoggedIn = isAuthenticated();
 
   return (
     <header className={css.module}>
@@ -24,9 +26,16 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
         >
           keylog
         </span>
+        {authorId && (
+          <span className={css.authorId} onClick={() => router.push(`/${authorId}`)}>
+            {authorId}
+          </span>
+        )}
         {isLoggedIn ? (
           <div className={css.accountMenu}>
-            <button className={css.writeBtn}>새 글 작성</button>
+            <button className={css.writeBtn} onClick={() => router.push(`/write?keyword=true`)}>
+              새 글 작성
+            </button>
             <AccountMenu />
           </div>
         ) : (

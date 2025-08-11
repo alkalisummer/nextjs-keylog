@@ -14,19 +14,16 @@
     justify-content: space-between;
     height: 4rem;
     line-height: 4rem;
+    position: relative;
 
     .logo {
       font-family: 'Fira Mono', monospace;
       font-size: 1.2rem;
       cursor: pointer;
+    }
 
-      @media (max-width: $breakpoint-medium) {
-        font-size: 1.1rem;
-      }
-
-      @media (max-width: $breakpoint-small) {
-        font-size: 1rem;
-      }
+    .authorId {
+      display: none;
     }
 
     .loginBtn {
@@ -69,10 +66,52 @@
       }
     }
   }
+}
 
-  @media (max-width: $breakpoint-medium-small) {
-    .header {
-      height: 3.5rem;
+@media (max-width: $breakpoint-medium) {
+  .logo {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .header {
+    height: 3.5rem;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .header {
+    height: 56px !important;
+    .writeBtn {
+      display: none;
+    }
+
+    .logo {
+      font-size: 1rem !important;
+    }
+
+    .authorId {
+      font-size: 1rem !important;
+    }
+  }
+}
+
+@media (max-width: $post-breakpoint-large) {
+  .module {
+    .blogHeader {
+      border-bottom: 1px solid #dadada !important;
+    }
+
+    .authorId {
+      display: block !important;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: #525252;
+      cursor: pointer;
     }
   }
 }
