@@ -19,3 +19,9 @@ export const ProfileFormSchema = z.object({
 });
 
 export type ProfileForm = z.infer<typeof ProfileFormSchema>;
+
+export const EmailFormSchema = z.object({
+  email: z.email({ message: '이메일 형식이 올바르지 않습니다.' }),
+});
+
+export type EmailForm = z.infer<typeof EmailFormSchema>;

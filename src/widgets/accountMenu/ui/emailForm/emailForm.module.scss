@@ -1,0 +1,122 @@
+@use 'variable' as *;
+
+// Color variables only
+$colorBorder: #dddddd;
+$colorPrimaryText: #333;
+$colorGrayText: gray;
+$colorAccent: #009bf2;
+$colorAccentHover: #4ebeff;
+
+.module {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $colorBorder;
+  padding-bottom: 15px;
+  padding-top: 15px;
+
+  .subTitle {
+    padding-left: 15px;
+    width: 35%;
+    span {
+      font-size: 18px;
+      font-weight: 500;
+      color: $colorPrimaryText;
+      white-space: nowrap;
+    }
+  }
+
+  .sub {
+    width: 65%;
+    display: flex;
+    flex-direction: initial;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .email {
+    font-size: 18px;
+    color: $colorGrayText;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
+
+  .updateBtn {
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    color: $colorAccent;
+    line-height: 1.9rem;
+    white-space: nowrap;
+  }
+
+  .input {
+    border: 1px solid $colorBorder;
+    border-radius: 5px;
+    height: 30px;
+    padding-left: 10px;
+    width: 80%;
+    margin-bottom: 0;
+    font-family: 'Spoqa Han Sans Neo';
+  }
+
+  .profileBtn {
+    background-color: $colorAccent;
+    font-family: 'Spoqa Han Sans Neo';
+    color: white;
+    border: none;
+    width: 50px;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 0;
+    margin-left: 5px;
+
+    &:hover {
+      background-color: $colorAccentHover;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    padding-bottom: 10px;
+    padding-top: 10px;
+
+    .subTitle {
+      padding-left: 5px;
+      width: 20%;
+      span {
+        font-size: 14px;
+      }
+    }
+
+    .sub {
+      width: 75%;
+    }
+
+    .email {
+      font-size: 14px;
+    }
+
+    .updateBtn {
+      line-height: 1.5rem;
+      font-size: 12px;
+    }
+
+    .profileBtn {
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    .input {
+      font-size: 12px;
+    }
+  }
+}

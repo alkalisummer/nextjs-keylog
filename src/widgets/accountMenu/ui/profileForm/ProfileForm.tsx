@@ -43,7 +43,6 @@ export const ProfileForm = () => {
         nickname: data.nickname,
         blogName: data.blogName,
       });
-
       if (result.ok) {
         await update({ nickname: data.nickname, blogName: data.blogName });
         setShowNameInput(false);

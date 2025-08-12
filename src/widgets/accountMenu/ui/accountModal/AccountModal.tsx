@@ -1,9 +1,10 @@
 'use client';
 
-import { Modal } from '@mui/material';
 import { useEffect } from 'react';
+import { Modal } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import css from './accountModal.module.scss';
+import { EmailForm } from '../emailForm/EmailForm';
 import { ImageForm } from '../imageForm/ImageForm';
 import { ProfileForm } from '../profileForm/ProfileForm';
 
@@ -36,6 +37,9 @@ export const AccountModal = ({ openModal, setOpenModal }: AccountModalProps) => 
         <div className={css.content}>
           <ImageForm />
           <ProfileForm />
+        </div>
+        <div className={css.content}>
+          <EmailForm />
         </div>
       </div>
     </Modal>
