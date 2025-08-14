@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
         token.accessTokenExpireDate = user.accessTokenExpireDate;
       }
 
-      // 클라이언트 측 update() 호출 시
+      // 계정정보수정 update() 호출 시
       if (trigger === 'update') {
         if (session.type === 'uploadImg' && session.imgUrl) token.picture = session.imgUrl;
         if (session.type === 'deleteImg') token.picture = '';
@@ -65,7 +65,8 @@ export const authOptions: NextAuthOptions = {
         if (session.email) token.email = session.email;
       }
 
-      if (token.accessTokenExpireDate < new Date()) {
+      // access token 만료 10분 전 갱신
+      if (token.accessTokenExpireDate && Date.now() >= token.accessTokenExpireDate - 1000 * 60 * 10) {
         const refreshRes = await refreshToken();
         if (!refreshRes.ok) {
           throw new Error('Failed to refresh token');
@@ -85,7 +86,7 @@ export const authOptions: NextAuthOptions = {
         session.user.blogName = token.blogName as string;
         session.user.tokenExp = token.exp as string; // 만료 시각
         session.accessToken = token.accessToken as string;
-        session.accessTokenExpireDate = token.accessTokenExpireDate as Date;
+        session.accessTokenExpireDate = token.accessTokenExpireDate as number;
       }
 
       return session;

@@ -3,7 +3,7 @@ import NextAuth, { DefaultSession } from 'next-auth';
 declare module 'next-auth' {
   interface Session {
     accessToken: string;
-    accessTokenExpireDate: Date;
+    accessTokenExpireDate: number;
     user: DefaultSession['user'] & {
       id: string;
       blogName?: string;
@@ -13,7 +13,7 @@ declare module 'next-auth' {
 
   interface User {
     accessToken: string;
-    accessTokenExpireDate: Date;
+    accessTokenExpireDate: number;
     blogName?: string;
   }
 }
@@ -23,6 +23,6 @@ declare module 'next-auth/jwt' {
     id?: string;
     blogName?: string;
     accessToken: string;
-    accessTokenExpireDate: Date;
+    accessTokenExpireDate: number;
   }
 }

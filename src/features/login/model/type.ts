@@ -8,6 +8,6 @@ export interface UserToken {
 
 export interface AuthUser {
   accessToken: string;
-  accessTokenExpireDate: Date;
+  accessTokenExpireDate: number;
   user: User;
 }
