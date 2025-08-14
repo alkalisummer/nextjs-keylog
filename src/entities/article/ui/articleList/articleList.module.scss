@@ -80,10 +80,11 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 
 .article {
   display: flex;
+  width: 100%;
 
   img {
     object-fit: cover;
-    width: 100px;
+    width: 23%;
     height: 118.9px;
     @include card-border-radius(left);
     box-shadow: $card-shadow;
@@ -96,7 +97,7 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 
   .articleInfo {
     display: flex;
-    width: -webkit-fill-available;
+    width: 77%;
     height: 118.9px;
     flex-direction: column;
     justify-content: center;
@@ -148,13 +149,16 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 
   .article {
     img {
-      height: 106.9px;
+      width: 80px;
+      height: 90px;
     }
 
     .articleInfo {
-      height: 106.9px;
+      width: calc(100% - 80px);
+      height: 90px;
 
       .articleTitle {
+        line-height: 1.5rem;
         font-size: 13px;
       }
 

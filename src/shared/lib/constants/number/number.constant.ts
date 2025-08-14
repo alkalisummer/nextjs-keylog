@@ -14,3 +14,5 @@ export const VERIFY_CODE = {
   LENGTH: 6,
   EXPIRE_TIME: 24,
 };
+
+export const SESSION_REFETCH_INTERVAL = 10000;

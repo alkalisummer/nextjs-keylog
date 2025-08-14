@@ -24,3 +24,10 @@ export const UpdatePasswordSchema = z
   });
 
 export type UpdatePasswordForm = z.infer<typeof UpdatePasswordSchema>;
+
+export const LoginSchema = z.object({
+  id: z.string().trim().min(1, { message: 'ID를 입력해주세요.' }),
+  password: z.string().trim().min(1, { message: '비밀번호를 입력해주세요.' }),
+});
+
+export type LoginForm = z.infer<typeof LoginSchema>;

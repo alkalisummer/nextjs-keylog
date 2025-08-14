@@ -1,5 +1,6 @@
 export { AccountMenu } from './AccountMenu';
+export { EmailForm } from './emailForm/EmailForm';
 export { ImageForm } from './imageForm/ImageForm';
 export { ProfileForm } from './profileForm/ProfileForm';
 export { AccountModal } from './accountModal/AccountModal';
-export { EmailForm } from './emailForm/EmailForm';
+export { PasswordForm } from './passwordForm/PasswordForm';

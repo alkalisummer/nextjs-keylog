@@ -1,7 +1,7 @@
-import { getUser } from '@/entities/user/api';
-import { verifyPassword } from '@/utils/Bcypt';
+import { login } from '@/features/login/api';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { refreshToken } from '@/features/login/api';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -24,15 +24,11 @@ export const authOptions: NextAuthOptions = {
 
         const { id, password } = credentials;
 
-        const userRes = await getUser(id);
+        //로그인
+        const loginRes = await login({ id, password });
+        if (!loginRes.ok) return null;
 
-        if (!userRes.ok) return null;
-
-        const user = userRes.data;
-
-        // 비밀번호 검증
-        const valid = await verifyPassword(password, user.userPassword);
-        if (!user || !valid) return null;
+        const { user, accessToken, accessTokenExpireDate } = loginRes.data;
 
         return {
           id: user.userId,
@@ -40,6 +36,8 @@ export const authOptions: NextAuthOptions = {
           name: user.userNickname,
           image: user.userThmbImgUrl || '',
           blogName: user.userBlogName,
+          accessToken,
+          accessTokenExpireDate,
         };
       },
     }),
@@ -54,6 +52,8 @@ export const authOptions: NextAuthOptions = {
         token.picture = user.image;
         token.name = user.name;
         token.blogName = user.blogName;
+        token.accessToken = user.accessToken;
+        token.accessTokenExpireDate = user.accessTokenExpireDate;
       }
 
       // 클라이언트 측 update() 호출 시
@@ -63,6 +63,15 @@ export const authOptions: NextAuthOptions = {
         if (session.nickname) token.name = session.nickname;
         if (session.blogName) token.blogName = session.blogName;
         if (session.email) token.email = session.email;
+      }
+
+      if (token.accessTokenExpireDate < new Date()) {
+        const refreshRes = await refreshToken();
+        if (!refreshRes.ok) {
+          throw new Error('Failed to refresh token');
+        }
+        token.accessToken = refreshRes.data.accessToken;
+        token.accessTokenExpireDate = refreshRes.data.accessTokenExpireDate;
       }
 
       return token;
@@ -75,6 +84,8 @@ export const authOptions: NextAuthOptions = {
         session.user.image = token.picture as string;
         session.user.blogName = token.blogName as string;
         session.user.tokenExp = token.exp as string; // 만료 시각
+        session.accessToken = token.accessToken as string;
+        session.accessTokenExpireDate = token.accessTokenExpireDate as Date;
       }
 
       return session;

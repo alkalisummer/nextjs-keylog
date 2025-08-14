@@ -1,9 +1,9 @@
 'use client';
 
 import css from './header.module.scss';
-import { AccountMenu } from '../accountMenu/ui';
 import { isAuthenticated } from '@/shared/lib/util';
 import { useRouter, useParams } from 'next/navigation';
+import { AccountMenu } from '../../features/account/ui';
 
 interface HeaderProps {
   type: 'home' | 'blog';

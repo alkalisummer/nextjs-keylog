@@ -85,7 +85,8 @@
     "@types/formidable": "^3.4.5",
     "@types/mysql": "^2.15.27",
     "@types/react-beforeunload": "^2.1.5",
-    "babel-plugin-react-compiler": "^19.1.0-rc.2"
+    "babel-plugin-react-compiler": "^19.1.0-rc.2",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2"
   },
   "overrides": {
     "uuid": "7.0.3",

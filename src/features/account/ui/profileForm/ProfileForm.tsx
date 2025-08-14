@@ -35,18 +35,16 @@ export const ProfileForm = () => {
     if (isSubmitting) {
       return;
     }
-
     setIsSubmitting(true);
+
+    await update({ nickname: data.nickname, blogName: data.blogName });
+    setShowNameInput(false);
     try {
-      const result = await updateProfile({
+      await updateProfile({
         userId: id,
         nickname: data.nickname,
         blogName: data.blogName,
       });
-      if (result.ok) {
-        await update({ nickname: data.nickname, blogName: data.blogName });
-        setShowNameInput(false);
-      }
     } catch (error) {
       alert(error);
       console.error(error);

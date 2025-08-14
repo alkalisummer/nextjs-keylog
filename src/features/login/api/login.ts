@@ -1,9 +1,21 @@
-import { signIn } from 'next-auth/react';
+'use server';
 
-export const login = async (id: string, password: string) => {
-  return await signIn('credentials', {
-    redirect: false,
-    id: id.replaceAll(' ', ''),
-    password: password,
+import { client } from '@/shared/lib/client';
+import { AuthUser } from '../model/type';
+
+interface LoginProps {
+  id: string;
+  password: string;
+}
+
+export const login = async ({ id, password }: LoginProps) => {
+  return await client.user().post<AuthUser>({
+    endpoint: '/login',
+    options: {
+      body: {
+        userId: id,
+        userPassword: password,
+      },
+    },
   });
 };

@@ -39,6 +39,7 @@ export type SearchParams = Record<
 export interface ExtendedFetchOptions extends Omit<RequestInit, 'body'> {
   body?: any;
   searchParams?: SearchParams;
+  bearer?: string;
 }
 
 export interface FetchProps {
@@ -47,6 +48,7 @@ export interface FetchProps {
   headers?: HeadersInit;
   body?: Record<string, any>;
   searchParams?: SearchParams;
+  bearer?: string;
 }
 
 export interface HttpClientRequestProps {

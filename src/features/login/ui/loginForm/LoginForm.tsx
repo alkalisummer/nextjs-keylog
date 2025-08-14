@@ -1,62 +1,66 @@
 'use client';
 
+import { signIn } from 'next-auth/react';
+import { FieldError } from '@/shared/ui';
 import css from './loginForm.module.scss';
+import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/features/login/api';
 import { clientCookies } from '@/shared/lib/util';
 import { useSearchParams } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import { LoginSchema, LoginForm as Form } from '@/features/login/model';
 
 export const LoginForm = () => {
   const router = useRouter();
   const cookies = clientCookies();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get('redirect') ?? '/';
+  const userId = cookies.get('userId');
 
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Form>({
+    resolver: zodResolver(LoginSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      id: userId ?? '',
+      password: '',
+    },
+  });
   const [saveId, setSaveId] = useState(false);
-  const [showErrorMsg, setShowErrorMsg] = useState(false);
 
   useEffect(() => {
-    const userId = cookies.get('userId');
-    if (userId) {
-      setId(userId);
-      setSaveId(true);
-    }
+    userId && setSaveId(true);
   }, []);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const res = await login(id, password);
-    if (res?.ok) {
-      saveId ? cookies.set('userId', id, { maxAge: 60 * 60 * 24 * 7 }) : cookies.remove('userId');
+  const onSubmit = async (data: Form) => {
+    const loginRes = await signIn('credentials', {
+      id: data.id,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (loginRes?.ok) {
+      saveId ? cookies.set('userId', data.id, { maxAge: 60 * 60 * 24 * 7 }) : cookies.remove('userId');
       router.push(redirect);
-    } else {
-      setShowErrorMsg(true);
     }
   };
 
   return (
     <div className={css.module}>
       <span className={css.title}>keylog</span>
-      <form onSubmit={onSubmit} className={css.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
         <div className={css.inputDiv}>
           <div className={css.emoji}>
             <FontAwesomeIcon icon={faUser} className={css.icon} />
           </div>
-          <input
-            type="text"
-            value={id}
-            className={css.inputText}
-            placeholder="ID"
-            required
-            onChange={e => {
-              setId(e.target.value);
-            }}
-          ></input>
+          <input type="text" {...register('id')} className={css.inputText} placeholder="ID" required></input>
         </div>
         <div className={css.inputDiv}>
           <div className={css.emoji}>
@@ -64,13 +68,10 @@ export const LoginForm = () => {
           </div>
           <input
             type="password"
-            value={password}
+            {...register('password')}
             className={css.inputText}
             placeholder="Password"
             required
-            onChange={e => {
-              setPassword(e.target.value);
-            }}
           ></input>
         </div>
         <div className={css.subDiv}>
@@ -87,13 +88,7 @@ export const LoginForm = () => {
             비밀번호 찾기
           </span>
         </div>
-        {showErrorMsg && (
-          <div className={css.validateErrMsg}>
-            <span>아이디 또는 비밀번호를 잘못입력하였습니다.</span>
-            <br />
-            <span>입력하신 내용을 다시 확인해주세요.</span>
-          </div>
-        )}
+        <FieldError errors={[errors.id, errors.password]} />
         <button type="submit" className={css.btn}>
           로그인
         </button>

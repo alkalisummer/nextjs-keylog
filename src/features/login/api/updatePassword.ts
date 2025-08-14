@@ -12,7 +12,6 @@ export const updatePassword = async ({ userId, newPassword }: UpdatePasswordProp
     endpoint: `/${userId}/password`,
     options: {
       body: {
-        userId,
         password: newPassword,
       },
     },
