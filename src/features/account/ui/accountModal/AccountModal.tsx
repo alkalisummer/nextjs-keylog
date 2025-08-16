@@ -7,6 +7,7 @@ import css from './accountModal.module.scss';
 import { EmailForm } from '../emailForm/EmailForm';
 import { ImageForm } from '../imageForm/ImageForm';
 import { ProfileForm } from '../profileForm/ProfileForm';
+import { PasswordForm } from '../passwordForm/PasswordForm';
 
 interface AccountModalProps {
   openModal: boolean;
@@ -40,6 +41,9 @@ export const AccountModal = ({ openModal, setOpenModal }: AccountModalProps) => 
         </div>
         <div className={css.content}>
           <EmailForm />
+        </div>
+        <div className={css.content}>
+          <PasswordForm />
         </div>
       </div>
     </Modal>

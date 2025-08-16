@@ -8,6 +8,7 @@ export const getPostHashtags = async (postId: number) => {
       searchParams: {
         postId,
       },
+      isPublic: true,
     },
   });
 };

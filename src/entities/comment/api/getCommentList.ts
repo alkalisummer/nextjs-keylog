@@ -9,6 +9,7 @@ export const getCommentList = async (postId: number) => {
       searchParams: {
         postId,
       },
+      isPublic: true,
     },
   });
 };

@@ -16,6 +16,7 @@ export const login = async ({ id, password }: LoginProps) => {
         userId: id,
         userPassword: password,
       },
+      isPublic: true,
     },
   });
 };

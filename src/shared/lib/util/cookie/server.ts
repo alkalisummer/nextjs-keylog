@@ -12,8 +12,8 @@ export type ParsedCookie = {
   };
 };
 
-export function parseSetCookieHeader(setCookieHeader: string): ParsedCookie[] {
-  const maybeMany = setCookieHeader
+export function parseHeaderCookie(headerCookie: string): ParsedCookie[] {
+  const maybeMany = headerCookie
     .split(/,(?=[^;]+=)/)
     .map(s => s.trim())
     .filter(Boolean);
@@ -70,8 +70,8 @@ export function parseSetCookieHeader(setCookieHeader: string): ParsedCookie[] {
   });
 }
 
-export async function setCookiesFromSetCookieHeader(setCookieHeader: string) {
-  const parsedCookies = parseSetCookieHeader(setCookieHeader);
+export async function setCookies(headerCookie: string) {
+  const parsedCookies = parseHeaderCookie(headerCookie);
   if (parsedCookies.length === 0) return;
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();

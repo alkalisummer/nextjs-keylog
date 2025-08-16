@@ -35,6 +35,7 @@ export const signUp = async (data: SignUpForm) => {
         userPassword: signUpValidation.data.password,
         userBlogName: signUpValidation.data.blogName,
       },
+      isPublic: true,
     },
   });
 };

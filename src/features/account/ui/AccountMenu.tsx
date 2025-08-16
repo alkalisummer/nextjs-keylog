@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Menu from '@mui/material/Menu';
+import { signOut } from 'next-auth/react';
 import { Fragment, useState } from 'react';
 import css from './accountMenu.module.scss';
 import { useSession } from 'next-auth/react';
@@ -81,7 +82,12 @@ export const AccountMenu = () => {
               <FontAwesomeIcon icon={faUser} className={css.menuItemIco} />
               계정 관리
             </MenuItem>
-            <MenuItem onClick={logout}>
+            <MenuItem
+              onClick={() => {
+                logout();
+                signOut({ redirect: true, callbackUrl: window.location.href });
+              }}
+            >
               <FontAwesomeIcon icon={faRightFromBracket} className={css.menuItemIco} />
               로그아웃
             </MenuItem>

@@ -6,5 +6,8 @@ import { User } from '../model';
 export const getUser = async (userId: string) => {
   return await client.user().get<User>({
     endpoint: `/${userId}`,
+    options: {
+      isPublic: true,
+    },
   });
 };

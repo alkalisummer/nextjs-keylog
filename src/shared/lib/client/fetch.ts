@@ -2,7 +2,7 @@ import { isServer } from '@/shared/lib/util';
 import { getCustomSession } from '@/shared/lib/util/auth/server/action';
 import { buildSearchParams, handleResponse, handleNetworkError } from './util';
 import { FetchProps, HttpMethod, ApiResponse, ExtendedFetchOptions, HttpClient, HttpClientRequestProps } from './type';
-import { setCookiesFromSetCookieHeader } from '@/shared/lib/util/cookie/server';
+import { setCookies } from '@/shared/lib/util';
 
 const BASE_URL = process.env.BASE_URL ?? '';
 const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_URL ?? '';
@@ -27,20 +27,23 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     searchParams,
     headers: customHeaders,
     bearer: overrideBearer,
+    isPublic = false,
   }: FetchProps): Promise<ApiResponse<T>> {
     const url = baseUrl + endpoint + buildSearchParams(searchParams);
 
     let bearer: string | undefined = overrideBearer;
     let cookieHeader: string | undefined;
     if (isServer()) {
-      const session = await getCustomSession();
-      bearer = session?.accessToken || undefined;
+      if (!isPublic) {
+        const session = await getCustomSession();
+        bearer = session?.accessToken || undefined;
+      }
       try {
         const { cookies: nextCookies } = await import('next/headers');
         const cookie = await nextCookies();
         cookieHeader = cookie.toString();
-      } catch (_) {
-        // noop: cookies not available in this server context
+      } catch (error) {
+        console.error(error);
       }
     }
 
@@ -65,7 +68,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       const { headers: responseHeaders } = response;
       const setCookieHeader = responseHeaders.get('set-cookie') || responseHeaders.get('Set-Cookie');
       if (isServer() && setCookieHeader) {
-        await setCookiesFromSetCookieHeader(setCookieHeader);
+        await setCookies(setCookieHeader);
       }
 
       return handleResponse<T>(response);
@@ -86,6 +89,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       body: options?.body,
       searchParams: options?.searchParams,
       bearer: options?.bearer,
+      isPublic: options?.isPublic,
     });
   };
 

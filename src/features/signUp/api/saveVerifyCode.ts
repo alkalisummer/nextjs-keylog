@@ -13,6 +13,7 @@ export const saveVerifyCode = async ({ verifyCode, expireTime }: SaveVerifyCodeP
         verifyCode,
         expireTime,
       },
+      isPublic: true,
     },
   });
 };

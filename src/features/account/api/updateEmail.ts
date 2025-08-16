@@ -3,13 +3,12 @@
 import { client } from '@/shared/lib/client';
 
 interface UpdateEmailProps {
-  userId: string;
   email: string;
 }
 
-export const updateEmail = async ({ userId, email }: UpdateEmailProps) => {
+export const updateEmail = async ({ email }: UpdateEmailProps) => {
   return await client.user().put({
-    endpoint: `/${userId}/email`,
+    endpoint: `/update/email`,
     options: {
       body: { email },
     },

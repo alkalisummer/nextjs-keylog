@@ -1,7 +1,7 @@
-import { signOut } from 'next-auth/react';
+'use server';
+
+import { client } from '@/shared/lib/client';
 
 export const logout = async () => {
-  const callbackUrl = window.location.href;
-
-  await signOut({ redirect: true, callbackUrl: callbackUrl });
+  await client.user().post({ endpoint: `/logout` });
 };

@@ -15,7 +15,7 @@ export const EmailForm = () => {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { id, email } = session?.user ?? initUser;
+  const { email } = session?.user ?? initUser;
 
   const {
     register,
@@ -39,7 +39,7 @@ export const EmailForm = () => {
     try {
       await update({ email: data.email });
       setShowEmailInput(false);
-      const result = await updateEmail({ userId: id, email: data.email });
+      await updateEmail({ email: data.email });
     } catch (error) {
       alert(error);
       console.error(error);

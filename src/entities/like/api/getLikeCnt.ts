@@ -10,6 +10,7 @@ export const getLikeCnt = async (postId: number) => {
       searchParams: {
         postId,
       },
+      isPublic: true,
     },
   });
 };

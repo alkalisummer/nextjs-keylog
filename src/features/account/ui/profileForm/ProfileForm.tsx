@@ -15,7 +15,7 @@ export const ProfileForm = () => {
   const [showNameInput, setShowNameInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { id, name, blogName } = session?.user ?? initUser;
+  const { name, blogName } = session?.user ?? initUser;
 
   const {
     register,
@@ -41,7 +41,6 @@ export const ProfileForm = () => {
     setShowNameInput(false);
     try {
       await updateProfile({
-        userId: id,
         nickname: data.nickname,
         blogName: data.blogName,
       });

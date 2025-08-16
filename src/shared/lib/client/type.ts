@@ -40,6 +40,7 @@ export interface ExtendedFetchOptions extends Omit<RequestInit, 'body'> {
   body?: any;
   searchParams?: SearchParams;
   bearer?: string;
+  isPublic?: boolean;
 }
 
 export interface FetchProps {
@@ -49,6 +50,7 @@ export interface FetchProps {
   body?: Record<string, any>;
   searchParams?: SearchParams;
   bearer?: string;
+  isPublic?: boolean;
 }
 
 export interface HttpClientRequestProps {

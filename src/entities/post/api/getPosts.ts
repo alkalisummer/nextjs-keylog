@@ -31,6 +31,7 @@ export const getPosts = async ({
         tempYn,
         tagId,
       },
+      isPublic: true,
     },
   });
 };

@@ -10,6 +10,7 @@ export const getPost = async (postId: number) => {
       searchParams: {
         postId,
       },
+      isPublic: true,
     },
   });
 };
