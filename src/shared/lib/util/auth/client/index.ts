@@ -1,1 +1,1 @@
-export { isAuthenticated } from './validate';
+export { useAuthenticated } from './hook/useAuthenticated';

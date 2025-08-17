@@ -30,6 +30,7 @@ export const handleResponse = async <T>(response: Response): Promise<ApiResponse
       return createResponse<T>({
         ok: true,
         status: response.status,
+        headers: response.headers,
         data,
       });
     } else {

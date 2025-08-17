@@ -1,7 +1,8 @@
 'use server';
 
-import { client } from '@/shared/lib/client';
 import { AuthUser } from '../model/type';
+import { client } from '@/shared/lib/client';
+import { setCookies } from '@/shared/lib/util';
 
 interface LoginProps {
   id: string;
@@ -9,7 +10,7 @@ interface LoginProps {
 }
 
 export const login = async ({ id, password }: LoginProps) => {
-  return await client.user().post<AuthUser>({
+  const res = await client.user().post<AuthUser>({
     endpoint: '/login',
     options: {
       body: {
@@ -19,4 +20,13 @@ export const login = async ({ id, password }: LoginProps) => {
       isPublic: true,
     },
   });
+
+  if (res.headers) {
+    const setCookieHeader = res.headers.get('set-cookie') || res.headers.get('Set-Cookie');
+    if (setCookieHeader) {
+      await setCookies(setCookieHeader);
+    }
+  }
+
+  return res;
 };

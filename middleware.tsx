@@ -1,12 +1,12 @@
-import type { NextRequest, NextFetchEvent } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-const secret = process.env.SECRET;
+const secret = process.env.NEXTAUTH_SECRET;
 
-export async function middleware(req: NextRequest, event: NextFetchEvent) {
+export async function middleware(req: NextRequest) {
   //로그인이 되어 있을 경우 토큰이 존재
-  const token = await getToken({ req, secret, raw: true });
+  const token: any = await getToken({ req, secret });
   const { pathname } = req.nextUrl;
 
   // 루트 경로를 /home으로 리다이렉트

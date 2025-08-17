@@ -1,7 +1,7 @@
 'use client';
 
 import css from './header.module.scss';
-import { isAuthenticated } from '@/shared/lib/util';
+import { useAuthenticated } from '@/shared/lib/util';
 import { useRouter, useParams } from 'next/navigation';
 import { AccountMenu } from '../../features/account/ui';
 
@@ -13,7 +13,7 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
   const router = useRouter();
   const params = useParams();
   const authorId = params?.userId;
-  const isLoggedIn = isAuthenticated();
+  const isLoggedIn = useAuthenticated();
 
   return (
     <header className={css.module}>

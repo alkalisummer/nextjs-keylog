@@ -3,6 +3,13 @@ import { getCustomSession } from '@/shared/lib/util/auth/server/action';
 import { buildSearchParams, handleResponse, handleNetworkError } from './util';
 import { FetchProps, HttpMethod, ApiResponse, ExtendedFetchOptions, HttpClient, HttpClientRequestProps } from './type';
 import { setCookies } from '@/shared/lib/util';
+import {
+  applySetCookieHeader,
+  fetchNextAuthCsrfToken,
+  getCurrentCookieHeader,
+  refreshAccessToken,
+  updateNextAuthSession,
+} from '@/shared/lib/util';
 
 const BASE_URL = process.env.BASE_URL ?? '';
 const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_URL ?? '';
@@ -33,17 +40,44 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
 
     let bearer: string | undefined = overrideBearer;
     let cookieHeader: string | undefined;
+
     if (isServer()) {
-      if (!isPublic) {
-        const session = await getCustomSession();
-        bearer = session?.accessToken || undefined;
-      }
       try {
         const { cookies: nextCookies } = await import('next/headers');
         const cookie = await nextCookies();
         cookieHeader = cookie.toString();
       } catch (error) {
         console.error(error);
+      }
+      if (!isPublic) {
+        const session = await getCustomSession();
+
+        if (session?.accessTokenExpireDate && Date.now() >= session.accessTokenExpireDate) {
+          cookieHeader = await (async () => {
+            try {
+              const ch = await getCurrentCookieHeader();
+              return ch;
+            } catch {
+              return undefined;
+            }
+          })();
+
+          const { result, setCookieHeader: apiSetCookie } = await refreshAccessToken();
+          if (isServer()) await applySetCookieHeader(apiSetCookie);
+
+          const csrfToken = await fetchNextAuthCsrfToken(cookieHeader);
+          const { setCookieHeader: nextAuthSetCookie } = await updateNextAuthSession({
+            accessToken: result.accessToken,
+            accessTokenExpireDate: result.accessTokenExpireDate,
+            cookieHeader,
+            csrfToken,
+          });
+          if (isServer()) await applySetCookieHeader(nextAuthSetCookie);
+
+          session.accessToken = result.accessToken;
+          session.accessTokenExpireDate = result.accessTokenExpireDate;
+        }
+        bearer = session?.accessToken || undefined;
       }
     }
 
@@ -70,7 +104,6 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       if (isServer() && setCookieHeader) {
         await setCookies(setCookieHeader);
       }
-
       return handleResponse<T>(response);
     } catch (error: any) {
       return handleNetworkError(error);

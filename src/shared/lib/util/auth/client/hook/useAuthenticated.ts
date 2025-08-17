@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 
-export const isAuthenticated = () => {
+export const useAuthenticated = () => {
   const { data: session, status } = useSession();
   let isLoggedIn = status !== 'unauthenticated';
 

@@ -63,16 +63,8 @@ export const authOptions: NextAuthOptions = {
         if (session.nickname) token.name = session.nickname;
         if (session.blogName) token.blogName = session.blogName;
         if (session.email) token.email = session.email;
-      }
-
-      // access token 만료 10분 전 갱신
-      if (token.accessTokenExpireDate && Date.now() >= token.accessTokenExpireDate - 1000 * 60 * 10) {
-        const refreshRes = await refreshToken();
-        if (!refreshRes.ok) {
-          throw new Error('Failed to refresh token');
-        }
-        token.accessToken = refreshRes.data.accessToken;
-        token.accessTokenExpireDate = refreshRes.data.accessTokenExpireDate;
+        if (session.accessToken) token.accessToken = session.accessToken;
+        if (session.accessTokenExpireDate) token.accessTokenExpireDate = session.accessTokenExpireDate;
       }
 
       return token;

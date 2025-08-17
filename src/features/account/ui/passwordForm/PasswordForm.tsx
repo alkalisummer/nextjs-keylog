@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FieldError } from '@/shared/ui';
 import { useForm } from 'react-hook-form';
 import { updatePassword } from '../../api';
 import css from './passwordForm.module.scss';
@@ -14,7 +15,7 @@ export const PasswordForm = () => {
   const {
     register,
     handleSubmit,
-    // formState: { errors },
+    formState: { errors },
   } = useForm<Form>({
     resolver: zodResolver(CheckPasswordFormSchema),
     mode: 'onBlur',
@@ -42,9 +43,9 @@ export const PasswordForm = () => {
       </div>
       <div className={css.sub}>
         {!showPwInput ? (
-          <button className={css.passwordBtn} onClick={() => setShowPwInput(true)}>
+          <span className={css.passwordBtn} onClick={() => setShowPwInput(true)}>
             비밀번호 변경
-          </button>
+          </span>
         ) : (
           <div className={css.updatePassword}>
             <input type="password" placeholder="현재 비밀번호" className={css.pwInput} {...register('currPassword')} />
@@ -55,13 +56,10 @@ export const PasswordForm = () => {
               className={css.pwInput}
               {...register('checkPassword')}
             />
+            <FieldError errors={[errors.currPassword, errors.newPassword, errors.checkPassword]} />
             <div className={css.button}>
-              <button className={css.passwordBtn} type="submit">
-                확인
-              </button>
-              <button className={css.passwordBtn} onClick={() => setShowPwInput(false)}>
-                취소
-              </button>
+              <button type="submit">확인</button>
+              <button onClick={() => setShowPwInput(false)}>취소</button>
             </div>
           </div>
         )}

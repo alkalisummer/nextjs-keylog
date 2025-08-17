@@ -37,9 +37,8 @@ export const EmailForm = () => {
 
     setIsSubmitting(true);
     try {
-      await update({ email: data.email });
+      await Promise.all([updateEmail({ email: data.email }), update({ email: data.email })]);
       setShowEmailInput(false);
-      await updateEmail({ email: data.email });
     } catch (error) {
       alert(error);
       console.error(error);
