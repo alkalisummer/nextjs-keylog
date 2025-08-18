@@ -142,8 +142,21 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
   }
 
   .articleDate {
+    .logo {
+      width: 35px !important;
+      height: 10px;
+    }
+    .trends {
+      font-size: 10px;
+    }
+
     span {
       font-size: 10px;
+    }
+
+    .icon {
+      width: 11px;
+      height: 12px;
     }
   }
 
