@@ -3,7 +3,7 @@
 import { client } from '@/shared/lib/client';
 import { AuthUser } from '../model/type';
 
-export const refreshToken = async () => {
+export const refreshAccessToken = async () => {
   return await client.user().post<AuthUser>({
     endpoint: '/refresh',
     options: {

@@ -23,8 +23,8 @@ export const FindPasswordForm = () => {
   });
 
   const onSubmit = async (data: PasswordForm) => {
-    const { id, email } = data;
-    const result = await sendPasswordMail({ id, email });
+    const { id } = data;
+    const result = await sendPasswordMail({ id });
     if (result.ok) {
       alert(
         '해당 계정의 이메일로 비밀번호 재설정을 위한 인증메일을 전송하였습니다.\n인증 메일의 링크를 클릭하여 비밀번호를 재설정하세요.',

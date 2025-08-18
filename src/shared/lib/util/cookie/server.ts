@@ -79,3 +79,15 @@ export async function setCookies(headerCookie: string) {
     cookieStore.set(name, value, options);
   }
 }
+
+export async function applySetCookieHeader(setCookieHeader?: string) {
+  if (!setCookieHeader) return;
+  await setCookies(setCookieHeader);
+}
+
+export async function getCurrentCookieHeader(): Promise<string | undefined> {
+  const { cookies } = await import('next/headers');
+  const cookie = await cookies();
+  const cookieHeader = cookie.toString();
+  return cookieHeader || undefined;
+}

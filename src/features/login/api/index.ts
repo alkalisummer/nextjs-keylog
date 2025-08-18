@@ -1,6 +1,6 @@
 export { login } from './login';
-export { refreshToken } from './refreshToken';
-export { getUserToken } from './getUserToken';
-export { saveUserToken } from './saveUserToken';
+export { refreshAccessToken } from './refreshAccessToken';
+export { getPasswordResetToken } from './getPasswordResetToken';
+export { savePasswordResetToken } from './savePassowordResetToken';
 export { updatePassword } from './updatePassword';
 export { sendPasswordMail } from './sendPasswordMail';

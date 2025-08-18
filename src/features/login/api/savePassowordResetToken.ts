@@ -6,7 +6,7 @@ interface SaveUserTokenProps {
   expireTime: string;
 }
 
-export const saveUserToken = async ({ token, userId, expireTime }: SaveUserTokenProps) => {
+export const savePasswordResetToken = async ({ token, userId, expireTime }: SaveUserTokenProps) => {
   return await client.user().post({
     endpoint: '/tokens',
     options: {

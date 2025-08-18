@@ -55,8 +55,8 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
         if (session?.accessTokenExpireDate && Date.now() >= session.accessTokenExpireDate) {
           cookieHeader = await (async () => {
             try {
-              const ch = await getCurrentCookieHeader();
-              return ch;
+              const cookieHeader = await getCurrentCookieHeader();
+              return cookieHeader;
             } catch {
               return undefined;
             }

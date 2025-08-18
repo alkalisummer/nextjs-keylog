@@ -1,7 +1,6 @@
 import { login } from '@/features/login/api';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { refreshToken } from '@/features/login/api';
 
 export const authOptions: NextAuthOptions = {
   session: {

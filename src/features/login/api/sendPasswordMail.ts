@@ -1,16 +1,15 @@
 'use server';
 
 import { getUser } from '@/entities/user/api';
-import { saveUserToken } from './saveUserToken';
+import { savePasswordResetToken } from './savePassowordResetToken';
 import { createTransporter } from '@/shared/lib/util';
-import { createToken, createMailOptions } from '../lib';
+import { createPasswordResetToken, createMailOptions } from '../lib';
 
 interface SendPasswordMailProps {
   id: string;
-  email: string;
 }
 
-export const sendPasswordMail = async ({ id, email }: SendPasswordMailProps) => {
+export const sendPasswordMail = async ({ id }: SendPasswordMailProps) => {
   const userRes = await getUser(id);
 
   if (!userRes.ok) {
@@ -21,7 +20,7 @@ export const sendPasswordMail = async ({ id, email }: SendPasswordMailProps) => 
   }
 
   const user = userRes.data;
-  const { token, expireTime } = createToken({ length: 20, expireTimeMin: 30 });
+  const { token, expireTime } = createPasswordResetToken({ length: 20, expireTimeMin: 30 });
   const url =
     process.env.NODE_ENV === 'production'
       ? `${process.env.NEXT_PUBLIC_KEYLOG_URL}/updatePassword/${token}`
@@ -33,7 +32,7 @@ export const sendPasswordMail = async ({ id, email }: SendPasswordMailProps) => 
   try {
     const [sendMailRes, saveTokenRes] = await Promise.all([
       transporter.sendMail(mailOptions),
-      saveUserToken({ token, userId: id, expireTime }),
+      savePasswordResetToken({ token, userId: id, expireTime }),
     ]);
 
     return {

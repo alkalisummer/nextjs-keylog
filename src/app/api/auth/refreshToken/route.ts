@@ -5,7 +5,7 @@ import {
   getCurrentCookieHeader,
   refreshAccessToken,
   updateNextAuthSession,
-} from '@/shared/lib/util/auth/server/token';
+} from '@/shared/lib/util';
 
 export const POST = async () => {
   try {

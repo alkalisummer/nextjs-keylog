@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { User } from '@/entities/user/model';
 import { formatDate } from '@/shared/lib/util/transform/date';
 
-export const createToken = ({ length, expireTimeMin }: { length: number; expireTimeMin: number }) => {
+export const createPasswordResetToken = ({ length, expireTimeMin }: { length: number; expireTimeMin: number }) => {
   const token = crypto.randomBytes(length).toString('hex');
   const expireTime = formatDate({
     date: new Date(Date.now() + 1000 * 60 * expireTimeMin),
