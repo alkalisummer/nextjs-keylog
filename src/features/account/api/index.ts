@@ -4,3 +4,4 @@ export { deleteUserImage } from './deleteUserImage';
 export { uploadUserImage } from './uploadUserImage';
 export { verifyPassword } from './verifyPassword';
 export { updatePassword } from './updatePassword';
+export { deleteUser } from './deleteUser';

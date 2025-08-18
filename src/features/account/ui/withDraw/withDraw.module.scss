@@ -1,0 +1,75 @@
+@use 'variable' as *;
+
+$color-title: #333;
+$color-gray: gray;
+$color-warning: #ff6b6b;
+$color-warning-hover: #f67b7b;
+$color-white: #ffffff;
+
+.module {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: none; // bbn
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .subTitle {
+    padding-left: 15px;
+    font-size: 18px;
+    font-weight: 500;
+    color: $color-title;
+    width: 35%;
+    margin-bottom: 25px;
+  }
+
+  .subContent {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leaveButton {
+    width: 130px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: $color-warning;
+    color: $color-white;
+    border: none;
+    font-family: 'Spoqa Han Sans Neo';
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background-color: $color-warning-hover;
+    }
+  }
+
+  .leaveDescription {
+    font-size: 13px;
+    color: $color-gray;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    .subTitle {
+      font-size: 14px;
+      padding-left: 5px;
+      width: 25%;
+    }
+
+    .subContent {
+      width: 75%;
+    }
+
+    .leaveButton {
+      font-size: 12px;
+      width: 100px;
+    }
+  }
+}

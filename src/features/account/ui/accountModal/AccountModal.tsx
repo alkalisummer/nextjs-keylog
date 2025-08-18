@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Modal } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import css from './accountModal.module.scss';
+import { WithDraw } from '../withDraw/WithDraw';
 import { EmailForm } from '../emailForm/EmailForm';
 import { ImageForm } from '../imageForm/ImageForm';
 import { ProfileForm } from '../profileForm/ProfileForm';
@@ -15,7 +16,7 @@ interface AccountModalProps {
 }
 
 export const AccountModal = ({ openModal, setOpenModal }: AccountModalProps) => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === 'unauthenticated' && openModal) {
@@ -44,6 +45,9 @@ export const AccountModal = ({ openModal, setOpenModal }: AccountModalProps) => 
         </div>
         <div className={css.content}>
           <PasswordForm />
+        </div>
+        <div className={css.content}>
+          <WithDraw />
         </div>
       </div>
     </Modal>
