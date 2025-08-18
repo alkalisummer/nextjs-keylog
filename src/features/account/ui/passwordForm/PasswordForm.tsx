@@ -33,6 +33,8 @@ export const PasswordForm = () => {
       console.error(error);
     } finally {
       setIsSubmitting(false);
+      setShowPwInput(false);
+      alert('비밀번호가 변경되었습니다.');
     }
   };
 

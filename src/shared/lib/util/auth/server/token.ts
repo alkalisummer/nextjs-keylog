@@ -27,6 +27,7 @@ export async function fetchNextAuthCsrfToken(cookieHeader?: string): Promise<str
       headers: {
         ...(cookieHeader ? { Cookie: cookieHeader } : {}),
       },
+      isPublic: true,
     },
   });
 
@@ -58,6 +59,7 @@ export async function updateNextAuthSession(params: {
         csrfToken,
         data: { accessToken, accessTokenExpireDate },
       },
+      isPublic: true,
     },
   });
   const setCookieHeader = refreshRes.headers?.get('set-cookie') || refreshRes.headers?.get('Set-Cookie') || undefined;
