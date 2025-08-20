@@ -38,7 +38,7 @@ $margin-small: 10px;
   .postCreated {
     font-size: $font-size-created-large;
     color: $color-text-secondary;
-    text-align: right;
+    text-align: left;
     border-bottom: 1px solid $color-border-light;
     padding-bottom: 15px;
     margin-bottom: 15px;
@@ -84,6 +84,14 @@ $margin-small: 10px;
     .postContent {
       font-size: 13px;
       min-height: 31%;
+    }
+  }
+}
+
+@media (max-width: $post-breakpoint-large) {
+  .module {
+    .postCreated {
+      border-bottom: none;
     }
   }
 }

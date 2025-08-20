@@ -7,6 +7,7 @@ import { formatDate } from '@/shared/lib/util';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
 import { useDeletePost } from '@/features/post/delete/hooks';
+import Image from 'next/image';
 
 interface BlogPostItemProps {
   post: Post;
@@ -47,7 +48,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
                 <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
               </div>
               <div className={css.thumbImgDiv}>
-                <img className={css.thumbImg} src={postThmbImgUrl} alt="thumbImg" />
+                <Image width={160} height={160} className={css.thumbImg} src={postThmbImgUrl} alt="thumbImg" />
               </div>
             </div>
           ) : (

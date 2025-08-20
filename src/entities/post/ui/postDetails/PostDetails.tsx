@@ -7,7 +7,6 @@ import { formatDate } from '@/shared/lib/util';
 import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
-import { parseImgfileArr } from '@/entities/post/lib';
 import { useDeletePost } from '@/features/post/delete/hooks';
 
 interface PostDetailProps {
@@ -18,7 +17,6 @@ interface PostDetailProps {
 export const PostDetails = ({ post, user }: PostDetailProps) => {
   const isAuthorized = useCheckAuth(user.userId);
   const postHtmlCntn = Buffer.from(post.postHtmlCntn ?? '').toString();
-  const imgFiles = parseImgfileArr(postHtmlCntn);
 
   const { deletePostMutation } = useDeletePost({
     postQueryKey: queryKey().post().postList({ authorId: user.userId }),
@@ -30,6 +28,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
     <div className={css.module}>
       <span className={css.postTitle}>{post.postTitle}</span>
       <div className={css.postCreated}>
+        <span>{`${post.authorId} • `}</span>
         <span className={`${css.marginRight} ${css.pointer}`}>
           {formatDate({ date: post.amntDttm, seperator: '.', isExtendTime: true })}
         </span>

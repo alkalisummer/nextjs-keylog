@@ -21,6 +21,7 @@ export interface PostDetail {
   authorId: string;
   tempYn: string;
   amntDttm: string;
+  rgsnDttm: string;
 }
 
 export interface RecentPost {

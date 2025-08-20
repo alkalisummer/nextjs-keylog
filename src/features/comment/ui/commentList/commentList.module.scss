@@ -1,0 +1,55 @@
+@use 'variable' as *;
+
+.commentSection {
+  margin-top: 3rem;
+  padding: 2rem 0;
+  border-top: 2px solid #efefef;
+}
+
+.commentHeader {
+  margin-bottom: 1rem;
+}
+
+.commentCount {
+  color: #525252;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.loading {
+  text-align: center;
+  color: #98a1a9;
+  font-size: 16px;
+  padding: 2rem 0;
+}
+
+.noComments {
+  text-align: center;
+  color: #98a1a9;
+  font-size: 16px;
+  padding: 3rem 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+@media (max-width: $breakpoint-small) {
+  .commentSection {
+    margin-top: 2rem;
+    padding: 1.5rem 0;
+  }
+
+  .commentCount {
+    font-size: 16px;
+  }
+
+  .loading,
+  .noComments {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,85 @@
+@use 'variable' as *;
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.textarea {
+  height: 100px;
+  resize: none;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  overflow-y: auto;
+
+  &:focus {
+    outline: none;
+    border-color: #009bf2;
+  }
+
+  &::placeholder {
+    color: #98a1a9;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px;
+  background-color: #009bf2;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #4ebeff;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px;
+  background-color: white;
+  font-size: 15px;
+  border: 1px solid #009bf2;
+  border-radius: 5px;
+  color: #009bf2;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: hsl(0, 0%, 94%);
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .textarea {
+    font-size: 14px;
+    height: 80px;
+  }
+
+  .submitButton,
+  .cancelButton {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}

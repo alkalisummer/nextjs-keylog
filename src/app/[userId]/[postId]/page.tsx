@@ -5,6 +5,7 @@ import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { PostDetails } from '@/entities/post/ui';
 import { AsyncBoundary } from '@/shared/boundary';
+import { CommentList } from '@/features/comment/ui';
 import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
 import { PostHashtags } from '@/entities/hashtag/ui';
@@ -73,6 +74,7 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
       <PostDetails post={postRes.data} user={userRes.data} />
       <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
       <PostHashtags hashtags={postHashtagsRes.data} />
+      <CommentList postId={Number(postId)} />
     </AsyncBoundary>
   );
 };

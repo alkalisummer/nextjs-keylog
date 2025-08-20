@@ -1,0 +1,205 @@
+@use 'variable' as *;
+
+.commentItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #efefef;
+  padding-bottom: 2rem;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+}
+
+.userImage {
+  width: 3.375rem;
+  height: 3.375rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15px;
+}
+
+.userName {
+  color: #5c5c5c;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.date {
+  color: #98a1a9;
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+}
+
+.actionText {
+  color: #98a1a9;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.content {
+  margin-bottom: 1.5rem;
+  font-size: 18px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.replyToggle {
+  color: #009bf2;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  &:hover {
+    color: #4ebeff;
+  }
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.editTextarea {
+  height: 100px;
+  resize: none;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  font-family: 'Spoqa Han Sans Neo';
+  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 15px;
+  overflow-y: auto;
+
+  &:focus {
+    outline: none;
+    border-color: #009bf2;
+  }
+}
+
+.editButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.submitButton {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px;
+  background-color: #009bf2;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #4ebeff;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  font-family: 'Spoqa Han Sans Neo';
+  padding: 10px 15px;
+  background-color: white;
+  font-size: 15px;
+  border: 1px solid #009bf2;
+  border-radius: 5px;
+  color: #009bf2;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: hsl(0, 0%, 94%);
+  }
+}
+
+.repliesContainer {
+  margin-left: 4rem;
+  margin-top: 1rem;
+}
+
+.replyFormContainer {
+  margin-left: 4rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: $breakpoint-small) {
+  .userImage {
+    width: 2.375rem;
+    height: 2.375rem;
+  }
+
+  .userName {
+    font-size: 14px;
+  }
+
+  .date,
+  .actionText {
+    font-size: 11px;
+  }
+
+  .content {
+    font-size: 15px;
+  }
+
+  .replyToggle {
+    font-size: 14px;
+  }
+
+  .repliesContainer,
+  .replyFormContainer {
+    margin-left: 2rem;
+  }
+
+  .editTextarea {
+    font-size: 14px;
+  }
+
+  .submitButton,
+  .cancelButton {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}

@@ -23,7 +23,7 @@ export const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    setError,
     formState: { errors },
   } = useForm<Form>({
     resolver: zodResolver(LoginSchema),
@@ -49,6 +49,10 @@ export const LoginForm = () => {
     if (loginRes?.ok) {
       saveId ? cookies.set('userId', data.id, { maxAge: 60 * 60 * 24 * 7 }) : cookies.remove('userId');
       router.push(redirect);
+    } else {
+      if (loginRes?.status === 401) {
+        setError('password', { message: '아이디 또는 비밀번호가 일치하지 않습니다.' });
+      }
     }
   };
 
