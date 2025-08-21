@@ -3,9 +3,10 @@
 .module {
   display: flex;
   flex-direction: column;
+  margin-top: 15px;
 }
 
-.textarea {
+.editTextarea {
   font-family: 'Spoqa Han Sans Neo';
   height: 100px;
   resize: none;
@@ -13,22 +14,19 @@
   border-radius: 5px;
   font-size: 16px;
   padding: 10px;
+  margin-bottom: 15px;
   overflow-y: auto;
 
   &:focus {
     outline: none;
     border-color: #009bf2;
   }
-
-  &::placeholder {
-    color: #98a1a9;
-  }
 }
 
-.buttonGroup {
+.editButtons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 15px;
+  gap: 10px;
 }
 
 .submitButton {
@@ -39,7 +37,6 @@
   border-radius: 5px;
   color: white;
   cursor: pointer;
-  margin-left: 10px;
   transition: background-color 0.2s;
 
   &:hover {
@@ -68,9 +65,8 @@
 }
 
 @media (max-width: $breakpoint-small) {
-  .textarea {
+  .editTextarea {
     font-size: 14px;
-    height: 80px;
   }
 
   .submitButton,

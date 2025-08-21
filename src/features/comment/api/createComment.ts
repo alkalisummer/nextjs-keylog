@@ -3,7 +3,7 @@
 import { isReply } from '../lib';
 import { client } from '@/shared/lib/client';
 import { CommentMutationResponse } from '../model/type';
-import { CreateCommentForm, CreateCommentSchema } from '../model/schema';
+import { CreateCommentForm, CreateCommentSchema } from '../model';
 import { getCustomSession } from '@/shared/lib/util/auth/server/action';
 
 export const createComment = async (data: CreateCommentForm): Promise<CommentMutationResponse> => {

@@ -1,0 +1,25 @@
+@use 'variable' as *;
+
+.module {
+  color: #009bf2;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  &:hover {
+    color: #4ebeff;
+  }
+
+  .replyToggleIcon {
+    width: 14px;
+    height: 14px;
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .replyToggle {
+    font-size: 14px;
+  }
+}

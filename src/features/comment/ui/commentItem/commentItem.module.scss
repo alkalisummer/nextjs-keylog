@@ -1,6 +1,6 @@
 @use 'variable' as *;
 
-.commentItem {
+.module {
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
@@ -87,6 +87,12 @@
   &:hover {
     color: #4ebeff;
   }
+
+  .replyToggleIcon {
+    width: 14px;
+    height: 14px;
+    margin-right: 0.5rem;
+  }
 }
 
 .editForm {
@@ -100,7 +106,6 @@
   resize: none;
   border: 1px solid #efefef;
   border-radius: 5px;
-  font-family: 'Spoqa Han Sans Neo';
   font-size: 16px;
   padding: 10px;
   margin-bottom: 15px;
@@ -119,7 +124,6 @@
 }
 
 .submitButton {
-  font-family: 'Spoqa Han Sans Neo';
   padding: 10px 15px;
   background-color: #009bf2;
   font-size: 15px;
@@ -140,7 +144,6 @@
 }
 
 .cancelButton {
-  font-family: 'Spoqa Han Sans Neo';
   padding: 10px 15px;
   background-color: white;
   font-size: 15px;
@@ -156,13 +159,47 @@
 }
 
 .repliesContainer {
-  margin-left: 4rem;
-  margin-top: 1rem;
+  padding: 1.5rem;
+  background-color: #fbfbfb;
 }
 
 .replyFormContainer {
-  margin-left: 4rem;
-  margin-top: 1rem;
+  padding: 1.5rem;
+  background-color: #fbfbfb;
+}
+
+.replyFooter {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.replyButton {
+  padding: 8px 14px;
+  background-color: white;
+  font-size: 14px;
+  border: 1px solid #009bf2;
+  border-radius: 5px;
+  color: #009bf2;
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(0, 0%, 94%);
+  }
+}
+
+.hideButton {
+  padding: 8px 14px;
+  background-color: white;
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  color: #6b7280;
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(0, 0%, 96%);
+  }
 }
 
 @media (max-width: $breakpoint-small) {

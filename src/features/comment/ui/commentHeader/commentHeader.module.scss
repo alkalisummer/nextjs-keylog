@@ -1,0 +1,74 @@
+@use 'variable' as *;
+
+.module {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+}
+
+.userImage {
+  width: 3.375rem;
+  height: 3.375rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15px;
+}
+
+.userName {
+  color: #5c5c5c;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.date {
+  color: #98a1a9;
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+}
+
+.actionText {
+  color: #98a1a9;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .userImage {
+    width: 2.375rem;
+    height: 2.375rem;
+  }
+
+  .userName {
+    font-size: 14px;
+  }
+
+  .date,
+  .actionText {
+    font-size: 11px;
+  }
+}

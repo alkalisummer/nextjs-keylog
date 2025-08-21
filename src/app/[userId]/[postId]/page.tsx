@@ -7,11 +7,12 @@ import { PostDetails } from '@/entities/post/ui';
 import { AsyncBoundary } from '@/shared/boundary';
 import { CommentList } from '@/features/comment/ui';
 import { queryKey } from '@/app/provider/query/lib';
-import { QueryClient } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { PostHashtags } from '@/entities/hashtag/ui';
 import { PostInteractions } from '@/entities/like/ui';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
+import { dehydrate } from '@tanstack/react-query';
 
 export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
   const { userId, postId } = await params;
@@ -69,13 +70,17 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     throw new Error('Hashtags fetch error');
   }
 
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
-      <PostDetails post={postRes.data} user={userRes.data} />
-      <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
-      <PostHashtags hashtags={postHashtagsRes.data} />
-      <CommentList postId={Number(postId)} />
-    </AsyncBoundary>
+    <HydrationBoundary state={dehydratedState}>
+      <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
+        <PostDetails post={postRes.data} user={userRes.data} />
+        <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
+        <PostHashtags hashtags={postHashtagsRes.data} />
+        <CommentList postId={Number(postId)} />
+      </AsyncBoundary>
+    </HydrationBoundary>
   );
 };
 

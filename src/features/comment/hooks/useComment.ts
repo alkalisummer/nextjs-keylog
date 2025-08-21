@@ -27,7 +27,6 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
       const prev = queryClient.getQueryData<ApiResponse<CommentRes>>(commentListQueryKey);
       const prevData = prev?.data || { totalItems: 0, items: [] };
 
-      // 임시 댓글 생성 (factory 사용)
       const tempComment: Comment = createTempComment({
         postId: data.postId,
         content: data.content,
@@ -56,10 +55,9 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSuccess: res => {
       if (res.ok) {
-        alert('댓글이 작성되었습니다.');
         onSuccess?.();
       } else {
-        alert(res.error || '댓글 작성에 실패했습니다.');
+        alert(res.error || '댓글 작성에 실패했습니다. 다시 시도해주세요.');
       }
     },
     onSettled: () => {
@@ -99,7 +97,6 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSuccess: res => {
       if (res.ok) {
-        alert('댓글이 수정되었습니다.');
         onSuccess?.();
       } else {
         alert(res.error || '댓글 수정에 실패했습니다.');
@@ -150,7 +147,6 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSuccess: res => {
       if (res.ok) {
-        alert('댓글이 삭제되었습니다.');
         onSuccess?.();
       } else {
         alert(res.error || '댓글 삭제에 실패했습니다.');

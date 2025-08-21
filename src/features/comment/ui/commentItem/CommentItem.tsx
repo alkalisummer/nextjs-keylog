@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 import css from './commentItem.module.scss';
 import { useSession } from 'next-auth/react';
 import { timeFormat } from '@/utils/CommonUtils';
+import { getCommentToggleLabel } from '../../lib';
 import { Comment } from '@/entities/comment/model';
-import { CommentForm } from '../commentForm/CommentForm';
+import { CommentHeader, CommentEditForm, CommentReplyToggle, CommentReply } from '../';
 
 interface CommentItemProps {
   comment: Comment;
@@ -40,7 +41,16 @@ export const CommentItem = ({
   });
 
   const isAuthor = session?.user?.id === comment.authorId;
+  const canShowActions = isAuthor && !isEditing;
   const hasReplies = replies.length > 0;
+  const canToggleReplies = comment.commentDepth === 1;
+  const showMinusIcon = showReplies || showReplyForm;
+  const replyToggleLabel = getCommentToggleLabel({
+    hasReplies,
+    showReplies,
+    showReplyForm,
+    replyCnt: comment.replyCnt,
+  });
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -81,81 +91,49 @@ export const CommentItem = ({
     }
   };
 
+  const shouldShowReplyForm = showReplyForm && (showReplies || !hasReplies);
+
   return (
-    <div className={css.commentItem}>
-      <div className={css.header}>
-        <div className={css.userInfo}>
-          <img
-            className={css.userImage}
-            src={comment.userThmbImgUrl || '/icon/person.png'}
-            alt={`${comment.userNickname} profile`}
-          />
-          <div className={css.userDetails}>
-            <span className={css.userName} onClick={() => router.push(`/${comment.authorId}`)}>
-              {comment.userNickname}
-            </span>
-            <span className={css.date}>{timeFormat(comment.rgsnDttm)}</span>
-          </div>
-        </div>
-        {isAuthor && !isEditing && (
-          <div className={css.actions}>
-            <span className={css.actionText} onClick={handleEdit}>
-              수정
-            </span>
-            <span className={css.actionText} onClick={handleDelete}>
-              삭제
-            </span>
-          </div>
-        )}
-      </div>
+    <div className={css.module}>
+      <CommentHeader
+        userImageUrl={comment.userThmbImgUrl}
+        userNickname={comment.userNickname}
+        date={timeFormat(comment.rgsnDttm)}
+        canShowActions={canShowActions}
+        onUserClick={() => router.push(`/${comment.authorId}`)}
+        onEditClick={handleEdit}
+        onDeleteClick={handleDelete}
+      />
 
       {isEditing ? (
-        <div className={css.editForm}>
-          <textarea
-            className={css.editTextarea}
-            value={editContent}
-            onChange={e => setEditContent(e.target.value)}
-            maxLength={290}
-          />
-          <div className={css.editButtons}>
-            <button className={css.cancelButton} onClick={handleEditCancel}>
-              취소
-            </button>
-            <button className={css.submitButton} onClick={handleEditSubmit} disabled={update.isPending}>
-              {update.isPending ? '수정 중...' : '댓글 수정'}
-            </button>
-          </div>
-        </div>
+        <CommentEditForm
+          value={editContent}
+          submitting={update.isPending}
+          onChange={setEditContent}
+          onCancel={handleEditCancel}
+          onSubmit={handleEditSubmit}
+        />
       ) : (
         <>
           <p className={css.content}>{comment.commentCntn}</p>
-          {comment.commentDepth === 1 && (
-            <span className={css.replyToggle} onClick={handleReplyToggle}>
-              <i className="fa-regular fa-square-plus"></i>&nbsp;&nbsp;
-              {hasReplies ? `${comment.replyCnt}개의 답글` : '답글 달기'}
-            </span>
+          {canToggleReplies && (
+            <CommentReplyToggle isMinus={showMinusIcon} label={replyToggleLabel} onToggle={handleReplyToggle} />
           )}
         </>
       )}
 
-      {showReplies && hasReplies && (
-        <div className={css.repliesContainer}>
-          {replies.map(reply => (
-            <CommentItem key={reply.commentId} comment={reply} postId={postId} />
-          ))}
-        </div>
-      )}
-
-      {showReplyForm && (
-        <div className={css.replyFormContainer}>
-          <CommentForm
-            postId={postId}
-            commentOriginId={comment.commentId}
-            onCancel={onReplyCancel}
-            placeholder="답글을 작성하세요."
-            buttonText="답글 작성"
-          />
-        </div>
+      {canToggleReplies && (
+        <CommentReply
+          postId={postId}
+          commentId={comment.commentId}
+          replies={replies}
+          showReplies={showReplies}
+          showReplyForm={showReplyForm}
+          shouldShowReplyForm={shouldShowReplyForm}
+          renderReply={(reply: Comment) => <CommentItem key={reply.commentId} comment={reply} postId={postId} />}
+          onReplyClick={onReplyClick}
+          onReplyCancel={onReplyCancel}
+        />
       )}
     </div>
   );

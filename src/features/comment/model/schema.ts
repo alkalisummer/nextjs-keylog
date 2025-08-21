@@ -5,8 +5,8 @@ export const CreateCommentSchema = z.object({
   content: z
     .string()
     .trim()
-    .min(1, { message: '∙ 댓글 내용을 입력해주세요.' })
-    .max(290, { message: '∙ 댓글은 290자까지 작성할 수 있습니다.' }),
+    .min(1, { message: '댓글 내용을 입력해주세요.' })
+    .max(290, { message: '댓글은 300자까지 작성할 수 있습니다.' }),
   commentOriginId: z.number().optional(), // 답글인 경우
 });
 
@@ -17,8 +17,8 @@ export const UpdateCommentSchema = z.object({
   content: z
     .string()
     .trim()
-    .min(1, { message: '∙ 댓글 내용을 입력해주세요.' })
-    .max(290, { message: '∙ 댓글은 290자까지 작성할 수 있습니다.' }),
+    .min(1, { message: '댓글 내용을 입력해주세요.' })
+    .max(290, { message: '댓글은 300자까지 작성할 수 있습니다.' }),
 });
 
 export type UpdateCommentForm = z.infer<typeof UpdateCommentSchema>;

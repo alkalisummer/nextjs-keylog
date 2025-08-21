@@ -1,13 +1,8 @@
 @use 'variable' as *;
 
-.commentSection {
-  margin-top: 3rem;
-  padding: 2rem 0;
-  border-top: 2px solid #efefef;
-}
-
-.commentHeader {
-  margin-bottom: 1rem;
+.module {
+  width: 100%;
+  padding: 1rem 0;
 }
 
 .commentCount {
