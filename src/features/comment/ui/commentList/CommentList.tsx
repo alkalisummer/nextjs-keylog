@@ -31,9 +31,9 @@ export const CommentList = ({ postId }: CommentListProps) => {
   const comments = commentRes.data.items;
   const totalComments = commentRes.data.totalItems;
 
-  // 부모 댓글과 답글 분리
+  // 댓글과 대댓글 분리
   const repliesMap = mappingReplies(comments);
-  const parentComments = parseParentComments(comments);
+  const commentList = parseParentComments(comments);
 
   const handleReplyClick = (commentId: number) => {
     setReplyFormCommentId(replyFormCommentId === commentId ? null : commentId);
@@ -46,10 +46,10 @@ export const CommentList = ({ postId }: CommentListProps) => {
       </div>
       <CommentForm postId={postId} />
       <div className={css.commentList}>
-        {parentComments.length === 0 ? (
+        {commentList.length === 0 ? (
           <div className={css.noComments}>아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!</div>
         ) : (
-          parentComments.map(comment => (
+          commentList.map(comment => (
             <CommentItem
               key={comment.commentId}
               comment={comment}

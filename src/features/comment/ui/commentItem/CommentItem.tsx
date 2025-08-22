@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useComment } from '../../hooks';
 import { useRouter } from 'next/navigation';
 import css from './commentItem.module.scss';
 import { useSession } from 'next-auth/react';
 import { timeFormat } from '@/utils/CommonUtils';
 import { getCommentToggleLabel } from '../../lib';
 import { Comment } from '@/entities/comment/model';
+import { useAutoOpenReplies, useComment } from '../../hooks';
 import { CommentHeader, CommentEditForm, CommentReplyToggle, CommentReply } from '../';
 
 interface CommentItemProps {
@@ -44,7 +44,7 @@ export const CommentItem = ({
   const canShowActions = isAuthor && !isEditing;
   const hasReplies = replies.length > 0;
   const canToggleReplies = comment.commentDepth === 1;
-  const showMinusIcon = showReplies || showReplyForm;
+  const showMinusIcon = (showReplies && hasReplies) || showReplyForm;
   const replyToggleLabel = getCommentToggleLabel({
     hasReplies,
     showReplies,
@@ -92,6 +92,9 @@ export const CommentItem = ({
   };
 
   const shouldShowReplyForm = showReplyForm && (showReplies || !hasReplies);
+
+  // 대댓글이 처음 달리면 토글 open
+  useAutoOpenReplies(replies.length, showReplies, setShowReplies);
 
   return (
     <div className={css.module}>

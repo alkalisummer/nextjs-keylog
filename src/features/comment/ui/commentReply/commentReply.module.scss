@@ -45,10 +45,3 @@
     background-color: hsl(0, 0%, 96%);
   }
 }
-
-@media (max-width: $breakpoint-small) {
-  .repliesContainer,
-  .replyFormContainer {
-    margin-left: 2rem;
-  }
-}

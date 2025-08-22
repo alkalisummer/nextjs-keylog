@@ -5,10 +5,14 @@
   padding: 1rem 0;
 }
 
-.commentCount {
-  color: #525252;
-  font-weight: 500;
-  font-size: 18px;
+.commentHeader {
+  margin-bottom: 1rem;
+
+  .commentCount {
+    color: #525252;
+    font-weight: 500;
+    font-size: 18px;
+  }
 }
 
 .commentList {

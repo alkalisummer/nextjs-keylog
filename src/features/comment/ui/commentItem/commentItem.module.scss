@@ -5,10 +5,9 @@
   flex-direction: column;
   margin-bottom: 2rem;
   border-bottom: 1px solid #efefef;
-  padding-bottom: 2rem;
 
   &:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
   }
 }
 

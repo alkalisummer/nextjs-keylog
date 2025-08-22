@@ -1,13 +1,14 @@
 'use client';
 
-import { FormEvent } from 'react';
 import { useComment } from '../../hooks';
 import { useForm } from 'react-hook-form';
 import css from './commentForm.module.scss';
 import { useRouter } from 'next/navigation';
+import { FieldError } from '@/shared/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthenticated } from '@/shared/lib/util/auth/client';
 import { CreateCommentSchema, CreateCommentForm as Form } from '../../model';
+import { scroll } from '@/shared/lib/util';
 
 interface CommentFormProps {
   postId: number;
@@ -15,6 +16,7 @@ interface CommentFormProps {
   onCancel?: () => void;
   placeholder?: string;
   buttonText?: string;
+  showReplies?: boolean;
 }
 
 export const CommentForm = ({
@@ -27,9 +29,14 @@ export const CommentForm = ({
   const isAuthenticated = useAuthenticated();
   const router = useRouter();
 
-  const { register, handleSubmit, reset } = useForm<Form>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Form>({
     resolver: zodResolver(CreateCommentSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       postId,
       content: '',
@@ -40,12 +47,21 @@ export const CommentForm = ({
   const { create } = useComment({
     postId,
     onSuccess: () => {
-      reset();
+      setValue('content', '');
       onCancel?.();
+      if (!commentOriginId) {
+        scroll.scrollToBottom({ container: '[data-article-root]' });
+      }
     },
   });
 
   const onSubmit = (data: Form) => {
+    if (!isAuthenticated) {
+      alert('로그인이 필요합니다.\n로그인 페이지로 이동합니다.');
+      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+
     create.mutate({
       postId,
       content: data.content,
@@ -53,23 +69,13 @@ export const CommentForm = ({
     });
   };
 
-  const onPreSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (!isAuthenticated) {
-      e.preventDefault();
-      alert('로그인이 필요합니다.\n로그인 페이지로 이동합니다.');
-      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
-      return;
-    }
-
-    return handleSubmit(onSubmit)(e);
-  };
-
   return (
-    <form className={css.module} onSubmit={onPreSubmit}>
+    <form className={css.module} onSubmit={handleSubmit(onSubmit)}>
       <textarea className={css.textarea} {...register('content')} placeholder={placeholder} maxLength={290} />
+      <FieldError error={errors.content} />
       <div className={css.buttonGroup}>
         {onCancel && (
-          <button className={css.cancelButton} onClick={onCancel}>
+          <button className={css.cancelButton} type="button" onClick={onCancel}>
             취소
           </button>
         )}
