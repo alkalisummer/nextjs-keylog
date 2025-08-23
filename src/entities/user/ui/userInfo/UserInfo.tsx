@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import css from './userInfo.module.scss';
 import { User } from '@/entities/user/model';
 import { useCheckAuth } from '@/shared/lib/hooks';
@@ -17,10 +18,14 @@ export const UserInfo = ({ userInfo }: UserInfoProps) => {
   return (
     <div className={css.module}>
       <Link href={`/${userId}`}>
-        <img
+        <Image
           src={userInfo.userThmbImgUrl ? userInfo.userThmbImgUrl : '/../../icon/person.png'}
           className={css.profileIcon}
           alt="profile img"
+          width={60}
+          height={60}
+          quality={100}
+          priority
         />
       </Link>
       <Link href={`/${userId}`} className={css.blogName}>

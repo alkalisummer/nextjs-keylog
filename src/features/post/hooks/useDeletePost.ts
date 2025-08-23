@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { getPost } from '@/entities/post/api';
-import { deletePostImage, deletePost } from '../api';
-import { queryKey } from '@/app/provider/query/lib';
-import { useMutation, useQueryClient, useQuery, QueryKey } from '@tanstack/react-query';
-import { parseImgfileArr } from '@/entities/post/lib';
-import { ApiResponse } from '@/shared/lib/client';
 import { Post } from '@/entities/post/model';
+import { getPost } from '@/entities/post/api';
+import { ApiResponse } from '@/shared/lib/client';
 import { useSearchParams } from 'next/navigation';
+import { queryKey } from '@/app/provider/query/lib';
+import { deletePostImage, deletePost } from '../api';
+import { parseImgfileArr } from '@/entities/post/lib';
+import { useMutation, useQueryClient, useQuery, QueryKey } from '@tanstack/react-query';
 
 interface Props {
   postQueryKey: QueryKey;

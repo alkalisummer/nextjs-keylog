@@ -1,6 +1,6 @@
 'use server';
 
-import { View } from './ui/View';
+import { Home } from './ui/Home';
 import { queryKey } from '../provider/query/lib';
 import { getPosts } from '@/entities/post/api';
 import { getDailyTrends } from '@/entities/trend/api';
@@ -54,7 +54,7 @@ export const Page = async ({ searchParams }: PageProps) => {
   return (
     <HydrationBoundary state={dehydratedState}>
       <HomeContainer initialTrend={initTrendKeywordInfo}>
-        <View trends={dailyTrends} initialArticles={sortedArticles} initialPosts={posts.data} />
+        <Home trends={dailyTrends} initialArticles={sortedArticles} initialPosts={posts.data} />
       </HomeContainer>
     </HydrationBoundary>
   );

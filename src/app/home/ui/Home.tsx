@@ -13,7 +13,7 @@ import { ArticleList } from '@/entities/article/ui';
 import { SearchPost } from './searchPost/SearchPost';
 import { ArticleListSkeleton } from '@/entities/article/ui';
 
-export const View = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
+export const Home = ({ trends, initialArticles, initialPosts }: HomeInitData) => {
   const searchParams = useSearchParams();
   const tab = searchParams?.get('tab');
   const { trend, setTrend } = useHome();

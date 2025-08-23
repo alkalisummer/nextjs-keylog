@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { User } from '@/entities/user/model';
 import css from './postUserInfo.module.scss';
 
@@ -10,8 +11,12 @@ interface PostUserInfoProps {
 export const PostUserInfo = ({ author }: PostUserInfoProps) => {
   return (
     <div className={css.module}>
-      <img
+      <Image
         src={author.userThmbImgUrl ? author.userThmbImgUrl : '../../icon/person.png'}
+        width={90}
+        height={90}
+        quality={100}
+        priority
         className={css.profileImg}
         alt="profile img"
       />

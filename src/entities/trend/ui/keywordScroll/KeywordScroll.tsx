@@ -1,9 +1,9 @@
 'use client';
 
 import { Trend } from '../../model';
-import { InfiniteScroll } from '@/shared/ui';
 import css from './keywordScroll.module.scss';
 import { useAutoplaySpeed } from '../../hooks';
+import { InfiniteScroll } from '@/shared/lib/reactBits';
 import { parseKeywordsArray } from '../../lib/transform';
 import { KeywordList } from '../keywordList/KeywordList';
 

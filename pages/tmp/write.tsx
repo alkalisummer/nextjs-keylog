@@ -1,7 +1,7 @@
 import TrendKeyword from '@/utils/TrendKeyword';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import Navbar from '../src/widgets/Navbar';
+import Navbar from '../../src/widgets/Navbar';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '@/app/api/HandlePost';

@@ -7,7 +7,7 @@ import { formatDate } from '@/shared/lib/util';
 import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
-import { useDeletePost } from '@/features/post/delete/hooks';
+import { useDeletePost } from '@/features/post/hooks';
 
 interface PostDetailProps {
   post: PostDetail;

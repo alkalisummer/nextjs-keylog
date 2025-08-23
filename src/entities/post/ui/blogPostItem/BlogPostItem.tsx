@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Post } from '../../model';
 import css from './blogPostItem.module.scss';
 import { formatDate } from '@/shared/lib/util';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
-import { useDeletePost } from '@/features/post/delete/hooks';
-import Image from 'next/image';
+import { useDeletePost } from '@/features/post/hooks';
 
 interface BlogPostItemProps {
   post: Post;
