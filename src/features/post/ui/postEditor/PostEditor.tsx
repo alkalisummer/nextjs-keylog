@@ -1,12 +1,17 @@
 'use client';
 
-import { useRef } from 'react';
 import css from './postEditor.module.scss';
 import { Editor } from '@toast-ui/react-editor';
+import { uploadPostImage } from '@/features/post/api';
 import { getEditorToolbar } from '@/features/post/lib';
 import { ToastEditor } from '@/shared/lib/toastEditor/ToastEditor';
+import { useRef, type Dispatch, type SetStateAction } from 'react';
 
-export const PostEditor = () => {
+interface PostEditorProps {
+  setImgFiles: Dispatch<SetStateAction<string[]>>;
+}
+
+export const PostEditor = ({ setImgFiles }: PostEditorProps) => {
   const editorRef = useRef<Editor>(null);
 
   return (
@@ -18,11 +23,12 @@ export const PostEditor = () => {
         initialValue="내용을 입력하세요."
         toolbarItems={getEditorToolbar()}
         hooks={{
-          addImageBlobHook: (_imgFile: any, _callBack: any) => {
-            //   onUploadImage(imgFile).then(res => {
-            //     setImgFileArr((arr: any) => [...arr, res.imgName]);
-            //     callBack(res.imgUrl, res.imgName); // 첫번째 인자 : return 받은 이미지 url, 두번째 인자: alt 속성
-            //   });
+          addImageBlobHook: (imgFile: any, callBack: any) => {
+            uploadPostImage(imgFile).then(res => {
+              const imageUrl = res.data;
+              setImgFiles((prev: string[]) => [...prev, imageUrl]);
+              callBack(imageUrl, imgFile.name);
+            });
           },
         }}
       />

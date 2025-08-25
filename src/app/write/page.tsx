@@ -1,11 +1,11 @@
 'use server';
 
-import { PostEditor } from '@/features/post/ui';
+import { Write } from './ui/Write';
 
 export const Page = async () => {
   return (
     <main>
-      <PostEditor />
+      <Write />
     </main>
   );
 };
