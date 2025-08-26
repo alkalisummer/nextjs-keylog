@@ -7,7 +7,7 @@ import css from './blogPostItem.module.scss';
 import { formatDate } from '@/shared/lib/util';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
-import { useDeletePost } from '@/features/post/hooks';
+import { usePost } from '@/features/post/hooks';
 
 interface BlogPostItemProps {
   post: Post;
@@ -21,16 +21,18 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   const isTemp = searchParams?.get('tempYn') === 'Y';
   const pageNum = searchParams?.get('pageNum');
 
-  const { deletePostMutation } = useDeletePost({
-    userId: userId,
-    postId: postId,
-    postQueryKey: queryKey()
-      .post()
-      .postList({
-        authorId: userId,
-        ...(pageNum && { currPageNum: Number(pageNum) }),
-        ...(isTemp && { tempYn: 'Y' }),
-      }),
+  const { deletePostMutation } = usePost({
+    delete: {
+      userId: userId,
+      postId: postId,
+      postQueryKey: queryKey()
+        .post()
+        .postList({
+          authorId: userId,
+          ...(pageNum && { currPageNum: Number(pageNum) }),
+          ...(isTemp && { tempYn: 'Y' }),
+        }),
+    },
   });
 
   return (
@@ -65,7 +67,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
       </div>
       {isTemp && (
         <div className={css.deleteBtn}>
-          <span onClick={() => deletePostMutation()}>삭제</span>
+          <span onClick={() => deletePostMutation.mutate()}>삭제</span>
         </div>
       )}
     </div>

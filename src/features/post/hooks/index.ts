@@ -1,1 +1,1 @@
-export { useDeletePost } from './useDeletePost';
+export { usePost } from './usePost';

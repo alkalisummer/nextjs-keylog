@@ -38,3 +38,32 @@ export interface PopularPost {
   rgsnDttm: string;
   likeCnt: number;
 }
+
+export interface CreatePostInput {
+  postTitle: string;
+  postCntn: string;
+  postHtmlCntn: string;
+  postThmbImgUrl: string;
+  tempYn: 'Y' | 'N';
+  postOriginId?: number;
+  hashtagArr: string[];
+}
+
+export interface UpdatePostInput {
+  postTitle: string;
+  postCntn: string;
+  postHtmlCntn: string;
+  postThmbImgUrl: string;
+  tempYn: 'Y' | 'N';
+  hashtagArr: string[];
+}
+
+export interface CreatePostResponse {
+  postId: number;
+  authorId: string;
+}
+
+export interface UpdatePostResponse {
+  postId: number;
+  authorId: string;
+}

@@ -7,7 +7,7 @@ import { formatDate } from '@/shared/lib/util';
 import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
-import { useDeletePost } from '@/features/post/hooks';
+import { usePost } from '@/features/post/hooks';
 
 interface PostDetailProps {
   post: PostDetail;
@@ -18,10 +18,12 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
   const isAuthorized = useCheckAuth(user.userId);
   const postHtmlCntn = Buffer.from(post.postHtmlCntn ?? '').toString();
 
-  const { deletePostMutation } = useDeletePost({
-    postQueryKey: queryKey().post().postList({ authorId: user.userId }),
-    userId: user.userId,
-    postId: post.postId,
+  const { deletePostMutation } = usePost({
+    delete: {
+      postQueryKey: queryKey().post().postList({ authorId: user.userId }),
+      userId: user.userId,
+      postId: post.postId,
+    },
   });
 
   return (
@@ -39,7 +41,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
               <span className={`${css.marginRight} ${css.marginLeft}`}>수정</span>
             </Link>
             |
-            <span className={`${css.marginLeft} ${css.pointer}`} onClick={() => deletePostMutation()}>
+            <span className={`${css.marginLeft} ${css.pointer}`} onClick={() => deletePostMutation.mutate()}>
               삭제
             </span>
           </>

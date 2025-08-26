@@ -1,0 +1,38 @@
+@use 'variable' as *;
+
+$color-white: #ffffff;
+$color-border: #e9ecef;
+$color-primary: #959595;
+$color-primary-light: #f8f9fa;
+
+.module {
+  padding: 0px 24px 0px 24px;
+  background-color: $color-white;
+
+  .hashtagList {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    input {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Spoqa Han Sans Neo';
+    }
+    .hashtagChip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background-color: $color-primary-light;
+      color: $color-primary;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  }
+}

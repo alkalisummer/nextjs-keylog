@@ -1,1 +1,1 @@
-export { getEditorToolbar } from './transform';
+export { getEditorToolbar, sanitizeHashtag } from './transform';

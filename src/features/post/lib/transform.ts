@@ -6,3 +6,5 @@ export const getEditorToolbar = () => {
     ['code', 'codeblock'],
   ];
 };
+
+export const sanitizeHashtag = (value: string) => value.trim().replace(/^#/, '');

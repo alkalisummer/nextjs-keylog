@@ -16,3 +16,8 @@ export const VERIFY_CODE = {
 };
 
 export const SESSION_REFETCH_INTERVAL = 10000;
+
+export const POST = {
+  TITLE_MAX_LENGTH: 300,
+  THUMBNAIL_EXTRACT_LENGTH: 5000,
+};
