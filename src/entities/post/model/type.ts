@@ -41,21 +41,22 @@ export interface PopularPost {
 
 export interface CreatePostInput {
   postTitle: string;
-  postCntn: string;
-  postHtmlCntn: string;
-  postThmbImgUrl: string;
+  postCntn?: string;
+  postHtmlCntn?: string;
+  postThmbImgUrl?: string;
   tempYn: 'Y' | 'N';
   postOriginId?: number;
-  hashtagArr: string[];
+  authorId: string;
 }
 
 export interface UpdatePostInput {
+  postId: number;
   postTitle: string;
-  postCntn: string;
-  postHtmlCntn: string;
-  postThmbImgUrl: string;
+  postCntn?: string;
+  postHtmlCntn?: string;
+  postThmbImgUrl?: string;
   tempYn: 'Y' | 'N';
-  hashtagArr: string[];
+  authorId: string;
 }
 
 export interface CreatePostResponse {

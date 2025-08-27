@@ -1,4 +1,4 @@
-export { formatDate } from './transform/date';
+export { formatDate, removeHtml } from './transform';
 export { useAuthenticated } from './auth/client';
 export { isServer, isClient } from './validate';
 export { clientCookies } from './cookie/client';

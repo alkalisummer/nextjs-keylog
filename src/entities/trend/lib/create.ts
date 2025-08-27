@@ -1,5 +1,4 @@
 import { Trend } from '../model';
-import { formatTraffic } from './transform';
 
 export const createDailyTrends = (trends: Trend[]) => {
   return trends

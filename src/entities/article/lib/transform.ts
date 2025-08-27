@@ -1,5 +1,3 @@
-import { load } from 'cheerio';
-
 export const formatTimeAgo = (pressDateArr: number[]) => {
   if (!Array.isArray(pressDateArr) || pressDateArr.length === 0) return '';
   const pressDate = pressDateArr[0] * 1000; // 초 → 밀리초
@@ -14,10 +12,4 @@ export const formatTimeAgo = (pressDateArr: number[]) => {
   if (diffMin < 60) return `${diffMin}분 전`;
   if (diffHour < 24) return `${diffHour}시간 전`;
   return `${diffDay}일 전`;
-};
-
-export const removeHtml = (htmlStr: string) => {
-  const $ = load(htmlStr);
-  const plainText = $.text();
-  return plainText;
 };

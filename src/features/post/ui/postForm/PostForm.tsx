@@ -1,135 +1,157 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
 import css from './postForm.module.scss';
-import { Editor } from '@toast-ui/react-editor';
-import { uploadPostImage } from '@/features/post/api';
-import { getEditorToolbar } from '@/features/post/lib';
-import { ToastEditor } from '@/shared/lib/toastEditor/ToastEditor';
-import { usePost } from '@/features/post/hooks';
-import { removeHtml } from '@/utils/CommonUtils';
-import { PostDetail } from '@/entities/post/model';
 import { useRouter } from 'next/navigation';
-import { PostHashtag } from '@/features/post/ui/postHashtag/PostHashtag';
+import { useRef, useCallback } from 'react';
 import { POST } from '@/shared/lib/constants';
+import { removeHtml } from '@/shared/lib/util';
+import { usePost } from '@/features/post/hooks';
+import { Editor } from '@toast-ui/react-editor';
+import { PostDetail } from '@/entities/post/model';
+import { uploadPostImage } from '@/features/post/api';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { usePostImage } from '@/features/post/hooks/usePostImage';
+import { ToastEditor } from '@/shared/lib/toastEditor/ToastEditor';
+import { PostForm as Form, PostSchema } from '@/features/post/model';
+import { getEditorToolbar, extractThumbnail } from '@/features/post/lib';
+import { PostHashtag } from '@/features/post/ui/postHashtag/PostHashtag';
 
-interface WriteContainerProps {
+interface PostFormProps {
   post?: PostDetail;
   hashtags?: string[];
   authorId: string;
 }
 
-export const PostForm = ({ post, hashtags = [], authorId }: WriteContainerProps) => {
+export const PostForm = ({ post, authorId }: PostFormProps) => {
   const router = useRouter();
   const editorRef = useRef<Editor>(null);
 
-  const [title, setTitle] = useState(post?.postTitle || '');
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<Form>({
+    resolver: zodResolver(PostSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      title: post?.postTitle ?? '',
+      content: post?.postHtmlCntn ?? '',
+    },
+  });
 
-  const [imgFiles, setImgFiles] = useState<string[]>([]);
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(hashtags);
+  const { addUploadedImage, handleCancel, cleanupBeforeSubmit, cleanupAfterUpdateSuccess } = usePostImage({
+    initialHtml: post?.postHtmlCntn || '',
+  });
 
   const { createPostMutation, updatePostMutation } = usePost({
     update: { postId: post?.postId || 0, authorId },
   });
 
-  const isEditMode = !!post;
-  const isLoading = createPostMutation.isPending || updatePostMutation.isPending;
+  const handleHashtagsChange = useCallback(
+    (tags: string[]) => {
+      setValue('hashtags', tags, { shouldValidate: true, shouldDirty: true });
+    },
+    [setValue],
+  );
 
-  useEffect(() => {
-    if (post && editorRef.current) {
-      const editorInstance = editorRef.current.getInstance();
-      editorInstance.setHTML(post.postHtmlCntn);
-    }
-  }, [post]);
-
-  const handleHashtagsChange = useCallback((tags: string[]) => {
-    setSelectedHashtags(tags);
-  }, []);
-
-  const extractThumbnail = (htmlContent: string): string => {
-    const imgRegex = /<img[^>]+src="([^">]+)"/;
-    const match = htmlContent.match(imgRegex);
-    return match ? match[1] : '';
+  const onCancel = async () => {
+    await handleCancel();
+    router.back();
   };
 
-  const handleSubmit = async (tempYn: 'Y' | 'N', postId?: number) => {
-    if (!title.trim()) {
-      alert('제목을 입력해주세요.');
-      return;
-    }
+  const onSubmitWith = (tempYn: 'Y' | 'N', postId?: number) =>
+    handleSubmit(async (data: Form) => {
+      const htmlContent = data.content || '';
+      const plainContent = removeHtml(htmlContent);
+      const { currentImageNames } = await cleanupBeforeSubmit(htmlContent);
 
-    const editorInstance = editorRef.current?.getInstance();
-    if (!editorInstance) return;
+      const postData = {
+        postTitle: data.title,
+        postCntn: plainContent.substring(0, POST.THUMBNAIL_EXTRACT_LENGTH),
+        postHtmlCntn: htmlContent,
+        postThmbImgUrl: extractThumbnail(htmlContent) || '',
+        tempYn,
+        hashtagArr: data.hashtags,
+        ...(postId ? { postId } : {}),
+      };
 
-    const htmlContent = editorInstance.getHTML();
-
-    const plainContent = removeHtml(htmlContent);
-
-    const postData = {
-      postTitle: title,
-      postCntn: plainContent.substring(0, POST.THUMBNAIL_EXTRACT_LENGTH),
-      postHtmlCntn: htmlContent,
-      postThmbImgUrl: extractThumbnail(htmlContent) || imgFiles[0] || '',
-      tempYn,
-      hashtagArr: selectedHashtags,
-      ...(!isEditMode && postId ? { postOriginId: postId } : {}),
-    };
-
-    if (isEditMode) {
-      updatePostMutation.mutate(postData);
-    } else {
-      createPostMutation.mutate(postData);
-    }
-  };
+      if (postId) {
+        try {
+          const res = await updatePostMutation.mutateAsync({ ...postData, postId, authorId });
+          if (res?.ok ?? true) await cleanupAfterUpdateSuccess(currentImageNames);
+        } catch (error) {
+          console.error('Failed to update post:', error);
+        }
+      } else {
+        try {
+          await createPostMutation.mutateAsync({ ...postData, authorId });
+        } catch (error) {
+          console.error('Failed to create post:', error);
+        }
+      }
+    });
 
   return (
-    <div className={css.module}>
+    <form className={css.module}>
       <div className={css.header}>
         <input
           type="text"
-          className={css.postTitle}
+          className={`${css.postTitle} ${errors.title ? css.error : ''}`}
           placeholder="제목을 입력하세요"
-          value={title}
           maxLength={POST.TITLE_MAX_LENGTH}
-          onChange={e => setTitle(e.target.value)}
+          {...register('title')}
         />
       </div>
       <div className={css.editorWrapper}>
-        <ToastEditor
-          ref={editorRef}
-          height="100%"
-          initialEditType="wysiwyg"
-          initialValue={post ? '' : '내용을 입력하세요.'}
-          toolbarItems={getEditorToolbar()}
-          hooks={{
-            addImageBlobHook: async (imgFile: File, callback: (url: string, altText: string) => void) => {
-              try {
-                const response = await uploadPostImage(imgFile);
-                if (response.ok) {
-                  const imageUrl = response.data;
-                  setImgFiles(prev => [...prev, imageUrl]);
-                  callback(imageUrl, imgFile.name);
-                }
-              } catch (error) {
-                console.error('Image upload failed:', error);
-                alert('이미지 업로드에 실패했습니다.');
-              }
-            },
-          }}
+        <Controller
+          name="content"
+          control={control}
+          render={({ field }) => (
+            <ToastEditor
+              ref={editorRef}
+              height="100%"
+              initialEditType="wysiwyg"
+              initialValue={typeof field.value === 'string' ? field.value : ''}
+              toolbarItems={getEditorToolbar()}
+              onChange={() => {
+                const html = editorRef.current?.getInstance().getHTML();
+                field.onChange(html);
+              }}
+              hooks={{
+                addImageBlobHook: async (imgFile: File, callback: (url: string, altText: string) => void) => {
+                  try {
+                    const response = await uploadPostImage(imgFile);
+                    if (response.ok) {
+                      const imageUrl = response.data;
+                      const objectName = addUploadedImage(imageUrl);
+                      callback(imageUrl, objectName);
+                    }
+                  } catch (error) {
+                    console.error('Image upload failed:', error);
+                    alert('이미지 업로드에 실패했습니다.');
+                  }
+                },
+              }}
+            />
+          )}
         />
       </div>
-      <PostHashtag postHashtags={selectedHashtags} onChange={handleHashtagsChange} />
+      <PostHashtag postHashtags={watch('hashtags')} onChange={handleHashtagsChange} />
       <div className={css.buttonWrapper}>
-        <button className={css.cancelButton} onClick={() => router.back()}>
+        <button type="button" className={css.cancelButton} onClick={onCancel}>
           취소
         </button>
-        <button className={css.button} onClick={() => handleSubmit('Y')}>
+        <button className={css.button} type="button" onClick={onSubmitWith('Y')}>
           임시저장
         </button>
-        <button className={css.button} onClick={() => handleSubmit('N')}>
+        <button className={css.button} type="submit" onClick={onSubmitWith('N', post?.postId)}>
           저장
         </button>
       </div>
-    </div>
+    </form>
   );
 };

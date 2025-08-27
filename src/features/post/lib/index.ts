@@ -1,1 +1,8 @@
-export { getEditorToolbar, sanitizeHashtag } from './transform';
+export {
+  getEditorToolbar,
+  sanitizeHashtag,
+  extractThumbnail,
+  getObjectNameFromUrl,
+  extractImageNamesFromHtml,
+  diff,
+} from './transform';

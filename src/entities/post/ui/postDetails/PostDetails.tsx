@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import css from './postDetails.module.scss';
+import { parseImgfileArr } from '../../lib';
 import { User } from '@/entities/user/model';
 import { formatDate } from '@/shared/lib/util';
 import { useCheckAuth } from '@/shared/lib/hooks';
@@ -23,6 +24,7 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
       postQueryKey: queryKey().post().postList({ authorId: user.userId }),
       userId: user.userId,
       postId: post.postId,
+      postImageFiles: parseImgfileArr(postHtmlCntn),
     },
   });
 

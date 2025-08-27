@@ -1,3 +1,5 @@
+import { load } from 'cheerio';
+
 export const formatDate = ({
   date,
   seperator = '',
@@ -52,4 +54,10 @@ const formatStringDate = ({
     return `${year}${month}${day}${hour}${min}${sec}`;
   }
   return `${year}${seperator}${month}${seperator}${day}`;
+};
+
+export const removeHtml = (htmlStr: string) => {
+  const $ = load(htmlStr);
+  const plainText = $.text();
+  return plainText;
 };

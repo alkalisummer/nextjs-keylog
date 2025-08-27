@@ -1,17 +1,16 @@
 'use client';
 
+import { ApiResponse } from '@/shared/lib/client';
+import { queryKey } from '@/app/provider/query/lib';
+import { deletePostImage, deletePost } from '../api';
+import { createPost, updatePost } from '@/entities/post/api';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient, QueryKey } from '@tanstack/react-query';
-import { createPost, getPost, updatePost } from '@/entities/post/api';
 import { CreatePostInput, UpdatePostInput, Post } from '@/entities/post/model';
-import { ApiResponse } from '@/shared/lib/client';
-import { parseImgfileArr } from '@/entities/post/lib';
-import { deletePostImage, deletePost } from '../api';
-import { queryKey } from '@/app/provider/query/lib';
 
 interface UsePostOptions {
   update?: { postId: number; authorId: string };
-  delete?: { postQueryKey: QueryKey; userId: string; postId: number };
+  delete?: { postQueryKey: QueryKey; userId: string; postId: number; postImageFiles: string[] };
 }
 
 export function usePost(options?: UsePostOptions) {
@@ -24,14 +23,16 @@ export function usePost(options?: UsePostOptions) {
     mutationFn: (data: CreatePostInput) => createPost(data),
     onSuccess: async (response, variables) => {
       if (response.ok) {
-        await queryClient.invalidateQueries({ queryKey: queryKey().post().postList({}) });
+        const { authorId, postId } = response.data;
+
+        await queryClient.invalidateQueries({ queryKey: queryKey().post().postList({ authorId }) });
 
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
         if (variables.tempYn === 'N') {
-          router.push(`/${response.data.authorId}/${response.data.postId}`);
+          router.push(`/${authorId}/${postId}`);
         } else {
-          router.push(`/${response.data.authorId}?tempYn=Y`);
+          router.push(`/${authorId}?tempYn=Y`);
         }
       } else {
         alert('게시물 작성에 실패했습니다.');
@@ -56,7 +57,7 @@ export function usePost(options?: UsePostOptions) {
       if (response.ok) {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKey().post().postDetail(postId) }),
-          queryClient.invalidateQueries({ queryKey: queryKey().post().postList({}) }),
+          queryClient.invalidateQueries({ queryKey: queryKey().post().postList({ authorId }) }),
         ]);
 
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 수정되었습니다.');
@@ -103,26 +104,24 @@ export function usePost(options?: UsePostOptions) {
       return { prev: prevData };
     },
     onError: (err, _, context) => {
+      debugger;
       if (!options?.delete) return;
       const { postQueryKey } = options.delete;
       if (context?.prev) {
         queryClient.setQueryData(postQueryKey, context.prev);
       }
     },
-    onSettled: async () => {
+    onSuccess: async () => {
+      debugger;
       if (!options?.delete) return;
-      const { postQueryKey: listKey, userId, postId } = options.delete;
+      const { postQueryKey: listKey, userId, postImageFiles } = options.delete;
       const isTemp = searchParams?.get('tempYn') === 'Y';
 
       queryClient.invalidateQueries({ queryKey: listKey });
       queryClient.invalidateQueries({ queryKey: queryKey().post().recentPost(userId) });
       queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
 
-      // Fetch post content to find images to remove
-      const postRes = await getPost(postId);
-      const postHtmlCntn = (postRes?.ok && postRes.data?.postHtmlCntn) || '';
-      const imgFiles = parseImgfileArr(Buffer.from(postHtmlCntn).toString());
-      deletePostImage(imgFiles);
+      deletePostImage(postImageFiles);
 
       !isTemp && router.push(`/${userId}`);
     },

@@ -1,8 +1,4 @@
-export interface ArticleKey {
-  keyNum: number;
-  lang: string;
-  geo: string;
-}
+export type ArticleKey = [number, string, string];
 
 export interface Article {
   title: string;

@@ -11,5 +11,5 @@ interface GetDailyTrendsProps {
 
 export const getDailyTrends = async ({ geo, hl }: GetDailyTrendsProps): Promise<Trend[]> => {
   const result = await GoogleTrendsApi.dailyTrends({ geo, hl });
-  return createDailyTrends(result.data);
+  return createDailyTrends(result.data || []);
 };

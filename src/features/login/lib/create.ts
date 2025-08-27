@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { User } from '@/entities/user/model';
-import { formatDate } from '@/shared/lib/util/transform/date';
+import { formatDate } from '@/shared/lib/util/transform';
 
 export const createPasswordResetToken = ({ length, expireTimeMin }: { length: number; expireTimeMin: number }) => {
   const token = crypto.randomBytes(length).toString('hex');

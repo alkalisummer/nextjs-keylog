@@ -5,14 +5,14 @@ import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { PostDetails } from '@/entities/post/ui';
 import { AsyncBoundary } from '@/shared/boundary';
+import { dehydrate } from '@tanstack/react-query';
 import { CommentList } from '@/features/comment/ui';
 import { queryKey } from '@/app/provider/query/lib';
-import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { PostHashtags } from '@/entities/hashtag/ui';
 import { PostInteractions } from '@/entities/like/ui';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
-import { dehydrate } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
   const { userId, postId } = await params;
