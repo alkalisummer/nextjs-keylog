@@ -1,18 +1,15 @@
 'use server';
 
-import { BoxError } from '@/shared/ui';
 import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { PostDetails } from '@/entities/post/ui';
-import { AsyncBoundary } from '@/shared/boundary';
-import { dehydrate } from '@tanstack/react-query';
 import { CommentList } from '@/features/comment/ui';
 import { queryKey } from '@/app/provider/query/lib';
 import { PostHashtags } from '@/entities/hashtag/ui';
 import { PostInteractions } from '@/entities/like/ui';
 import { getCommentList } from '@/entities/comment/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
-import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
   const { userId, postId } = await params;
@@ -24,7 +21,6 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     queryFn: () => getUser(userId),
   };
 
-  await queryClient.prefetchQuery(userQueryOptions);
   const userRes = await queryClient.ensureQueryData(userQueryOptions);
 
   if (!userRes.ok) {
@@ -37,7 +33,6 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     queryFn: () => getPost(Number(postId)),
   };
 
-  await queryClient.prefetchQuery(postQueryOptions);
   const postRes = await queryClient.ensureQueryData(postQueryOptions);
 
   if (!postRes.ok) {
@@ -50,7 +45,6 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     queryFn: () => getCommentList(Number(postId)),
   };
 
-  await queryClient.prefetchQuery(commentsQueryOptions);
   const commentsRes = await queryClient.ensureQueryData(commentsQueryOptions);
 
   if (!commentsRes.ok) {
@@ -63,7 +57,6 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
     queryFn: () => getPostHashtags(Number(postId)),
   };
 
-  await queryClient.prefetchQuery(hashtagsQueryOptions);
   const postHashtagsRes = await queryClient.ensureQueryData(hashtagsQueryOptions);
 
   if (!postHashtagsRes.ok) {
@@ -74,12 +67,10 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
-        <PostDetails post={postRes.data} user={userRes.data} />
-        <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
-        <PostHashtags hashtags={postHashtagsRes.data} />
-        <CommentList postId={Number(postId)} />
-      </AsyncBoundary>
+      <PostDetails post={postRes.data} user={userRes.data} />
+      <PostInteractions postId={Number(postId)} postTitle={postRes.data.postTitle} />
+      <PostHashtags hashtags={postHashtagsRes.data} />
+      <CommentList postId={Number(postId)} />
     </HydrationBoundary>
   );
 };

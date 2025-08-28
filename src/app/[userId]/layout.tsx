@@ -21,8 +21,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getUser(userId),
   };
   await queryClient.prefetchQuery(userQueryOptions);
-  const user = await queryClient.ensureQueryData(userQueryOptions);
-  if (!user.ok) throw new Error('user fetch error');
 
   //recent post
   const recentPostQueryOptions = {
@@ -30,8 +28,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getRecentPosts(userId),
   };
   await queryClient.prefetchQuery(recentPostQueryOptions);
-  const recentPost = await queryClient.ensureQueryData(recentPostQueryOptions);
-  if (!recentPost.ok) throw new Error('recent post fetch error');
 
   //popular posts
   const popularPostQueryOptions = {
@@ -39,8 +35,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getPopularPosts(userId),
   };
   await queryClient.prefetchQuery(popularPostQueryOptions);
-  const popularPost = await queryClient.ensureQueryData(popularPostQueryOptions);
-  if (!popularPost.ok) throw new Error('popular post fetch error');
 
   //recent comments
   const recentCommentQueryOptions = {
@@ -48,8 +42,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getRecentComments(userId),
   };
   await queryClient.prefetchQuery(recentCommentQueryOptions);
-  const recentComment = await queryClient.ensureQueryData(recentCommentQueryOptions);
-  if (!recentComment.ok) throw new Error('recent comment fetch error');
 
   //hashtags
   const hashtagQueryOptions = {
@@ -57,8 +49,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getAuthorHashtags(userId),
   };
   await queryClient.prefetchQuery(hashtagQueryOptions);
-  const hashtag = await queryClient.ensureQueryData(hashtagQueryOptions);
-  if (!hashtag.ok) throw new Error('hashtag fetch error');
 
   //posts
   const postsQueryOptions = {
@@ -66,8 +56,6 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     queryFn: () => getPosts({ currPageNum: 1, authorId: userId }),
   };
   await queryClient.prefetchQuery(postsQueryOptions);
-  const posts = await queryClient.ensureQueryData(postsQueryOptions);
-  if (!posts.ok) throw new Error('posts fetch error');
 
   const dehydratedState = dehydrate(queryClient);
 
@@ -75,14 +63,7 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
     <HydrationBoundary state={dehydratedState}>
       <BlogContainer>
         <Header type="blog" />
-        <Sidebar
-          userInfo={user.data}
-          recentPosts={recentPost.data}
-          popularPosts={popularPost.data}
-          recentComments={recentComment.data}
-          hashtags={hashtag.data}
-          posts={posts.data}
-        />
+        <Sidebar />
         <Article>{children}</Article>
       </BlogContainer>
     </HydrationBoundary>

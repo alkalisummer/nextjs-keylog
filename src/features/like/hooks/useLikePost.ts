@@ -50,6 +50,7 @@ export const useLikePost = (postId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postLikeQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
     },
   });
 
@@ -80,6 +81,7 @@ export const useLikePost = (postId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postLikeQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
     },
   });
 

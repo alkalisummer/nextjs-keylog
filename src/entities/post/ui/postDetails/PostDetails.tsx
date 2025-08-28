@@ -2,13 +2,12 @@
 
 import Link from 'next/link';
 import css from './postDetails.module.scss';
-import { parseImgfileArr } from '../../lib';
 import { User } from '@/entities/user/model';
 import { formatDate } from '@/shared/lib/util';
+import { usePost } from '@/features/post/hooks';
 import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
-import { usePost } from '@/features/post/hooks';
 
 interface PostDetailProps {
   post: PostDetail;
@@ -24,7 +23,6 @@ export const PostDetails = ({ post, user }: PostDetailProps) => {
       postQueryKey: queryKey().post().postList({ authorId: user.userId }),
       userId: user.userId,
       postId: post.postId,
-      postImageFiles: parseImgfileArr(postHtmlCntn),
     },
   });
 

@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { Post } from '../../model';
 import css from './blogPostItem.module.scss';
 import { formatDate } from '@/shared/lib/util';
+import { usePost } from '@/features/post/hooks';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
-import { usePost } from '@/features/post/hooks';
 
 interface BlogPostItemProps {
   post: Post;
@@ -18,8 +18,10 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   const { postId, postTitle, postCntn, postThmbImgUrl, hashtagName, rgsnDttm } = post || {};
 
   const searchParams = useSearchParams();
-  const isTemp = searchParams?.get('tempYn') === 'Y';
   const pageNum = searchParams?.get('pageNum');
+  const isTemp = searchParams?.get('tempYn') === 'Y';
+
+  const routeUrl = isTemp ? `/write?postId=${postId}` : `/${userId}/${postId}`;
 
   const { deletePostMutation } = usePost({
     delete: {
@@ -38,7 +40,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   return (
     <div className={css.module}>
       <div className={css.postTitleContent}>
-        <Link href={`/${userId}/${postId}`}>
+        <Link href={routeUrl}>
           {postThmbImgUrl ? (
             <div className={css.postThumb}>
               <div className={css.thumbContent}>

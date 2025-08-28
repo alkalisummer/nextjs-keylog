@@ -7,6 +7,8 @@ import { getPost } from '@/entities/post/api';
 import { getDailyTrends } from '@/entities/trend/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
 import { getCustomSession } from '@/shared/lib/util';
+import { queryKey } from '@/app/provider/query/lib';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 interface PageProps {
   searchParams: Promise<{ postId?: string }>;
@@ -14,6 +16,7 @@ interface PageProps {
 
 export const Page = async ({ searchParams }: PageProps) => {
   const { postId } = await searchParams;
+  const queryClient = new QueryClient();
   const session = await getCustomSession();
 
   // 로그인 체크
@@ -22,11 +25,16 @@ export const Page = async ({ searchParams }: PageProps) => {
   }
 
   let post = null;
-  let hashtags: string[] = [];
 
   // postId가 있으면 수정 모드
   if (postId) {
-    const postRes = await getPost(Number(postId));
+    const postQueryOptions = {
+      queryKey: queryKey().post().postDetail(Number(postId)),
+      queryFn: () => getPost(Number(postId)),
+    };
+
+    const postRes = await queryClient.fetchQuery(postQueryOptions);
+
     if (!postRes.ok) {
       notFound();
     }
@@ -38,20 +46,25 @@ export const Page = async ({ searchParams }: PageProps) => {
       throw new Error('Unauthorized');
     }
 
-    // 해시태그 조회
-    const hashtagRes = await getPostHashtags(Number(postId));
-    if (hashtagRes.ok) {
-      hashtags = hashtagRes.data.map(tag => tag.hashtagName);
-    }
+    const hashtagsQueryOptions = {
+      queryKey: queryKey().hashtag().postHashtags(Number(postId)),
+      queryFn: () => getPostHashtags(Number(postId)),
+    };
+
+    await queryClient.prefetchQuery(hashtagsQueryOptions);
   }
 
   // 트렌드 키워드 조회
   const trends = await getDailyTrends({ geo: 'KR', hl: 'ko' });
 
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <main>
-      <Write post={post || undefined} hashtags={hashtags} trends={trends} authorId={session.user.id} />
-    </main>
+    <HydrationBoundary state={dehydratedState}>
+      <main>
+        <Write trends={trends} authorId={session.user.id} post={post || undefined} />
+      </main>
+    </HydrationBoundary>
   );
 };
 

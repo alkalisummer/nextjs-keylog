@@ -17,6 +17,10 @@ interface UseCommentProps {
 export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
+  const userId = session?.user?.id ?? '';
+  const userName = session?.user?.name ?? '';
+  const userImage = session?.user?.image ?? '';
+
   const commentListQueryKey = queryKey().comment().commentList(postId);
 
   const createCommentMutation = useMutation({
@@ -30,9 +34,9 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
       const tempComment: Comment = createTempComment({
         postId: data.postId,
         content: data.content,
-        authorId: session?.user?.id,
-        authorName: session?.user?.name ?? '',
-        authorImage: session?.user?.image ?? '',
+        authorId: userId,
+        authorName: userName,
+        authorImage: userImage,
         commentOriginId: data.commentOriginId,
       });
 
@@ -62,6 +66,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
     },
   });
 
@@ -104,6 +109,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
     },
   });
 
@@ -154,6 +160,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
     },
   });
 

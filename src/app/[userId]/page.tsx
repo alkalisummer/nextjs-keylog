@@ -1,10 +1,8 @@
 'use server';
 
-import { BoxError } from '@/shared/ui';
 import { getUser } from '@/entities/user/api';
 import { getPosts } from '@/entities/post/api';
 import { queryKey } from '../provider/query/lib';
-import { AsyncBoundary } from '@/shared/boundary';
 import { PostUserInfo } from '@/entities/user/ui';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { BlogPostList, BlogPostHeader } from '@/entities/post/ui';
@@ -24,7 +22,6 @@ export const Page = async ({
     queryKey: queryKey().user().userInfo(userId),
     queryFn: () => getUser(userId),
   };
-  await queryClient.prefetchQuery(userQueryOptions);
   const userRes = await queryClient.ensureQueryData(userQueryOptions);
 
   if (!userRes.ok) {
@@ -46,7 +43,7 @@ export const Page = async ({
     queryKey: queryKey().hashtag().hashtagList(userId),
     queryFn: () => getAuthorHashtags(userId),
   };
-  await queryClient.prefetchQuery(hashtagQueryOptions);
+
   const hashtagRes = await queryClient.ensureQueryData(hashtagQueryOptions);
   if (!hashtagRes.ok) throw new Error('hashtag fetch error');
 
@@ -54,11 +51,9 @@ export const Page = async ({
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <AsyncBoundary pending={<div>Loading...</div>} error={<BoxError height={500} />}>
-        <PostUserInfo author={userRes.data} />
-        <BlogPostHeader hashtags={hashtagRes.data} userId={userRes.data.userId} />
-        <BlogPostList author={userRes.data} />
-      </AsyncBoundary>
+      <PostUserInfo author={userRes.data} />
+      <BlogPostHeader hashtags={hashtagRes.data} userId={userRes.data.userId} />
+      <BlogPostList author={userRes.data} />
     </HydrationBoundary>
   );
 };

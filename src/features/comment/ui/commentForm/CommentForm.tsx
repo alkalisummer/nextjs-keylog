@@ -2,13 +2,13 @@
 
 import { useComment } from '../../hooks';
 import { useForm } from 'react-hook-form';
+import { scroll } from '@/shared/lib/util';
 import css from './commentForm.module.scss';
 import { useRouter } from 'next/navigation';
 import { FieldError } from '@/shared/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthenticated } from '@/shared/lib/util/auth/client';
 import { CreateCommentSchema, CreateCommentForm as Form } from '../../model';
-import { scroll } from '@/shared/lib/util';
 
 interface CommentFormProps {
   postId: number;

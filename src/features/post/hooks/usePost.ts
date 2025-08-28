@@ -7,10 +7,12 @@ import { createPost, updatePost } from '@/entities/post/api';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient, QueryKey } from '@tanstack/react-query';
 import { CreatePostInput, UpdatePostInput, Post } from '@/entities/post/model';
+import { getPost } from '@/entities/post/api';
+import { parseImgfileArr } from '@/entities/post/lib';
 
 interface UsePostOptions {
   update?: { postId: number; authorId: string };
-  delete?: { postQueryKey: QueryKey; userId: string; postId: number; postImageFiles: string[] };
+  delete?: { postQueryKey: QueryKey; userId: string; postId: number };
 }
 
 export function usePost(options?: UsePostOptions) {
@@ -58,6 +60,7 @@ export function usePost(options?: UsePostOptions) {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKey().post().postDetail(postId) }),
           queryClient.invalidateQueries({ queryKey: queryKey().post().postList({ authorId }) }),
+          queryClient.invalidateQueries({ queryKey: queryKey().hashtag().postHashtags(postId) }),
         ]);
 
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 수정되었습니다.');
@@ -82,6 +85,15 @@ export function usePost(options?: UsePostOptions) {
     mutationFn: async () => {
       if (!options?.delete) throw new Error('delete options are required');
       const { postId } = options.delete;
+
+      // 게시물 이미지 삭제
+      const post = await getPost(postId);
+      if (post.ok) {
+        const postHtmlCntn = Buffer.from(post.data.postHtmlCntn ?? '').toString();
+        const postImageFiles = parseImgfileArr(postHtmlCntn);
+        deletePostImage(postImageFiles);
+      }
+
       return deletePost(postId);
     },
     onMutate: async () => {
@@ -104,7 +116,6 @@ export function usePost(options?: UsePostOptions) {
       return { prev: prevData };
     },
     onError: (err, _, context) => {
-      debugger;
       if (!options?.delete) return;
       const { postQueryKey } = options.delete;
       if (context?.prev) {
@@ -112,16 +123,14 @@ export function usePost(options?: UsePostOptions) {
       }
     },
     onSuccess: async () => {
-      debugger;
       if (!options?.delete) return;
-      const { postQueryKey: listKey, userId, postImageFiles } = options.delete;
+      const { postQueryKey: listKey, userId } = options.delete;
+
       const isTemp = searchParams?.get('tempYn') === 'Y';
 
       queryClient.invalidateQueries({ queryKey: listKey });
       queryClient.invalidateQueries({ queryKey: queryKey().post().recentPost(userId) });
       queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
-
-      deletePostImage(postImageFiles);
 
       !isTemp && router.push(`/${userId}`);
     },

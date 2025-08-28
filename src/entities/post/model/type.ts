@@ -31,40 +31,28 @@ export interface RecentPost {
   rgsnDttm: string;
 }
 
-export interface PopularPost {
-  postId: number;
-  postTitle: string;
-  postThmbImgUrl: string;
-  rgsnDttm: string;
+export interface PopularPost extends RecentPost {
   likeCnt: number;
 }
+
+export type TempYn = 'Y' | 'N';
 
 export interface CreatePostInput {
   postTitle: string;
   postCntn?: string;
   postHtmlCntn?: string;
   postThmbImgUrl?: string;
-  tempYn: 'Y' | 'N';
+  tempYn: TempYn;
   postOriginId?: number;
   authorId: string;
+  hashtagList?: string[];
 }
 
-export interface UpdatePostInput {
+export interface UpdatePostInput extends CreatePostInput {
   postId: number;
-  postTitle: string;
-  postCntn?: string;
-  postHtmlCntn?: string;
-  postThmbImgUrl?: string;
-  tempYn: 'Y' | 'N';
-  authorId: string;
 }
 
-export interface CreatePostResponse {
-  postId: number;
-  authorId: string;
-}
-
-export interface UpdatePostResponse {
+export interface PostResponse {
   postId: number;
   authorId: string;
 }

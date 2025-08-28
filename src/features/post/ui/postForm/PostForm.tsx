@@ -7,6 +7,7 @@ import { POST } from '@/shared/lib/constants';
 import { removeHtml } from '@/shared/lib/util';
 import { usePost } from '@/features/post/hooks';
 import { Editor } from '@toast-ui/react-editor';
+import { useCheckAuth } from '@/shared/lib/hooks';
 import { PostDetail } from '@/entities/post/model';
 import { uploadPostImage } from '@/features/post/api';
 import { useForm, Controller } from 'react-hook-form';
@@ -23,9 +24,10 @@ interface PostFormProps {
   authorId: string;
 }
 
-export const PostForm = ({ post, authorId }: PostFormProps) => {
+export const PostForm = ({ post, hashtags, authorId }: PostFormProps) => {
   const router = useRouter();
   const editorRef = useRef<Editor>(null);
+  const isAuthorized = useCheckAuth(authorId);
 
   const {
     register,
@@ -40,6 +42,7 @@ export const PostForm = ({ post, authorId }: PostFormProps) => {
     defaultValues: {
       title: post?.postTitle ?? '',
       content: post?.postHtmlCntn ?? '',
+      hashtags: hashtags || [],
     },
   });
 
@@ -65,6 +68,12 @@ export const PostForm = ({ post, authorId }: PostFormProps) => {
 
   const onSubmitWith = (tempYn: 'Y' | 'N', postId?: number) =>
     handleSubmit(async (data: Form) => {
+      if (!isAuthorized) {
+        alert('비정상적인 접근입니다. 로그인 화면으로 이동합니다.');
+        router.push('/login');
+        return;
+      }
+
       const htmlContent = data.content || '';
       const plainContent = removeHtml(htmlContent);
       const { currentImageNames } = await cleanupBeforeSubmit(htmlContent);
@@ -75,11 +84,12 @@ export const PostForm = ({ post, authorId }: PostFormProps) => {
         postHtmlCntn: htmlContent,
         postThmbImgUrl: extractThumbnail(htmlContent) || '',
         tempYn,
-        hashtagArr: data.hashtags,
+        ...(data.hashtags ? { hashtagList: data.hashtags } : {}),
         ...(postId ? { postId } : {}),
       };
 
       if (postId) {
+        // 게시물 수정
         try {
           const res = await updatePostMutation.mutateAsync({ ...postData, postId, authorId });
           if (res?.ok ?? true) await cleanupAfterUpdateSuccess(currentImageNames);
@@ -87,6 +97,7 @@ export const PostForm = ({ post, authorId }: PostFormProps) => {
           console.error('Failed to update post:', error);
         }
       } else {
+        // 게시물 신규등록
         try {
           await createPostMutation.mutateAsync({ ...postData, authorId });
         } catch (error) {
@@ -145,7 +156,7 @@ export const PostForm = ({ post, authorId }: PostFormProps) => {
         <button type="button" className={css.cancelButton} onClick={onCancel}>
           취소
         </button>
-        <button className={css.button} type="button" onClick={onSubmitWith('Y')}>
+        <button className={css.button} type="button" onClick={onSubmitWith('Y', post?.postId)}>
           임시저장
         </button>
         <button className={css.button} type="submit" onClick={onSubmitWith('N', post?.postId)}>
