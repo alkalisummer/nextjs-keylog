@@ -38,13 +38,13 @@ export function PostHashtag({ postHashtags = [], onChange }: Props) {
         ))}
         <input
           type="text"
-          placeholder="#해시태그를 입력하세요 (엔터 혹은 쉼표로 추가)"
+          placeholder="#해시태그를 입력하세요 (엔터 혹은 공백으로 추가)"
           value={newHashtag}
           onChange={e => setNewHashtag(e.target.value)}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
           onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ',') {
+            if (e.key === 'Enter' || e.key === ' ') {
               if (isComposing) return;
               e.preventDefault();
               handleHashtagAdd();

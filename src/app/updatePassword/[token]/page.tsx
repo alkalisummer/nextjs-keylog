@@ -1,8 +1,8 @@
 'use server';
 
-import { getPasswordResetToken } from '@/features/login/api';
 import { validateToken } from '@/features/login/lib';
 import { UpdatePasswordForm } from '@/features/login/ui';
+import { getPasswordResetToken } from '@/features/login/api';
 
 export const Page = async ({ params }: { params: Promise<{ token: string }> }) => {
   const { token } = await params;

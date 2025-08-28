@@ -1,34 +1,44 @@
+@use 'variable' as *;
+
 // Variables
 $color-background: #f8f9fa;
 $color-white: #ffffff;
 $color-border: #e9ecef;
-$color-text: #212529;
+$color-text: #333;
 $color-text-secondary: #868e96;
-$color-primary: #12b886;
-$color-primary-light: #e3fcef;
+$color-primary: #0c7eff;
+$color-primary-light: #e4f5ff;
 $color-hover: #f8f9fa;
 
 .module {
   width: 100%;
   height: 100%;
+  padding-right: 24px;
   display: flex;
   flex-direction: column;
   background-color: $color-white;
-  border-left: 1px solid $color-border;
   overflow-y: auto;
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 20px 0px 20px 0px;
     border-bottom: 1px solid $color-border;
 
     .title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
       margin: 0;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 500;
       color: $color-text;
+
+      .icon {
+        width: 16px;
+        height: 16px;
+      }
     }
 
     .toggleBtn {
@@ -178,16 +188,15 @@ $color-hover: #f8f9fa;
       }
     }
   }
+}
 
-  .footer {
-    padding: 16px 20px;
-    border-top: 1px solid $color-border;
-    text-align: center;
+@media (max-width: $breakpoint-small) {
+  .module {
+    padding-right: 0;
 
-    .footerText {
-      margin: 0;
-      font-size: 12px;
-      color: $color-text-secondary;
+    .header {
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
 }

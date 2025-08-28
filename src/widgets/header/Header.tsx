@@ -2,7 +2,7 @@
 
 import css from './header.module.scss';
 import { useAuthenticated } from '@/shared/lib/util';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, usePathname } from 'next/navigation';
 import { AccountMenu } from '../../features/account/ui';
 
 interface HeaderProps {
@@ -14,6 +14,7 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
   const params = useParams();
   const authorId = params?.userId;
   const isLoggedIn = useAuthenticated();
+  const isWritePage = usePathname()?.includes('/write');
 
   return (
     <header className={css.module}>
@@ -33,9 +34,11 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
         )}
         {isLoggedIn ? (
           <div className={css.accountMenu}>
-            <button className={css.writeBtn} onClick={() => router.push(`/write?keyword=true`)}>
-              새 글 작성
-            </button>
+            {!isWritePage && (
+              <button className={css.writeBtn} onClick={() => router.push(`/write?keyword=true`)}>
+                새 글 작성
+              </button>
+            )}
             <AccountMenu />
           </div>
         ) : (

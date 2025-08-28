@@ -1,19 +1,38 @@
+@use 'variable' as *;
+
 .module {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 4rem);
   display: flex;
   background-color: #f8f9fa;
+  position: absolute;
 
   .editorSection {
-    flex: 1;
+    width: 70%;
     height: 100%;
     min-width: 0;
   }
 
   .trendKeywords {
-    width: 400px;
+    width: 30%;
+    min-width: 350px;
     height: 100%;
     display: flex;
     flex-direction: column;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    flex-direction: column-reverse;
+    height: calc(100% - 56px);
+
+    .editorSection {
+      width: 100%;
+    }
+
+    .trendKeywords {
+      width: 100%;
+    }
   }
 }
