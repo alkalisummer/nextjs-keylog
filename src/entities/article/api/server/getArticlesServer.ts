@@ -11,5 +11,5 @@ interface GetArticlesProps {
 
 export const getArticlesServer = async ({ articleKeys, articleCount }: GetArticlesProps): Promise<Article[]> => {
   const result = await GoogleTrendsApi.trendingArticles({ articleKeys, articleCount });
-  return result.data?.length > 0 ? createArticles(result.data) : [];
+  return result?.data && result.data.length > 0 ? createArticles(result.data) : [];
 };

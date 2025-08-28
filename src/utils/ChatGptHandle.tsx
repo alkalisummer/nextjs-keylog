@@ -1,9 +1,7 @@
 import OpenAI from 'openai';
-import { get_encoding } from 'tiktoken'; //토큰 계산
 
 export default async function ChatGptHandle(type: string, chatContent: any) {
   let chatMessage;
-  const encoding = get_encoding('cl100k_base');
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
@@ -27,7 +25,7 @@ export default async function ChatGptHandle(type: string, chatContent: any) {
   }
 
   //사용가능한 토큰 계산
-  const availableTokens = type === 'common' ? undefined : 16375 - encoding.encode(seriealized).length;
+  const availableTokens = undefined; // Avoid client-side tiktoken WASM; let API infer safe max
 
   const chatCompletion = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo-16k',

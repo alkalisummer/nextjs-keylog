@@ -21,3 +21,7 @@ export const createDailyTrends = (trends: Trend[]) => {
     .sort((a, b) => Number(b.traffic) - Number(a.traffic))
     .slice(0, 10);
 };
+
+export const createSearchGoogleKeyword = (keyword: string) => {
+  return `https://www.google.com/search?q=${keyword}`;
+};

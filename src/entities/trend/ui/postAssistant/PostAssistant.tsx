@@ -1,11 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import css from './postAssistant.module.scss';
 import { Trend } from '../../model';
-import { formatTraffic } from '../../lib';
-import { faArrowUp, faChevronDown, faChevronUp, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
+import css from './postAssistant.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PostTrendKeyword } from '../postTrendKeyword/PostTrendKeyword';
+import { PostRelatedKeywords } from '../postRelatedKeywords/PostRelatedKeywords';
+import { PostInterestChart } from '../postInterestChart/PostInterestChart';
+import { PostArticles } from '../postArticles/PostArticles';
+import { PostAutoPosting } from '../postAutoPosting/PostAutoPosting';
+import { PostImageSearch } from '../postImageSearch/PostImageSearch';
+import { faChevronDown, faChevronUp, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
 interface PostAssistantProps {
   trends: Trend[];
@@ -14,11 +19,18 @@ interface PostAssistantProps {
 export const PostAssistant = ({ trends }: PostAssistantProps) => {
   const [selectedTrend, setSelectedTrend] = useState<Trend | null>(trends[0] || null);
   const [isExpanded, setIsExpanded] = useState(true);
-  const [showArticles, setShowArticles] = useState(false);
+  const [openSections, setOpenSections] = useState({
+    related: true,
+    chart: true,
+    articles: true,
+    auto: true,
+    image: true,
+  });
+
+  const toggle = (key: keyof typeof openSections) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
 
   const handleTrendSelect = (trend: Trend) => {
     setSelectedTrend(trend);
-    setShowArticles(true);
   };
 
   return (
@@ -35,22 +47,62 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
 
       {isExpanded && (
         <>
-          <div className={css.keywordList}>
-            {trends.map((trend, index) => (
-              <div
-                key={trend.keyword}
-                className={`${css.keywordItem} ${selectedTrend?.keyword === trend.keyword ? css.active : ''}`}
-                onClick={() => handleTrendSelect(trend)}
-              >
-                <span className={css.rank}>{index + 1}</span>
-                <span className={css.keyword}>{trend.keyword}</span>
-                <span className={css.traffic}>
-                  {formatTraffic({ traffic: trend.traffic })}
-                  <FontAwesomeIcon icon={faArrowUp} className={css.icon} />
-                </span>
-              </div>
-            ))}
-          </div>
+          <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
+
+          {/* Related Keywords */}
+          {/* <section className={css.section}>
+            <div className={css.sectionHeader}>
+              <h4>연관 검색어</h4>
+              <button className={css.toggleBtn} onClick={() => toggle('related')}>
+                <FontAwesomeIcon icon={openSections.related ? faChevronUp : faChevronDown} />
+              </button>
+            </div>
+            {openSections.related && <PostRelatedKeywords keyword={selectedTrend?.keyword} />}
+          </section> */}
+
+          {/* Articles */}
+          {/* <section className={css.section}>
+            <div className={css.sectionHeader}>
+              <h4>Articles</h4>
+              <button className={css.toggleBtn} onClick={() => toggle('articles')}>
+                <FontAwesomeIcon icon={openSections.articles ? faChevronUp : faChevronDown} />
+              </button>
+            </div>
+            {openSections.articles && <PostArticles trend={selectedTrend} />}
+          </section> */}
+
+          {/* Interest Chart */}
+          {/* <section className={css.section}>
+            <div className={css.sectionHeader}>
+              <h4>Interest Change Chart</h4>
+              <button className={css.toggleBtn} onClick={() => toggle('chart')}>
+                <FontAwesomeIcon icon={openSections.chart ? faChevronUp : faChevronDown} />
+              </button>
+            </div>
+            {openSections.chart && <PostInterestChart keyword={selectedTrend?.keyword} />}
+          </section> */}
+
+          {/* Auto Posting */}
+          {/* <section className={css.section}>
+            <div className={css.sectionHeader}>
+              <h4>Auto Posting</h4>
+              <button className={css.toggleBtn} onClick={() => toggle('auto')}>
+                <FontAwesomeIcon icon={openSections.auto ? faChevronUp : faChevronDown} />
+              </button>
+            </div>
+            {openSections.auto && <PostAutoPosting defaultKeyword={selectedTrend?.keyword || ''} />}
+          </section> */}
+
+          {/* Image Search */}
+          {/* <section className={css.section}>
+            <div className={css.sectionHeader}>
+              <h4>Image</h4>
+              <button className={css.toggleBtn} onClick={() => toggle('image')}>
+                <FontAwesomeIcon icon={openSections.image ? faChevronUp : faChevronDown} />
+              </button>
+            </div>
+            {openSections.image && <PostImageSearch defaultKeyword={selectedTrend?.keyword || ''} />}
+          </section> */}
         </>
       )}
     </div>
