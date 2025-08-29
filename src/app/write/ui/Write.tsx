@@ -9,6 +9,8 @@ import { PostDetail } from '@/entities/post/model';
 import { PostAssistant } from '@/entities/trend/ui';
 import { queryKey } from '@/app/provider/query/lib';
 import { getPostHashtags } from '@/entities/hashtag/api';
+import { useArticlesQuery } from '@/entities/article/query';
+import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 
 interface WriteProps {
   post?: PostDetail;

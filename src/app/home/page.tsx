@@ -22,7 +22,6 @@ export const Page = async ({ searchParams }: PageProps) => {
     queryKey: queryKey().trend().trendsList(),
     queryFn: () => getDailyTrends({ geo: 'KR', hl: 'ko' }),
   };
-  await queryClient.prefetchQuery(dailyTrendsQueryOptions);
   const dailyTrends = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
 
   //articles init data
@@ -35,7 +34,6 @@ export const Page = async ({ searchParams }: PageProps) => {
         articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
       }),
   };
-  await queryClient.prefetchQuery(articlesQueryOptions);
   const articles = await queryClient.ensureQueryData(articlesQueryOptions);
   const sortedArticles = articles?.sort((a, b) => b.pressDate[0] - a.pressDate[0]);
 
@@ -44,7 +42,6 @@ export const Page = async ({ searchParams }: PageProps) => {
     queryKey: queryKey().post().postList({ currPageNum: 1, tagId }),
     queryFn: () => getPosts({ currPageNum: 1, tagId }),
   };
-  await queryClient.prefetchQuery(postsQueryOptions);
   const posts = await queryClient.ensureQueryData(postsQueryOptions);
 
   if (!posts.ok) throw new Error('posts fetch error');

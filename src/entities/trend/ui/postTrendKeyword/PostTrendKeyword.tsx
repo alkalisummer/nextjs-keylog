@@ -15,6 +15,8 @@ interface PostTrendKeywordProps {
 
 export function PostTrendKeyword({ trends, selectedKeyword, onSelect }: PostTrendKeywordProps) {
   const selectedTrend = trends.find(trend => trend.keyword === selectedKeyword);
+  const relatedKeywords = selectedTrend?.relatedKeywords.filter(keyword => keyword !== selectedKeyword);
+
   return (
     <div className={css.module}>
       <div className={css.keywordList}>
@@ -33,16 +35,18 @@ export function PostTrendKeyword({ trends, selectedKeyword, onSelect }: PostTren
           </div>
         ))}
       </div>
-      <div className={css.realtedKeyword}>
-        <span className={css.title}>연관 검색어</span>
-        <div className={css.list}>
-          {selectedTrend?.relatedKeywords.map((keyword, index) => (
-            <Link key={`${keyword}-${index}`} href={createSearchGoogleKeyword(keyword)} target="_blank">
-              <span>{keyword}</span>
-            </Link>
-          ))}
+      {relatedKeywords && relatedKeywords.length > 0 && (
+        <div className={css.realtedKeyword}>
+          <span className={css.title}>연관 검색어</span>
+          <div className={css.list}>
+            {relatedKeywords?.map((keyword, index) => (
+              <Link key={`${keyword}-${index}`} href={createSearchGoogleKeyword(keyword)} target="_blank">
+                <span>{keyword}</span>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

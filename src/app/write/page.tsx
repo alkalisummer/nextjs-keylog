@@ -9,6 +9,8 @@ import { getPostHashtags } from '@/entities/hashtag/api';
 import { getCustomSession } from '@/shared/lib/util';
 import { queryKey } from '@/app/provider/query/lib';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import { getArticlesServer } from '@/entities/article/api';
+import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 
 interface PageProps {
   searchParams: Promise<{ postId?: string }>;
@@ -23,6 +25,26 @@ export const Page = async ({ searchParams }: PageProps) => {
   if (!session?.user?.id) {
     redirect(`/login?redirect=${encodeURIComponent('/write')}`);
   }
+
+  //trends init data prefetch
+  const dailyTrendsQueryOptions = {
+    queryKey: queryKey().trend().trendsList(),
+    queryFn: () => getDailyTrends({ geo: 'KR', hl: 'ko' }),
+  };
+
+  const dailyTrends = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
+
+  //init trend articles prefetch
+  const initTrendKeywordInfo = dailyTrends[0];
+  const articlesQueryOptions = {
+    queryKey: queryKey().article().articleList(initTrendKeywordInfo.keyword),
+    queryFn: () =>
+      getArticlesServer({
+        articleKeys: initTrendKeywordInfo.articleKeys,
+        articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
+      }),
+  };
+  await queryClient.prefetchQuery(articlesQueryOptions);
 
   let post = null;
 
@@ -54,15 +76,12 @@ export const Page = async ({ searchParams }: PageProps) => {
     await queryClient.prefetchQuery(hashtagsQueryOptions);
   }
 
-  // 트렌드 키워드 조회
-  const trends = await getDailyTrends({ geo: 'KR', hl: 'ko' });
-
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
       <main>
-        <Write trends={trends} authorId={session.user.id} post={post || undefined} />
+        <Write trends={dailyTrends} authorId={session.user.id} post={post || undefined} />
       </main>
     </HydrationBoundary>
   );

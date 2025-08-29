@@ -1,24 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Trend } from '../../model';
 import css from './postAssistant.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PostTrendKeyword } from '../postTrendKeyword/PostTrendKeyword';
-import { PostRelatedKeywords } from '../postRelatedKeywords/PostRelatedKeywords';
 import { PostInterestChart } from '../postInterestChart/PostInterestChart';
-import { PostArticles } from '../postArticles/PostArticles';
+import { PostArticles } from '../../../article/ui';
 import { PostAutoPosting } from '../postAutoPosting/PostAutoPosting';
 import { PostImageSearch } from '../postImageSearch/PostImageSearch';
 import { faChevronDown, faChevronUp, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
+import { Article } from '@/entities/article/model';
+import { useArticlesQuery } from '@/entities/article/query';
 
 interface PostAssistantProps {
   trends: Trend[];
 }
 
 export const PostAssistant = ({ trends }: PostAssistantProps) => {
-  const [selectedTrend, setSelectedTrend] = useState<Trend | null>(trends[0] || null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
+  const [keywordExpanded, setKeywordExpanded] = useState(true);
+  const [articlesExpanded, setArticlesExpanded] = useState(true);
   const [openSections, setOpenSections] = useState({
     related: true,
     chart: true,
@@ -27,7 +30,10 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
     image: true,
   });
 
-  const toggle = (key: keyof typeof openSections) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+  const { data: articles } = useArticlesQuery({
+    trends,
+    selectedTrend: selectedTrend,
+  });
 
   const handleTrendSelect = (trend: Trend) => {
     setSelectedTrend(trend);
@@ -35,44 +41,32 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
 
   return (
     <div className={css.module}>
-      <div className={css.header}>
+      <section className={css.section}>
         <div className={css.title}>
           <h3 className={css.title}>급상승 키워드</h3>
           <FontAwesomeIcon icon={faArrowTrendUp} className={css.icon} />
         </div>
-        <button className={css.toggleBtn} onClick={() => setIsExpanded(!isExpanded)}>
-          <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} />
+        <button className={css.toggleBtn} onClick={() => setKeywordExpanded(!keywordExpanded)}>
+          <FontAwesomeIcon icon={keywordExpanded ? faChevronUp : faChevronDown} />
         </button>
-      </div>
+      </section>
+      {keywordExpanded && (
+        <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
+      )}
+      {/* Articles */}
+      <section className={css.section}>
+        <div className={css.title}>
+          <h3 className={css.title}>뉴스</h3>
+          <FontAwesomeIcon icon={faNewspaper} className={css.icon} />
+        </div>
+        <button className={css.toggleBtn} onClick={() => setArticlesExpanded(!articlesExpanded)}>
+          <FontAwesomeIcon icon={articlesExpanded ? faChevronUp : faChevronDown} />
+        </button>
+      </section>
+      {articlesExpanded && <PostArticles trend={selectedTrend} articles={articles || []} />}
 
-      {isExpanded && (
-        <>
-          <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
-
-          {/* Related Keywords */}
-          {/* <section className={css.section}>
-            <div className={css.sectionHeader}>
-              <h4>연관 검색어</h4>
-              <button className={css.toggleBtn} onClick={() => toggle('related')}>
-                <FontAwesomeIcon icon={openSections.related ? faChevronUp : faChevronDown} />
-              </button>
-            </div>
-            {openSections.related && <PostRelatedKeywords keyword={selectedTrend?.keyword} />}
-          </section> */}
-
-          {/* Articles */}
-          {/* <section className={css.section}>
-            <div className={css.sectionHeader}>
-              <h4>Articles</h4>
-              <button className={css.toggleBtn} onClick={() => toggle('articles')}>
-                <FontAwesomeIcon icon={openSections.articles ? faChevronUp : faChevronDown} />
-              </button>
-            </div>
-            {openSections.articles && <PostArticles trend={selectedTrend} />}
-          </section> */}
-
-          {/* Interest Chart */}
-          {/* <section className={css.section}>
+      {/* Interest Chart */}
+      {/* <section className={css.section}>
             <div className={css.sectionHeader}>
               <h4>Interest Change Chart</h4>
               <button className={css.toggleBtn} onClick={() => toggle('chart')}>
@@ -82,8 +76,8 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
             {openSections.chart && <PostInterestChart keyword={selectedTrend?.keyword} />}
           </section> */}
 
-          {/* Auto Posting */}
-          {/* <section className={css.section}>
+      {/* Auto Posting */}
+      {/* <section className={css.section}>
             <div className={css.sectionHeader}>
               <h4>Auto Posting</h4>
               <button className={css.toggleBtn} onClick={() => toggle('auto')}>
@@ -93,8 +87,8 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
             {openSections.auto && <PostAutoPosting defaultKeyword={selectedTrend?.keyword || ''} />}
           </section> */}
 
-          {/* Image Search */}
-          {/* <section className={css.section}>
+      {/* Image Search */}
+      {/* <section className={css.section}>
             <div className={css.sectionHeader}>
               <h4>Image</h4>
               <button className={css.toggleBtn} onClick={() => toggle('image')}>
@@ -103,8 +97,6 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
             </div>
             {openSections.image && <PostImageSearch defaultKeyword={selectedTrend?.keyword || ''} />}
           </section> */}
-        </>
-      )}
     </div>
   );
 };

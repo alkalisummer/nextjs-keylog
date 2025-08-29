@@ -17,13 +17,14 @@ $color-hover: #f8f9fa;
   display: flex;
   flex-direction: column;
   background-color: $color-white;
-  overflow-y: auto;
+  margin-bottom: 20px;
 
-  .header {
+  .section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 0px 20px 0px;
+
     border-bottom: 1px solid $color-border;
 
     .title {
@@ -36,8 +37,8 @@ $color-hover: #f8f9fa;
       color: $color-text;
 
       .icon {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
       }
     }
 
