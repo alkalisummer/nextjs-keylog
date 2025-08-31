@@ -7,11 +7,10 @@ export interface InterestOverTime {
 }
 
 export const getInterestOverTime = async (keyword: string, geo: string = 'KR') => {
-  const result = await client.route().post<InterestOverTime | null>({
+  return await client.route().post<InterestOverTime>({
     endpoint: '/trend/interestOverTime',
     options: {
       body: { keyword, geo },
     },
   });
-  return result.data;
 };

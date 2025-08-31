@@ -1,3 +1,4 @@
+import { InterestOverTime } from '../api/interestOverTimeClient';
 import { Trend } from '../model';
 import css from '../ui/keywordScroll/keywordScroll.module.scss';
 
@@ -30,4 +31,13 @@ export const parseKeywordsArray = (trends: Trend[]) => {
     ),
     data: trend,
   }));
+};
+
+export const parseValidKeywordDataList = (
+  keywordToDataMap: Record<string, InterestOverTime>,
+  seriesKeywords: string[],
+): InterestOverTime[] => {
+  return seriesKeywords
+    .map(keyword => keywordToDataMap[keyword])
+    .filter(keywordData => !!keywordData && Array.isArray(keywordData.values) && keywordData.values.length > 0);
 };

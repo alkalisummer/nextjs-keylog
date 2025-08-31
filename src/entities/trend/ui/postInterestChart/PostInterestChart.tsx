@@ -1,75 +1,48 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { getInterestOverTime, InterestOverTime } from '../../api/interestOverTimeClient';
+import { InterestOverTime } from '../../api';
+import { useInterestOverTime } from '../../hooks';
 import css from './postInterestChart.module.scss';
-import { createChartOption } from '../../lib';
 import { ECharts } from '@/shared/lib/echarts/ECharts';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createChartOption, isAllReady, parseValidKeywordDataList } from '../../lib';
 
 interface PostInterestChartProps {
-  keyword?: string;
+  keyword: string;
 }
-
-// local series type removed; handled by createChartOption
 
 export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
   const addInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [seriesKeywords, setSeriesKeywords] = useState<string[]>([]);
-  const [keywordToDataMap, setKeywordToDataMap] = useState<Record<string, InterestOverTime | null>>({});
+  const [seriesKeywords, setSeriesKeywords] = useState<string[]>([keyword]);
+  const [keywordToDataMap, setKeywordToDataMap] = useState<Record<string, InterestOverTime>>({});
   const [isAdding, setIsAdding] = useState(false);
   const [addValue, setAddValue] = useState('');
 
   useEffect(() => {
-    // Reset when base keyword changes
-    if (keyword) {
-      setSeriesKeywords([keyword]);
-      setKeywordToDataMap({});
-    } else {
-      setSeriesKeywords([]);
-      setKeywordToDataMap({});
-    }
+    setSeriesKeywords([keyword]);
   }, [keyword]);
 
   useEffect(() => {
     if (!isAdding) return;
-    // focus input when shown
     const id = window.setTimeout(() => addInputRef.current?.focus(), 0);
     return () => window.clearTimeout(id);
   }, [isAdding]);
 
-  useEffect(() => {
-    // Fetch data for any missing keywords
-    const missingKeywords = seriesKeywords.filter(k => !keywordToDataMap[k]);
-    if (missingKeywords.length === 0) return;
-
-    let cancelled = false;
-    const fetchAll = async () => {
-      const results = await Promise.all(missingKeywords.map(k => getInterestOverTime(k, 'KR')));
-      if (cancelled) return;
-      setKeywordToDataMap(prev => {
-        const next: Record<string, InterestOverTime | null> = { ...prev };
-        missingKeywords.forEach((k, i) => {
-          next[k] = results[i] ?? null;
-        });
-        return next;
-      });
-    };
-    fetchAll();
-    return () => {
-      cancelled = true;
-    };
-  }, [seriesKeywords, keywordToDataMap]);
+  useInterestOverTime({
+    seriesKeywords,
+    keywordToDataMap,
+    setKeywordToDataMap,
+    geo: 'KR',
+  });
 
   const presentDataList = useMemo(() => {
-    return seriesKeywords
-      .map(k => keywordToDataMap[k])
-      .filter((d): d is InterestOverTime => !!d && Array.isArray(d.values) && d.values.length > 0);
+    return parseValidKeywordDataList(keywordToDataMap, seriesKeywords);
   }, [seriesKeywords, keywordToDataMap]);
 
   const allReady = useMemo(() => {
     if (seriesKeywords.length === 0) return false;
-    return seriesKeywords.every(k => !!keywordToDataMap[k]);
+    return isAllReady(seriesKeywords, keywordToDataMap);
   }, [seriesKeywords, keywordToDataMap]);
 
   const option = useMemo(() => {
@@ -90,20 +63,29 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
     setIsAdding(true);
   };
 
-  const finishAdd = () => {
+  const addComplete = () => {
     setIsAdding(false);
     setAddValue('');
   };
 
-  const tryAppendKeyword = (value: string) => {
+  const addKeyword = (value: string) => {
     const trimmed = value.trim();
-    if (!trimmed) return finishAdd();
+    if (!trimmed) return addComplete();
     setSeriesKeywords(prev => {
       const exists = prev.some(v => v.toLowerCase() === trimmed.toLowerCase());
-      if (exists || prev.length >= 5) return prev;
+
+      if (exists) {
+        return prev;
+      }
+
+      if (prev.length >= 5) {
+        alert('키워드는 최대 5개까지 비교할 수 있습니다.');
+        return prev;
+      }
+
       return [...prev, trimmed];
     });
-    finishAdd();
+    addComplete();
   };
 
   if (!keyword) return null;
@@ -113,11 +95,8 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
       <div className={css.header}>
         <div className={css.controls}>
           {seriesKeywords.map(k => (
-            <span key={k} className={css.chip} title={k}>
-              <span className={css.chipText}>{k}</span>
-              <button className={css.chipDelete} aria-label={`remove ${k}`} onClick={() => onDeleteKeyword(k)}>
-                ×
-              </button>
+            <span key={k} className={css.keywordItem} title={k} onClick={() => onDeleteKeyword(k)}>
+              <span className={css.keyword}>{k}</span>
             </span>
           ))}
           {!isAdding && seriesKeywords.length < 5 ? (
@@ -133,10 +112,10 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
               value={addValue}
               onChange={e => setAddValue(e.target.value)}
               onKeyDown={e => {
-                if (e.key === 'Enter') tryAppendKeyword(addValue);
-                if (e.key === 'Escape') finishAdd();
+                if (e.key === 'Enter') addKeyword(addValue);
+                if (e.key === 'Escape') addComplete();
               }}
-              onBlur={() => finishAdd()}
+              onBlur={() => addComplete()}
             />
           ) : null}
         </div>

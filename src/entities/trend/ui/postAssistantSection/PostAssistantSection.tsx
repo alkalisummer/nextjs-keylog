@@ -14,7 +14,7 @@ interface PostAssistantSection {
   children?: React.ReactNode;
 }
 
-export const PostAssistantSection: React.FC<PostAssistantSection> = ({ title, icon, expanded, onToggle, children }) => {
+export const PostAssistantSection = ({ title, icon, expanded, onToggle, children }: PostAssistantSection) => {
   return (
     <div className={css.module}>
       <section className={css.section}>
