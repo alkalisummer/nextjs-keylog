@@ -1,18 +1,15 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Trend } from '../../model';
 import css from './postAssistant.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PostTrendKeyword } from '../postTrendKeyword/PostTrendKeyword';
-import { PostInterestChart } from '../postInterestChart/PostInterestChart';
 import { PostArticles } from '../../../article/ui';
-import { PostAutoPosting } from '../postAutoPosting/PostAutoPosting';
-import { PostImageSearch } from '../postImageSearch/PostImageSearch';
-import { faChevronDown, faChevronUp, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
-import { Article } from '@/entities/article/model';
 import { useArticlesQuery } from '@/entities/article/query';
+import { PostAssistantSection } from '../postAssistantSection/PostAssistantSection';
+import { PostInterestChart } from '../postInterestChart/PostInterestChart';
 
 interface PostAssistantProps {
   trends: Trend[];
@@ -22,13 +19,8 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
   const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
   const [keywordExpanded, setKeywordExpanded] = useState(true);
   const [articlesExpanded, setArticlesExpanded] = useState(true);
-  const [openSections, setOpenSections] = useState({
-    related: true,
-    chart: true,
-    articles: true,
-    auto: true,
-    image: true,
-  });
+  const [chartExpanded, setChartExpanded] = useState(true);
+  // Additional sections can be added later if needed
 
   const { data: articles } = useArticlesQuery({
     trends,
@@ -41,29 +33,32 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
 
   return (
     <div className={css.module}>
-      <section className={css.section}>
-        <div className={css.title}>
-          <h3 className={css.title}>급상승 키워드</h3>
-          <FontAwesomeIcon icon={faArrowTrendUp} className={css.icon} />
-        </div>
-        <button className={css.toggleBtn} onClick={() => setKeywordExpanded(!keywordExpanded)}>
-          <FontAwesomeIcon icon={keywordExpanded ? faChevronUp : faChevronDown} />
-        </button>
-      </section>
-      {keywordExpanded && (
+      <PostAssistantSection
+        title="급상승 키워드"
+        icon={faArrowUpLong}
+        expanded={keywordExpanded}
+        onToggle={() => setKeywordExpanded(!keywordExpanded)}
+      >
         <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
-      )}
-      {/* Articles */}
-      <section className={css.section}>
-        <div className={css.title}>
-          <h3 className={css.title}>뉴스</h3>
-          <FontAwesomeIcon icon={faNewspaper} className={css.icon} />
-        </div>
-        <button className={css.toggleBtn} onClick={() => setArticlesExpanded(!articlesExpanded)}>
-          <FontAwesomeIcon icon={articlesExpanded ? faChevronUp : faChevronDown} />
-        </button>
-      </section>
-      {articlesExpanded && <PostArticles trend={selectedTrend} articles={articles || []} />}
+      </PostAssistantSection>
+
+      <PostAssistantSection
+        title="뉴스"
+        icon={faNewspaper}
+        expanded={articlesExpanded}
+        onToggle={() => setArticlesExpanded(!articlesExpanded)}
+      >
+        <PostArticles trend={selectedTrend} articles={articles || []} />
+      </PostAssistantSection>
+
+      <PostAssistantSection
+        title="관심도 차트"
+        icon={faChartLine}
+        expanded={chartExpanded}
+        onToggle={() => setChartExpanded(!chartExpanded)}
+      >
+        <PostInterestChart keyword={selectedTrend?.keyword} />
+      </PostAssistantSection>
 
       {/* Interest Chart */}
       {/* <section className={css.section}>

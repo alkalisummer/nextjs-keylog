@@ -1,2 +1,2 @@
 export { formatTraffic, stringifyKeywords } from './transform';
-export { createDailyTrends, createSearchGoogleKeyword } from './create';
+export { createDailyTrends, createSearchGoogleKeyword, createRgbToString, createChartOption } from './create';

@@ -4,7 +4,7 @@
 $color-background: #f8f9fa;
 $color-background-hover: #f1f3f5;
 $color-white: #ffffff;
-$color-border: #e9ecef;
+$color-border: #dadada;
 $color-text: #212529;
 $color-text-secondary: #868e96;
 $color-primary: #12b886;
@@ -22,13 +22,13 @@ $color-error: #ff5644;
   .header {
     display: flex;
     align-items: center;
-    padding: 16px 24px 0px 24px;
+    padding: 17px 16px 0px 16px;
     background-color: $color-white;
 
     .postTitle {
       width: 100%;
       border: none;
-      border-bottom: 1px solid #efefef;
+      border-bottom: 1px solid $color-border;
       font-size: 30px;
       padding-bottom: 10px;
       font-family: 'Spoqa Han Sans Neo';
@@ -39,7 +39,7 @@ $color-error: #ff5644;
 
   .editorWrapper {
     flex: 1;
-    padding: 24px;
+    padding: 24px 16px 24px 16px;
     background-color: $color-white;
     overflow: hidden;
   }
@@ -123,5 +123,11 @@ $color-error: #ff5644;
     &::-ms-input-placeholder {
       color: $color-error !important;
     }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    height: 800px;
   }
 }

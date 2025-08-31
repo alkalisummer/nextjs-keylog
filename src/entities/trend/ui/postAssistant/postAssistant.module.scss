@@ -12,58 +12,13 @@ $color-hover: #f8f9fa;
 
 .module {
   width: 100%;
-  height: 100%;
-  padding-right: 24px;
   display: flex;
   flex-direction: column;
   background-color: $color-white;
-  margin-bottom: 20px;
-
-  .section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0px 20px 0px;
-
-    border-bottom: 1px solid $color-border;
-
-    .title {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin: 0;
-      font-size: 16px;
-      font-weight: 500;
-      color: $color-text;
-
-      .icon {
-        width: 14px;
-        height: 14px;
-      }
-    }
-
-    .toggleBtn {
-      padding: 4px 8px;
-      background: none;
-      border: none;
-      color: $color-text-secondary;
-      cursor: pointer;
-      transition: color 0.2s;
-
-      &:hover {
-        color: $color-text;
-      }
-    }
-  }
 }
 
 @media (max-width: $breakpoint-small) {
   .module {
     padding-right: 0;
-
-    .header {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
   }
 }

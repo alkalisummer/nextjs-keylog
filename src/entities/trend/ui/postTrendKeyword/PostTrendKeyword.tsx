@@ -13,7 +13,7 @@ interface PostTrendKeywordProps {
   onSelect: (trend: Trend) => void;
 }
 
-export function PostTrendKeyword({ trends, selectedKeyword, onSelect }: PostTrendKeywordProps) {
+export const PostTrendKeyword = ({ trends, selectedKeyword, onSelect }: PostTrendKeywordProps) => {
   const selectedTrend = trends.find(trend => trend.keyword === selectedKeyword);
   const relatedKeywords = selectedTrend?.relatedKeywords.filter(keyword => keyword !== selectedKeyword);
 
@@ -49,4 +49,4 @@ export function PostTrendKeyword({ trends, selectedKeyword, onSelect }: PostTren
       )}
     </div>
   );
-}
+};

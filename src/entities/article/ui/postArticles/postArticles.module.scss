@@ -5,6 +5,7 @@ $color-text-secondary: #1f1f1f;
 $color-text-meta: #525252;
 $color-background-hover: #e3e3e3;
 $color-background-card: white;
+$color-border: #e9ecef;
 
 // Shadows and transitions
 $card-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
@@ -23,7 +24,7 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
     color: $color-text-secondary;
 
     .keyword {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 500;
     }
     .traffic {
@@ -90,5 +91,12 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
         }
       }
     }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

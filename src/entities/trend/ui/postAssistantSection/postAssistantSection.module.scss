@@ -1,0 +1,61 @@
+@use 'variable' as *;
+
+// Variables (kept consistent with nearby modules)
+$color-background: #f8f9fa;
+$color-white: #ffffff;
+$color-border: #dadada;
+$color-text: #333;
+$color-text-secondary: #868e96;
+
+.module {
+  width: 100%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 16px 20px 16px;
+  border-bottom: 1px solid $color-border;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: $color-text;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+}
+
+.toggleBtn {
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $color-text;
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
