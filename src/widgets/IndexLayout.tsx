@@ -23,7 +23,7 @@ const IndexLayout: React.FC<LayoutProps> = ({ children, tabName }) => {
       <div className="index_main_tab">
         <span
           className={`index_main_tab_text ${currTab === 'keyword' ? 'index_main_active' : ''}`}
-          onClick={e => {
+          onClick={() => {
             router.push('/');
             setCurrTab('keyword');
           }}

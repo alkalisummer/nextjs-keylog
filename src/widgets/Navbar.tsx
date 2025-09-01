@@ -100,7 +100,7 @@ const Navbar = () => {
       const imgUrl = getImgName(session!.user!.image!);
       const userId = session?.user?.id;
 
-      let removedImg = [];
+      const removedImg = [];
       removedImg.push(imgUrl);
 
       const params = { type: 'deleteUserImg', id: userId };
@@ -225,7 +225,7 @@ const Navbar = () => {
   const updateEmail = async () => {
     const userId = session?.user?.id;
     const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    let isValidate = emailRegEx.test(email);
+    const isValidate = emailRegEx.test(email);
 
     if (!isValidate) {
       alert('이메일 형식이 올바르지 않습니다.');
@@ -260,7 +260,7 @@ const Navbar = () => {
       {status === 'authenticated' ? (
         <div className="df">
           {showCreateBtn && (
-            <Link href={`/write?keyword=true`} className="nav_create_link">
+            <Link href={`/write`} className="nav_create_link">
               <button className="nav_create_btn">새 글 작성</button>
             </Link>
           )}

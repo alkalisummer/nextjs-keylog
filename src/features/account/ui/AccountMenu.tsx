@@ -63,7 +63,7 @@ export const AccountMenu = () => {
               </Link>
             </MenuItem>
             <MenuItem className={css.writeBtn}>
-              <Link href={`/write?keyword=true`} className={css.menuLink} onClick={closeToggle}>
+              <Link href={`/write`} className={css.menuLink} onClick={closeToggle}>
                 <FontAwesomeIcon icon={faPen} className={css.menuItemIco} />새 글 작성
               </Link>
             </MenuItem>

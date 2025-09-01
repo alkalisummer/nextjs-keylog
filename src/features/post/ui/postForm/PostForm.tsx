@@ -2,7 +2,6 @@
 
 import css from './postForm.module.scss';
 import { useRouter } from 'next/navigation';
-import { useRef, useCallback } from 'react';
 import { POST } from '@/shared/lib/constants';
 import { removeHtml } from '@/shared/lib/util';
 import { usePost } from '@/features/post/hooks';
@@ -12,6 +11,7 @@ import { PostDetail } from '@/entities/post/model';
 import { uploadPostImage } from '@/features/post/api';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef, useCallback, useEffect } from 'react';
 import { usePostImage } from '@/features/post/hooks/usePostImage';
 import { ToastEditor } from '@/shared/lib/toastEditor/ToastEditor';
 import { PostForm as Form, PostSchema } from '@/features/post/model';
@@ -29,6 +29,21 @@ export const PostForm = ({ post, hashtags, authorId }: PostFormProps) => {
   const editorRef = useRef<Editor>(null);
   const isAuthorized = useCheckAuth(authorId);
 
+  // 게시물 작성, 수정 custom hooks
+  const { createPostMutation, updatePostMutation } = usePost({
+    update: { postId: post?.postId || 0, authorId },
+  });
+  const { addUploadedImage, handleCancel, cleanupBeforeSubmit, cleanupAfterUpdateSuccess } = usePostImage({
+    initialHtml: post?.postHtmlCntn || '',
+  });
+
+  useEffect(() => {
+    if (!isAuthorized) {
+      alert('비정상적인 접근입니다. 로그인 화면으로 이동합니다.');
+      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+    }
+  }, [isAuthorized]);
+
   const {
     register,
     control,
@@ -44,14 +59,6 @@ export const PostForm = ({ post, hashtags, authorId }: PostFormProps) => {
       content: post?.postHtmlCntn ?? '',
       hashtags: hashtags || [],
     },
-  });
-
-  const { addUploadedImage, handleCancel, cleanupBeforeSubmit, cleanupAfterUpdateSuccess } = usePostImage({
-    initialHtml: post?.postHtmlCntn || '',
-  });
-
-  const { createPostMutation, updatePostMutation } = usePost({
-    update: { postId: post?.postId || 0, authorId },
   });
 
   const handleHashtagsChange = useCallback(

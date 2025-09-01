@@ -34,7 +34,7 @@ export const UserInfo = ({ userInfo }: UserInfoProps) => {
       <span className={css.nickname}>{userInfo.userNickname}</span>
       {isAuthorized && (
         <div className={css.btnDiv}>
-          <Link href={`/write?keyword=true`}>
+          <Link href={`/write`}>
             <button className={css.createBtn}></button>
           </Link>
         </div>

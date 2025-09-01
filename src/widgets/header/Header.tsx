@@ -35,7 +35,7 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
         {isLoggedIn ? (
           <div className={css.accountMenu}>
             {!isWritePage && (
-              <button className={css.writeBtn} onClick={() => router.push(`/write?keyword=true`)}>
+              <button className={css.writeBtn} onClick={() => router.push(`/write`)}>
                 새 글 작성
               </button>
             )}
