@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/util';
 
 const BASE_URL = process.env.BASE_URL ?? '';
-const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_URL ?? '';
+const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_API_URL ?? '';
 
 export const client = {
   route: () => createFetchInstance(`${BASE_URL}/api`),

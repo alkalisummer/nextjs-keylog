@@ -1,0 +1,1 @@
+export { isPrivateHostname } from './is';

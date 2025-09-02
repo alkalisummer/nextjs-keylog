@@ -1,5 +1,4 @@
-import { InterestOverTime } from '../api/interestOverTimeClient';
-import { Trend } from '../model';
+import { ImageItem, Trend, InterestOverTime } from '../model';
 import css from '../ui/keywordScroll/keywordScroll.module.scss';
 
 interface FormatTrafficProps {
@@ -40,4 +39,19 @@ export const parseValidKeywordDataList = (
   return seriesKeywords
     .map(keyword => keywordToDataMap[keyword])
     .filter(keywordData => !!keywordData && Array.isArray(keywordData.values) && keywordData.values.length > 0);
+};
+
+export const normalizeUrl = (url: string) => url.replace(/^http:\/\//i, 'https://');
+
+export const mergeUniqueImages = (base: ImageItem[], incoming: ImageItem[]) => {
+  const seen = new Set(base.map(img => img.link || ''));
+  const merged: ImageItem[] = [...base];
+  for (const img of incoming) {
+    const key = img.link || '';
+    if (!seen.has(key)) {
+      seen.add(key);
+      merged.push(img);
+    }
+  }
+  return merged;
 };

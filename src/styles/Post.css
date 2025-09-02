@@ -913,10 +913,6 @@ pre:has(> code) {
     font-size: 13px !important;
   }
 
-  .toastui-editor-popup {
-    left: 50vw !important;
-  }
-
   .toastui-editor-file-name {
     width: 48% !important;
   }

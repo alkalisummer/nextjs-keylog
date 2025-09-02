@@ -1,94 +1,110 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import { ImageItem } from '../../model';
+import { useState, useEffect } from 'react';
+import { mergeUniqueImages } from '../../lib';
 import css from './postImageSearch.module.scss';
-import { searchImages, ImageItem } from '../../api/searchImageClient';
+import { getSearchImages } from '../../api/getSearchImages';
 import { useIntersectionObserver } from '@/shared/lib/hooks';
+import { POST_IMAGE_SEARCH_PER_PAGE } from '@/shared/lib/constants';
 
 interface PostImageSearchProps {
-  defaultKeyword?: string;
+  keyword?: string;
 }
 
-export function PostImageSearch({ defaultKeyword = '' }: PostImageSearchProps) {
-  const [keyword, setKeyword] = useState(defaultKeyword);
+export function PostImageSearch({ keyword = '' }: PostImageSearchProps) {
+  const [searchKeyword, setSearchKeyword] = useState(keyword);
   const [images, setImages] = useState<ImageItem[]>([]);
   const [selectedUrl, setSelectedUrl] = useState('');
   const [pageNum, setPageNum] = useState(1);
-  const [loading, setLoading] = useState(false);
-
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  useIntersectionObserver({
-    target: loadMoreRef,
-    onIntersect: () => !loading && images.length && setPageNum(p => p + 1),
-  });
 
   useEffect(() => {
-    setImages([]);
-    setPageNum(1);
+    setSearchKeyword(keyword);
+    const searchImages = async () => {
+      await goSearch(keyword);
+    };
+    searchImages();
   }, [keyword]);
 
-  useEffect(() => {
-    let ignore = false;
-    const fetch = async () => {
-      if (!keyword) return;
-      setLoading(true);
-      const res = await searchImages(keyword, pageNum);
-      if (!ignore) setImages(prev => [...prev, ...(res || [])]);
-      setLoading(false);
-    };
-    fetch();
-    return () => {
-      ignore = true;
-    };
-  }, [keyword, pageNum]);
+  const { setTarget } = useIntersectionObserver({
+    onShow: async () => {
+      const nextPageNum = pageNum + 1;
+      setPageNum(nextPageNum);
+      const res = await getSearchImages({
+        keyword: searchKeyword,
+        pageNum: nextPageNum,
+        perPage: POST_IMAGE_SEARCH_PER_PAGE,
+      });
+      if (!res.ok) {
+        throw new Error('failed to search images');
+      }
+      setImages(prev => mergeUniqueImages(prev, res.data));
+    },
+    once: true,
+  });
 
-  const handleSearch = () => {
-    if (!keyword) return;
+  const goSearch = async (keyword?: string) => {
     setImages([]);
     setPageNum(1);
+    const res = await getSearchImages({
+      keyword: keyword ?? searchKeyword,
+      pageNum: 1,
+      perPage: POST_IMAGE_SEARCH_PER_PAGE,
+    });
+    if (!res.ok) {
+      throw new Error('failed to search images');
+    }
+    setImages(mergeUniqueImages([], res.data));
   };
 
-  const normalizeUrl = (url: string) => url.replace(/^http:\/\//i, 'https://');
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await goSearch(searchKeyword);
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.classList.add(css.error);
+  };
 
   return (
-    <div className={css.module}>
+    <form className={css.module} onSubmit={e => onSubmit(e)}>
       <div className={css.controls}>
-        <label className={css.label}>키워드:</label>
-        <input className={css.input} value={keyword} onChange={e => setKeyword(e.target.value)} />
-        <button className={css.button} onClick={handleSearch} disabled={!keyword}>
+        <input className={css.input} value={searchKeyword} onChange={e => setSearchKeyword(e.target.value)} />
+        <button className={css.button} type="submit" disabled={!searchKeyword}>
           이미지 검색
-        </button>
-        <button className={css.button} onClick={() => setSelectedUrl('')}>
-          초기화
         </button>
         <button
           className={css.button}
+          type="button"
           onClick={() => {
             if (!selectedUrl) return;
             navigator.clipboard.writeText(selectedUrl);
+            alert('이미지 URL이 복사되었습니다.');
           }}
         >
           이미지 URL 복사
         </button>
       </div>
-
-      <div className={css.grid}>
-        {images.map((img, idx) => (
-          <div key={idx} className={css.item}>
-            <Image
-              src={normalizeUrl(img.link)}
-              width={200}
-              height={200}
-              alt={img.title || '검색 이미지'}
-              onClick={e => setSelectedUrl((e.target as HTMLImageElement).src)}
-              className={`${css.image} ${selectedUrl === img.link ? css.active : ''}`}
-            />
-          </div>
-        ))}
-        <div ref={loadMoreRef} />
+      <div className={css.imageGridWrapper}>
+        <div className={css.grid}>
+          {images.map((img, idx) => (
+            <div key={idx} className={css.item}>
+              <div className={css.imageWrapper} ref={idx === images.length - 1 ? setTarget : null}>
+                <Image
+                  src={`/api/image-proxy?url=${encodeURIComponent(img.link || '')}`}
+                  alt={img.title || '검색 이미지'}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 33vw"
+                  onClick={() => setSelectedUrl(img.link)}
+                  onError={handleImageError as any}
+                  className={`${css.image} ${selectedUrl === img.link ? css.active : ''}`}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      {loading && <div className={css.loading}>Loading...</div>}
-    </div>
+    </form>
   );
 }

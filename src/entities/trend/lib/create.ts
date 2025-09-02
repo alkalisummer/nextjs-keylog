@@ -1,6 +1,6 @@
 import { Trend } from '../model';
 import type { EChartsCoreOption, SeriesOption } from 'echarts';
-import type { InterestOverTime } from '../api/interestOverTimeClient';
+import type { InterestOverTime } from '../api/getInterestOverTime';
 
 export const createDailyTrends = (trends: Trend[]) => {
   return trends

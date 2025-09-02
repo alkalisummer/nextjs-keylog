@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import { Trend } from '../../model';
 import css from './postAssistant.module.scss';
-import { PostTrendKeyword } from '../postTrendKeyword/PostTrendKeyword';
 import { PostArticles } from '../../../article/ui';
-import { faChartLine, faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
-import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
 import { useArticlesQuery } from '@/entities/article/query';
-import { PostAssistantSection } from '../postAssistantSection/PostAssistantSection';
-import { PostInterestChart } from '../postInterestChart/PostInterestChart';
+import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
+import { faChartLine, faArrowUpLong, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faOpenai } from '@fortawesome/free-brands-svg-icons';
+import { PostImageSearch, PostAssistantSection, PostInterestChart, PostTrendKeyword } from '..';
 
 interface PostAssistantProps {
   trends: Trend[];
@@ -20,7 +19,8 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
   const [keywordExpanded, setKeywordExpanded] = useState(true);
   const [articlesExpanded, setArticlesExpanded] = useState(true);
   const [chartExpanded, setChartExpanded] = useState(true);
-  // Additional sections can be added later if needed
+  const [imageExpanded, setImageExpanded] = useState(true);
+  const [autoPostExpanded, setAutoPostExpanded] = useState(true);
 
   const { data: articles } = useArticlesQuery({
     trends,
@@ -41,7 +41,6 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
       >
         <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
       </PostAssistantSection>
-
       <PostAssistantSection
         title="뉴스"
         icon={faNewspaper}
@@ -50,7 +49,6 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
       >
         <PostArticles trend={selectedTrend} articles={articles || []} />
       </PostAssistantSection>
-
       <PostAssistantSection
         title="관심도 차트"
         icon={faChartLine}
@@ -58,6 +56,22 @@ export const PostAssistant = ({ trends }: PostAssistantProps) => {
         onToggle={() => setChartExpanded(!chartExpanded)}
       >
         <PostInterestChart keyword={selectedTrend?.keyword} />
+      </PostAssistantSection>
+      <PostAssistantSection
+        title="이미지 검색"
+        icon={faImage}
+        expanded={imageExpanded}
+        onToggle={() => setImageExpanded(!imageExpanded)}
+      >
+        <PostImageSearch keyword={selectedTrend?.keyword} />
+      </PostAssistantSection>
+      <PostAssistantSection
+        title="AI 포스팅"
+        icon={faOpenai}
+        expanded={autoPostExpanded}
+        onToggle={() => setAutoPostExpanded(!autoPostExpanded)}
+      >
+        <></>
       </PostAssistantSection>
 
       {/* Interest Chart */}

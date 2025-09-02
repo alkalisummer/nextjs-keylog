@@ -10,10 +10,11 @@ const nextConfig = {
   env: {
     BASE_URL: process.env.BASE_URL,
     NEXT_PUBLIC_COOKIE_DOMAIN: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+    NEXT_PUBLIC_IMAGE_PROXY_URL: process.env.NEXT_PUBLIC_IMAGE_PROXY_URL,
 
     //KEYLOG API URL
     KEYLOG_API_URL: process.env.KEYLOG_API_URL,
-    NEXT_PUBLIC_KEYLOG_URL: process.env.NEXT_PUBLIC_KEYLOG_URL,
+    NEXT_PUBLIC_KEYLOG_API_URL: process.env.NEXT_PUBLIC_KEYLOG_API_URL,
 
     //Oracle Cloud Instance DB(MySQL)
     CLOUD_MYSQL_HOST: process.env.CLOUD_MYSQL_HOST,
@@ -53,6 +54,8 @@ const nextConfig = {
       { protocol: 'http', hostname: 'imgnews.naver.net', pathname: '/**' },
       { protocol: 'https', hostname: 'imgnews.pstatic.net', pathname: '/**' },
       { protocol: 'http', hostname: 'imgnews.pstatic.net', pathname: '/**' },
+      { protocol: 'http', hostname: 'simg.pstatic.net', pathname: '/**' },
+      { protocol: 'https', hostname: 'simg.pstatic.net', pathname: '/**' },
     ],
   },
 

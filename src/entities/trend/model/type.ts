@@ -15,3 +15,17 @@ export interface SpeedBreakpoints {
   mobile?: number; // >= 480px
   small?: number; // < 480px
 }
+
+export interface ImageItem {
+  link: string;
+  sizeheight: string;
+  sizewidth: string;
+  thumbnail: string;
+  title: string;
+}
+
+export interface InterestOverTime {
+  keyword: string;
+  dates: string[];
+  values: number[];
+}

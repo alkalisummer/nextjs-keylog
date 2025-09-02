@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface NaverImageItem {
   link: string;
@@ -12,34 +12,30 @@ interface NaverImageItem {
 export const dynamic = 'force-dynamic';
 
 export const POST = async (req: NextRequest) => {
-  try {
-    const body = await req.json();
-    const { keyword, pageNum = 1 } = body as { keyword: string; pageNum?: number };
+  const body = await req.json();
+  const { keyword, pageNum = 1, perPage = 10 } = body as { keyword: string; pageNum?: number; perPage?: number };
 
-    if (!keyword || typeof keyword !== 'string') {
-      return NextResponse.json({ message: 'keyword is required' }, { status: 400 });
-    }
-
-    const clientId = process.env.X_NAVER_CLIENT_ID;
-    const clientSecret = process.env.X_NAVER_CLIENT_SECRET;
-
-    if (!clientId || !clientSecret) {
-      return NextResponse.json({ message: 'naver api credentials missing' }, { status: 500 });
-    }
-
-    const searchParams = {
-      params: { query: keyword, display: 30, start: pageNum },
-      headers: {
-        'X-Naver-Client-Id': clientId,
-        'X-Naver-Client-Secret': clientSecret,
-      },
-    } as const;
-
-    const res = await axios.get('https://openapi.naver.com/v1/search/image', searchParams);
-    const items: NaverImageItem[] = res.data?.items ?? [];
-    const images = items.filter(obj => obj.link.includes('naver'));
-    return NextResponse.json(images);
-  } catch (error) {
-    return NextResponse.json({ message: 'failed to search images' }, { status: 500 });
+  if (!keyword || typeof keyword !== 'string') {
+    return NextResponse.json({ message: 'keyword is required' }, { status: 400 });
   }
+
+  const clientId = process.env.X_NAVER_CLIENT_ID;
+  const clientSecret = process.env.X_NAVER_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    return NextResponse.json({ message: 'naver api credentials missing' }, { status: 500 });
+  }
+
+  const searchParams = {
+    params: { query: keyword, display: perPage, start: pageNum },
+    headers: {
+      'X-Naver-Client-Id': clientId,
+      'X-Naver-Client-Secret': clientSecret,
+    },
+  };
+
+  const res = await axios.get('https://openapi.naver.com/v1/search/image', searchParams);
+  const items: NaverImageItem[] = res.data?.items ?? [];
+
+  return NextResponse.json(items);
 };

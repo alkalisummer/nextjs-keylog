@@ -21,3 +21,5 @@ export const POST = {
   TITLE_MAX_LENGTH: 300,
   THUMBNAIL_EXTRACT_LENGTH: 5000,
 };
+
+export const POST_IMAGE_SEARCH_PER_PAGE = 10;

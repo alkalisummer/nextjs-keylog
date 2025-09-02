@@ -1,12 +1,12 @@
 import { client } from '@/shared/lib/client';
+import { InterestOverTime } from '../model';
 
-export interface InterestOverTime {
+export interface InterestOverTimeProps {
   keyword: string;
-  dates: string[];
-  values: number[];
+  geo: string;
 }
 
-export const getInterestOverTime = async (keyword: string, geo: string = 'KR') => {
+export const getInterestOverTime = async ({ keyword, geo = 'KR' }: InterestOverTimeProps) => {
   return await client.route().post<InterestOverTime>({
     endpoint: '/trend/interestOverTime',
     options: {

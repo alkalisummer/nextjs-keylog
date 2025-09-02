@@ -1,4 +1,4 @@
-import { InterestOverTime } from '../api/interestOverTimeClient';
+import { InterestOverTime } from '../api/getInterestOverTime';
 
 export const isAllReady = (seriesKeywords: string[], keywordToDataMap: Record<string, InterestOverTime>) => {
   return seriesKeywords.every(k => {

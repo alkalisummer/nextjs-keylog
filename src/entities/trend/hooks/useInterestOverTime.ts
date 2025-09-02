@@ -1,5 +1,6 @@
+import { InterestOverTime } from '../model';
 import { useEffect, Dispatch, SetStateAction } from 'react';
-import { getInterestOverTime, InterestOverTime } from '@/entities/trend/api/interestOverTimeClient';
+import { getInterestOverTime } from '@/entities/trend/api/getInterestOverTime';
 
 interface UseInterestOverTimeParams {
   seriesKeywords: string[];
@@ -15,20 +16,31 @@ export const useInterestOverTime = ({
   geo = 'KR',
 }: UseInterestOverTimeParams) => {
   useEffect(() => {
-    const missingKeywords = seriesKeywords.filter(keyword => !keywordToDataMap[keyword]);
+    const missingKeywords = seriesKeywords.filter(k => !keywordToDataMap[k]);
     if (missingKeywords.length === 0) return;
 
-    const fetchAll = async () => {
-      const results = await Promise.all(missingKeywords.map(keyword => getInterestOverTime(keyword, geo)));
-      const validResults = results.filter(result => result.ok);
+    let cancelled = false;
+    (async () => {
+      const pairs = await Promise.all(
+        missingKeywords.map(async keyword => {
+          const res = await getInterestOverTime({ keyword, geo });
+          return { keyword, res };
+        }),
+      );
+
+      if (cancelled) return;
+
       setKeywordToDataMap(prev => {
-        const next: Record<string, InterestOverTime> = { ...prev };
-        missingKeywords.forEach((keyword, index) => {
-          next[keyword] = validResults[index].data;
-        });
+        const next = { ...prev };
+        for (const { keyword, res } of pairs) {
+          if (res.ok) next[keyword] = res.data;
+        }
         return next;
       });
+    })();
+
+    return () => {
+      cancelled = true;
     };
-    fetchAll();
-  }, [seriesKeywords, keywordToDataMap, setKeywordToDataMap, geo]);
+  }, [seriesKeywords, geo]);
 };

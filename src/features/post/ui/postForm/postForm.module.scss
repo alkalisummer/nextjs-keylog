@@ -129,5 +129,9 @@ $color-error: #ff5644;
 @media (max-width: $breakpoint-small) {
   .module {
     height: 800px;
+
+    .editorWrapper {
+      padding: 24px 16px 24px 16px;
+    }
   }
 }

@@ -51,7 +51,7 @@ export const Write = ({ post, trends, authorId }: WriteProps) => {
           <FontAwesomeIcon icon={faAngleDown} className={css.toggleIcon} />
         </button>
       </div>
-      <div className={`${css.trendKeywords} ${!showAssistant ? css.isClosed : ''}`}>
+      <div className={`${css.postAssistant} ${!showAssistant ? css.isClosed : ''}`}>
         <PostAssistant trends={trends} />
       </div>
     </div>
