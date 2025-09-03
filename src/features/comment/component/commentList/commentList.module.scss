@@ -28,15 +28,6 @@
   padding: 2rem 0;
 }
 
-.noComments {
-  text-align: center;
-  color: #98a1a9;
-  font-size: 16px;
-  padding: 3rem 0;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
 @media (max-width: $breakpoint-small) {
   .commentSection {
     margin-top: 2rem;
@@ -47,8 +38,7 @@
     font-size: 16px;
   }
 
-  .loading,
-  .noComments {
+  .loading {
     font-size: 14px;
   }
 }

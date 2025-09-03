@@ -22,7 +22,7 @@ $color-error: #ff5644;
   .header {
     display: flex;
     align-items: center;
-    padding: 17px 16px 0px 16px;
+    padding: 17px 0px 0px 16px;
     background-color: $color-white;
 
     .postTitle {
@@ -48,7 +48,8 @@ $color-error: #ff5644;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 16px 24px;
+    padding: 16px;
+    padding-right: 0px;
     background-color: $color-white;
 
     .cancelButton {

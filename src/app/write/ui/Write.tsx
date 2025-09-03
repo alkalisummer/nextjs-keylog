@@ -1,40 +1,21 @@
 'use client';
 
-import { useState } from 'react';
 import css from './write.module.scss';
-import { Trend } from '@/entities/trend/model';
-import { useQuery } from '@tanstack/react-query';
-import { PostDetail } from '@/entities/post/model';
-import { queryKey } from '@/app/provider/query/lib';
-import { PostForm } from '@/features/post/component';
-import { getPostHashtags } from '@/entities/hashtag/api';
-import { PostAssistant } from '@/entities/trend/component';
+import { useState, ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-interface WriteProps {
-  post?: PostDetail;
-  trends: Trend[];
-  authorId: string;
+interface Props {
+  editor: ReactNode;
+  assistant: ReactNode;
 }
 
-export const Write = ({ post, trends, authorId }: WriteProps) => {
-  const postId = post?.postId;
+export const Write = ({ editor, assistant }: Props) => {
   const [showAssistant, setShowAssistant] = useState(true);
-
-  const { data: hashtagsRes } = useQuery({
-    queryKey: queryKey().hashtag().postHashtags(Number(postId)),
-    queryFn: () => getPostHashtags(Number(postId)),
-    enabled: !!postId,
-  });
-
-  const hashtags = hashtagsRes?.data?.map(tag => tag.hashtagName) || [];
 
   return (
     <div className={css.module}>
-      <div className={css.editorSection}>
-        <PostForm post={post} hashtags={hashtags} authorId={authorId} />
-      </div>
+      <div className={css.editorSection}>{editor}</div>
       <div className={css.postAssistantToggle}>
         <button
           className={`${css.postAssistantToggleBtn} ${showAssistant ? css.rotated : ''}`}
@@ -51,9 +32,7 @@ export const Write = ({ post, trends, authorId }: WriteProps) => {
           <FontAwesomeIcon icon={faAngleDown} className={css.toggleIcon} />
         </button>
       </div>
-      <div className={`${css.postAssistant} ${!showAssistant ? css.isClosed : ''}`}>
-        <PostAssistant trends={trends} />
-      </div>
+      <div className={`${css.postAssistant} ${!showAssistant ? css.isClosed : ''}`}>{assistant}</div>
     </div>
   );
 };

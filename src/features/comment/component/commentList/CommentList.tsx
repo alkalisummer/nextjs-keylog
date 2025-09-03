@@ -46,21 +46,17 @@ export const CommentList = ({ postId }: CommentListProps) => {
       </div>
       <CommentForm postId={postId} />
       <div className={css.commentList}>
-        {commentList.length === 0 ? (
-          <div className={css.noComments}>아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!</div>
-        ) : (
-          commentList.map(comment => (
-            <CommentItem
-              key={comment.commentId}
-              comment={comment}
-              postId={postId}
-              replies={repliesMap[comment.commentId] || []}
-              onReplyClick={() => handleReplyClick(comment.commentId)}
-              showReplyForm={replyFormCommentId === comment.commentId}
-              onReplyCancel={() => setReplyFormCommentId(null)}
-            />
-          ))
-        )}
+        {commentList.map(comment => (
+          <CommentItem
+            key={comment.commentId}
+            comment={comment}
+            postId={postId}
+            replies={repliesMap[comment.commentId] || []}
+            onReplyClick={() => handleReplyClick(comment.commentId)}
+            showReplyForm={replyFormCommentId === comment.commentId}
+            onReplyCancel={() => setReplyFormCommentId(null)}
+          />
+        ))}
       </div>
     </div>
   );
