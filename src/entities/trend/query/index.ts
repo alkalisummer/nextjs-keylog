@@ -1,0 +1,1 @@
+export { useDailyTrendsQuery } from './useDailyTrendsQuery';

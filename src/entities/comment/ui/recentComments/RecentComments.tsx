@@ -1,38 +1,32 @@
-'use client';
+'use server';
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import css from './recentComments.module.scss';
+import { View } from './ui/View';
 import { Comment } from '@/entities/comment/model';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { ApiResponse } from '@/shared/lib/client';
+import { queryKey } from '@/app/provider/query/lib';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-interface RecentCommentsProps {
-  recentComments: Partial<Comment>[];
+interface Props {
+  promise: {
+    recentComments: Promise<ApiResponse<Partial<Comment>[]>>;
+  };
   userId: string;
 }
 
-export const RecentComments = ({ recentComments, userId }: RecentCommentsProps) => {
-  const router = useRouter();
+export const RecentComments = async ({ promise, userId }: Props) => {
+  const queryClient = new QueryClient();
+
+  const recentCommentsQueryOptions = {
+    queryKey: queryKey().comment().recentComment(userId),
+    queryFn: () => promise.recentComments,
+  };
+  await queryClient.prefetchQuery(recentCommentsQueryOptions);
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className={css.module}>
-      <span className={css.title}>최근 댓글</span>
-      {recentComments.map((comment: Partial<Comment>) => (
-        <div
-          key={`comment_${comment.commentId}`}
-          className={css.item}
-          onClick={() => router.push(`/${userId}/${comment.postId}`)}
-        >
-          <div className={css.info}>
-            <span className={css.commentContent}>
-              <FontAwesomeIcon icon={faCommentDots} className={css.commentIcon} />
-              {comment.commentCntn}
-            </span>
-            <span className={css.userName}>{comment.userNickname}</span>
-          </div>
-        </div>
-      ))}
-    </div>
+    <HydrationBoundary state={dehydratedState}>
+      <View userId={userId} />
+    </HydrationBoundary>
   );
 };

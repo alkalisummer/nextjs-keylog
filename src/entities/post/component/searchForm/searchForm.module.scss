@@ -1,0 +1,94 @@
+@use 'variable' as *;
+
+.module {
+  width: 100%;
+
+  .searchForm {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    margin-top: calc(1rem + 17px);
+    margin-bottom: 3.4rem;
+
+    .searchInput {
+      width: 30%;
+      min-width: 200px;
+      font-family: 'Spoqa Han Sans Neo', sans-serif;
+      font-size: 30px;
+      font-weight: 400;
+      background-color: #f8f9fa;
+      color: #333;
+      border: none;
+      border-bottom: 3px solid #333;
+      margin-bottom: 5px;
+      padding-bottom: 3px;
+      margin-right: 0px !important;
+      &::placeholder {
+        font-weight: 300;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .searchBtn {
+      font-size: 25px;
+      border: none;
+      cursor: pointer;
+      background-color: #f8f9fa;
+      border-bottom: 3px solid #333;
+      margin-bottom: 5px;
+      padding-bottom: 5px;
+      color: #333;
+      margin-left: 0px;
+    }
+  }
+
+  .searchCnt {
+    width: 100%;
+    display: flex;
+    justify-content: flex;
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #525252;
+    span {
+      color: #333;
+      font-weight: 500;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-medium) {
+  .searchInput {
+    width: 40% !important;
+    font-size: 22px !important;
+    padding-bottom: 2px !important;
+    &::placeholder {
+      font-size: 22px !important;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .searchForm {
+    margin-bottom: 1rem !important;
+
+    .searchInput {
+      font-size: 18px !important;
+      padding-bottom: 3px !important;
+      &::placeholder {
+        font-size: 18px !important;
+      }
+    }
+
+    .searchBtn {
+      font-size: 20px !important;
+      padding-bottom: 3px !important;
+    }
+  }
+  .searchCnt {
+    font-size: 13px !important;
+  }
+}

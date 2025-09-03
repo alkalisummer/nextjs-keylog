@@ -1,5 +1,5 @@
 import { ImageItem, Trend, InterestOverTime } from '../model';
-import css from '../ui/keywordScroll/keywordScroll.module.scss';
+import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
   traffic: string;

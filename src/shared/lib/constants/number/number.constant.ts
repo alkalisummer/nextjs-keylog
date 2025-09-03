@@ -15,7 +15,7 @@ export const VERIFY_CODE = {
   EXPIRE_TIME: 24,
 };
 
-export const SESSION_REFETCH_INTERVAL = 10000;
+export const SESSION_REFETCH_INTERVAL = 900;
 
 export const POST = {
   TITLE_MAX_LENGTH: 300,

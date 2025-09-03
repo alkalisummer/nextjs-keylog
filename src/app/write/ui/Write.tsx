@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import css from './write.module.scss';
-import { PostForm } from '@/features/post/ui';
 import { Trend } from '@/entities/trend/model';
 import { useQuery } from '@tanstack/react-query';
 import { PostDetail } from '@/entities/post/model';
-import { PostAssistant } from '@/entities/trend/ui';
 import { queryKey } from '@/app/provider/query/lib';
+import { PostForm } from '@/features/post/component';
 import { getPostHashtags } from '@/entities/hashtag/api';
+import { PostAssistant } from '@/entities/trend/component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 

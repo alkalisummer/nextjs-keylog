@@ -1,4 +1,4 @@
-import { FindPasswordForm } from '@/features/login/ui';
+import { FindPasswordForm } from '@/features/login/component';
 
 export const Page = () => {
   return (

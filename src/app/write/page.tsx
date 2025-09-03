@@ -4,13 +4,13 @@ import { Write } from './ui/Write';
 import { redirect } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { getPost } from '@/entities/post/api';
+import { queryKey } from '@/app/provider/query/lib';
+import { getCustomSession } from '@/shared/lib/util';
 import { getDailyTrends } from '@/entities/trend/api';
 import { getPostHashtags } from '@/entities/hashtag/api';
-import { getCustomSession } from '@/shared/lib/util';
-import { queryKey } from '@/app/provider/query/lib';
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { getArticlesServer } from '@/entities/article/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+import { getArticlesServer } from '@/entities/article/api';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 interface PageProps {
   searchParams: Promise<{ postId?: string }>;
@@ -32,7 +32,11 @@ export const Page = async ({ searchParams }: PageProps) => {
     queryFn: () => getDailyTrends({ geo: 'KR', hl: 'ko' }),
   };
 
-  const dailyTrends = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
+  const dailyTrendsRes = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
+
+  if (!dailyTrendsRes.ok) throw new Error('dailyTrends fetch error');
+
+  const dailyTrends = dailyTrendsRes.data;
 
   //init trend articles prefetch
   const initTrendKeywordInfo = dailyTrends[0];

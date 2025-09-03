@@ -8,4 +8,4 @@ export * from './hooks';
 export * from './model';
 
 // UI
-export * from './ui';
+export * from './component';

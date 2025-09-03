@@ -8,12 +8,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 
 interface UseArticlesQueryProps {
-  trends: Trend[];
   selectedTrend: Trend;
-  initialData?: Article[];
 }
 
-export const useArticlesQuery = ({ trends, selectedTrend, initialData }: UseArticlesQueryProps) => {
+export const useArticlesQuery = ({ selectedTrend }: UseArticlesQueryProps) => {
   return useSuspenseQuery({
     queryKey: queryKey().article().articleList(selectedTrend.keyword),
     queryFn: () =>
@@ -21,7 +19,5 @@ export const useArticlesQuery = ({ trends, selectedTrend, initialData }: UseArti
         articleKeys: selectedTrend.articleKeys,
         articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
       }).then(articles => articles?.sort((a, b) => b.pressDate[0] - a.pressDate[0])),
-    ...(initialData && { initialData: selectedTrend.keyword === trends[0].keyword ? initialData : undefined }),
-    refetchOnMount: true,
   });
 };

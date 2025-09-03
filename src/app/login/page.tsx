@@ -1,6 +1,6 @@
 'use server';
 
-import { LoginForm } from '@/features/login/ui';
+import { LoginForm } from '@/features/login/component';
 
 export const Page = async () => {
   return (

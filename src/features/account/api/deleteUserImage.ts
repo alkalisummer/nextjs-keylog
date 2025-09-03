@@ -5,6 +5,13 @@ import { parseUserImageFileName } from '../lib';
 import { objectStorageClient } from '@/shared/lib/oci';
 
 export const deleteUserImage = async (userImageUrl: string) => {
+  if (userImageUrl === '') {
+    return {
+      ok: true,
+      status: 200,
+    };
+  }
+
   const objectStorage = await objectStorageClient();
   const imgName = parseUserImageFileName(userImageUrl);
   try {

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import RightArea from '@/widgets/RightArea';
-import LeftArea from '@/widgets/sidebar/Sidebar';
+import { Sidebar } from '@/widgets/sidebar/Sidebar';
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,7 +9,7 @@ interface LayoutProps {
 const BlogLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <LeftArea></LeftArea>
+      {/* Sidebar needs a userId; pages using this old layout won't have it. Keep RightArea only. */}
       <RightArea>{children}</RightArea>
     </>
   );

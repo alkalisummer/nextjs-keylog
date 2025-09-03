@@ -6,6 +6,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60, // 1 hour
+    updateAge: 30 * 30, // 30 minutes
   },
   providers: [
     CredentialsProvider({

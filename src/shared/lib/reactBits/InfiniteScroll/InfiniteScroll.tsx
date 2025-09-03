@@ -52,6 +52,10 @@ export const InfiniteScroll = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedItemData, setSelectedItemData] = useState<Trend | null>(selectedItemInitData || null);
 
+  useEffect(() => {
+    setSelectedItemData(selectedItemInitData || null);
+  }, [selectedItemInitData]);
+
   // 스타일 객체들을 메모이제이션
   const dynamicStyles = useMemo(
     () => ({

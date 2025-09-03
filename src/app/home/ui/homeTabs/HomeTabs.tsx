@@ -1,30 +1,28 @@
 'use client';
 
 import css from './homeTabs.module.scss';
+import { useHome } from '../../container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-interface HomeTabsProps {
-  currentTab: string;
-  setCurrentTab: (tab: string) => void;
-}
+export const HomeTabs = () => {
+  const { selectedTab, setSelectedTab } = useHome();
 
-export const HomeTabs = ({ currentTab, setCurrentTab }: HomeTabsProps) => {
   return (
     <nav className={css.module}>
       <span
-        className={`${css.tab} ${currentTab === 'keyword' ? css.activeTab : ''}`}
-        onClick={e => {
-          setCurrentTab('keyword');
+        className={`${css.tab} ${selectedTab === 'keyword' ? css.activeTab : ''}`}
+        onClick={() => {
+          setSelectedTab('keyword');
         }}
       >
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.ico} />
         <span className={css.text}>급상승 키워드</span>
       </span>
       <span
-        className={`${css.tab} ${currentTab === 'post' ? css.activeTab : ''}`}
-        onClick={e => {
-          setCurrentTab('post');
+        className={`${css.tab} ${selectedTab === 'post' ? css.activeTab : ''}`}
+        onClick={() => {
+          setSelectedTab('post');
         }}
       >
         <FontAwesomeIcon icon={faMagnifyingGlass} className={css.ico} />

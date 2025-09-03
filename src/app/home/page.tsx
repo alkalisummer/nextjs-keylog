@@ -1,59 +1,46 @@
 'use server';
 
-import { Home } from './ui/Home';
-import { queryKey } from '../provider/query/lib';
-import { getPosts } from '@/entities/post/api';
-import { getDailyTrends } from '@/entities/trend/api';
-import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
-import { getArticlesServer } from '@/entities/article/api';
+import { BoxError } from '@/shared/ui';
 import { HomeContainer } from './container';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { LottieSpinner } from '@/shared/ui';
+import { HomeTabs } from './ui/homeTabs/HomeTabs';
+import { AsyncBoundary } from '@/shared/boundary';
+import { Keyword } from '@/entities/trend/component';
+import { getDailyTrends } from '@/entities/trend/api';
+import { PostSearch } from '@/features/post/component';
+import { KeywordScroll } from '@/entities/trend/component';
+import { ArticleList } from '@/entities/article/component';
+import { ArticleListSkeleton } from '@/entities/article/component';
 
-type PageProps = {
+type Props = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 };
 
-export const Page = async ({ searchParams }: PageProps) => {
-  const { tagId } = await searchParams;
-  const queryClient = new QueryClient();
+export const Page = async ({ searchParams }: Props) => {
+  const { tagId = '', tab = 'keyword' } = await searchParams;
+  const dailyTrends = getDailyTrends({ geo: 'KR', hl: 'ko' });
 
-  //trends init data
-  const dailyTrendsQueryOptions = {
-    queryKey: queryKey().trend().trendsList(),
-    queryFn: () => getDailyTrends({ geo: 'KR', hl: 'ko' }),
-  };
-  const dailyTrends = await queryClient.ensureQueryData(dailyTrendsQueryOptions);
+  const dailyTrendsRes = await dailyTrends;
 
-  //articles init data
-  const initTrendKeywordInfo = dailyTrends[0];
-  const articlesQueryOptions = {
-    queryKey: queryKey().article().articleList(initTrendKeywordInfo.keyword),
-    queryFn: () =>
-      getArticlesServer({
-        articleKeys: initTrendKeywordInfo.articleKeys,
-        articleCount: NUMBER_CONSTANTS.ARTICLE_COUNT,
-      }),
-  };
-  const articles = await queryClient.ensureQueryData(articlesQueryOptions);
-  const sortedArticles = articles?.sort((a, b) => b.pressDate[0] - a.pressDate[0]);
+  if (!dailyTrendsRes.ok) throw new Error('dailyTrends fetch error');
 
-  //posts init data
-  const postsQueryOptions = {
-    queryKey: queryKey().post().postList({ currPageNum: 1, tagId }),
-    queryFn: () => getPosts({ currPageNum: 1, tagId }),
-  };
-  const posts = await queryClient.ensureQueryData(postsQueryOptions);
-
-  if (!posts.ok) throw new Error('posts fetch error');
-
-  const dehydratedState = dehydrate(queryClient);
+  const trends = dailyTrendsRes.data;
+  const initTrend = dailyTrendsRes.data[0];
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <HomeContainer initialTrend={initTrendKeywordInfo}>
-        <Home trends={dailyTrends} initialArticles={sortedArticles} initialPosts={posts.data} />
-      </HomeContainer>
-    </HydrationBoundary>
+    <HomeContainer initTrend={initTrend} initTab={tab}>
+      <HomeTabs />
+      <main>
+        <Keyword />
+        <KeywordScroll trends={trends} />
+        <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={450} />}>
+          <ArticleList trends={trends} />
+        </AsyncBoundary>
+        <AsyncBoundary pending={<LottieSpinner />} error={<BoxError height={150} />}>
+          <PostSearch tagId={tagId} />
+        </AsyncBoundary>
+      </main>
+    </HomeContainer>
   );
 };
 

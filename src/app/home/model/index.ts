@@ -1,1 +1,1 @@
-export type { HomeInitData } from './type';
+export { initTrendData } from './init';

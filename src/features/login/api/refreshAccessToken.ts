@@ -1,5 +1,3 @@
-'use server';
-
 import { client } from '@/shared/lib/client';
 import { AuthUser } from '../model/type';
 
