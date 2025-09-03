@@ -4,7 +4,7 @@ import css from './sidebar.module.scss';
 import { getUser } from '@/entities/user/api';
 import { UserInfo } from '@/entities/user/component';
 import { getPopularPosts } from '@/entities/post/api';
-import { RecentComments } from '@/entities/comment/ui';
+import { RecentComments } from '@/entities/comment/component';
 import { SidebarHashtags } from '@/entities/hashtag/component';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { getRecentComments } from '@/entities/comment/api';

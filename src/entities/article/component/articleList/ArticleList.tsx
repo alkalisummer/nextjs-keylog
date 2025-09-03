@@ -2,7 +2,6 @@
 
 import { View } from './ui/View';
 import { Trend } from '@/entities/trend/model';
-import { ApiResponse } from '@/shared/lib/client';
 import { queryKey } from '@/app/provider/query/lib';
 import { getArticlesServer } from '@/entities/article/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';

@@ -3,7 +3,7 @@
 import css from './header.module.scss';
 import { useAuthenticated } from '@/shared/lib/util';
 import { useRouter, useParams, usePathname } from 'next/navigation';
-import { AccountMenu } from '../../features/account/ui';
+import { AccountMenu } from '../../features/account/component';
 
 interface HeaderProps {
   type: 'home' | 'blog';
