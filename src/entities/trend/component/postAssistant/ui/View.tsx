@@ -18,10 +18,10 @@ interface Props {
 export const View = ({ trends }: Props) => {
   const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
   const [keywordExpanded, setKeywordExpanded] = useState(true);
-  const [articlesExpanded, setArticlesExpanded] = useState(true);
-  const [chartExpanded, setChartExpanded] = useState(true);
-  const [imageExpanded, setImageExpanded] = useState(true);
-  const [autoPostExpanded, setAutoPostExpanded] = useState(true);
+  const [articlesExpanded, setArticlesExpanded] = useState(false);
+  const [chartExpanded, setChartExpanded] = useState(false);
+  const [imageExpanded, setImageExpanded] = useState(false);
+  const [autoPostExpanded, setAutoPostExpanded] = useState(false);
 
   const { data: articles } = useArticlesQuery({
     selectedTrend: selectedTrend,
@@ -42,20 +42,20 @@ export const View = ({ trends }: Props) => {
         <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
       </PostAssistantSection>
       <PostAssistantSection
-        title="뉴스"
-        icon={faNewspaper}
-        expanded={articlesExpanded}
-        onToggle={() => setArticlesExpanded(!articlesExpanded)}
-      >
-        <PostArticles trend={selectedTrend} articles={articles || []} />
-      </PostAssistantSection>
-      <PostAssistantSection
         title="관심도 차트"
         icon={faChartLine}
         expanded={chartExpanded}
         onToggle={() => setChartExpanded(!chartExpanded)}
       >
         <PostInterestChart keyword={selectedTrend.keyword} />
+      </PostAssistantSection>
+      <PostAssistantSection
+        title="뉴스"
+        icon={faNewspaper}
+        expanded={articlesExpanded}
+        onToggle={() => setArticlesExpanded(!articlesExpanded)}
+      >
+        <PostArticles trend={selectedTrend} articles={articles || []} />
       </PostAssistantSection>
       <PostAssistantSection
         title="이미지 검색"
@@ -73,17 +73,6 @@ export const View = ({ trends }: Props) => {
       >
         <PostAutoPosting selectedKeyword={selectedTrend.keyword} />
       </PostAssistantSection>
-
-      {/* Auto Posting */}
-      {/* <section className={css.section}>
-            <div className={css.sectionHeader}>
-              <h4>Auto Posting</h4>
-              <button className={css.toggleBtn} onClick={() => toggle('auto')}>
-                <FontAwesomeIcon icon={openSections.auto ? faChevronUp : faChevronDown} />
-              </button>
-            </div>
-            {openSections.auto && <PostAutoPosting defaultKeyword={selectedTrend?.keyword || ''} />}
-          </section> */}
     </div>
   );
 };

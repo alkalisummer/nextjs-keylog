@@ -44,4 +44,34 @@ export const Page = async ({ searchParams }: Props) => {
   );
 };
 
+export const generateMetadata = async () => {
+  return {
+    title: 'keylog',
+    description: '인기 키워드를 활용한 블로그 포스팅',
+    icons: {
+      icon: [
+        {
+          url: '/favicon.ico',
+          sizes: '180x180',
+        },
+      ],
+      apple: [
+        {
+          url: '/favicon.ico',
+          sizes: '180x180',
+        },
+      ],
+    },
+    openGraph: {
+      type: 'website',
+      url: `${process.env.BASE_URL}`,
+      title: 'keylog',
+      description: '인기 키워드를 활용한 블로그 포스팅',
+    },
+    alternates: {
+      canonical: `${process.env.BASE_URL}`,
+    },
+  };
+};
+
 export default Page;

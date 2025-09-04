@@ -12,5 +12,6 @@ export {
   createChartOption,
   createAiPostPrompt,
   readAndRenderStream,
+  createAIPost,
 } from './create';
 export { isAllReady } from './is';

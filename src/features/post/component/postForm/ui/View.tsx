@@ -13,6 +13,7 @@ import { uploadPostImage } from '@/features/post/api';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PostHashtag } from '@/features/post/component';
+import { sanitizeHtml } from '@/shared/lib/util/sanitize';
 import { usePostImage } from '@/features/post/hooks/usePostImage';
 import { ToastEditor } from '@/shared/lib/toastEditor/ToastEditor';
 import { PostForm as Form, PostSchema } from '@/features/post/model';
@@ -74,7 +75,8 @@ export const View = ({ post, hashtags, authorId }: Props) => {
         return;
       }
 
-      const htmlContent = data.content || '';
+      // sanitize user-provided HTML before any further processing
+      const htmlContent = sanitizeHtml(data.content || '');
       const plainContent = removeHtml(htmlContent);
       const { currentImageNames } = await cleanupBeforeSubmit(htmlContent);
 

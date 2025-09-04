@@ -1,4 +1,5 @@
 import { NaverArticle, Trend } from '../model';
+import { client } from '@/shared/lib/client/fetch';
 import type { EChartsCoreOption, SeriesOption } from 'echarts';
 import type { InterestOverTime } from '../model';
 import { parseRecentTop5 } from './transform';
@@ -240,5 +241,49 @@ export const readAndRenderStream = async (
     const chunk = decoder.decode(value, { stream: true });
     html += chunk;
     setHtml(html.replaceAll('```html', '').replaceAll('```', ''));
+  }
+};
+
+export interface CreateAIPostParams {
+  keyword: string;
+  setHtml: (html: string) => void;
+  setLoading?: (loading: boolean) => void;
+  clear?: () => void;
+  isLoading?: boolean;
+}
+
+export const createAIPost = async ({ keyword, setHtml, setLoading, clear, isLoading }: CreateAIPostParams) => {
+  if (!keyword || isLoading) return;
+  setLoading?.(true);
+  clear?.();
+  try {
+    const naverArticlesRes = await client.route().get<NaverArticle[]>({
+      endpoint: '/naverArticles',
+      options: { searchParams: { keyword } },
+    });
+
+    if (!naverArticlesRes.ok) {
+      throw new Error('Failed to get naver articles');
+    }
+
+    const naverArticles = naverArticlesRes.data;
+
+    const res = await client.route().post<ReadableStreamDefaultReader<Uint8Array>>({
+      endpoint: '/ai',
+      options: {
+        headers: { 'Content-Type': 'application/json' },
+        body: { messages: createAiPostPrompt({ keyword, naverArticles }) },
+        stream: true,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to start stream');
+    }
+
+    const reader = res.data;
+    await readAndRenderStream(reader, setHtml);
+  } finally {
+    setLoading?.(false);
   }
 };

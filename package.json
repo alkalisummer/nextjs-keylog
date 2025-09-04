@@ -85,6 +85,7 @@
     "fs": false
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/formidable": "^3.4.5",
     "@types/mysql": "^2.15.27",
     "@types/react-beforeunload": "^2.1.5",

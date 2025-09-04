@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
 import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
+import { sanitizeHtml } from '@/shared/lib/util/sanitize';
 
 interface Props {
   userId: string;
@@ -32,7 +33,7 @@ export const View = ({ userId, postId }: Props) => {
   const post = postRes.data;
 
   const isAuthorized = useCheckAuth(user.userId);
-  const postHtmlCntn = Buffer.from(post.postHtmlCntn ?? '').toString();
+  const postHtmlCntn = sanitizeHtml(Buffer.from(post.postHtmlCntn ?? '').toString());
 
   const { deletePostMutation } = usePost({
     delete: {
