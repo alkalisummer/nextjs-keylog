@@ -133,8 +133,9 @@ $font-size-created: 12px;
 
   .postThumb {
     flex-direction: column-reverse;
-    align-items: flex-start;
+    align-items: stretch;
     row-gap: 1.5rem;
+    height: auto !important;
   }
 
   .postTitle {
@@ -152,6 +153,7 @@ $font-size-created: 12px;
 
   .thumbImgDiv {
     width: 100%;
+    overflow: hidden;
   }
 
   .thumbImg {

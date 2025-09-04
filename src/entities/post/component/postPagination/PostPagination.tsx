@@ -19,6 +19,7 @@ export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
   const pageNavigationNumArr = calculateTotalPage(totalPageNum);
 
   const handlePagination = (pageNum: number | null, totalPageNum: number) => {
+    debugger;
     if (pageNum && pageNum > 0 && pageNum <= totalPageNum) {
       router.push(`/${userId}?pageNum=${pageNum}${tempYn ? `&tempYn=${tempYn}` : ''}`);
     }

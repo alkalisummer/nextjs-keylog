@@ -17,6 +17,8 @@ export interface Post {
 export interface PostDetail {
   postId: number;
   postTitle: string;
+  postThmbImgUrl: string;
+  postCntn: string;
   postHtmlCntn: string;
   authorId: string;
   tempYn: string;
