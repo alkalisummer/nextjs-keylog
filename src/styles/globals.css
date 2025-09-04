@@ -133,6 +133,13 @@ button {
   border: none;
 }
 
+ul,
+ol {
+  list-style-position: outside;
+  margin: 1em 0 1em 0;
+  padding-left: 1.5em;
+}
+
 .toastui-editor-popup {
   margin-left: 0 !important;
 }

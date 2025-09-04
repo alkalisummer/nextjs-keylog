@@ -41,6 +41,7 @@ export interface ExtendedFetchOptions extends Omit<RequestInit, 'body'> {
   searchParams?: SearchParams;
   bearer?: string;
   isPublic?: boolean;
+  stream?: boolean;
 }
 
 export interface FetchProps {
@@ -51,6 +52,7 @@ export interface FetchProps {
   searchParams?: SearchParams;
   bearer?: string;
   isPublic?: boolean;
+  stream?: boolean;
 }
 
 export interface HttpClientRequestProps {

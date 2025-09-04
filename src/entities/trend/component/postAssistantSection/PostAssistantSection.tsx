@@ -18,12 +18,12 @@ export const PostAssistantSection = ({ title, icon, expanded, onToggle, children
   return (
     <div className={css.module}>
       <section className={css.section}>
-        <div className={css.sectionHeader}>
+        <div className={css.sectionHeader} onClick={onToggle}>
           <div className={css.title}>
             <FontAwesomeIcon icon={icon} className={css.icon} />
             <h3 className={css.title}>{title}</h3>
           </div>
-          <button className={css.toggleBtn} onClick={onToggle}>
+          <button className={css.toggleBtn}>
             <FontAwesomeIcon icon={expanded ? faChevronUp : faChevronDown} />
           </button>
         </div>

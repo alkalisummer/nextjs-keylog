@@ -29,3 +29,11 @@ export interface InterestOverTime {
   dates: string[];
   values: number[];
 }
+
+export interface NaverArticle {
+  title: string;
+  originallink: string;
+  link: string;
+  description: string;
+  pubDate: string;
+}

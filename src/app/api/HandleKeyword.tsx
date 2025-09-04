@@ -41,10 +41,10 @@ export const getGoogleArticles = async (articleKeys: articleKey[], articleCount:
 };
 
 const getArticles = async (keyword: string) => {
-  const cheerio = require('cheerio');
+  const cheerio = await import('cheerio');
 
   let naverArticles: naverArticle[] = [];
-  let articles: article[] = [];
+  const articles: article[] = [];
 
   const searchParams = {
     params: { query: keyword, display: 100, sort: 'sim' },
@@ -83,7 +83,7 @@ const getArticles = async (keyword: string) => {
           article.link.indexOf('naver') !== -1 && article.originallink.indexOf('nocutnews') === -1,
       );
 
-      for (let article of resultArr) {
+      for (const article of resultArr) {
         for (let i = 0; i < keywordArr.length; i++) {
           if (article.title.indexOf(keywordArr[i]) === -1) {
             break;
@@ -102,7 +102,7 @@ const getArticles = async (keyword: string) => {
       );
     }
   });
-  for (let article of naverArticles) {
+  for (const article of naverArticles) {
     await axios.get(article.link).then(async res => {
       const $ = cheerio.load(res.data);
       const host = res.request.host;

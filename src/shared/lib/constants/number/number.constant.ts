@@ -23,3 +23,5 @@ export const POST = {
 };
 
 export const POST_IMAGE_SEARCH_PER_PAGE = 10;
+
+export const NAVER_ARTICLES_PER_PAGE = 15;

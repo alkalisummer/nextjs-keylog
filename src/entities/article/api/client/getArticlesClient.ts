@@ -8,7 +8,7 @@ interface GetArticlesProps {
 
 export const getArticlesClient = async ({ articleKeys, articleCount }: GetArticlesProps) => {
   const result = await client.route().post<Article[]>({
-    endpoint: '/article/articleList',
+    endpoint: '/articles',
     options: {
       body: {
         articleKeys,

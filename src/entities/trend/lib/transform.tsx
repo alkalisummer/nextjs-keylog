@@ -1,4 +1,4 @@
-import { ImageItem, Trend, InterestOverTime } from '../model';
+import { ImageItem, Trend, InterestOverTime, NaverArticle } from '../model';
 import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
@@ -54,4 +54,55 @@ export const mergeUniqueImages = (base: ImageItem[], incoming: ImageItem[]) => {
     }
   }
   return merged;
+};
+
+export const parsePubDate = (value: string): Date => {
+  const native = new Date(value);
+  if (!Number.isNaN(native.getTime())) return native;
+
+  const m = value.trim().match(/^(?:\w{3},\s*)?(\d{2})\s+(\w{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+([+-]\d{4})$/);
+  if (!m) return new Date(NaN);
+
+  const day = parseInt(m[1], 10);
+  const monthStr = m[2].toLowerCase();
+  const year = parseInt(m[3], 10);
+  const hour = parseInt(m[4], 10);
+  const minute = parseInt(m[5], 10);
+  const second = parseInt(m[6], 10);
+  const tz = m[7];
+
+  const monthMap: Record<string, number> = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11,
+  };
+  const month = monthMap[monthStr];
+  if (month === undefined) return new Date(NaN);
+
+  const sign = tz.startsWith('+') ? 1 : -1;
+  const offH = parseInt(tz.slice(1, 3), 10) || 0;
+  const offM = parseInt(tz.slice(3, 5), 10) || 0;
+  const offsetMinutes = sign * (offH * 60 + offM);
+
+  const utcMs = Date.UTC(year, month, day, hour, minute, second) - offsetMinutes * 60 * 1000;
+  return new Date(utcMs);
+};
+
+export const parseRecentTop5 = (articles: NaverArticle[], cutoff: Date): NaverArticle[] => {
+  return (articles || [])
+    .filter(a => {
+      const t = parsePubDate(a.pubDate);
+      return !Number.isNaN(t.getTime()) && t >= cutoff;
+    })
+    .sort((a, b) => parsePubDate(b.pubDate).getTime() - parsePubDate(a.pubDate).getTime())
+    .slice(0, 5);
 };

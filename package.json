@@ -60,7 +60,7 @@
     "oci-common": "^2.112.2",
     "oci-objectstorage": "^2.112.2",
     "oci-sdk": "^2.112.2",
-    "openai": "^5.1.0",
+    "openai": "^5.19.0",
     "openai-gpt-token-counter": "^1.1.1",
     "prismjs": "^1.30.0",
     "react": "19.1.0",

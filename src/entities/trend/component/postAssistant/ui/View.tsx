@@ -8,6 +8,7 @@ import { PostArticles } from '../../../../article/component';
 import { faOpenai } from '@fortawesome/free-brands-svg-icons';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
 import { faChartLine, faArrowUpLong, faImage } from '@fortawesome/free-solid-svg-icons';
+import { PostAutoPosting } from '../../postAutoPosting/PostAutoPosting';
 import { PostImageSearch, PostAssistantSection, PostInterestChart, PostTrendKeyword } from '../..';
 
 interface Props {
@@ -54,7 +55,7 @@ export const View = ({ trends }: Props) => {
         expanded={chartExpanded}
         onToggle={() => setChartExpanded(!chartExpanded)}
       >
-        <PostInterestChart keyword={selectedTrend?.keyword} />
+        <PostInterestChart keyword={selectedTrend.keyword} />
       </PostAssistantSection>
       <PostAssistantSection
         title="이미지 검색"
@@ -62,7 +63,7 @@ export const View = ({ trends }: Props) => {
         expanded={imageExpanded}
         onToggle={() => setImageExpanded(!imageExpanded)}
       >
-        <PostImageSearch keyword={selectedTrend?.keyword} />
+        <PostImageSearch keyword={selectedTrend.keyword} />
       </PostAssistantSection>
       <PostAssistantSection
         title="AI 포스팅"
@@ -70,19 +71,8 @@ export const View = ({ trends }: Props) => {
         expanded={autoPostExpanded}
         onToggle={() => setAutoPostExpanded(!autoPostExpanded)}
       >
-        <></>
+        <PostAutoPosting selectedKeyword={selectedTrend.keyword} />
       </PostAssistantSection>
-
-      {/* Interest Chart */}
-      {/* <section className={css.section}>
-            <div className={css.sectionHeader}>
-              <h4>Interest Change Chart</h4>
-              <button className={css.toggleBtn} onClick={() => toggle('chart')}>
-                <FontAwesomeIcon icon={openSections.chart ? faChevronUp : faChevronDown} />
-              </button>
-            </div>
-            {openSections.chart && <PostInterestChart keyword={selectedTrend?.keyword} />}
-          </section> */}
 
       {/* Auto Posting */}
       {/* <section className={css.section}>
@@ -93,17 +83,6 @@ export const View = ({ trends }: Props) => {
               </button>
             </div>
             {openSections.auto && <PostAutoPosting defaultKeyword={selectedTrend?.keyword || ''} />}
-          </section> */}
-
-      {/* Image Search */}
-      {/* <section className={css.section}>
-            <div className={css.sectionHeader}>
-              <h4>Image</h4>
-              <button className={css.toggleBtn} onClick={() => toggle('image')}>
-                <FontAwesomeIcon icon={openSections.image ? faChevronUp : faChevronDown} />
-              </button>
-            </div>
-            {openSections.image && <PostImageSearch defaultKeyword={selectedTrend?.keyword || ''} />}
           </section> */}
     </div>
   );

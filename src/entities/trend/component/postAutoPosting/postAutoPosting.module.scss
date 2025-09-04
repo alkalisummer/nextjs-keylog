@@ -1,3 +1,5 @@
+@use 'variable' as *;
+
 .module {
   display: flex;
   flex-direction: column;
@@ -13,18 +15,25 @@
 }
 .input {
   flex: 1;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
+  font-size: 12px;
+  font-family: 'Spoqa Han Sans Neo';
+
+  &:focus {
+    outline: none;
+  }
 }
 .button {
-  padding: 6px 10px;
+  padding: 5px 10px;
+  font-size: 12px;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
   background: #f9fafb;
 }
 .content {
-  min-height: 200px;
+  min-height: 400px;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 10px;

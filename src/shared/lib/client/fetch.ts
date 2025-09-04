@@ -35,6 +35,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     headers: customHeaders,
     bearer: overrideBearer,
     isPublic = false,
+    stream = false,
   }: FetchProps): Promise<ApiResponse<T>> {
     const url = baseUrl + endpoint + buildSearchParams(searchParams);
 
@@ -82,7 +83,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     }
 
     const headers: HeadersInit = {
-      Accept: 'application/json',
+      Accept: stream ? 'text/plain' : 'application/json',
       ...(bearer && { Authorization: `Bearer ${bearer}` }),
       ...customHeaders,
       ...(body && { 'Content-Type': 'application/json' }),
@@ -104,6 +105,16 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       if (isServer() && setCookieHeader) {
         await setCookies(setCookieHeader);
       }
+      if (stream) {
+        const reader = response.body?.getReader() as unknown as T;
+        return {
+          ok: response.ok,
+          status: response.status,
+          headers: response.headers,
+          data: reader,
+          ...(response.ok ? {} : { error: response.statusText }),
+        } as ApiResponse<T>;
+      }
       return handleResponse<T>(response);
     } catch (error: any) {
       return handleNetworkError(error);
@@ -123,6 +134,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       searchParams: options?.searchParams,
       bearer: options?.bearer,
       isPublic: options?.isPublic,
+      stream: options?.stream,
     });
   };
 

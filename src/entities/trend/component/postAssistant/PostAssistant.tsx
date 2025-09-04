@@ -35,7 +35,7 @@ export const PostAssistant = async () => {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <View trends={trends} />;
+      <View trends={trends} />
     </HydrationBoundary>
   );
 };

@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { Trend } from '../../model';
+import { formatDate } from '@/shared/lib/util';
 import css from './postTrendKeyword.module.scss';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatTraffic, createSearchGoogleKeyword } from '../../lib';
 
@@ -14,11 +16,17 @@ interface PostTrendKeywordProps {
 }
 
 export const PostTrendKeyword = ({ trends, selectedKeyword, onSelect }: PostTrendKeywordProps) => {
+  const baseDate = `: ${formatDate({ date: new Date(), seperator: '.' })}`;
   const selectedTrend = trends.find(trend => trend.keyword === selectedKeyword);
   const relatedKeywords = selectedTrend?.relatedKeywords.filter(keyword => keyword !== selectedKeyword);
 
   return (
     <div className={css.module}>
+      <div className={css.baseDate}>
+        <FontAwesomeIcon icon={faGoogle} className={css.icon} />
+        <span className={css.trends}>Trends</span>
+        <span className={css.date}>{baseDate}</span>
+      </div>
       <div className={css.keywordList}>
         {trends.map((trend, index) => (
           <div

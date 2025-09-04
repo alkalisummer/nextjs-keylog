@@ -1,74 +1,84 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import css from './postAutoPosting.module.scss';
-import ArticlePrompt from '@/utils/ChatGptPrompt';
-import ChatGptHandle from '@/utils/ChatGptHandle';
+import { useClipboard } from '@/shared/lib/hooks';
+import { client } from '@/shared/lib/client/fetch';
+import { useEffect, useRef, useState } from 'react';
+import { NaverArticle } from '@/entities/trend/model';
+import { createAiPostPrompt, readAndRenderStream } from '@/entities/trend/lib';
 
 interface PostAutoPostingProps {
-  defaultKeyword?: string;
+  selectedKeyword?: string;
 }
-
-interface Message {
-  role: string;
-  content: string;
-}
-
-export function PostAutoPosting({ defaultKeyword = '' }: PostAutoPostingProps) {
-  const [keyword, setKeyword] = useState(defaultKeyword);
+export function PostAutoPosting({ selectedKeyword = '' }: PostAutoPostingProps) {
+  const [keyword, setKeyword] = useState(selectedKeyword);
   const [loading, setLoading] = useState(false);
+  const [html, setHtml] = useState('');
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (contentRef.current) contentRef.current.innerHTML = '';
-  }, [keyword]);
+  useClipboard({ elementId: 'clipboard' });
 
   const clear = () => {
-    if (contentRef.current) contentRef.current.innerHTML = '';
+    setHtml('');
   };
 
-  const generate = async () => {
+  const createAIPost = async (keyword: string) => {
     if (!keyword || loading) return;
     setLoading(true);
     clear();
-    const chatMsg = (await ArticlePrompt(keyword)) as Message;
-    if (!chatMsg || Object.keys(chatMsg).length === 0) {
+    try {
+      const naverArticlesRes = await client.route().get<NaverArticle[]>({
+        endpoint: '/naverArticles',
+        options: {
+          searchParams: { keyword },
+        },
+      });
+
+      if (!naverArticlesRes.ok) {
+        throw new Error('Failed to get naver articles');
+      }
+
+      const naverArticles = naverArticlesRes.data;
+
+      const res = await client.route().post<ReadableStreamDefaultReader<Uint8Array>>({
+        endpoint: '/ai',
+        options: {
+          headers: { 'Content-Type': 'application/json' },
+          body: { messages: createAiPostPrompt({ keyword, naverArticles }) },
+          stream: true,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to start stream');
+      }
+
+      const reader = res.data;
+      await readAndRenderStream(reader, setHtml);
+    } catch (e) {
+      console.error(e);
+    } finally {
       setLoading(false);
-      return;
-    }
-    const stream = await ChatGptHandle('auto-post', chatMsg);
-    let html = '';
-    for await (const chunk of stream) {
-      if (chunk.choices[0].finish_reason) {
-        setLoading(false);
-      }
-      const text = chunk.choices[0].delta.content;
-      if (text) {
-        html += text;
-        if (contentRef.current) contentRef.current.innerHTML = html.replaceAll('```html', '').replaceAll('```', '');
-      }
     }
   };
+
+  useEffect(() => {
+    clear();
+    setKeyword(selectedKeyword);
+  }, [selectedKeyword]);
 
   return (
     <div className={css.module}>
       <div className={css.controls}>
-        <label className={css.label}>키워드:</label>
         <input className={css.input} value={keyword} onChange={e => setKeyword(e.target.value)} />
-        <button className={css.button} onClick={generate} disabled={!keyword || loading}>
+        <button className={css.button} onClick={() => createAIPost(keyword)} disabled={!keyword || loading}>
           {loading ? '생성 중...' : '글 생성하기'}
         </button>
-        <button className={css.button} onClick={clear}>
-          초기화
-        </button>
-        <button
-          className={css.button}
-          onClick={() => contentRef.current && navigator.clipboard.writeText(contentRef.current.innerHTML)}
-        >
+        <button className={css.button} id="clipboard" data-clipboard-target="#clipboard-content">
           클립보드 복사
         </button>
       </div>
-      <div ref={contentRef} className={css.content} />
+      <div id="clipboard-content" ref={contentRef} className={css.content} dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 }

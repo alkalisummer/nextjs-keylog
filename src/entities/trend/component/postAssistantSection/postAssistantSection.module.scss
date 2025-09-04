@@ -23,6 +23,12 @@ $color-text-secondary: #868e96;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+  &:hover {
+    .toggleBtn {
+      color: $color-text;
+    }
+  }
 }
 
 .title {
@@ -47,10 +53,6 @@ $color-text-secondary: #868e96;
   color: $color-text-secondary;
   cursor: pointer;
   transition: color 0.2s;
-
-  &:hover {
-    color: $color-text;
-  }
 }
 
 @media (max-width: $breakpoint-small) {
