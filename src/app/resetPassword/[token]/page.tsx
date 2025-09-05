@@ -1,8 +1,8 @@
 'use server';
 
 import { validateToken } from '@/features/login/lib';
-import { UpdatePasswordForm } from '@/features/login/component';
 import { getPasswordResetToken } from '@/features/login/api';
+import { ResetPasswordForm } from '@/features/login/component';
 
 export const Page = async ({ params }: { params: Promise<{ token: string }> }) => {
   const { token } = await params;
@@ -18,7 +18,7 @@ export const Page = async ({ params }: { params: Promise<{ token: string }> }) =
 
   return (
     <main>
-      <UpdatePasswordForm token={token} userId={userId} isValidToken={isValidToken} />
+      <ResetPasswordForm userId={userId} isValidToken={isValidToken} token={userToken.data.token} />
     </main>
   );
 };

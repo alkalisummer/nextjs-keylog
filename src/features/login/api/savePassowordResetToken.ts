@@ -10,6 +10,7 @@ export const savePasswordResetToken = async ({ token, userId, expireTime }: Save
   return await client.user().post({
     endpoint: '/tokens',
     options: {
+      isPublic: true,
       body: {
         token,
         userId,

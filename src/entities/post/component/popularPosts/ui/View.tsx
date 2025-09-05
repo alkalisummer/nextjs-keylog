@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import css from './view.module.scss';
-import { PopularPost } from '@/entities/post/model';
-import { timeFormat } from '@/utils/CommonUtils';
+import { useRouter } from 'next/navigation';
+import { formatDate } from '@/shared/lib/util';
 import { useQuery } from '@tanstack/react-query';
+import { PopularPost } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { getPopularPosts } from '@/entities/post/api';
 
@@ -30,7 +30,7 @@ export const View = ({ userId }: Props) => {
         <div key={`post_${post.postId}`} className={css.item} onClick={() => router.push(`/${userId}/${post.postId}`)}>
           <div className={css.info}>
             <span className={css.postTitle}>{post.postTitle}</span>
-            <span className={css.date}>{timeFormat(post.rgsnDttm)}</span>
+            <span className={css.date}>{formatDate({ date: post.rgsnDttm, seperator: '.', isExtendTime: true })}</span>
           </div>
           {post.postThmbImgUrl && (
             <div className={css.postImgDiv}>

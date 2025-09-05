@@ -6,5 +6,8 @@ import { client } from '@/shared/lib/client';
 export const getPasswordResetToken = async (token: string) => {
   return await client.user().get<UserToken>({
     endpoint: `/tokens/${token}`,
+    options: {
+      isPublic: true,
+    },
   });
 };

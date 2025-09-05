@@ -23,8 +23,8 @@ export const sendPasswordMail = async ({ id }: SendPasswordMailProps) => {
   const { token, expireTime } = createPasswordResetToken({ length: 20, expireTimeMin: 30 });
   const url =
     process.env.NODE_ENV === 'production'
-      ? `${process.env.NEXT_PUBLIC_KEYLOG_API_URL}/updatePassword/${token}`
-      : `${process.env.BASE_URL}/updatePassword/${token}`;
+      ? `${process.env.NEXT_PUBLIC_KEYLOG_URL}/resetPassword/${token}`
+      : `${process.env.BASE_URL}/resetPassword/${token}`;
 
   const transporter = await createTransporter();
   const mailOptions = createMailOptions({ user, expireTimeMin: expireTime, resetPasswordUrl: url });

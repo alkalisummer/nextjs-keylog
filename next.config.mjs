@@ -11,6 +11,7 @@ const nextConfig = {
     BASE_URL: process.env.BASE_URL,
     NEXT_PUBLIC_COOKIE_DOMAIN: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
     NEXT_PUBLIC_IMAGE_PROXY_URL: process.env.NEXT_PUBLIC_IMAGE_PROXY_URL,
+    NEXT_PUBLIC_KEYLOG_URL: process.env.NEXT_PUBLIC_KEYLOG_URL,
 
     //KEYLOG API URL
     KEYLOG_API_URL: process.env.KEYLOG_API_URL,
@@ -86,6 +87,16 @@ const nextConfig = {
       config.resolve.fallback = { fs: false, path: false, os: false, net: false, tls: false };
     }
     return config;
+  },
+
+  redirects: async () => {
+    return [
+      {
+        source: '/',
+        destination: '/home',
+        permanent: true,
+      },
+    ];
   },
 };
 

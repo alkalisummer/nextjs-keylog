@@ -2,28 +2,28 @@
 
 import { FieldError } from '@/shared/ui';
 import { useForm } from 'react-hook-form';
-import { updatePassword } from '../../api';
+import { resetPassword } from '../../api';
 import { useRouter } from 'next/navigation';
-import css from './updatePasswordForm.module.scss';
+import css from './resetPasswordForm.module.scss';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faLock } from '@fortawesome/free-solid-svg-icons';
-import { UpdatePasswordSchema, UpdatePasswordForm as PasswordForm } from '../../model';
+import { ResetPasswordSchema, ResetPasswordForm as PasswordForm } from '../../model';
 
 interface ResetPasswordFormProps {
-  token: string;
   userId: string;
   isValidToken: boolean;
+  token: string;
 }
 
-export const UpdatePasswordForm = ({ token, userId, isValidToken }: ResetPasswordFormProps) => {
+export const ResetPasswordForm = ({ userId, isValidToken, token }: ResetPasswordFormProps) => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<PasswordForm>({
-    resolver: zodResolver(UpdatePasswordSchema),
+    resolver: zodResolver(ResetPasswordSchema),
     mode: 'onChange',
   });
 
@@ -31,13 +31,13 @@ export const UpdatePasswordForm = ({ token, userId, isValidToken }: ResetPasswor
     const { password } = data;
 
     if (!isValidToken) {
-      alert('토큰 정보가 유효하지 않습니다. 비밀번호 재설정 링크를 다시 발급받아주세요.');
+      return alert('토큰 정보가 유효하지 않습니다. 비밀번호 재설정 링크를 다시 발급받아주세요.');
     }
 
-    const result = await updatePassword({ userId, newPassword: password });
+    const result = await resetPassword({ userId, newPassword: password, token });
 
     if (!result.ok) {
-      alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+      return alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
     }
 
     alert('비밀번호 변경이 완료되었습니다. 다시 로그인해주세요.');

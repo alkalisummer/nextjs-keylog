@@ -7,7 +7,7 @@ export const FindPasswordSchema = z.object({
 
 export type FindPasswordForm = z.infer<typeof FindPasswordSchema>;
 
-export const UpdatePasswordSchema = z
+export const ResetPasswordSchema = z
   .object({
     password: z
       .string()
@@ -23,7 +23,7 @@ export const UpdatePasswordSchema = z
     path: ['passwordCheck'],
   });
 
-export type UpdatePasswordForm = z.infer<typeof UpdatePasswordSchema>;
+export type ResetPasswordForm = z.infer<typeof ResetPasswordSchema>;
 
 export const LoginSchema = z.object({
   id: z.string().trim().min(1, { message: 'ID를 입력해주세요.' }),

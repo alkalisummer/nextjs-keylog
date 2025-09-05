@@ -20,7 +20,15 @@ export const View = () => {
     <section className={css.module}>
       <div className={css.articleDate}>
         <span>(</span>
-        <Image className={css.logo} src="/google.svg" alt="google logo" width={50} height={15} quality={100} priority />
+        <Image
+          className={css.logo}
+          src="/icon/google.svg"
+          alt="google logo"
+          width={50}
+          height={15}
+          quality={100}
+          priority
+        />
         <span className={css.trends}>Trends</span>
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.icon} />
         <span>{baseDate}</span>

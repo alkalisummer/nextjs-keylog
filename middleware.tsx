@@ -5,14 +5,10 @@ import type { NextRequest } from 'next/server';
 const secret = process.env.NEXTAUTH_SECRET;
 
 export async function middleware(req: NextRequest) {
-  //로그인이 되어 있을 경우 토큰이 존재
-  const token: any = await getToken({ req, secret });
   const { pathname } = req.nextUrl;
 
-  // 루트 경로를 /home으로 리다이렉트
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL('/home', req.url));
-  }
+  //로그인이 되어 있을 경우 토큰이 존재
+  const token: any = await getToken({ req, secret });
 
   //로그인이 되어 있는 경우 로그인, 회원가입 화면 접근 불가
   if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {

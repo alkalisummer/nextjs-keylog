@@ -2,17 +2,20 @@
 
 import { client } from '@/shared/lib/client';
 
-interface UpdatePasswordProps {
+interface ResetPasswordProps {
   userId: string;
   newPassword: string;
+  token: string;
 }
 
-export const updatePassword = async ({ userId, newPassword }: UpdatePasswordProps) => {
+export const resetPassword = async ({ userId, newPassword, token }: ResetPasswordProps) => {
   return await client.user().put({
-    endpoint: `/${userId}/password`,
+    endpoint: `/reset/${userId}/password`,
     options: {
+      isPublic: true,
       body: {
         password: newPassword,
+        token,
       },
     },
   });

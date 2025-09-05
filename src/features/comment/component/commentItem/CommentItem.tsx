@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import css from './commentItem.module.scss';
 import { useSession } from 'next-auth/react';
-import { timeFormat } from '@/utils/CommonUtils';
+import { formatDate } from '@/shared/lib/util';
 import { getCommentToggleLabel } from '../../lib';
 import { Comment } from '@/entities/comment/model';
 import { useAutoOpenReplies, useComment } from '../../hooks';
@@ -101,7 +101,7 @@ export const CommentItem = ({
       <CommentHeader
         userImageUrl={comment.userThmbImgUrl}
         userNickname={comment.userNickname}
-        date={timeFormat(comment.rgsnDttm)}
+        date={formatDate({ date: comment.rgsnDttm, seperator: '.', isExtendTime: true })}
         canShowActions={canShowActions}
         onUserClick={() => router.push(`/${comment.authorId}`)}
         onEditClick={handleEdit}
