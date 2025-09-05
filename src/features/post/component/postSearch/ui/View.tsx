@@ -7,8 +7,8 @@ import { useSearchParams } from 'next/navigation';
 import { Fragment, useState, useEffect } from 'react';
 import { useIntersectionObserver } from '@/shared/hooks';
 import { SearchForm } from '@/entities/post/component/index';
-import { SearchTagPost, SearchPostList } from '@/entities/post/component';
 import { SearchForm as SearchFormType } from '@/entities/post/model';
+import { SearchTagPost, SearchPostList } from '@/entities/post/component';
 
 interface Props {
   initPosts: Post[];
