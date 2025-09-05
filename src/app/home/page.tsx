@@ -2,7 +2,6 @@
 
 import { BoxError } from '@/shared/ui';
 import { HomeContainer } from './container';
-import { LottieSpinner } from '@/shared/ui';
 import { HomeTabs } from './ui/homeTabs/HomeTabs';
 import { AsyncBoundary } from '@/shared/boundary';
 import { Keyword } from '@/entities/trend/component';
@@ -10,6 +9,7 @@ import { getDailyTrends } from '@/entities/trend/api';
 import { PostSearch } from '@/features/post/component';
 import { KeywordScroll } from '@/entities/trend/component';
 import { ArticleList } from '@/entities/article/component';
+import { PostSearchSkeleton } from '@/features/post/component';
 import { ArticleListSkeleton } from '@/entities/article/component';
 
 type Props = {
@@ -36,7 +36,7 @@ export const Page = async ({ searchParams }: Props) => {
         <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={450} />}>
           <ArticleList trends={trends} />
         </AsyncBoundary>
-        <AsyncBoundary pending={<LottieSpinner />} error={<BoxError height={150} />}>
+        <AsyncBoundary pending={<PostSearchSkeleton />} error={<BoxError height={150} />}>
           <PostSearch tagId={tagId} />
         </AsyncBoundary>
       </main>

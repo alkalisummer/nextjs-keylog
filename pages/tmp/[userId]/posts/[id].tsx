@@ -13,7 +13,7 @@ import { handleMySql as handlePostSql } from '@/app/api/HandlePost';
 import { handleMySql as handleCommentSql } from '@/app/api/HandleComment';
 import { handleMySql as handleLikeSql } from '@/app/api/HandleLike';
 import { handleMySql as handleHashtag } from '@/app/api/HandleHashtag';
-import useCheckAuth from '@/shared/lib/hooks/useCheckAuth';
+import useCheckAuth from '@/shared/hooks/useCheckAuth';
 import ClipboardJS from 'clipboard';
 
 //mui notification

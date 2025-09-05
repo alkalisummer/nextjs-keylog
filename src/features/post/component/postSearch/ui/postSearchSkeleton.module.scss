@@ -1,0 +1,150 @@
+@use 'variable' as *;
+
+@keyframes pulse {
+  0% {
+    background-color: #f2f2f2;
+  }
+  50% {
+    background-color: #e8e8e8;
+  }
+  100% {
+    background-color: #f2f2f2;
+  }
+}
+
+@mixin skeletonBase {
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.headerSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 20px;
+
+  .searchInputSkeleton {
+    width: 60%;
+    height: 38px;
+    @include skeletonBase;
+  }
+}
+
+.gridSkeleton {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 30px;
+  column-gap: 30px;
+}
+
+.cardSkeleton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: white;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
+}
+
+.imageSkeleton {
+  width: 100%;
+  padding-top: 50%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  @include skeletonBase;
+}
+
+.contentSkeleton {
+  padding: 15px;
+}
+
+.titleSkeleton {
+  width: 70%;
+  height: 16px;
+  margin-bottom: 10px;
+  @include skeletonBase;
+}
+
+.summarySkeleton {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 8px;
+  @include skeletonBase;
+}
+
+.summarySkeletonShort {
+  width: 60%;
+  height: 14px;
+  margin-bottom: 10px;
+  @include skeletonBase;
+}
+
+.bottomLineSkeleton {
+  width: 40%;
+  height: 12px;
+  margin-top: 8px;
+  @include skeletonBase;
+}
+
+.authorSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-top: 1px solid #efefef;
+}
+
+.userAreaSkeleton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatarSkeleton {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  @include skeletonBase;
+}
+
+.usernameSkeleton {
+  width: 80px;
+  height: 12px;
+  @include skeletonBase;
+}
+
+.likeSkeleton {
+  width: 36px;
+  height: 12px;
+  @include skeletonBase;
+}
+
+@media (max-width: $breakpoint-medium) {
+  .gridSkeleton {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-medium-small) {
+  .gridSkeleton {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .headerSkeleton {
+    .searchInputSkeleton {
+      width: 70%;
+      height: 34px;
+    }
+    .searchMetaSkeleton {
+      width: 100px;
+      height: 12px;
+    }
+  }
+  .gridSkeleton {
+    grid-template-columns: 1fr;
+  }
+}

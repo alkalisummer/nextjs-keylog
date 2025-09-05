@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { mergeUniqueImages } from '../../lib';
 import css from './postImageSearch.module.scss';
 import { getSearchImages } from '../../api/getSearchImages';
-import { useIntersectionObserver } from '@/shared/lib/hooks';
+import { useIntersectionObserver } from '@/shared/hooks';
 import { POST_IMAGE_SEARCH_PER_PAGE } from '@/shared/lib/constants';
 
 interface PostImageSearchProps {

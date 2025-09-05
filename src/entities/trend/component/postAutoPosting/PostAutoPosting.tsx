@@ -1,10 +1,10 @@
 'use client';
 
 import css from './postAutoPosting.module.scss';
-import { useClipboard } from '@/shared/lib/hooks';
+import { useClipboard } from '@/shared/hooks';
 import { useEffect, useRef, useState } from 'react';
 import { createAIPost } from '@/entities/trend/lib';
-import { sanitizeHtml } from '@/shared/lib/util/sanitize';
+import { sanitizeHtml } from '@/shared/lib/dompurify/sanitize';
 
 interface PostAutoPostingProps {
   selectedKeyword?: string;

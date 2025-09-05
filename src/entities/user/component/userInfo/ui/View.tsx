@@ -4,10 +4,10 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import css from './view.module.scss';
-import { useCheckAuth } from '@/shared/lib/hooks';
+import { useCheckAuth } from '@/shared/hooks';
+import { getUser } from '@/entities/user/api';
 import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
-import { getUser } from '@/entities/user/api';
 
 interface Props {
   userId: string;

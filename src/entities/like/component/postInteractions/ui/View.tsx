@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { isClient } from '@/shared/lib/util';
-import { useClipboard } from '@/shared/lib/hooks';
+import { useClipboard } from '@/shared/hooks';
 import { useLikePost } from '@/features/like/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { facebookShare, twitterShare } from '@/entities/like/lib';

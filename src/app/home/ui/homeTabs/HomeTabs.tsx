@@ -2,18 +2,25 @@
 
 import css from './homeTabs.module.scss';
 import { useHome } from '../../container';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 export const HomeTabs = () => {
   const { selectedTab, setSelectedTab } = useHome();
+  const router = useRouter();
+
+  const changeTab = (tab: string) => {
+    setSelectedTab(tab);
+    router.replace(`/home?tab=${tab}`);
+  };
 
   return (
     <nav className={css.module}>
       <span
         className={`${css.tab} ${selectedTab === 'keyword' ? css.activeTab : ''}`}
         onClick={() => {
-          setSelectedTab('keyword');
+          changeTab('keyword');
         }}
       >
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.ico} />
@@ -22,7 +29,7 @@ export const HomeTabs = () => {
       <span
         className={`${css.tab} ${selectedTab === 'post' ? css.activeTab : ''}`}
         onClick={() => {
-          setSelectedTab('post');
+          changeTab('post');
         }}
       >
         <FontAwesomeIcon icon={faMagnifyingGlass} className={css.ico} />

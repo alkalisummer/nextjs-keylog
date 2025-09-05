@@ -4,9 +4,9 @@ import { Post } from '@/entities/post/model';
 import { useHome } from '@/app/home/container';
 import { getPosts } from '@/entities/post/api';
 import { useSearchParams } from 'next/navigation';
-import { SearchForm } from '@/entities/post/component/index';
 import { Fragment, useState, useEffect } from 'react';
-import { useIntersectionObserver } from '@/shared/lib/hooks';
+import { useIntersectionObserver } from '@/shared/hooks';
+import { SearchForm } from '@/entities/post/component/index';
 import { SearchTagPost, SearchPostList } from '@/entities/post/component';
 import { SearchForm as SearchFormType } from '@/entities/post/model';
 

@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import css from './view.module.scss';
-import { formatDate } from '@/shared/lib/util';
-import { usePost } from '@/features/post/hooks';
-import { useCheckAuth } from '@/shared/lib/hooks';
-import { useQuery } from '@tanstack/react-query';
-import { queryKey } from '@/app/provider/query/lib';
+import { useCheckAuth } from '@/shared/hooks';
 import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
-import { sanitizeHtml } from '@/shared/lib/util/sanitize';
+import { formatDate } from '@/shared/lib/util';
+import { usePost } from '@/features/post/hooks';
+import { useQuery } from '@tanstack/react-query';
+import { queryKey } from '@/app/provider/query/lib';
+import { sanitizeHtml } from '@/shared/lib/dompurify/sanitize';
 
 interface Props {
   userId: string;

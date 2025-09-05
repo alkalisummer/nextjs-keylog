@@ -1,6 +1,5 @@
 'use client';
 
-import { initTrendData } from '../model';
 import { Trend } from '@/entities/trend/model/type';
 import { createContext, useContext, useState } from 'react';
 

@@ -7,7 +7,7 @@ import listStyle from '@/styles/List.module.css';
 import cx from 'classnames';
 import { GetServerSideProps } from 'next';
 import { handleMySql as handlePost } from '@/app/api/HandlePost';
-import useCheckAuth from '@/shared/lib/hooks/useCheckAuth';
+import useCheckAuth from '@/shared/hooks/useCheckAuth';
 //error Page
 import Error from '../../../pages/_error';
 
