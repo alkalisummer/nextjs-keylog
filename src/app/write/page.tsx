@@ -8,7 +8,7 @@ interface PageProps {
   searchParams: Promise<{ postId?: string }>;
 }
 
-export const Page = async ({ searchParams }: PageProps) => {
+export default async function Page({ searchParams }: PageProps) {
   const { postId } = await searchParams;
 
   return (
@@ -16,7 +16,7 @@ export const Page = async ({ searchParams }: PageProps) => {
       <Write editor={<PostForm postId={Number(postId)} />} assistant={<PostAssistant />} />
     </main>
   );
-};
+}
 
 export const generateMetadata = async () => {
   const session = await getCustomSession();
@@ -47,5 +47,3 @@ export const generateMetadata = async () => {
     },
   };
 };
-
-export default Page;

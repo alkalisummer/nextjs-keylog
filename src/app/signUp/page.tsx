@@ -1,11 +1,9 @@
 import { SignUpForm } from '@/features/signup/component';
 
-export const Page = () => {
+export default function Page() {
   return (
     <main>
       <SignUpForm />
     </main>
   );
-};
-
-export default Page;
+}

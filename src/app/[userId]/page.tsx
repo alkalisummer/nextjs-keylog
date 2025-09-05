@@ -8,13 +8,13 @@ import { PostUserInfo } from '@/entities/user/component';
 import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { BlogPostList, BlogPostHeader } from '@/entities/post/component';
 
-export const Page = async ({
+export default async function Page({
   params,
   searchParams,
 }: {
   params: Promise<{ userId: string }>;
   searchParams: Promise<{ pageNum: string; tagId: string; tempYn: string }>;
-}) => {
+}) {
   const [{ userId }, { pageNum = '1', tagId = '', tempYn = 'N' }] = await Promise.all([params, searchParams]);
 
   const posts = getPosts({ currPageNum: Number(pageNum), authorId: userId, tagId, tempYn });
@@ -28,7 +28,7 @@ export const Page = async ({
       <BlogPostList promise={{ posts }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
     </>
   );
-};
+}
 
 export const generateMetadata = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const { userId } = await params;
@@ -79,5 +79,3 @@ export const generateMetadata = async ({ params }: { params: Promise<{ userId: s
     };
   }
 };
-
-export default Page;

@@ -2,12 +2,10 @@
 
 import { LoginForm } from '@/features/login/component';
 
-export const Page = async () => {
+export default async function Page() {
   return (
     <main>
       <LoginForm />
     </main>
   );
-};
-
-export default Page;
+}

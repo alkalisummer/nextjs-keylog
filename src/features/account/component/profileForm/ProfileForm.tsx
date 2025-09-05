@@ -26,7 +26,7 @@ export const ProfileForm = () => {
     resolver: zodResolver(ProfileFormSchema),
     mode: 'onBlur',
     defaultValues: {
-      nickname: name,
+      nickname: name ?? '',
       blogName: blogName,
     },
   });
@@ -68,8 +68,8 @@ export const ProfileForm = () => {
               onClick={() => {
                 setShowNameInput(true);
                 reset({
-                  nickname: name,
-                  blogName: blogName,
+                  nickname: name ?? '',
+                  blogName: blogName ?? '',
                 });
               }}
             >

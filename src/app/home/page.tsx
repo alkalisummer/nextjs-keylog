@@ -16,7 +16,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 };
 
-export const Page = async ({ searchParams }: Props) => {
+export default async function Page({ searchParams }: Props) {
   const { tagId = '', tab = 'keyword' } = await searchParams;
   const dailyTrends = getDailyTrends({ geo: 'KR', hl: 'ko' });
 
@@ -42,7 +42,7 @@ export const Page = async ({ searchParams }: Props) => {
       </main>
     </HomeContainer>
   );
-};
+}
 
 export const generateMetadata = async () => {
   return {
@@ -73,5 +73,3 @@ export const generateMetadata = async () => {
     },
   };
 };
-
-export default Page;

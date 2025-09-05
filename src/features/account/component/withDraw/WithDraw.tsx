@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { logout } from '@/features/logout/api';
 import { deleteUser } from '@/features/account/api';
 import { useAuthenticated } from '@/shared/lib/util';
-import { deletePostByUserId } from '@/features/post/delete/api';
+import { deletePostByUserId } from '@/features/post/api';
 
 export const WithDraw = () => {
   const router = useRouter();
@@ -21,7 +21,12 @@ export const WithDraw = () => {
 
     const result = confirm('정말로 탈퇴하시겠습니까?');
     if (result) {
-      Promise.all([deleteUser(), logout(), signOut({ redirect: true, callbackUrl: window.location.href })]).then(() => {
+      Promise.all([
+        deleteUser(),
+        deletePostByUserId(),
+        logout(),
+        signOut({ redirect: true, callbackUrl: window.location.href }),
+      ]).then(() => {
         alert('탈퇴되었습니다.');
       });
     }

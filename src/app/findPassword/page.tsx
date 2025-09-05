@@ -1,11 +1,9 @@
 import { FindPasswordForm } from '@/features/login/component';
 
-export const Page = () => {
+export default function Page() {
   return (
     <main>
       <FindPasswordForm />
     </main>
   );
-};
-
-export default Page;
+}

@@ -15,7 +15,7 @@ export const EmailForm = () => {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { email } = session?.user ?? initUser;
+  const { email } = session?.user || initUser;
 
   const {
     register,
@@ -26,7 +26,7 @@ export const EmailForm = () => {
     resolver: zodResolver(EmailFormSchema),
     mode: 'onBlur',
     defaultValues: {
-      email: email,
+      email: email || '',
     },
   });
 
@@ -61,7 +61,7 @@ export const EmailForm = () => {
               onClick={() => {
                 setShowEmailInput(true);
                 reset({
-                  email: email,
+                  email: email || '',
                 });
               }}
             >

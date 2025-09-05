@@ -1,6 +1,4 @@
-import { UserInfo } from './next-auth.d';
-
-export const initUser: UserInfo = {
+export const initUser = {
   id: '',
   email: '',
   name: '',

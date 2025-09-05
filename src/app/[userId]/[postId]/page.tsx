@@ -10,7 +10,7 @@ import { CommentList } from '@/features/comment/component';
 import { PostHashtags } from '@/entities/hashtag/component';
 import { PostInteractions } from '@/entities/like/component';
 
-export const Page = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
+export default async function Page({ params }: { params: Promise<{ userId: string; postId: string }> }) {
   const { userId, postId } = await params;
 
   const user = getUser(userId);
@@ -25,9 +25,9 @@ export const Page = async ({ params }: { params: Promise<{ userId: string; postI
       <CommentList postId={Number(postId)} />
     </>
   );
-};
+}
 
-export const generateMetadata = async ({ params }: { params: Promise<{ userId: string; postId: string }> }) => {
+export async function generateMetadata({ params }: { params: Promise<{ userId: string; postId: string }> }) {
   const { userId, postId } = await params;
   const queryClient = new QueryClient();
   const url = `${process.env.BASE_URL}/${userId}/${postId}`;
@@ -81,6 +81,4 @@ export const generateMetadata = async ({ params }: { params: Promise<{ userId: s
       },
     };
   }
-};
-
-export default Page;
+}
