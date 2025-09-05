@@ -1,9 +1,9 @@
-import { SignUpForm } from '@/features/signup/component';
+import { SignupForm } from '@/features/signup/component';
 
 export default function Page() {
   return (
     <main>
-      <SignUpForm />
+      <SignupForm />
     </main>
   );
 }

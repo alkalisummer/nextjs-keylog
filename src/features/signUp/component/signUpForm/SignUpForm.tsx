@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FieldError } from '@/shared/ui';
 import { useForm } from 'react-hook-form';
-import css from './signUpForm.module.scss';
+import css from './signupForm.module.scss';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignUpSchema, SignUpForm as Form } from '../../model';
@@ -20,7 +20,7 @@ import {
   faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-export const SignUpForm = () => {
+export const SignupForm = () => {
   const router = useRouter();
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
