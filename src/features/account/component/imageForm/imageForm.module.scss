@@ -31,6 +31,7 @@ $color-neutral-border: #d0d0d0;
 
   .imgUploadBtn {
     width: 100%;
+    min-width: 89px;
     background-color: $color-primary-blue;
     color: $color-text-inverse;
     padding: 10px 20px;
@@ -48,6 +49,7 @@ $color-neutral-border: #d0d0d0;
 
   .imgDelBtn {
     width: 170px;
+    min-width: 80px;
     font-size: 14px;
     padding: 10px 20px;
     border-radius: 5px;

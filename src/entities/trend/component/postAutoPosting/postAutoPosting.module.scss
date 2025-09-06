@@ -20,6 +20,7 @@
   border-radius: 6px;
   font-size: 12px;
   font-family: 'Spoqa Han Sans Neo';
+  width: 50%;
 
   &:focus {
     outline: none;
@@ -31,6 +32,7 @@
   border-radius: 6px;
   border: 1px solid #e5e7eb;
   background: #f9fafb;
+  color: #333;
 }
 .content {
   min-height: 400px;

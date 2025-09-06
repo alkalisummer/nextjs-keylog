@@ -54,6 +54,10 @@ $margin-small: 10px;
     word-break: break-all;
     margin-bottom: 2.5rem !important;
     min-height: 5rem;
+
+    img {
+      max-width: 100%;
+    }
   }
 
   // Utility classes

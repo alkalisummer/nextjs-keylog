@@ -72,7 +72,7 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
       <div className={css.controls}>
         <input className={css.input} value={searchKeyword} onChange={e => setSearchKeyword(e.target.value)} />
         <button className={css.button} type="submit" disabled={!searchKeyword}>
-          이미지 검색
+          검색
         </button>
         <button
           className={css.button}
@@ -80,10 +80,10 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
           onClick={() => {
             if (!selectedUrl) return;
             navigator.clipboard.writeText(selectedUrl);
-            alert('이미지 URL이 복사되었습니다.');
+            alert('이미지 URL이 클립보드에 복사되었습니다.');
           }}
         >
-          이미지 URL 복사
+          URL 복사
         </button>
       </div>
       <div className={css.imageGridWrapper}>

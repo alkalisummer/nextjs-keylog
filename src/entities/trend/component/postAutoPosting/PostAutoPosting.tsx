@@ -35,10 +35,10 @@ export function PostAutoPosting({ selectedKeyword = '' }: PostAutoPostingProps) 
       <div className={css.controls}>
         <input className={css.input} value={keyword} onChange={e => setKeyword(e.target.value)} />
         <button className={css.button} onClick={() => handleCreateClick(keyword)} disabled={!keyword || loading}>
-          {loading ? '생성 중...' : '글 생성하기'}
+          {loading ? '생성 중...' : '글 생성'}
         </button>
         <button className={css.button} id="clipboard" data-clipboard-target="#clipboard-content">
-          클립보드 복사
+          복사하기
         </button>
       </div>
       <div

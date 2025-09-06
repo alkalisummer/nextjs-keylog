@@ -30,19 +30,19 @@
 @font-face {
   font-family: 'Fira Mono';
   font-weight: 700;
-  src: url('/font/FiraMono-Bold.ttf') format('ttf');
+  src: url('/font/FiraMono-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Fira Mono';
   font-weight: 500;
-  src: url('/font/FiraMono-Medium.ttf') format('ttf');
+  src: url('/font/FiraMono-Medium.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Fira Mono';
   font-weight: 400;
-  src: url('/font/FiraMono-Regular.ttf') format('ttf');
+  src: url('/font/FiraMono-Regular.ttf') format('truetype');
 }
 
 @font-face {
