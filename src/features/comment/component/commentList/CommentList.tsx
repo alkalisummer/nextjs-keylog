@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import css from './commentList.module.scss';
 import { CommentForm, CommentItem } from '..';
-import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
 import { getCommentList } from '@/entities/comment/api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { mappingReplies, parseParentComments } from '../../lib';
 
 interface CommentListProps {
@@ -15,7 +15,7 @@ interface CommentListProps {
 export const CommentList = ({ postId }: CommentListProps) => {
   const [replyFormCommentId, setReplyFormCommentId] = useState<number | null>(null);
 
-  const { data: commentRes, isLoading } = useQuery({
+  const { data: commentRes, isLoading } = useSuspenseQuery({
     queryKey: queryKey().comment().commentList(postId),
     queryFn: () => getCommentList(postId),
   });

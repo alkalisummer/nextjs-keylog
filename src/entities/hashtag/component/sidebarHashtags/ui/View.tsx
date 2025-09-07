@@ -2,16 +2,16 @@
 
 import React from 'react';
 import css from './view.module.scss';
-import { Post } from '@/entities/post/model/type';
-import { HashtagInfo } from '@/entities/hashtag/model';
-import { faTag } from '@fortawesome/free-solid-svg-icons';
-import { useHashtagRouter } from '@/entities/hashtag/hooks';
-import { useBlog } from '@/app/[userId]/container';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useQuery } from '@tanstack/react-query';
-import { queryKey } from '@/app/provider/query/lib';
-import { getAuthorHashtags } from '@/entities/hashtag/api';
 import { getPosts } from '@/entities/post/api';
+import { Post } from '@/entities/post/model/type';
+import { useBlog } from '@/app/[userId]/container';
+import { queryKey } from '@/app/provider/query/lib';
+import { HashtagInfo } from '@/entities/hashtag/model';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
+import { getAuthorHashtags } from '@/entities/hashtag/api';
+import { useHashtagRouter } from '@/entities/hashtag/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
   userId: string;
@@ -21,7 +21,7 @@ export const View = ({ userId }: Props) => {
   const { setSelectedHashtag } = useBlog();
   const router = useHashtagRouter({ userId, setSelectedHashtag });
 
-  const { data: hashtagsRes } = useQuery({
+  const { data: hashtagsRes } = useSuspenseQuery({
     queryKey: queryKey().hashtag().hashtagList(userId),
     queryFn: () => getAuthorHashtags(userId),
   });
@@ -30,7 +30,7 @@ export const View = ({ userId }: Props) => {
     throw new Error('Hashtags fetch error');
   }
 
-  const { data: postsRes } = useQuery({
+  const { data: postsRes } = useSuspenseQuery({
     queryKey: queryKey().post().postList({ currPageNum: 1, authorId: userId }),
     queryFn: () => getPosts({ currPageNum: 1, authorId: userId }),
   });

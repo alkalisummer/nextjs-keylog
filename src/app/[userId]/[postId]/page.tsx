@@ -2,6 +2,8 @@
 
 import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
+import { AsyncBoundary } from '@/shared/boundary';
+import { BoxError, BoxSkeleton } from '@/shared/ui';
 import { QueryClient } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
 import { PostDetails } from '@/entities/post/component';
@@ -19,10 +21,21 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
 
   return (
     <>
-      <PostDetails promise={{ user, post }} userId={userId} postId={Number(postId)} />
-      <PostInteractions promise={{ post }} postId={Number(postId)} />
-      <PostHashtags promise={{ hashtags }} postId={Number(postId)} />
-      <CommentList postId={Number(postId)} />
+      <AsyncBoundary pending={<BoxSkeleton height={450} />} error={<BoxError height={450} />}>
+        <PostDetails promise={{ user, post }} userId={userId} postId={Number(postId)} />
+      </AsyncBoundary>
+
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <PostInteractions promise={{ post }} postId={Number(postId)} />
+      </AsyncBoundary>
+
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <PostHashtags promise={{ hashtags }} postId={Number(postId)} />
+      </AsyncBoundary>
+
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <CommentList postId={Number(postId)} />
+      </AsyncBoundary>
     </>
   );
 }

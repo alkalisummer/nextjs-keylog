@@ -6,8 +6,8 @@ import Image from 'next/image';
 import css from './view.module.scss';
 import { useCheckAuth } from '@/shared/hooks';
 import { getUser } from '@/entities/user/api';
-import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface Props {
   userId: string;
@@ -16,7 +16,7 @@ interface Props {
 export const View = ({ userId }: Props) => {
   const isAuthorized = useCheckAuth(userId);
 
-  const { data: userInfoRes } = useQuery({
+  const { data: userInfoRes } = useSuspenseQuery({
     queryKey: queryKey().user().userInfo(userId),
     queryFn: () => getUser(userId),
   });

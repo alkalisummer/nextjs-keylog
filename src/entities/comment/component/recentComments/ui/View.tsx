@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import css from './view.module.scss';
+import { useRouter } from 'next/navigation';
 import { Comment } from '@/entities/comment/model';
+import { queryKey } from '@/app/provider/query/lib';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getRecentComments } from '@/entities/comment/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
-import { useQuery } from '@tanstack/react-query';
-import { queryKey } from '@/app/provider/query/lib';
-import { getRecentComments } from '@/entities/comment/api';
 
 interface Props {
   userId: string;
@@ -17,7 +17,7 @@ interface Props {
 export const View = ({ userId }: Props) => {
   const router = useRouter();
 
-  const { data: recentCommentsRes } = useQuery({
+  const { data: recentCommentsRes } = useSuspenseQuery({
     queryKey: queryKey().comment().recentComment(userId),
     queryFn: () => getRecentComments(userId),
   });

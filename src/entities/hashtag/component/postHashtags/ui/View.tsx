@@ -2,8 +2,8 @@
 
 import css from './view.module.scss';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getPostHashtags } from '@/entities/hashtag/api';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 export const View = ({ postId }: Props) => {
   const router = useRouter();
 
-  const { data: hashtagsRes } = useQuery({
+  const { data: hashtagsRes } = useSuspenseQuery({
     queryKey: queryKey().hashtag().postHashtags(postId),
     queryFn: () => getPostHashtags(postId),
   });

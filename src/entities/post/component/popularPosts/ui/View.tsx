@@ -4,10 +4,10 @@ import React from 'react';
 import css from './view.module.scss';
 import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
-import { useQuery } from '@tanstack/react-query';
 import { PopularPost } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { getPopularPosts } from '@/entities/post/api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface Props {
   userId: string;
@@ -16,7 +16,7 @@ interface Props {
 export const View = ({ userId }: Props) => {
   const router = useRouter();
 
-  const { data: popularPostsRes } = useQuery({
+  const { data: popularPostsRes } = useSuspenseQuery({
     queryKey: queryKey().post().popularPost(userId),
     queryFn: () => getPopularPosts(userId),
   });

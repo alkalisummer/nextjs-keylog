@@ -4,10 +4,10 @@ import React from 'react';
 import css from './view.module.scss';
 import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
-import { useQuery } from '@tanstack/react-query';
 import { RecentPost } from '@/entities/post/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { getRecentPosts } from '@/entities/post/api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface Props {
   userId: string;
@@ -16,7 +16,7 @@ interface Props {
 export const View = ({ userId }: Props) => {
   const router = useRouter();
 
-  const { data: recentPostsRes } = useQuery({
+  const { data: recentPostsRes } = useSuspenseQuery({
     queryKey: queryKey().post().recentPost(userId),
     queryFn: () => getRecentPosts(userId),
   });

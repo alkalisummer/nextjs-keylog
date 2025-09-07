@@ -2,9 +2,9 @@
 
 import { View } from './ui/View';
 import { Post } from '@/entities/post/model/type';
-import { HashtagInfo } from '@/entities/hashtag/model';
 import { ApiResponse } from '@/shared/lib/client';
 import { queryKey } from '@/app/provider/query/lib';
+import { HashtagInfo } from '@/entities/hashtag/model';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 interface Props {

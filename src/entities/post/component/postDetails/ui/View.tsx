@@ -7,8 +7,8 @@ import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { formatDate } from '@/shared/lib/util';
 import { usePost } from '@/features/post/hooks';
-import { useQuery } from '@tanstack/react-query';
 import { queryKey } from '@/app/provider/query/lib';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { sanitizeHtml } from '@/shared/lib/dompurify/sanitize';
 
 interface Props {
@@ -17,11 +17,11 @@ interface Props {
 }
 
 export const View = ({ userId, postId }: Props) => {
-  const { data: userRes } = useQuery({
+  const { data: userRes } = useSuspenseQuery({
     queryKey: queryKey().user().userInfo(userId),
     queryFn: () => getUser(userId),
   });
-  const { data: postRes } = useQuery({
+  const { data: postRes } = useSuspenseQuery({
     queryKey: queryKey().post().postDetail(postId),
     queryFn: () => getPost(postId),
   });

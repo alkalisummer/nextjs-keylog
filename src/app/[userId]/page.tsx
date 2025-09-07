@@ -2,6 +2,8 @@
 
 import { getUser } from '@/entities/user/api';
 import { getPosts } from '@/entities/post/api';
+import { AsyncBoundary } from '@/shared/boundary';
+import { BoxError, BoxSkeleton } from '@/shared/ui';
 import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
 import { PostUserInfo } from '@/entities/user/component';
@@ -23,9 +25,17 @@ export default async function Page({
 
   return (
     <>
-      <PostUserInfo promise={{ author: user }} userId={userId} />
-      <BlogPostHeader promise={{ posts, hashtags }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
-      <BlogPostList promise={{ posts }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <PostUserInfo promise={{ author: user }} userId={userId} />
+      </AsyncBoundary>
+
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <BlogPostHeader promise={{ posts, hashtags }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
+      </AsyncBoundary>
+
+      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <BlogPostList promise={{ posts }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
+      </AsyncBoundary>
     </>
   );
 }
