@@ -87,14 +87,14 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       ...(bearer && { Authorization: `Bearer ${bearer}` }),
       ...customHeaders,
       ...(body && { 'Content-Type': 'application/json' }),
-      ...(cookieHeader && { Cookie: cookieHeader }),
+      ...(!isPublic && cookieHeader ? { Cookie: cookieHeader } : {}),
     };
 
     const requestOptions: RequestInit = {
       method,
       headers,
       ...(body ? { body: JSON.stringify(body) } : {}),
-      credentials: 'include',
+      credentials: isPublic ? 'omit' : 'include',
     };
 
     try {
