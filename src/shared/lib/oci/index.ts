@@ -10,6 +10,7 @@ export const objectStorageClient = async () => {
       ? process.env.OCI_CONFIG_PATH
       : join(process.cwd(), 'src/shared/lib/oci/config');
   console.log('ociConfigFilePath', ociConfigFilePath);
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
   const provider = new ConfigFileAuthenticationDetailsProvider(ociConfigFilePath);
   const storageClient = new ObjectStorageClient({ authenticationDetailsProvider: provider });
 
