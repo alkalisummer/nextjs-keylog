@@ -5,7 +5,8 @@ import { ObjectStorageClient } from 'oci-objectstorage';
 import { ConfigFileAuthenticationDetailsProvider } from 'oci-common';
 
 export const objectStorageClient = async () => {
-  const ociConfigFilePath = join(process.cwd(), '/src/shared/lib/oci/config');
+  const ociConfigFilePath = join(process.cwd(), 'src/shared/lib/oci/config');
+  console.log('ociConfigFilePath', ociConfigFilePath);
   const provider = new ConfigFileAuthenticationDetailsProvider(ociConfigFilePath);
   const storageClient = new ObjectStorageClient({ authenticationDetailsProvider: provider });
 
