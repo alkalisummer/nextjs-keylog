@@ -9,7 +9,6 @@ import { queryKey } from '@/app/provider/query/lib';
 import { PostListHashtags } from '@/entities/hashtag/component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
-import { Post } from '@/entities/post/model';
 
 interface Props {
   userId: string;
@@ -36,8 +35,8 @@ export const View = ({ userId }: Props) => {
   }
 
   const posts = postsRes?.data || [];
-  const hashtagName = posts[0]?.hashtagName;
-  const totalItems = posts[0]?.totalItems;
+  const hashtagName = posts[0]?.hashtagName ?? '';
+  const totalItems = posts[0]?.totalItems ?? 0;
   const headerTitle = isTempPosts ? '임시 글' : tagId ? `'${hashtagName}' 태그의 글 목록` : '전체 글';
 
   return (

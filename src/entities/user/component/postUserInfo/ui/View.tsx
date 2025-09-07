@@ -25,7 +25,7 @@ export const View = ({ userId }: Props) => {
   return (
     <div className={css.module}>
       <Image
-        src={author.userThmbImgUrl ? author.userThmbImgUrl : '../../icon/person.png'}
+        src={author.userThmbImgUrl ? author.userThmbImgUrl : '/icon/person.png'}
         width={90}
         height={90}
         quality={100}
