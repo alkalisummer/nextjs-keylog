@@ -1,9 +1,9 @@
-import DOMPurify from 'dompurify';
+import createDOMPurify from 'isomorphic-dompurify';
 
 export function sanitizeHtml(html: string): string {
-  if (typeof window === 'undefined') return html ?? '';
   try {
-    return DOMPurify.sanitize(html ?? '', {
+    const DOMPurify = createDOMPurify as unknown as typeof import('dompurify');
+    return (DOMPurify as any).sanitize(html ?? '', {
       ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
     });
   } catch {

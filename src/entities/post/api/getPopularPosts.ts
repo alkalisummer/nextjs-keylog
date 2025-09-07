@@ -1,5 +1,3 @@
-'use server';
-
 import { PopularPost } from '../model';
 import { client } from '@/shared/lib/client';
 

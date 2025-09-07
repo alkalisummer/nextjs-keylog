@@ -1,5 +1,3 @@
-'use server';
-
 import { Post } from '../model';
 import { client } from '@/shared/lib/client';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';

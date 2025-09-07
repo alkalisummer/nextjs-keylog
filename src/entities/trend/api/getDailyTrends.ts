@@ -1,5 +1,3 @@
-'use server';
-
 import { Trend } from '../model';
 import { createDailyTrends } from '../lib/create';
 import { ApiResponse } from '@/shared/lib/client';

@@ -1,5 +1,3 @@
-'use server';
-
 import { PostDetail } from '../model';
 import { client } from '@/shared/lib/client';
 

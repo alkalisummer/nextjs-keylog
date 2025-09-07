@@ -1,5 +1,3 @@
-'use server';
-
 import { client } from '@/shared/lib/client';
 import { Comment } from '../model';
 

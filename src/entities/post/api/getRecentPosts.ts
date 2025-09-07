@@ -1,5 +1,3 @@
-'use server';
-
 import { RecentPost } from '../model';
 import { client } from '@/shared/lib/client';
 

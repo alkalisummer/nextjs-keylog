@@ -39,6 +39,7 @@
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.3.3",
     "gsap": "^3.13.0",
+    "isomorphic-dompurify": "^2.26.0",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
     "nodemailer": "6.10.1",
