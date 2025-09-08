@@ -79,7 +79,7 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
           type="button"
           onClick={() => {
             if (!selectedUrl) return;
-            navigator.clipboard.writeText(selectedUrl);
+            navigator.clipboard.writeText(selectedUrl.replace('http://', 'https://'));
             alert('이미지 URL이 클립보드에 복사되었습니다.');
           }}
         >

@@ -6,6 +6,7 @@ export const refreshAccessToken = async () => {
     endpoint: '/refresh',
     options: {
       isPublic: true,
+      withCookie: true,
     },
   });
 };

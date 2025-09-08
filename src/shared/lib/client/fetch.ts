@@ -36,6 +36,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     bearer: overrideBearer,
     isPublic = false,
     stream = false,
+    withCookie = false,
   }: FetchProps): Promise<ApiResponse<T>> {
     const url = baseUrl + endpoint + buildSearchParams(searchParams);
 
@@ -87,14 +88,16 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       ...(bearer && { Authorization: `Bearer ${bearer}` }),
       ...customHeaders,
       ...(body && { 'Content-Type': 'application/json' }),
-      ...(!isPublic && cookieHeader ? { Cookie: cookieHeader } : {}),
+      // Allow explicit cookie inclusion for specific public calls (e.g., refresh)
+      ...((!isPublic || withCookie) && cookieHeader ? { Cookie: cookieHeader } : {}),
     };
 
     const requestOptions: RequestInit = {
       method,
       headers,
       ...(body ? { body: JSON.stringify(body) } : {}),
-      credentials: isPublic ? 'omit' : 'include',
+      // Include credentials either when non-public or when caller opts-in via withCookie
+      credentials: !isPublic || withCookie ? 'include' : 'omit',
     };
 
     try {
@@ -134,6 +137,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       searchParams: options?.searchParams,
       bearer: options?.bearer,
       isPublic: options?.isPublic,
+      withCookie: (options as any)?.withCookie,
       stream: options?.stream,
     });
   };

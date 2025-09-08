@@ -42,6 +42,7 @@ export interface ExtendedFetchOptions extends Omit<RequestInit, 'body'> {
   bearer?: string;
   isPublic?: boolean;
   stream?: boolean;
+  withCookie?: boolean;
 }
 
 export interface FetchProps {
@@ -53,6 +54,7 @@ export interface FetchProps {
   bearer?: string;
   isPublic?: boolean;
   stream?: boolean;
+  withCookie?: boolean;
 }
 
 export interface HttpClientRequestProps {
