@@ -124,6 +124,7 @@ $color-border: #dadada;
         .toggleIcon {
           width: 14px;
           height: 14px;
+          color: #333;
           transition: transform 240ms ease;
         }
         &.rotated .toggleIcon {
