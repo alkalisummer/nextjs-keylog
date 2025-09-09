@@ -5,22 +5,8 @@ import { objectStorageClient } from '@/shared/lib/oci';
 
 export const uploadPostImage = async (image: File) => {
   const objectStorage = await objectStorageClient();
-  const originalType = (image.type || '').toLowerCase();
-  const mimeToExt: Record<string, string> = {
-    'image/jpeg': 'jpg',
-    'image/jpg': 'jpg',
-    'image/png': 'png',
-    'image/gif': 'gif',
-    'image/webp': 'webp',
-    'image/avif': 'avif',
-    'image/heic': 'heic',
-    'image/heif': 'heic',
-  };
-
-  const ext = mimeToExt[originalType] || 'jpg';
-  const targetMime = originalType || (ext === 'jpg' ? 'image/jpeg' : `image/${ext}`);
-  const imageName = `IMG${formatDate({ date: new Date(), isFullTime: true })}.${ext}`;
-  const customImageFile = new File([image], imageName, { type: targetMime });
+  const imageName = `IMG${formatDate({ date: new Date(), isFullTime: true })}`;
+  const customImageFile = new File([image], imageName, { type: image.type });
 
   try {
     await objectStorage.put(customImageFile);

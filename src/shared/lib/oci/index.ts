@@ -37,7 +37,8 @@ export const objectStorageClient = async () => {
         contentType,
         contentDisposition: 'inline',
       };
-      await storageClient.putObject(putObjectRequest);
+      const res = await storageClient.putObject(putObjectRequest);
+      console.log('res', res);
     },
     delete: async (objectName: string) => {
       const deleteObjectRequest = {
