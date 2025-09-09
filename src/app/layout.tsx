@@ -22,6 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 export const generateMetadata = async () => {
   return {
     title: 'Keylog',
+    description: '인기 키워드를 활용한 블로그 포스팅',
     themeColor: '#fff',
     icons: {
       icon: [
