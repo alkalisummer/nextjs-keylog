@@ -23,6 +23,7 @@ export const generateMetadata = async () => {
   const url = `${process.env.BASE_URL}/write`;
   return {
     title: '글쓰기',
+    themeColor: '#fff',
     icons: {
       icon: [
         {

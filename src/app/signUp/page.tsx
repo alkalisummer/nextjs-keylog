@@ -8,3 +8,10 @@ export default async function Page() {
     </main>
   );
 }
+
+export const generateMetadata = async () => {
+  return {
+    title: '회원가입',
+    description: '회원가입',
+  };
+};

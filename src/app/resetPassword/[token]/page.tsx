@@ -22,3 +22,10 @@ export default async function Page({ params }: { params: Promise<{ token: string
     </main>
   );
 }
+
+export const generateMetadata = async () => {
+  return {
+    title: '비밀번호 재설정',
+    description: '비밀번호 재설정',
+  };
+};
