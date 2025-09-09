@@ -1,0 +1,79 @@
+@use 'variable' as *;
+
+// Colors
+$color-title: #000;
+$color-desc: #777;
+$color-button-bg: #000;
+$color-button-text: #fff;
+
+// Layout
+$gap-vertical: 20px;
+$button-width: 120px;
+$button-height: 40px;
+$button-radius: 30px;
+
+.module {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 80px 0 120px 0;
+  text-align: center;
+
+  .title {
+    font-size: 18px;
+    font-weight: 400;
+    color: $color-title;
+    margin-bottom: 9px;
+  }
+
+  .description {
+    font-size: 13px;
+    color: $color-desc;
+    margin-bottom: 30px;
+  }
+
+  .ctaButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $button-width;
+    height: $button-height;
+    border-radius: $button-radius;
+    background-color: $color-button-bg;
+    color: $color-button-text;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    padding: 60px 0 90px 0;
+
+    .title {
+      font-size: 28px;
+    }
+
+    .description {
+      font-size: 16px;
+    }
+
+    .ctaButton {
+      width: 200px;
+      height: 48px;
+      font-size: 16px;
+    }
+  }
+}

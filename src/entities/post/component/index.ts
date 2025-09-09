@@ -8,3 +8,4 @@ export { SearchTagPost } from './searchTagPost/SearchTagPost';
 export { PostPagination } from './postPagination/PostPagination';
 export { BlogPostHeader } from './blogPostHeader/BlogPostHeader';
 export { SearchPostList } from './searchPostList/SearchPostList';
+export { PostEmpty } from './postEmpty/PostEmpty';

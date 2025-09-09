@@ -144,6 +144,7 @@ export const View = ({ post, hashtags, authorId }: Props) => {
                       callback(imageUrl, objectName);
                     }
                   } catch (error) {
+                    debugger;
                     console.error('Image upload failed:', error);
                     alert('이미지 업로드에 실패했습니다.');
                   }

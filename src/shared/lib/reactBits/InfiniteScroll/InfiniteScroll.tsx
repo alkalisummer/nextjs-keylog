@@ -54,6 +54,7 @@ export const InfiniteScroll = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedItemData, setSelectedItemData] = useState<Trend | null>(selectedItemInitData || null);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const [isTemporarilyPaused, setIsTemporarilyPaused] = useState<boolean>(false);
   const divItemsRef = useRef<HTMLDivElement[]>([]);
   const wrapFnRef = useRef<((value: number) => number) | null>(null);
   const observerRef = useRef<Observer | null>(null);
@@ -95,6 +96,7 @@ export const InfiniteScroll = ({
     (data?: any) => {
       setSelectedItemData(data);
       onClick?.(data);
+      setIsPlaying(false);
     },
     [onClick],
   );
@@ -184,6 +186,7 @@ export const InfiniteScroll = ({
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
+      setIsTemporarilyPaused(false);
       return;
     }
 
@@ -206,6 +209,7 @@ export const InfiniteScroll = ({
     };
 
     rafIdRef.current = requestAnimationFrame(tick);
+    setIsTemporarilyPaused(false);
 
     let stopTicker: (() => void) | null = null;
     let startTicker: (() => void) | null = null;
@@ -216,9 +220,11 @@ export const InfiniteScroll = ({
           cancelAnimationFrame(rafIdRef.current);
           rafIdRef.current = null;
         }
+        setIsTemporarilyPaused(true);
       };
       startTicker = () => {
         if (!rafIdRef.current) {
+          setIsTemporarilyPaused(false);
           rafIdRef.current = requestAnimationFrame(tick);
         }
       };
@@ -231,6 +237,7 @@ export const InfiniteScroll = ({
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
+      setIsTemporarilyPaused(false);
       if (stopTicker) container.removeEventListener('mouseenter', stopTicker);
       if (startTicker) container.removeEventListener('mouseleave', startTicker);
     };
@@ -268,7 +275,7 @@ export const InfiniteScroll = ({
           ))}
         </div>
         <div className="infinite-scroll-controll">
-          {isPlaying ? (
+          {isPlaying && !isTemporarilyPaused ? (
             <FontAwesomeIcon icon={faPause} className="icon" onClick={handlePause} title="일시 정지" />
           ) : (
             <FontAwesomeIcon icon={faPlay} className="icon" onClick={handlePlay} title="재생" />

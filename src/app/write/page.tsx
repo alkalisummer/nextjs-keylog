@@ -1,3 +1,5 @@
+'use server';
+
 import { Write } from './ui/Write';
 import { PostForm } from '@/features/post/component';
 import { getCustomSession } from '@/shared/lib/util';
@@ -25,13 +27,13 @@ export const generateMetadata = async () => {
     icons: {
       icon: [
         {
-          url: session?.user?.image ?? '/favicon.ico',
+          url: session?.user?.image || '/favicon.ico',
           sizes: '180x180',
         },
       ],
       apple: [
         {
-          url: session?.user?.image ?? '/favicon.ico',
+          url: session?.user?.image || '/favicon.ico',
           sizes: '180x180',
         },
       ],

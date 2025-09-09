@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ userId: s
       icons: {
         icon: [
           {
-            url: user.userThmbImgUrl ?? '/favicon.ico',
+            url: user.userThmbImgUrl || '/favicon.ico',
             sizes: '180x180',
           },
         ],
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ userId: s
         description: `${user.userNickname} - ${user.userBlogName}`,
         images: [
           {
-            url: post.postThmbImgUrl ?? '/favicon.ico',
+            url: post.postThmbImgUrl || '/favicon.ico',
             width: 250,
             height: 250,
             alt: post.postTitle,

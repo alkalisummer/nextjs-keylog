@@ -6,9 +6,9 @@ import { getPosts } from '@/entities/post/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
-import { BlogPostItem } from '@/entities/post/component';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 import { PostPagination } from '@/entities/post/component';
+import { BlogPostItem, PostEmpty } from '@/entities/post/component';
 
 interface Props {
   userId: string;
@@ -33,10 +33,16 @@ export const View = ({ userId }: Props) => {
 
   return (
     <div className={css.module}>
-      {posts?.map((post: Post) => {
-        return <BlogPostItem key={post.postId} post={post} userId={userId} />;
-      })}
-      <PostPagination totalPageNum={totalPageNum} />
+      {posts?.length === 0 ? (
+        <PostEmpty />
+      ) : (
+        <>
+          {posts.map((post: Post) => (
+            <BlogPostItem key={post.postId} post={post} userId={userId} />
+          ))}
+          <PostPagination totalPageNum={totalPageNum} />
+        </>
+      )}
     </div>
   );
 };

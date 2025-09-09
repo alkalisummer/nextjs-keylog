@@ -35,19 +35,22 @@ export const View = () => {
         <span>)</span>
       </div>
       <div className={css.articleList}>
-        {articles.map((article, idx) => (
-          <Link key={idx} href={article.link} target="_blank">
-            <div className={css.article}>
-              {article.image ? <img src={article.image} alt="articleImg"></img> : <></>}
-              <div className={`${css.articleInfo} ${article.image ? '' : css.noImg}`}>
-                <span className={css.articleTitle}>{article.title}</span>
-                <div className={css.articleBottom}>
-                  <span>{article.mediaCompany}</span>•<span>{article.formattedPressDate}</span>
+        {articles.map(
+          (article, idx) =>
+            article.link && (
+              <Link key={idx} href={article.link} target="_blank">
+                <div className={css.article}>
+                  {article.image ? <img src={article.image} alt="articleImg"></img> : <></>}
+                  <div className={`${css.articleInfo} ${article.image ? '' : css.noImg}`}>
+                    <span className={css.articleTitle}>{article.title}</span>
+                    <div className={css.articleBottom}>
+                      <span>{article.mediaCompany}</span>•<span>{article.formattedPressDate}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+              </Link>
+            ),
+        )}
       </div>
     </section>
   );
