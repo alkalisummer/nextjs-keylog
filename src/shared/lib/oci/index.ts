@@ -25,6 +25,7 @@ export const objectStorageClient = async () => {
       return await storageClient.getObject(getObjectRequest);
     },
     put: async (image: File) => {
+      console.log('image', image);
       const contentType = image.type || 'application/octet-stream';
       const bodyBuffer = Buffer.from(await image.arrayBuffer());
 
@@ -37,8 +38,7 @@ export const objectStorageClient = async () => {
         contentType,
         contentDisposition: 'inline',
       };
-      const res = await storageClient.putObject(putObjectRequest);
-      console.log('res', res);
+      await storageClient.putObject(putObjectRequest);
     },
     delete: async (objectName: string) => {
       const deleteObjectRequest = {
