@@ -1,9 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import Image from 'next/image';
 import { Post } from '../../model';
 import css from './searchPostList.module.scss';
-import { useRouter } from 'next/navigation';
 import { formatDate } from '@/shared/lib/util';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,16 +14,15 @@ interface PostListsProps {
 }
 
 export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
-  const router = useRouter();
-
   return (
     <section className={css.module}>
       {posts.map((post, idx) => (
-        <div
-          key={post.postId}
-          ref={posts.length - 1 === idx ? setTarget : null}
+        <Link
+          key={`${post.postId}-${idx}`}
+          href={`/${post.authorId}/${post.postId}`}
+          scroll={false}
           className={css.post}
-          onClick={() => router.push(`/${post.authorId}/${post.postId}`)}
+          ref={posts.length - 1 === idx ? setTarget : null}
         >
           <div className={css.postSummary}>
             {post.postThmbImgUrl ? (
@@ -70,7 +69,7 @@ export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
               {post.likeCnt}
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </section>
   );

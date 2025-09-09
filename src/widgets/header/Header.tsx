@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import css from './header.module.scss';
 import { useAuthenticated } from '@/shared/lib/util';
-import { useRouter, useParams, usePathname } from 'next/navigation';
+import { useRouter, useParams, usePathname, useSearchParams } from 'next/navigation';
 import { AccountMenu } from '../../features/account/component';
 
 interface HeaderProps {
@@ -15,22 +16,19 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
   const authorId = params?.userId;
   const isLoggedIn = useAuthenticated();
   const isWritePage = usePathname()?.includes('/write');
+  const searchParams = useSearchParams();
+  const tab = searchParams?.get('tab') ?? 'keyword';
 
   return (
     <header className={css.module}>
       <div className={`${css.header} ${type === 'blog' ? css.blogHeader : ''}`}>
-        <span
-          className={css.logo}
-          onClick={() => {
-            router.push('/');
-          }}
-        >
+        <Link className={css.logo} href={`/home?tab=${tab}`} scroll={false}>
           keylog
-        </span>
+        </Link>
         {authorId && (
-          <span className={css.authorId} onClick={() => router.push(`/${authorId}`)}>
+          <Link className={css.authorId} href={`/${authorId}`} scroll={false}>
             {authorId}
-          </span>
+          </Link>
         )}
         {isLoggedIn ? (
           <div className={css.accountMenu}>

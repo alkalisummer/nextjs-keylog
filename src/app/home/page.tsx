@@ -31,14 +31,20 @@ export default async function Page({ searchParams }: Props) {
     <HomeContainer initTrend={initTrend} initTab={tab}>
       <HomeTabs />
       <main>
-        <Keyword />
-        <KeywordScroll trends={trends} />
-        <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={450} />}>
-          <ArticleList trends={trends} />
-        </AsyncBoundary>
-        <AsyncBoundary pending={<PostSearchSkeleton />} error={<BoxError height={150} />}>
-          <PostSearch tagId={tagId} />
-        </AsyncBoundary>
+        {tab === 'keyword' && (
+          <>
+            <Keyword />
+            <KeywordScroll trends={trends} />
+            <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={450} />}>
+              <ArticleList trends={trends} />
+            </AsyncBoundary>
+          </>
+        )}
+        {tab === 'post' && (
+          <AsyncBoundary pending={<PostSearchSkeleton />} error={<BoxError height={150} />}>
+            <PostSearch tagId={tagId} />
+          </AsyncBoundary>
+        )}
       </main>
     </HomeContainer>
   );
@@ -48,6 +54,7 @@ export const generateMetadata = async () => {
   return {
     title: 'keylog',
     description: '인기 키워드를 활용한 블로그 포스팅',
+    themeColor: '#f8f9fa',
     icons: {
       icon: [
         {

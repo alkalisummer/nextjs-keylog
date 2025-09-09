@@ -5,8 +5,9 @@ import { ImageItem } from '../../model';
 import { useState, useEffect } from 'react';
 import { mergeUniqueImages } from '../../lib';
 import css from './postImageSearch.module.scss';
-import { getSearchImages } from '../../api/getSearchImages';
+import { getImageProxyUrl } from '@/entities/post/lib';
 import { useIntersectionObserver } from '@/shared/hooks';
+import { getSearchImages } from '../../api/getSearchImages';
 import { POST_IMAGE_SEARCH_PER_PAGE } from '@/shared/lib/constants';
 
 interface PostImageSearchProps {
@@ -79,7 +80,7 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
           type="button"
           onClick={() => {
             if (!selectedUrl) return;
-            navigator.clipboard.writeText(selectedUrl.replace('http://', 'https://'));
+            navigator.clipboard.writeText(getImageProxyUrl(selectedUrl));
             alert('이미지 URL이 클립보드에 복사되었습니다.');
           }}
         >
@@ -92,7 +93,7 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
             <div key={idx} className={css.item}>
               <div className={css.imageWrapper} ref={idx === images.length - 1 ? setTarget : null}>
                 <Image
-                  src={`/api/image-proxy?url=${encodeURIComponent(img.link || '')}`}
+                  src={getImageProxyUrl(img.link || '')}
                   alt={img.title || '검색 이미지'}
                   fill
                   sizes="(max-width: 768px) 33vw, 33vw"

@@ -32,7 +32,7 @@ export const SearchForm = ({ onSubmit, isSubmitSuccessful, postCnt }: SearchForm
           {...register('searchWord')}
         ></input>
         <button className={css.searchBtn} type="submit">
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className={css.icon} />
         </button>
       </form>
       <div className={css.searchCnt}>

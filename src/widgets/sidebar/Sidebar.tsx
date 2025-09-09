@@ -28,16 +28,16 @@ export const Sidebar = async ({ userId }: Props) => {
   return (
     <aside className={css.module}>
       <div className={css.leftArea}>
-        <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <AsyncBoundary pending={<BoxSkeleton height={166.5} />} error={<BoxError height={150} />}>
           <UserInfo promise={{ authorInfo }} userId={userId} />
         </AsyncBoundary>
-        <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <AsyncBoundary pending={<BoxSkeleton height={166.5} />} error={<BoxError height={150} />}>
           <RecentPosts promise={{ recentPosts }} userId={userId} />
         </AsyncBoundary>
-        <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <AsyncBoundary pending={<BoxSkeleton height={166.5} />} error={<BoxError height={150} />}>
           <PopularPosts promise={{ popularPosts }} userId={userId} />
         </AsyncBoundary>
-        <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+        <AsyncBoundary pending={<BoxSkeleton height={166.5} />} error={<BoxError height={150} />}>
           <RecentComments promise={{ recentComments }} userId={userId} />
         </AsyncBoundary>
         <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>

@@ -36,7 +36,7 @@ export const useLikePost = (postId: number) => {
           ok: true,
           status: 200,
           data: {
-            totalItems: prev.totalItems + 1,
+            totalItems: Number(prev.totalItems) + 1,
             items: [...prev.items, { userId, likeCnt: prev.totalItems + 1 }],
           },
         };
@@ -67,7 +67,7 @@ export const useLikePost = (postId: number) => {
           ok: true,
           status: 200,
           data: {
-            totalItems: prev.totalItems - 1,
+            totalItems: Number(prev.totalItems) - 1,
             items: prev.items.filter(like => like.userId !== userId),
           },
         };

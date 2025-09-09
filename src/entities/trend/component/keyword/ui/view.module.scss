@@ -64,7 +64,8 @@ $color-secondary: #868e96;
   $traffic-padding,
   $ico-size,
   $cnt-size,
-  $keyword-padding
+  $keyword-padding,
+  $border-bottom
 ) {
   .module {
     margin-bottom: $margin-bottom;
@@ -73,6 +74,7 @@ $color-secondary: #868e96;
   .trend {
     font-size: $font-size;
     min-width: $min-width;
+    border-bottom: $border-bottom;
 
     .keyword {
       margin-right: $keyword-margin;
@@ -115,6 +117,8 @@ $color-secondary: #868e96;
     // cnt-size
     7px,
     // keyword-padding
+    2px solid $color-primary,
+    // border-bottom
   );
 }
 
@@ -140,6 +144,9 @@ $color-secondary: #868e96;
     // ico-size
     9px,
     // cnt-size
-    11px // keyword-padding
+    11px,
+    // keyword-padding
+    1.5px solid $color-primary,
+    // border-bottom
   );
 }

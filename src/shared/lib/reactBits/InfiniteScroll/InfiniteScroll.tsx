@@ -1,9 +1,11 @@
 'use client';
 
 import { gsap } from 'gsap';
-import './InfiniteScroll.css';
+import './InfiniteScroll.scss';
 import { Observer } from 'gsap/Observer';
 import { Trend } from '@/entities/trend/model';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import React, { useRef, useEffect, ReactNode, useMemo, useCallback, useState } from 'react';
 
 gsap.registerPlugin(Observer);
@@ -51,6 +53,11 @@ export const InfiniteScroll = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedItemData, setSelectedItemData] = useState<Trend | null>(selectedItemInitData || null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(autoplay);
+  const divItemsRef = useRef<HTMLDivElement[]>([]);
+  const wrapFnRef = useRef<((value: number) => number) | null>(null);
+  const observerRef = useRef<Observer | null>(null);
+  const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     setSelectedItemData(selectedItemInitData || null);
@@ -95,14 +102,14 @@ export const InfiniteScroll = ({
   // useEffect dependency를 줄이기 위해 핵심 값들만 포함
   const animationConfig = useMemo(
     () => ({
-      autoplay,
       autoplaySpeed,
       autoplayDirection,
       pauseOnHover,
     }),
-    [autoplay, autoplaySpeed, autoplayDirection, pauseOnHover],
+    [autoplaySpeed, autoplayDirection, pauseOnHover],
   );
 
+  // 1) 초기 배치 및 Observer 설정 (아이템 변경에만 반응)
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -116,10 +123,7 @@ export const InfiniteScroll = ({
     const itemHeight = firstItem.offsetHeight;
     const itemMarginTop = parseFloat(itemStyle.marginTop) || 0;
 
-    // 실제 아이템 간 간격 (음수 마진 포함)
     const actualItemSpacing = itemHeight + itemMarginTop;
-
-    // 무한 루프를 위한 전체 높이 계산
     const totalHeight = items.length * actualItemSpacing;
     const wrapFn = gsap.utils.wrap(-totalHeight, totalHeight);
 
@@ -128,7 +132,12 @@ export const InfiniteScroll = ({
       gsap.set(child, { y });
     });
 
-    const observer = Observer.create({
+    divItemsRef.current = divItems;
+    wrapFnRef.current = wrapFn as (value: number) => number;
+
+    // 기존 Observer 정리 후 재생성
+    observerRef.current?.kill();
+    observerRef.current = Observer.create({
       target: container,
       type: 'wheel,touch,pointer',
       preventDefault: true,
@@ -141,66 +150,99 @@ export const InfiniteScroll = ({
       onChange: ({ deltaY, isDragging, event }) => {
         const d = event.type === 'wheel' ? -deltaY : deltaY;
         const distance = isDragging ? d * 5 : d * 10;
-        divItems.forEach(child => {
+        const currentWrap = wrapFnRef.current;
+        const currentItems = divItemsRef.current;
+        if (!currentWrap || !currentItems.length) return;
+        currentItems.forEach(child => {
           gsap.to(child, {
             duration: 0.5,
             ease: 'expo.out',
             y: `+=${distance}`,
             modifiers: {
-              y: gsap.utils.unitize(wrapFn),
+              y: gsap.utils.unitize(currentWrap),
             },
           });
         });
       },
     });
 
-    let rafId: number;
-    if (animationConfig.autoplay) {
-      const directionFactor = animationConfig.autoplayDirection === 'down' ? 1 : -1;
-      const speedPerFrame = animationConfig.autoplaySpeed * directionFactor;
+    return () => {
+      observerRef.current?.kill();
+      observerRef.current = null;
+    };
+  }, [items]);
 
-      const tick = () => {
-        divItems.forEach(child => {
-          gsap.set(child, {
-            y: `+=${speedPerFrame}`,
-            modifiers: {
-              y: gsap.utils.unitize(wrapFn),
-            },
-          });
-        });
-        rafId = requestAnimationFrame(tick);
-      };
+  // 2) 자동 스크롤 RAF 제어 (재생/정지 시 위치 유지)
+  useEffect(() => {
+    const container = containerRef.current;
+    const currentWrap = wrapFnRef.current;
+    if (!container || !currentWrap) return;
 
-      rafId = requestAnimationFrame(tick);
-
-      if (animationConfig.pauseOnHover) {
-        const stopTicker = () => rafId && cancelAnimationFrame(rafId);
-        const startTicker = () => {
-          rafId = requestAnimationFrame(tick);
-        };
-
-        container.addEventListener('mouseenter', stopTicker);
-        container.addEventListener('mouseleave', startTicker);
-
-        return () => {
-          observer.kill();
-          stopTicker();
-          container.removeEventListener('mouseenter', stopTicker);
-          container.removeEventListener('mouseleave', startTicker);
-        };
-      } else {
-        return () => {
-          observer.kill();
-          rafId && cancelAnimationFrame(rafId);
-        };
+    // 정지: RAF 해제만 수행
+    if (!isPlaying) {
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
       }
+      return;
+    }
+
+    const directionFactor = animationConfig.autoplayDirection === 'down' ? 1 : -1;
+    const speedPerFrame = animationConfig.autoplaySpeed * directionFactor;
+
+    const tick = () => {
+      const currentItems = divItemsRef.current;
+      const wrap = wrapFnRef.current;
+      if (!currentItems.length || !wrap) return;
+      currentItems.forEach(child => {
+        gsap.set(child, {
+          y: `+=${speedPerFrame}`,
+          modifiers: {
+            y: gsap.utils.unitize(wrap),
+          },
+        });
+      });
+      rafIdRef.current = requestAnimationFrame(tick);
+    };
+
+    rafIdRef.current = requestAnimationFrame(tick);
+
+    let stopTicker: (() => void) | null = null;
+    let startTicker: (() => void) | null = null;
+
+    if (animationConfig.pauseOnHover) {
+      stopTicker = () => {
+        if (rafIdRef.current) {
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
+        }
+      };
+      startTicker = () => {
+        if (!rafIdRef.current) {
+          rafIdRef.current = requestAnimationFrame(tick);
+        }
+      };
+      container.addEventListener('mouseenter', stopTicker);
+      container.addEventListener('mouseleave', startTicker);
     }
 
     return () => {
-      observer.kill();
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      if (stopTicker) container.removeEventListener('mouseenter', stopTicker);
+      if (startTicker) container.removeEventListener('mouseleave', startTicker);
     };
-  }, [items, animationConfig]);
+  }, [isPlaying, animationConfig]);
+
+  const handlePlay = useCallback(() => {
+    setIsPlaying(true);
+  }, []);
+
+  const handlePause = useCallback(() => {
+    setIsPlaying(false);
+  }, []);
 
   return (
     <>
@@ -224,6 +266,13 @@ export const InfiniteScroll = ({
               {i === 0 ? item.content : <span>{item.content}</span>}
             </div>
           ))}
+        </div>
+        <div className="infinite-scroll-controll">
+          {isPlaying ? (
+            <FontAwesomeIcon icon={faPause} className="icon" onClick={handlePause} title="일시 정지" />
+          ) : (
+            <FontAwesomeIcon icon={faPlay} className="icon" onClick={handlePlay} title="재생" />
+          )}
         </div>
       </div>
     </>

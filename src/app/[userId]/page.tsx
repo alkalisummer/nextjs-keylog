@@ -25,15 +25,15 @@ export default async function Page({
 
   return (
     <>
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={242} />} error={<BoxError height={150} />}>
         <PostUserInfo promise={{ author: user }} userId={userId} />
       </AsyncBoundary>
 
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={30} />} error={<BoxError height={150} />}>
         <BlogPostHeader promise={{ posts, hashtags }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
       </AsyncBoundary>
 
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={500} />} error={<BoxError height={150} />}>
         <BlogPostList promise={{ posts }} userId={userId} pageNum={pageNum} tagId={tagId} tempYn={tempYn} />
       </AsyncBoundary>
     </>

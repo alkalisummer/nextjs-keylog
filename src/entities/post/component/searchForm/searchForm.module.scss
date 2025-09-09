@@ -42,6 +42,11 @@
       padding-bottom: 5px;
       color: #333;
       margin-left: 0px;
+
+      .icon {
+        width: 25px;
+        height: 25px;
+      }
     }
   }
 
@@ -65,8 +70,17 @@
     width: 40% !important;
     font-size: 22px !important;
     padding-bottom: 2px !important;
+    border-bottom: 2px solid #333 !important;
     &::placeholder {
       font-size: 22px !important;
+    }
+  }
+
+  .searchBtn {
+    border-bottom: 2px solid #333 !important;
+    .icon {
+      width: 17px !important;
+      height: 17px !important;
     }
   }
 }
@@ -78,6 +92,7 @@
     .searchInput {
       font-size: 18px !important;
       padding-bottom: 3px !important;
+      border-bottom: 1.5px solid #333 !important;
       &::placeholder {
         font-size: 18px !important;
       }
@@ -85,7 +100,12 @@
 
     .searchBtn {
       font-size: 20px !important;
-      padding-bottom: 3px !important;
+      padding-bottom: 2px !important;
+      border-bottom: 1.5px solid #333 !important;
+      .icon {
+        width: 15px !important;
+        height: 15px !important;
+      }
     }
   }
   .searchCnt {

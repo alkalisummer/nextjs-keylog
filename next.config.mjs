@@ -58,6 +58,8 @@ const nextConfig = {
       { protocol: 'http', hostname: 'imgnews.pstatic.net', pathname: '/**' },
       { protocol: 'http', hostname: 'simg.pstatic.net', pathname: '/**' },
       { protocol: 'https', hostname: 'simg.pstatic.net', pathname: '/**' },
+      { protocol: 'http', hostname: 'localhost', pathname: '/**' },
+      { protocol: 'https', hostname: 'keylog.dev', pathname: '/**' },
     ],
   },
 

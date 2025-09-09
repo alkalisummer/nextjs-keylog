@@ -21,19 +21,19 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
 
   return (
     <>
-      <AsyncBoundary pending={<BoxSkeleton height={450} />} error={<BoxError height={450} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={600} />} error={<BoxError height={450} />}>
         <PostDetails promise={{ user, post }} userId={userId} postId={Number(postId)} />
       </AsyncBoundary>
 
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={150} />}>
         <PostInteractions promise={{ post }} postId={Number(postId)} />
       </AsyncBoundary>
 
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={150} />}>
         <PostHashtags promise={{ hashtags }} postId={Number(postId)} />
       </AsyncBoundary>
 
-      <AsyncBoundary pending={<BoxSkeleton height={150} />} error={<BoxError height={150} />}>
+      <AsyncBoundary pending={<BoxSkeleton height={200} />} error={<BoxError height={150} />}>
         <CommentList postId={Number(postId)} />
       </AsyncBoundary>
     </>
