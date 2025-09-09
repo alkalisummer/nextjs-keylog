@@ -61,6 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ userId: s
     return {
       title: post.postTitle,
       description: post.postCntn,
+      themeColor: '#fff',
       icons: {
         icon: [
           {

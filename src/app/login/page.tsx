@@ -14,5 +14,6 @@ export const generateMetadata = async () => {
   return {
     title: '로그인',
     description: '로그인',
+    themeColor: '#fff',
   };
 };

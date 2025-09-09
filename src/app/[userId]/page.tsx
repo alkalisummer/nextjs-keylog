@@ -55,6 +55,7 @@ export const generateMetadata = async ({ params }: { params: Promise<{ userId: s
     return {
       title: `${userInfo.userNickname} - ${userInfo.userBlogName}`,
       description: userInfo.userBlogName,
+      themeColor: '#fff',
       icons: {
         icon: [
           {
