@@ -54,12 +54,11 @@ export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
             <div className={css.userInfo}>
               <Image
                 className={css.userImg}
-                src={post.userThmbImgUrl ? post.userThmbImgUrl : '/../../icon/person.png'}
+                src={post.userThmbImgUrl ? post.userThmbImgUrl : '/icon/person.png'}
                 alt="userImg"
                 width={24}
                 height={24}
                 quality={100}
-                priority
               ></Image>
               <span className={css.userText}>by</span>
               <span className={css.nickname}>{post.userNickname}</span>

@@ -27,6 +27,5 @@ export const generateMetadata = async () => {
   return {
     title: '비밀번호 재설정',
     description: '비밀번호 재설정',
-    themeColor: '#fff',
   };
 };

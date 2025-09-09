@@ -1,4 +1,3 @@
-'use server';
 import { Write } from './ui/Write';
 import { PostForm } from '@/features/post/component';
 import { getCustomSession } from '@/shared/lib/util';
@@ -23,7 +22,6 @@ export const generateMetadata = async () => {
   const url = `${process.env.BASE_URL}/write`;
   return {
     title: '글쓰기',
-    themeColor: '#fff',
     icons: {
       icon: [
         {

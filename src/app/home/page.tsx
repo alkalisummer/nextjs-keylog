@@ -54,7 +54,6 @@ export const generateMetadata = async () => {
   return {
     title: 'keylog',
     description: '인기 키워드를 활용한 블로그 포스팅',
-    themeColor: '#f8f9fa',
     icons: {
       icon: [
         {

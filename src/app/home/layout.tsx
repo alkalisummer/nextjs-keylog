@@ -1,5 +1,6 @@
-import { Header } from '@/widgets';
+import { Viewport } from 'next';
 import { ReactNode } from 'react';
+import { Header } from '@/widgets';
 import { ResponsiveFrame } from '@/shared/ui/layout';
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -12,3 +13,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 };
 
 export default Layout;
+
+export const viewport: Viewport = {
+  themeColor: '#f8f9fa',
+};

@@ -72,7 +72,6 @@ export const ImageForm = () => {
         width={128}
         height={128}
         quality={100}
-        priority
         onError={e => (e.currentTarget.src = '/icon/person.png')}
       />
       <label htmlFor="fileInput" className={css.imgUploadBtn}>

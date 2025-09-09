@@ -1,5 +1,3 @@
-'use server';
-
 import { getUser } from '@/entities/user/api';
 import { getPosts } from '@/entities/post/api';
 import { AsyncBoundary } from '@/shared/boundary';
@@ -55,7 +53,6 @@ export const generateMetadata = async ({ params }: { params: Promise<{ userId: s
     return {
       title: `${userInfo.userNickname} - ${userInfo.userBlogName}`,
       description: userInfo.userBlogName,
-      themeColor: '#fff',
       icons: {
         icon: [
           {

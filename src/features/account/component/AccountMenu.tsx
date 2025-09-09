@@ -30,7 +30,7 @@ export const AccountMenu = () => {
 
   return (
     <Fragment>
-      {status !== 'unauthenticated' ? (
+      {status !== 'unauthenticated' && session?.user ? (
         <div className={css.module}>
           <div className={css.menu} onClick={openToggle}>
             <Image
@@ -40,7 +40,6 @@ export const AccountMenu = () => {
               width={40}
               height={40}
               quality={100}
-              priority
               onError={e => (e.currentTarget.src = '/icon/person.png')}
             />
             <div>▾</div>
@@ -58,7 +57,7 @@ export const AccountMenu = () => {
             }}
           >
             <MenuItem>
-              <Link href={`/${session?.user?.id ?? ''}`} className={css.menuLink} onClick={closeToggle}>
+              <Link href={`/${session.user.id}`} className={css.menuLink} onClick={closeToggle}>
                 <FontAwesomeIcon icon={faKickstarter} className={css.menuItemIco} />내 키로그
               </Link>
             </MenuItem>
@@ -68,7 +67,7 @@ export const AccountMenu = () => {
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href={`/${session?.user?.id ?? ''}?tempYn=Y`} className={css.menuLink}>
+              <Link href={`/${session.user.id}?tempYn=Y`} className={css.menuLink}>
                 <FontAwesomeIcon icon={faFileSignature} className={css.menuItemIco} />
                 임시 글
               </Link>

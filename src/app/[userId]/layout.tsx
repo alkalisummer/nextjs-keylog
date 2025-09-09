@@ -1,5 +1,5 @@
-'use server';
 import { ReactNode } from 'react';
+import type { Viewport } from 'next';
 import { BlogContainer } from './container';
 import { Header, Sidebar, Article } from '@/widgets';
 
@@ -16,3 +16,7 @@ const Layout = async ({ children, params }: { children: ReactNode; params: Promi
 };
 
 export default Layout;
+
+export const viewport: Viewport = {
+  themeColor: '#fff',
+};
