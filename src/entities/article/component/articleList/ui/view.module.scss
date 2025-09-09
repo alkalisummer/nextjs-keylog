@@ -118,6 +118,9 @@ $card-shadow-hover: rgba(0, 0, 0, 0.08) 0px 8px 24px 0px;
     }
 
     .articleBottom {
+      display: flex;
+      align-items: center;
+      gap: 5px;
       padding: 15px 0 5px;
       font-size: 13px;
       color: $color-text-secondary;

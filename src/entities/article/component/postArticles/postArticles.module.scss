@@ -87,6 +87,7 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
           font-size: 12px;
           display: flex;
           align-items: center;
+          gap: 5px;
           color: $color-text-meta;
         }
       }
