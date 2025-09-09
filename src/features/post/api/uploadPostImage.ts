@@ -4,9 +4,11 @@ import { formatDate } from '@/shared/lib/util';
 import { objectStorageClient } from '@/shared/lib/oci';
 
 export const uploadPostImage = async (image: File) => {
+  console.log('image2', image);
   const objectStorage = await objectStorageClient();
 
   const originalType = (image.type || '').toLowerCase();
+  console.log('originalType', originalType);
 
   const sniffExtAndMime = async (): Promise<{ ext: string; mime: string }> => {
     const mimeToExt: Record<string, string> = {
@@ -81,6 +83,8 @@ export const uploadPostImage = async (image: File) => {
   };
 
   const { ext, mime } = await sniffExtAndMime();
+  console.log('ext', ext);
+  console.log('mime', mime);
   const baseName = `IMG${formatDate({ date: new Date(), isFullTime: true })}`;
   const objectName = `${baseName}.${ext}`;
   const customImageFile = new File([image], objectName, { type: mime });

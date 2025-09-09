@@ -137,6 +137,7 @@ export const View = ({ post, hashtags, authorId }: Props) => {
               hooks={{
                 addImageBlobHook: async (imgFile: File, callback: (url: string, altText: string) => void) => {
                   try {
+                    console.log('imgFile', imgFile);
                     const response = await uploadPostImage(imgFile);
                     if (response.ok) {
                       const imageUrl = response.data;
