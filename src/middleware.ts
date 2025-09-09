@@ -6,9 +6,8 @@ const secret = process.env.NEXTAUTH_SECRET;
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
   //로그인이 되어 있을 경우 토큰이 존재
-  const token: any = await getToken({ req, secret });
+  const token = await getToken({ req, secret });
 
   //로그인이 되어 있는 경우 로그인, 회원가입 화면 접근 불가
   if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {

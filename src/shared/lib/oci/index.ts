@@ -32,7 +32,7 @@ export const objectStorageClient = async () => {
         namespaceName: namespace,
         bucketName: bucketName,
         objectName: image.name,
-        contentLength: image.size,
+        contentLength: bodyBuffer.byteLength,
         putObjectBody: bodyBuffer,
         contentType,
         contentDisposition: 'inline',
