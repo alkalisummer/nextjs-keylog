@@ -63,7 +63,7 @@ export function usePost(options?: UsePostOptions) {
           queryClient.invalidateQueries({ queryKey: queryKey().hashtag().postHashtags(postId) }),
         ]);
 
-        alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 수정되었습니다.');
+        alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
         if (variables.tempYn === 'N') {
           router.push(`/${authorId}/${postId}`);

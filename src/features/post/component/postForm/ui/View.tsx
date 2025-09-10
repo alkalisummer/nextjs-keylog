@@ -158,9 +158,11 @@ export const View = ({ post, hashtags, authorId }: Props) => {
         <button type="button" className={css.cancelButton} onClick={onCancel}>
           취소
         </button>
-        <button className={css.button} type="button" onClick={onSubmitWith('Y', post?.postId)}>
-          임시저장
-        </button>
+        {(!post?.postId || post?.tempYn === 'Y') && (
+          <button className={css.button} type="button" onClick={onSubmitWith('Y', post?.postId)}>
+            임시저장
+          </button>
+        )}
         <button className={css.button} type="submit" onClick={onSubmitWith('N', post?.postId)}>
           저장
         </button>
