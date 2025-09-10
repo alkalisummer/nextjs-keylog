@@ -39,7 +39,7 @@ export const View = ({ trends }: Props) => {
         expanded={keywordExpanded}
         onToggle={() => setKeywordExpanded(!keywordExpanded)}
       >
-        <PostTrendKeyword trends={trends} selectedKeyword={selectedTrend?.keyword} onSelect={handleTrendSelect} />
+        <PostTrendKeyword trends={trends} setSelectTrend={handleTrendSelect} />
       </PostAssistantSection>
       <PostAssistantSection
         title="관심도 차트"

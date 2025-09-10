@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Trend } from '../../model';
+import { useEffect, useState } from 'react';
 import { formatDate } from '@/shared/lib/util';
 import css from './postTrendKeyword.module.scss';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -11,14 +12,22 @@ import { formatTraffic, createSearchGoogleKeyword } from '../../lib';
 
 interface PostTrendKeywordProps {
   trends: Trend[];
-  selectedKeyword?: string;
-  onSelect: (trend: Trend) => void;
+  setSelectTrend: (trend: Trend) => void;
 }
 
-export const PostTrendKeyword = ({ trends, selectedKeyword, onSelect }: PostTrendKeywordProps) => {
+export const PostTrendKeyword = ({ trends, setSelectTrend }: PostTrendKeywordProps) => {
+  const [trend, setTrend] = useState<Trend>(trends[0]);
+  const [relatedKeywords, setRelatedKeywords] = useState<string[]>(trend.relatedKeywords);
   const baseDate = `: ${formatDate({ date: new Date(), seperator: '.' })}`;
-  const selectedTrend = trends.find(trend => trend.keyword === selectedKeyword);
-  const relatedKeywords = selectedTrend?.relatedKeywords.filter(keyword => keyword !== selectedKeyword);
+
+  const onSelect = (trend: Trend) => {
+    setTrend(trend);
+    setRelatedKeywords(trend.relatedKeywords);
+  };
+
+  useEffect(() => {
+    setSelectTrend(trend);
+  }, [trend]);
 
   return (
     <div className={css.module}>
@@ -28,16 +37,16 @@ export const PostTrendKeyword = ({ trends, selectedKeyword, onSelect }: PostTren
         <span className={css.date}>{baseDate}</span>
       </div>
       <div className={css.keywordList}>
-        {trends.map((trend, index) => (
+        {trends.map((trendItem, index) => (
           <div
-            key={trend.keyword}
-            className={`${css.keywordItem} ${selectedKeyword === trend.keyword ? css.active : ''}`}
-            onClick={() => onSelect(trend)}
+            key={trendItem.keyword}
+            className={`${css.keywordItem} ${trend.keyword === trendItem.keyword ? css.active : ''}`}
+            onClick={() => onSelect(trendItem)}
           >
             <span className={css.rank}>{index + 1}</span>
-            <span className={css.keyword}>{trend.keyword}</span>
+            <span className={css.keyword}>{trendItem.keyword}</span>
             <span className={css.traffic}>
-              {formatTraffic({ traffic: trend.traffic })}
+              {formatTraffic({ traffic: trendItem.traffic })}
               <FontAwesomeIcon icon={faArrowUp} className={css.icon} />
             </span>
           </div>
