@@ -3,9 +3,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const secret = process.env.NEXTAUTH_SECRET;
+const baseUrl = process.env.BASE_URL || location.origin;
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl;
   //로그인이 되어 있을 경우 토큰이 존재
   const token = await getToken({ req, secret });
 
@@ -20,10 +21,10 @@ export async function middleware(req: NextRequest) {
 
       // Referer 헤더에서 이전 경로 확인
       const referer = req.headers.get('referer');
+      console.log('referer', req);
       if (referer) {
         const refererUrl = new URL(referer);
         const refererPath = refererUrl.pathname;
-
         // 이전 경로가 로그인/회원가입 페이지가 아니고, 같은 도메인인 경우
         if (
           !refererPath.startsWith('/login') &&
@@ -46,8 +47,8 @@ export async function middleware(req: NextRequest) {
   //로그인이 되어 있지 않은 경우 보호된 경로 접근 불가
   if (isProtectedPath && !token) {
     // 현재 경로를 쿼리 파라미터로 전달하여 로그인 페이지로 리다이렉트
-    const loginUrl = new URL('/login', req.url);
-    loginUrl.searchParams.set('redirect', pathname);
+    const loginUrl = new URL('/login', baseUrl);
+    loginUrl.searchParams.set('redirect', pathname + search);
     return NextResponse.redirect(loginUrl);
   }
 }
