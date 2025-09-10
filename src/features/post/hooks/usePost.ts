@@ -27,7 +27,9 @@ export function usePost(options?: UsePostOptions) {
       if (response.ok) {
         const { authorId, postId } = response.data;
 
-        await queryClient.invalidateQueries({ queryKey: queryKey().post().postList({ authorId }) });
+        await queryClient.invalidateQueries({
+          queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
+        });
 
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
