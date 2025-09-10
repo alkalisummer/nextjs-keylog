@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import css from './view.module.scss';
 import { useCheckAuth } from '@/shared/hooks';
-import { getUser } from '@/entities/user/api';
 import { getPost } from '@/entities/post/api';
 import { formatDate } from '@/shared/lib/util';
 import { usePost } from '@/features/post/hooks';
@@ -17,44 +16,38 @@ interface Props {
 }
 
 export const View = ({ userId, postId }: Props) => {
-  const { data: userRes } = useSuspenseQuery({
-    queryKey: queryKey().user().userInfo(userId),
-    queryFn: () => getUser(userId),
-  });
-  const { data: postRes } = useSuspenseQuery({
+  const { data: postRes, isError: postError } = useSuspenseQuery({
     queryKey: queryKey().post().postDetail(postId),
     queryFn: () => getPost(postId),
   });
 
-  if (!userRes?.ok) throw new Error('User fetch error');
-  if (!postRes?.ok) throw new Error('Post fetch error');
+  if (postError) throw new Error('Post fetch error');
 
-  const user = userRes.data;
   const post = postRes.data;
 
-  const isAuthorized = useCheckAuth(user.userId);
-  const postHtmlCntn = sanitizeHtml(Buffer.from(post.postHtmlCntn ?? '').toString());
+  const isAuthorized = useCheckAuth(userId);
+  const postHtmlCntn = sanitizeHtml(Buffer.from(post?.postHtmlCntn ?? '').toString());
 
   const { deletePostMutation } = usePost({
     delete: {
-      postQueryKey: queryKey().post().postList({ authorId: user.userId }),
-      userId: user.userId,
-      postId: post.postId,
+      postQueryKey: queryKey().post().postList({ authorId: userId }),
+      userId: userId,
+      postId: postId,
     },
   });
 
   return (
     <div className={css.module}>
-      <span className={css.postTitle}>{post.postTitle}</span>
+      <span className={css.postTitle}>{post?.postTitle}</span>
       <div className={css.postCreated}>
-        <span>{`${post.authorId} • `}</span>
+        <span>{`${post?.authorId} • `}</span>
         <span className={`${css.marginRight} ${css.pointer}`}>
-          {formatDate({ date: post.amntDttm, seperator: '.', isExtendTime: true })}
+          {formatDate({ date: post?.amntDttm ?? '', seperator: '.', isExtendTime: true })}
         </span>
         {isAuthorized ? (
           <>
             |
-            <Link href={`/write?postId=${post.postId}`}>
+            <Link href={`/write?postId=${post?.postId}`}>
               <span className={`${css.marginRight} ${css.marginLeft}`}>수정</span>
             </Link>
             |

@@ -15,25 +15,21 @@ interface CommentListProps {
 export const CommentList = ({ postId }: CommentListProps) => {
   const [replyFormCommentId, setReplyFormCommentId] = useState<number | null>(null);
 
-  const { data: commentRes, isLoading } = useSuspenseQuery({
+  const { data: commentRes, isError } = useSuspenseQuery({
     queryKey: queryKey().comment().commentList(postId),
     queryFn: () => getCommentList(postId),
   });
 
-  if (isLoading) {
-    return <div className={css.loading}>댓글을 불러오는 중...</div>;
-  }
-
-  if (!commentRes?.ok) {
+  if (isError) {
     throw new Error('Failed to fetch comment list');
   }
 
-  const comments = commentRes.data.items;
-  const totalComments = commentRes.data.totalItems;
+  const comments = commentRes?.data?.items;
+  const totalComments = commentRes?.data?.totalItems;
 
   // 댓글과 대댓글 분리
-  const repliesMap = mappingReplies(comments);
-  const commentList = parseParentComments(comments);
+  const repliesMap = mappingReplies(comments || []);
+  const commentList = parseParentComments(comments || []);
 
   const handleReplyClick = (commentId: number) => {
     setReplyFormCommentId(replyFormCommentId === commentId ? null : commentId);

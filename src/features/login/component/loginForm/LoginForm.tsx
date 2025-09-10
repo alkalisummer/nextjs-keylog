@@ -18,6 +18,7 @@ export const LoginForm = () => {
   const cookies = clientCookies();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get('redirect') ?? '/';
+  const reason = searchParams?.get('reason') ?? '';
   const userId = cookies.get('userId');
 
   const {
@@ -37,6 +38,9 @@ export const LoginForm = () => {
 
   useEffect(() => {
     userId && setSaveId(true);
+    if (reason === 'session_expired') {
+      alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+    }
   }, []);
 
   const onSubmit = async (data: Form) => {

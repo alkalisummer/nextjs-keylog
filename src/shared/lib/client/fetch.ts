@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { isServer } from '@/shared/lib/util';
 import { getCustomSession } from '@/shared/lib/util/auth/server/action';
 import { buildSearchParams, handleResponse, handleNetworkError } from './util';
@@ -44,15 +45,18 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
     let cookieHeader: string | undefined;
 
     if (isServer()) {
-      try {
-        const { cookies: nextCookies } = await import('next/headers');
-        const cookie = await nextCookies();
-        cookieHeader = cookie.toString();
-      } catch (error) {
-        console.error(error);
-      }
+      const { cookies: nextCookies, headers: nextHeaders } = await import('next/headers');
+      const cookie = await nextCookies();
+
+      cookieHeader = cookie.toString();
       if (!isPublic) {
         const session = await getCustomSession();
+
+        if (!session?.accessToken) {
+          const headers = await nextHeaders();
+          const referer = headers.get('referer');
+          redirect('/login?reason=session_expired&redirect=' + referer);
+        }
 
         if (session?.accessTokenExpireDate && Date.now() >= session.accessTokenExpireDate) {
           cookieHeader = await (async () => {
