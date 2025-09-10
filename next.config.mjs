@@ -42,6 +42,7 @@ const nextConfig = {
     //NEXT_AUTH
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXTAUTH_URL_INTERNAL: process.env.NEXTAUTH_URL_INTERNAL,
 
     //Gmail Account
     MAIL_SERVICE: process.env.MAIL_SERVICE,
