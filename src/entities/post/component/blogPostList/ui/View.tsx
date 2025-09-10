@@ -34,7 +34,7 @@ export const View = ({ userId }: Props) => {
   return (
     <div className={css.module}>
       {posts?.length === 0 ? (
-        <PostEmpty />
+        <PostEmpty tempYn={tempYn} />
       ) : (
         <>
           {posts.map((post: Post) => (

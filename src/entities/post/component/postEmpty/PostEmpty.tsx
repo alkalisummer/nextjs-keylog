@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import css from './postEmpty.module.scss';
 
-export const PostEmpty = () => {
+export const PostEmpty = ({ tempYn }: { tempYn: string }) => {
+  const title = tempYn === 'Y' ? '작성하신 임시 글이 없습니다.' : '아직 작성하신 글이 없습니다.';
   return (
     <div className={css.module}>
-      <h2 className={css.title}>아직 작성하신 글이 없어요.</h2>
-      <p className={css.description}>내 블로그의 첫 시작이 될 오늘의 기록을 남겨보세요!</p>
+      <h2 className={css.title}>{title}</h2>
+      <p className={css.description}>새로운 글을 작성해보세요!</p>
       <Link href="/write" className={css.ctaButton} scroll={false}>
         글쓰기
       </Link>

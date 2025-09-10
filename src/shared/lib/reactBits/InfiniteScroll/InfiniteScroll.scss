@@ -17,7 +17,7 @@
   content: '';
   position: absolute;
   background: linear-gradient(var(--dir, to bottom), #ffffff, transparent);
-  height: 25%;
+  height: 15%;
   width: 100%;
   z-index: 1;
   pointer-events: none;
@@ -72,12 +72,11 @@
 
   &.selected-item {
     &::before {
-      background-color: #337bb5;
+      background-color: #2f363c;
     }
     &:hover {
-      background-color: #5d98c9;
       &::before {
-        background-color: #5d98c9;
+        background-color: #37383c;
       }
     }
     span {

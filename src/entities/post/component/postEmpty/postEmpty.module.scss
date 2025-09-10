@@ -3,7 +3,7 @@
 // Colors
 $color-title: #000;
 $color-desc: #777;
-$color-button-bg: #000;
+$color-button-bg: #525252;
 $color-button-text: #fff;
 
 // Layout
@@ -63,17 +63,17 @@ $button-radius: 30px;
     padding: 60px 0 90px 0;
 
     .title {
-      font-size: 28px;
+      font-size: 16px;
     }
 
     .description {
-      font-size: 16px;
+      font-size: 11px;
     }
 
     .ctaButton {
-      width: 200px;
-      height: 48px;
-      font-size: 16px;
+      width: 90px;
+      height: 30px;
+      font-size: 12px;
     }
   }
 }
