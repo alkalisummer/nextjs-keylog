@@ -61,7 +61,9 @@ export function usePost(options?: UsePostOptions) {
       if (response.ok) {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKey().post().postDetail(postId) }),
-          queryClient.invalidateQueries({ queryKey: queryKey().post().postList({ authorId }) }),
+          queryClient.invalidateQueries({
+            queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
+          }),
           queryClient.invalidateQueries({ queryKey: queryKey().hashtag().postHashtags(postId) }),
         ]);
 
