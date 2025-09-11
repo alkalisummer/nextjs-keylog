@@ -2,39 +2,31 @@
 
 import css from './homeTabs.module.scss';
 import { useHome } from '../../container';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 export const HomeTabs = () => {
   const { selectedTab, setSelectedTab } = useHome();
-  const router = useRouter();
-
-  const changeTab = (tab: string) => {
-    setSelectedTab(tab);
-    router.replace(`/home?tab=${tab}`);
-  };
 
   return (
     <nav className={css.module}>
-      <span
+      <Link
+        href={`/home?tab=keyword`}
         className={`${css.tab} ${selectedTab === 'keyword' ? css.activeTab : ''}`}
-        onClick={() => {
-          changeTab('keyword');
-        }}
+        onClick={() => setSelectedTab('keyword')}
       >
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.ico} />
         <span className={css.text}>급상승 키워드</span>
-      </span>
-      <span
+      </Link>
+      <Link
+        href={`/home?tab=post`}
         className={`${css.tab} ${selectedTab === 'post' ? css.activeTab : ''}`}
-        onClick={() => {
-          changeTab('post');
-        }}
+        onClick={() => setSelectedTab('post')}
       >
         <FontAwesomeIcon icon={faMagnifyingGlass} className={css.ico} />
         <span className={css.text}>포스트</span>
-      </span>
+      </Link>
     </nav>
   );
 };

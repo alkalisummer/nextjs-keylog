@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import css from './commentList.module.scss';
 import { CommentForm, CommentItem } from '..';
+import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
 import { getCommentList } from '@/entities/comment/api';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -14,6 +15,9 @@ interface CommentListProps {
 }
 
 export const CommentList = ({ postId, authorId }: CommentListProps) => {
+  const searchParams = useSearchParams();
+  const commentId = searchParams.get('commentId');
+  const targetCommentId = commentId ? Number(commentId) : null;
   const [replyFormCommentId, setReplyFormCommentId] = useState<number | null>(null);
 
   const { data: commentRes, isError } = useSuspenseQuery({
@@ -53,6 +57,7 @@ export const CommentList = ({ postId, authorId }: CommentListProps) => {
             onReplyClick={() => handleReplyClick(comment.commentId)}
             showReplyForm={replyFormCommentId === comment.commentId}
             onReplyCancel={() => setReplyFormCommentId(null)}
+            targetCommentId={targetCommentId}
           />
         ))}
       </div>

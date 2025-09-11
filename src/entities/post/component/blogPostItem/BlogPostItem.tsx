@@ -40,7 +40,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   return (
     <div className={css.module}>
       <div className={css.postTitleContent}>
-        <Link href={routeUrl} scroll={false}>
+        <Link href={routeUrl}>
           {postThmbImgUrl ? (
             <div className={css.postThumb}>
               <div className={css.thumbContent}>

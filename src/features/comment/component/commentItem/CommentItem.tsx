@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { formatDate } from '@/shared/lib/util';
 import { getCommentToggleLabel } from '../../lib';
 import { Comment } from '@/entities/comment/model';
-import { useAutoOpenReplies, useComment } from '../../hooks';
+import { useAutoOpenReplies, useComment, useCommentDeepLink } from '../../hooks';
 import { CommentHeader, CommentEditForm, CommentReplyToggle, CommentReply } from '..';
 
 interface CommentItemProps {
@@ -18,6 +18,7 @@ interface CommentItemProps {
   onReplyClick?: () => void;
   showReplyForm?: boolean;
   onReplyCancel?: () => void;
+  targetCommentId?: number | null;
 }
 
 export const CommentItem = ({
@@ -28,6 +29,7 @@ export const CommentItem = ({
   onReplyClick,
   showReplyForm = false,
   onReplyCancel,
+  targetCommentId,
 }: CommentItemProps) => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -99,14 +101,22 @@ export const CommentItem = ({
   // 대댓글이 처음 달리면 토글 open
   useAutoOpenReplies(replies.length, showReplies, setShowReplies);
 
+  useCommentDeepLink({
+    currentComment: comment,
+    replies,
+    showReplies,
+    setShowReplies,
+    targetCommentId,
+  });
+
   return (
-    <div className={css.module}>
+    <div className={css.module} id={`comment-${comment.commentId}`}>
       <CommentHeader
+        authorId={comment.authorId}
         userImageUrl={comment.userThmbImgUrl}
         userNickname={comment.userNickname}
         date={formatDate({ date: comment.rgsnDttm, seperator: '.', isExtendTime: true })}
         canShowActions={canShowActions}
-        onUserClick={() => router.push(`/${comment.authorId}`)}
         onEditClick={handleEdit}
         onDeleteClick={handleDelete}
       />
@@ -138,7 +148,13 @@ export const CommentItem = ({
           showReplyForm={showReplyForm}
           shouldShowReplyForm={shouldShowReplyForm}
           renderReply={(reply: Comment) => (
-            <CommentItem key={reply.commentId} comment={reply} postId={postId} authorId={authorId} />
+            <CommentItem
+              key={reply.commentId}
+              comment={reply}
+              postId={postId}
+              authorId={authorId}
+              targetCommentId={targetCommentId}
+            />
           )}
           onReplyClick={onReplyClick}
           onReplyCancel={onReplyCancel}

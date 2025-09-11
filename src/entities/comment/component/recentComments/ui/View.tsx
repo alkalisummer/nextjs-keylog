@@ -2,7 +2,7 @@
 
 import React from 'react';
 import css from './view.module.scss';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Comment } from '@/entities/comment/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -15,8 +15,6 @@ interface Props {
 }
 
 export const View = ({ userId }: Props) => {
-  const router = useRouter();
-
   const { data: recentCommentsRes } = useSuspenseQuery({
     queryKey: queryKey().comment().recentComment(userId),
     queryFn: () => getRecentComments(userId),
@@ -32,10 +30,10 @@ export const View = ({ userId }: Props) => {
     <div className={css.module}>
       <span className={css.title}>최근 댓글</span>
       {recentComments.map((comment: Partial<Comment>) => (
-        <div
+        <Link
           key={`comment_${comment.commentId}`}
           className={css.item}
-          onClick={() => router.push(`/${userId}/${comment.postId}`)}
+          href={`/${userId}/${comment.postId}?commentId=${comment.commentId}`}
         >
           <div className={css.info}>
             <span className={css.commentContent}>
@@ -44,7 +42,7 @@ export const View = ({ userId }: Props) => {
             </span>
             <span className={css.userName}>{comment.userNickname}</span>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

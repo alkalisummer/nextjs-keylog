@@ -1,24 +1,25 @@
 'use client';
 
+import Link from 'next/link';
 import Image from 'next/image';
 import css from './commentHeader.module.scss';
 
-type CommentHeaderProps = {
+interface CommentHeaderProps {
+  authorId: string;
   userImageUrl?: string | null;
   userNickname: string;
   date: string;
   canShowActions: boolean;
-  onUserClick: () => void;
   onEditClick: () => void;
   onDeleteClick: () => void;
-};
+}
 
 export function CommentHeader({
+  authorId,
   userImageUrl,
   userNickname,
   date,
   canShowActions,
-  onUserClick,
   onEditClick,
   onDeleteClick,
 }: CommentHeaderProps) {
@@ -35,9 +36,9 @@ export function CommentHeader({
           alt={`${userNickname} profile`}
         />
         <div className={css.userDetails}>
-          <span className={css.userName} onClick={onUserClick}>
-            {userNickname}
-          </span>
+          <Link href={`/${authorId}`}>
+            <span className={css.userName}>{userNickname}</span>
+          </Link>
           <span className={css.date}>{date}</span>
         </div>
       </div>
