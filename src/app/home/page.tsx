@@ -12,9 +12,9 @@ import { ArticleList } from '@/entities/article/component';
 import { PostSearchSkeleton } from '@/features/post/component';
 import { ArticleListSkeleton } from '@/entities/article/component';
 
-type Props = {
+interface Props {
   searchParams: Promise<{ [key: string]: string | undefined }>;
-};
+}
 
 export default async function Page({ searchParams }: Props) {
   const { tagId = '', tab = 'keyword' } = await searchParams;

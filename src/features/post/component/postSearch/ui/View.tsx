@@ -28,13 +28,18 @@ export const View = ({ initPosts, initPostsTotalCnt }: Props) => {
   const tagName = searchParams?.get('tagName');
 
   useEffect(() => {
+    setPageNum(1);
+    setSearchWord('');
+    setIsSubmitSuccessful(false);
     setPosts(initPosts);
+    setPostCnt(initPostsTotalCnt);
   }, [tagId, tagName]);
 
   const { setTarget } = useIntersectionObserver({
     onShow: async () => {
-      setPageNum(prev => prev + 1);
-      const postsResult = await getPosts({ searchWord: searchWord, tagId: tagId, currPageNum: pageNum + 1 });
+      const nextPage = pageNum + 1;
+      setPageNum(nextPage);
+      const postsResult = await getPosts({ searchWord: searchWord, tagId: tagId, currPageNum: nextPage });
 
       if (!postsResult.ok) throw new Error('getPosts failed');
 
