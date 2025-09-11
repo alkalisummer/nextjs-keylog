@@ -73,6 +73,13 @@ export const generateMetadata = async () => {
       url: `${process.env.BASE_URL}/home`,
       title: 'keylog',
       description: '인기 키워드를 활용한 블로그 포스팅',
+      images: [
+        {
+          url: '/logo.png',
+          width: 650,
+          height: 250,
+        },
+      ],
     },
     alternates: {
       canonical: `${process.env.BASE_URL}/home`,

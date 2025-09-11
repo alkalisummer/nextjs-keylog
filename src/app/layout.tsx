@@ -40,8 +40,8 @@ export const generateMetadata = async () => {
       url: `${process.env.BASE_URL}`,
       images: [
         {
-          url: '/favicon.ico',
-          width: 250,
+          url: '/logo.png',
+          width: 650,
           height: 250,
           alt: 'Keylog',
         },
