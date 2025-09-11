@@ -1,11 +1,10 @@
 'use client';
 
 import React from 'react';
-import css from './view.module.scss';
 import Link from 'next/link';
+import css from './view.module.scss';
 import { getPosts } from '@/entities/post/api';
 import { Post } from '@/entities/post/model/type';
-import { useBlog } from '@/app/[userId]/container';
 import { queryKey } from '@/app/provider/query/lib';
 import { HashtagInfo } from '@/entities/hashtag/model';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -18,8 +17,6 @@ interface Props {
 }
 
 export const View = ({ userId }: Props) => {
-  const { setSelectedHashtag } = useBlog();
-
   const { data: hashtagsRes } = useSuspenseQuery({
     queryKey: queryKey().hashtag().hashtagList(userId),
     queryFn: () => getAuthorHashtags(userId),
@@ -46,7 +43,7 @@ export const View = ({ userId }: Props) => {
     <div className={css.module}>
       <span className={css.title}>태그 목록</span>
       {hashtags.length > 0 && (
-        <Link href={`/${userId}`} className={css.hashtag} onClick={() => setSelectedHashtag(null)}>
+        <Link href={`/${userId}`} className={css.hashtag}>
           전체보기 <span className={css.count}>&nbsp;{`(${totalPostCnt})`}</span>
         </Link>
       )}
