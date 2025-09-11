@@ -7,29 +7,35 @@ import { useAutoplaySpeed } from '../../../hooks';
 import { InfiniteScroll } from '@/shared/lib/reactBits';
 import { parseKeywordsArray } from '../../../lib/transform';
 import { KeywordList } from '../../keywordList/KeywordList';
+import { useCallback, useMemo, useState } from 'react';
+import { useKeywordItemClick, useRefreshDailyTrends } from '../../../hooks';
 
 interface Props {
   trends: Trend[];
 }
 
 export const View = ({ trends }: Props) => {
-  const { trend, setTrend, selectedTab } = useHome();
+  const { trend, setTrend } = useHome();
   const autoplaySpeed = useAutoplaySpeed();
+  const [data, setData] = useState<Trend[]>(trends);
 
-  if (selectedTab === 'post') return;
+  const items = useMemo(() => {
+    const trendItems = parseKeywordsArray(data);
+    const keywordList = <KeywordList trends={data} setSelectedTrend={setTrend || (() => {})} />;
+    return [{ content: keywordList }, ...trendItems];
+  }, [data, setTrend]);
 
-  const trendItems = parseKeywordsArray(trends);
-  const keywordList = <KeywordList trends={trends} setSelectedTrend={setTrend || (() => {})} />;
+  const handleItemClick = useKeywordItemClick(setTrend);
 
-  // components가 있는 경우 앞에 추가
-  const items = [{ content: keywordList }, ...trendItems];
+  const { refresh } = useRefreshDailyTrends({
+    currentSelected: trend,
+    setSelected: setTrend,
+  });
 
-  const handleItemClick = (data?: any) => {
-    // data가 Trend 객체인 경우에만 onClick 호출
-    if (data && typeof data === 'object' && 'keyword' in data) {
-      setTrend?.(data as Trend);
-    }
-  };
+  const refreshAndSet = useCallback(async () => {
+    const next = await refresh();
+    if (Array.isArray(next)) setData(next);
+  }, [refresh]);
 
   return (
     <section className={css.module}>
@@ -45,6 +51,7 @@ export const View = ({ trends }: Props) => {
           width="100%"
           negativeMargin="-2.5em"
           onClick={handleItemClick}
+          refresh={refreshAndSet}
         />
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { decodeUrl } from './lib';
 import { login } from '@/features/login/api';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -83,8 +84,14 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
-    async redirect({ url }) {
-      return url;
+    async redirect({ url, baseUrl }) {
+      try {
+        if (url.startsWith('/')) return new URL(url, baseUrl).toString();
+        const decodedUrl = decodeUrl(url);
+        const target = new URL(decodedUrl);
+        if (target.origin === baseUrl) return target.toString();
+      } catch {}
+      return baseUrl;
     },
   },
 };

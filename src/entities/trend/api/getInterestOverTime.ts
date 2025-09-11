@@ -11,6 +11,7 @@ export const getInterestOverTime = async ({ keyword, geo = 'KR' }: InterestOverT
     endpoint: '/trend/interestOverTime',
     options: {
       body: { keyword, geo },
+      isPublic: true,
     },
   });
 };

@@ -12,6 +12,7 @@ export const getSearchImages = async ({ keyword, pageNum = 1, perPage = 10 }: Se
     endpoint: '/trend/searchImage',
     options: {
       body: { keyword, pageNum, perPage },
+      isPublic: true,
     },
   });
 };

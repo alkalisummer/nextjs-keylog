@@ -5,7 +5,7 @@ import './InfiniteScroll.scss';
 import { Observer } from 'gsap/Observer';
 import { Trend } from '@/entities/trend/model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPause, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 import React, { useRef, useEffect, ReactNode, useMemo, useCallback, useState } from 'react';
 
 gsap.registerPlugin(Observer);
@@ -31,6 +31,7 @@ interface InfiniteScrollProps {
   autoplayDirection?: 'down' | 'up';
   pauseOnHover?: boolean;
   onClick?: (data?: any) => void;
+  refresh?: () => void;
 }
 
 export const InfiniteScroll = ({
@@ -49,6 +50,7 @@ export const InfiniteScroll = ({
   autoplayDirection = 'down',
   pauseOnHover = false,
   onClick,
+  refresh,
 }: InfiniteScrollProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -275,6 +277,7 @@ export const InfiniteScroll = ({
           ))}
         </div>
         <div className="infinite-scroll-controll">
+          <FontAwesomeIcon icon={faArrowRotateRight} className="icon" onClick={refresh} title="새로고침" />
           {isPlaying && !isTemporarilyPaused ? (
             <FontAwesomeIcon icon={faPause} className="icon" onClick={handlePause} title="일시 정지" />
           ) : (

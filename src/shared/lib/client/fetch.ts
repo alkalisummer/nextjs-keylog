@@ -49,15 +49,19 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       const cookie = await nextCookies();
 
       cookieHeader = cookie.toString();
+
+      // 공개 API 가 아닌 경우
       if (!isPublic) {
         const session = await getCustomSession();
 
+        // 세션이 없는 경우 로그인 페이지로 리다이렉트
         if (!session?.accessToken) {
           const headers = await nextHeaders();
           const referer = headers.get('referer');
           redirect('/login?reason=session_expired&redirect=' + referer);
         }
 
+        // 세션이 만료된 경우 access token 갱신 시도
         if (session?.accessTokenExpireDate && Date.now() >= session.accessTokenExpireDate) {
           cookieHeader = await (async () => {
             try {
@@ -68,20 +72,31 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
             }
           })();
 
-          const { result, setCookieHeader: apiSetCookie } = await refreshAccessToken();
-          if (isServer()) await applySetCookieHeader(apiSetCookie);
+          try {
+            // access token 갱신
+            const { result, setCookieHeader: apiSetCookie } = await refreshAccessToken();
+            if (isServer()) await applySetCookieHeader(apiSetCookie);
 
-          const csrfToken = await fetchNextAuthCsrfToken(cookieHeader);
-          const { setCookieHeader: nextAuthSetCookie } = await updateNextAuthSession({
-            accessToken: result.accessToken,
-            accessTokenExpireDate: result.accessTokenExpireDate,
-            cookieHeader,
-            csrfToken,
-          });
-          if (isServer()) await applySetCookieHeader(nextAuthSetCookie);
+            // next auth session access token 정보 업데이트
+            const csrfToken = await fetchNextAuthCsrfToken(cookieHeader);
+            const { setCookieHeader: nextAuthSetCookie } = await updateNextAuthSession({
+              accessToken: result.accessToken,
+              accessTokenExpireDate: result.accessTokenExpireDate,
+              cookieHeader,
+              csrfToken,
+            });
+            if (isServer()) await applySetCookieHeader(nextAuthSetCookie);
 
-          session.accessToken = result.accessToken;
-          session.accessTokenExpireDate = result.accessTokenExpireDate;
+            session.accessToken = result.accessToken;
+            session.accessTokenExpireDate = result.accessTokenExpireDate;
+          } catch {
+            // 세션 만료 처리(refresh token 만료)
+            const headers = await nextHeaders();
+            const referer = headers.get('referer') || '/';
+
+            // next auth signout 처리
+            redirect(`/logout?callbackUrl=${encodeURIComponent('/login?reason=session_expired&redirect=' + referer)}`);
+          }
         }
         bearer = session?.accessToken || undefined;
       }
@@ -92,7 +107,6 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       ...(bearer && { Authorization: `Bearer ${bearer}` }),
       ...customHeaders,
       ...(body && { 'Content-Type': 'application/json' }),
-      // Allow explicit cookie inclusion for specific public calls (e.g., refresh)
       ...((!isPublic || withCookie) && cookieHeader ? { Cookie: cookieHeader } : {}),
     };
 
@@ -100,7 +114,6 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
       method,
       headers,
       ...(body ? { body: JSON.stringify(body) } : {}),
-      // Include credentials either when non-public or when caller opts-in via withCookie
       credentials: !isPublic || withCookie ? 'include' : 'omit',
     };
 
