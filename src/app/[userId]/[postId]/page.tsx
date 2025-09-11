@@ -15,7 +15,6 @@ import { PostInteractions } from '@/entities/like/component';
 export default async function Page({ params }: { params: Promise<{ userId: string; postId: string }> }) {
   const { userId, postId } = await params;
 
-  const user = getUser(userId);
   const post = getPost(Number(postId));
   const hashtags = getPostHashtags(Number(postId));
 
@@ -34,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
       </AsyncBoundary>
 
       <AsyncBoundary pending={<BoxSkeleton height={200} />} error={<BoxError height={150} />}>
-        <CommentList postId={Number(postId)} />
+        <CommentList postId={Number(postId)} authorId={userId} />
       </AsyncBoundary>
     </>
   );

@@ -13,6 +13,7 @@ import { CommentHeader, CommentEditForm, CommentReplyToggle, CommentReply } from
 interface CommentItemProps {
   comment: Comment;
   postId: number;
+  authorId: string;
   replies?: Comment[];
   onReplyClick?: () => void;
   showReplyForm?: boolean;
@@ -22,6 +23,7 @@ interface CommentItemProps {
 export const CommentItem = ({
   comment,
   postId,
+  authorId,
   replies = [],
   onReplyClick,
   showReplyForm = false,
@@ -35,6 +37,7 @@ export const CommentItem = ({
 
   const { update, delete: deleteComment } = useComment({
     postId,
+    authorId,
     onSuccess: () => {
       setIsEditing(false);
     },
@@ -128,12 +131,15 @@ export const CommentItem = ({
       {canToggleReplies && (
         <CommentReply
           postId={postId}
+          authorId={authorId}
           commentId={comment.commentId}
           replies={replies}
           showReplies={showReplies}
           showReplyForm={showReplyForm}
           shouldShowReplyForm={shouldShowReplyForm}
-          renderReply={(reply: Comment) => <CommentItem key={reply.commentId} comment={reply} postId={postId} />}
+          renderReply={(reply: Comment) => (
+            <CommentItem key={reply.commentId} comment={reply} postId={postId} authorId={authorId} />
+          )}
           onReplyClick={onReplyClick}
           onReplyCancel={onReplyCancel}
         />

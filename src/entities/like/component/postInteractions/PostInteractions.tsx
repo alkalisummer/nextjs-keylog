@@ -24,12 +24,13 @@ export const PostInteractions = async ({ promise, postId }: Props) => {
   if (!postRes.ok) throw new Error('postTitle fetch error');
 
   const postTitle = postRes.data.postTitle;
+  const authorId = postRes.data.authorId;
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <View postId={postId} postTitle={postTitle} />
+      <View postId={postId} postTitle={postTitle} authorId={authorId} />
     </HydrationBoundary>
   );
 };

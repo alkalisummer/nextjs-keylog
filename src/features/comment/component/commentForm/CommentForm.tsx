@@ -12,6 +12,7 @@ import { CreateCommentSchema, CreateCommentForm as Form } from '../../model';
 
 interface CommentFormProps {
   postId: number;
+  authorId: string;
   commentOriginId?: number;
   onCancel?: () => void;
   placeholder?: string;
@@ -21,6 +22,7 @@ interface CommentFormProps {
 
 export const CommentForm = ({
   postId,
+  authorId,
   commentOriginId,
   onCancel,
   placeholder = '댓글을 작성하세요.',
@@ -46,6 +48,7 @@ export const CommentForm = ({
 
   const { create } = useComment({
     postId,
+    authorId,
     onSuccess: () => {
       setValue('content', '');
       onCancel?.();

@@ -8,7 +8,12 @@ import { ApiResponse } from '@/shared/lib/client';
 import { queryKey } from '@/app/provider/query/lib';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useLikePost = (postId: number) => {
+interface Props {
+  postId: number;
+  authorId: string;
+}
+
+export const useLikePost = ({ postId, authorId }: Props) => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userId = session?.user?.id ?? '';
@@ -50,7 +55,7 @@ export const useLikePost = (postId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postLikeQueryKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(authorId) });
     },
   });
 
@@ -81,7 +86,7 @@ export const useLikePost = (postId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: postLikeQueryKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(authorId) });
     },
   });
 

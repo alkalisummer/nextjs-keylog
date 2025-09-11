@@ -11,10 +11,11 @@ import { CreateCommentForm, UpdateCommentForm, DeleteCommentForm } from '../mode
 
 interface UseCommentProps {
   postId: number;
+  authorId: string;
   onSuccess?: () => void;
 }
 
-export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
+export const useComment = ({ postId, authorId, onSuccess }: UseCommentProps) => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userId = session?.user?.id ?? '';
@@ -66,7 +67,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(authorId) });
     },
   });
 
@@ -109,7 +110,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(authorId) });
     },
   });
 
@@ -160,7 +161,7 @@ export const useComment = ({ postId, onSuccess }: UseCommentProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentListQueryKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKey().comment().recentComment(authorId) });
     },
   });
 

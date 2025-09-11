@@ -6,6 +6,7 @@ import { Comment } from '@/entities/comment/model';
 
 type ReplySectionProps = {
   postId: number;
+  authorId: string;
   commentId: number;
   replies: Comment[];
   showReplies: boolean;
@@ -18,6 +19,7 @@ type ReplySectionProps = {
 
 export function CommentReply({
   postId,
+  authorId,
   commentId,
   replies,
   showReplies,
@@ -48,6 +50,7 @@ export function CommentReply({
         <div className={css.replyFormContainer}>
           <CommentForm
             postId={postId}
+            authorId={authorId}
             commentOriginId={commentId}
             onCancel={onReplyCancel}
             placeholder="답글을 작성하세요."

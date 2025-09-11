@@ -16,12 +16,13 @@ import { faHeart as faHeartSolid, faPaperclip } from '@fortawesome/free-solid-sv
 interface Props {
   postId: number;
   postTitle: string;
+  authorId: string;
 }
 
-export const View = ({ postId, postTitle }: Props) => {
+export const View = ({ postId, postTitle, authorId }: Props) => {
   const router = useRouter();
   const { status } = useSession();
-  const { isLiked, likeCnt, like, unlike } = useLikePost(postId);
+  const { isLiked, likeCnt, like, unlike } = useLikePost({ postId, authorId });
   const [url, setUrl] = useState('');
 
   useClipboard({ elementId: 'clipboard' });

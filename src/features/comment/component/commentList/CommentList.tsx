@@ -10,9 +10,10 @@ import { mappingReplies, parseParentComments } from '../../lib';
 
 interface CommentListProps {
   postId: number;
+  authorId: string;
 }
 
-export const CommentList = ({ postId }: CommentListProps) => {
+export const CommentList = ({ postId, authorId }: CommentListProps) => {
   const [replyFormCommentId, setReplyFormCommentId] = useState<number | null>(null);
 
   const { data: commentRes, isError } = useSuspenseQuery({
@@ -40,13 +41,14 @@ export const CommentList = ({ postId }: CommentListProps) => {
       <div className={css.commentHeader}>
         <span className={css.commentCount}>{totalComments}개의 댓글</span>
       </div>
-      <CommentForm postId={postId} />
+      <CommentForm postId={postId} authorId={authorId} />
       <div className={css.commentList}>
         {commentList.map(comment => (
           <CommentItem
             key={comment.commentId}
             comment={comment}
             postId={postId}
+            authorId={authorId}
             replies={repliesMap[comment.commentId] || []}
             onReplyClick={() => handleReplyClick(comment.commentId)}
             showReplyForm={replyFormCommentId === comment.commentId}
