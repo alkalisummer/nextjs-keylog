@@ -56,6 +56,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
 
         // 세션이 없는 경우 로그인 페이지로 리다이렉트
         if (!session?.accessToken) {
+          console.log('session is not found');
           const headers = await nextHeaders();
           const referer = headers.get('referer');
           redirect('/login?reason=session_expired&redirect=' + referer);
@@ -76,20 +77,25 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
             // access token 갱신
             const { result, setCookieHeader: apiSetCookie } = await refreshAccessToken();
             if (isServer()) await applySetCookieHeader(apiSetCookie);
+            console.log('refreshAccessToken success');
 
             // next auth session access token 정보 업데이트
             const csrfToken = await fetchNextAuthCsrfToken(cookieHeader);
+            console.log('fetchNextAuthCsrfToken success');
+
             const { setCookieHeader: nextAuthSetCookie } = await updateNextAuthSession({
               accessToken: result.accessToken,
               accessTokenExpireDate: result.accessTokenExpireDate,
               cookieHeader,
               csrfToken,
             });
+            console.log('updateNextAuthSession success');
             if (isServer()) await applySetCookieHeader(nextAuthSetCookie);
 
             session.accessToken = result.accessToken;
             session.accessTokenExpireDate = result.accessTokenExpireDate;
           } catch {
+            console.log('refreshAccessToken error');
             // 세션 만료 처리(refresh token 만료)
             const headers = await nextHeaders();
             const referer = headers.get('referer') || '/';
