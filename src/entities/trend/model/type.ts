@@ -4,7 +4,7 @@ export interface Trend {
   keyword: string;
   traffic: number;
   trafficGrowthRate: number;
-  activeTime: string;
+  activeTime: Date;
   relatedKeywords: string[];
   articleKeys: ArticleKey[];
 }
