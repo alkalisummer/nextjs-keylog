@@ -58,8 +58,8 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
         if (!session?.accessToken) {
           console.log('session is not found');
           const headers = await nextHeaders();
-          const referer = headers.get('referer');
-          redirect('/login?reason=session_expired&redirect=' + referer);
+          const referer = headers.get('referer') || '/';
+          redirect(`/login?reason=session_expired&redirect=${encodeURIComponent(referer)}`);
         }
 
         // 세션이 만료된 경우 access token 갱신 시도
@@ -74,6 +74,7 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
           })();
 
           try {
+            console.log('cookie.get(refreshToken): ', cookie.get('refreshToken'));
             // access token 갱신
             const { result, setCookieHeader: apiSetCookie } = await refreshAccessToken();
             if (isServer()) await applySetCookieHeader(apiSetCookie);
@@ -100,8 +101,8 @@ export const createFetchInstance = (baseUrl: string = ''): HttpClient => {
             const headers = await nextHeaders();
             const referer = headers.get('referer') || '/';
 
-            // next auth signout 처리
-            redirect(`/logout?callbackUrl=${encodeURIComponent('/login?reason=session_expired&redirect=' + referer)}`);
+            // next auth signout 처리 (callbackUrl 전체 인코딩 금지, redirect 값만 인코딩)
+            redirect(`/logout?callbackUrl=/login?reason=session_expired&redirect=${encodeURIComponent(referer)}`);
           }
         }
         bearer = session?.accessToken || undefined;
