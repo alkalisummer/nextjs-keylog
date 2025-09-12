@@ -21,7 +21,6 @@ export async function middleware(req: NextRequest) {
 
       // Referer 헤더에서 이전 경로 확인
       const referer = req.headers.get('referer');
-      console.log('referer', req);
       if (referer) {
         const refererUrl = new URL(referer);
         const refererPath = refererUrl.pathname;

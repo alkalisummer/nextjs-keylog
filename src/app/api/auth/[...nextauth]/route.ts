@@ -1,4 +1,3 @@
-import { decodeUrl } from './lib';
 import { login } from '@/features/login/api';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -6,8 +5,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
-    maxAge: 10, // 1 hour
-    updateAge: 10, // 30 minutes
+    maxAge: 60 * 60, // 1 hour
+    updateAge: 60 * 30, // 30 minutes
   },
   providers: [
     CredentialsProvider({
