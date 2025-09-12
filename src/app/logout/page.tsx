@@ -7,7 +7,14 @@ import { useSearchParams } from 'next/navigation';
 export default function Page() {
   const searchParams = useSearchParams();
   const raw = searchParams.get('callbackUrl') || '/';
-  const callbackUrl = decodeURIComponent(raw);
+  const decoded = decodeURIComponent(raw);
+  let callbackUrl = decoded;
+  try {
+    const url = new URL(decoded, window.location.origin);
+    if (url.origin === window.location.origin) {
+      callbackUrl = url.pathname + url.search + url.hash;
+    }
+  } catch {}
   console.log('custom logout page, callbackUrl:', callbackUrl);
   (async () => {
     await signOut({ redirect: true, callbackUrl });

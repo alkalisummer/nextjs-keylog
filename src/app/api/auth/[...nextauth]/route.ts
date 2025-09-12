@@ -6,8 +6,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1 hour
-    updateAge: 60 * 30, // 30 minutes
+    maxAge: 10, // 1 hour
+    updateAge: 10, // 30 minutes
   },
   providers: [
     CredentialsProvider({
@@ -85,12 +85,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async redirect({ url, baseUrl }) {
-      try {
-        if (url.startsWith('/')) return new URL(url, baseUrl).toString();
-        const decodedUrl = decodeUrl(url);
-        const target = new URL(decodedUrl);
-        if (target.origin === baseUrl) return target.toString();
-      } catch {}
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
   },

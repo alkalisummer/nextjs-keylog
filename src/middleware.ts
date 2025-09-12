@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const secret = process.env.NEXTAUTH_SECRET;
-const baseUrl = process.env.BASE_URL || location.origin;
+const baseUrl = process.env.BASE_URL;
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
@@ -47,7 +47,8 @@ export async function middleware(req: NextRequest) {
   //로그인이 되어 있지 않은 경우 보호된 경로 접근 불가
   if (isProtectedPath && !token) {
     // 현재 경로를 쿼리 파라미터로 전달하여 로그인 페이지로 리다이렉트
-    const loginUrl = new URL('/login', baseUrl);
+    const origin = baseUrl || req.nextUrl.origin;
+    const loginUrl = new URL('/login', origin);
     loginUrl.searchParams.set('redirect', pathname + search);
     return NextResponse.redirect(loginUrl);
   }
