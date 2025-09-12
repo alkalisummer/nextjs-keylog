@@ -9,9 +9,10 @@ interface Props {
     post: Promise<ApiResponse<PostDetail>>;
   };
   postId: number;
+  authorId: string;
 }
 
-export const PostInteractions = async ({ promise, postId }: Props) => {
+export const PostInteractions = async ({ promise, postId, authorId }: Props) => {
   const queryClient = new QueryClient();
 
   const postTitleQueryOptions = {
@@ -19,18 +20,13 @@ export const PostInteractions = async ({ promise, postId }: Props) => {
     queryFn: () => promise.post,
   };
 
-  const postRes = await queryClient.ensureQueryData(postTitleQueryOptions);
-
-  if (!postRes.ok) throw new Error('postTitle fetch error');
-
-  const postTitle = postRes.data.postTitle;
-  const authorId = postRes.data.authorId;
+  await queryClient.prefetchQuery(postTitleQueryOptions);
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <View postId={postId} postTitle={postTitle} authorId={authorId} />
+      <View postId={postId} authorId={authorId} />
     </HydrationBoundary>
   );
 };

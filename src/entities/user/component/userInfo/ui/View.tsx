@@ -16,12 +16,12 @@ interface Props {
 export const View = ({ userId }: Props) => {
   const isAuthorized = useCheckAuth(userId);
 
-  const { data: userInfoRes } = useSuspenseQuery({
+  const { data: userInfoRes, error } = useSuspenseQuery({
     queryKey: queryKey().user().userInfo(userId),
     queryFn: () => getUser(userId),
   });
 
-  if (!userInfoRes?.ok) {
+  if (error) {
     throw new Error('User fetch error');
   }
 
@@ -31,7 +31,7 @@ export const View = ({ userId }: Props) => {
     <div className={css.module}>
       <Link href={`/${userId}`}>
         <Image
-          src={userInfo.userThmbImgUrl ? userInfo.userThmbImgUrl : '/icon/person.png'}
+          src={userInfo?.userThmbImgUrl ? userInfo.userThmbImgUrl : '/icon/person.png'}
           className={css.profileIcon}
           alt="profile img"
           width={60}
@@ -41,9 +41,9 @@ export const View = ({ userId }: Props) => {
         />
       </Link>
       <Link href={`/${userId}`} className={css.blogName}>
-        <span>{userInfo.userBlogName}</span>
+        <span>{userInfo?.userBlogName}</span>
       </Link>
-      <span className={css.nickname}>{userInfo.userNickname}</span>
+      <span className={css.nickname}>{userInfo?.userNickname}</span>
       {isAuthorized && (
         <div className={css.btnDiv}>
           <Link href={`/write`}>

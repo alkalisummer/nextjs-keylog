@@ -11,21 +11,21 @@ interface Props {
 }
 
 export const View = ({ userId }: Props) => {
-  const { data: userRes } = useQuery({
+  const { data: userRes, error } = useQuery({
     queryKey: queryKey().user().userInfo(userId),
     queryFn: () => getUser(userId),
   });
 
-  if (!userRes?.ok) {
+  if (error) {
     throw new Error('User fetch error');
   }
 
-  const author = userRes.data;
+  const author = userRes?.data;
 
   return (
     <div className={css.module}>
       <Image
-        src={author.userThmbImgUrl ? author.userThmbImgUrl : '/icon/person.png'}
+        src={author?.userThmbImgUrl ? author.userThmbImgUrl : '/icon/person.png'}
         width={90}
         height={90}
         quality={100}
@@ -33,8 +33,8 @@ export const View = ({ userId }: Props) => {
         className={css.profileImg}
         alt="profile img"
       />
-      <span className={css.blogName}>{author.userBlogName}</span>
-      <span className={css.headerTitle}>{author.userNickname}</span>
+      <span className={css.blogName}>{author?.userBlogName}</span>
+      <span className={css.headerTitle}>{author?.userNickname}</span>
     </div>
   );
 };

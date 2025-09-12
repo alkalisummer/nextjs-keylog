@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
       </AsyncBoundary>
 
       <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={150} />}>
-        <PostInteractions promise={{ post }} postId={Number(postId)} />
+        <PostInteractions promise={{ post }} postId={Number(postId)} authorId={userId} />
       </AsyncBoundary>
 
       <AsyncBoundary pending={<BoxSkeleton height={50} />} error={<BoxError height={150} />}>

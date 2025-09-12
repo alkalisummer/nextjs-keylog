@@ -12,20 +12,32 @@ import { facebookShare, twitterShare } from '@/entities/like/lib';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { queryKey } from '@/app/provider/query/lib';
+import { getPost } from '@/entities/post/api';
 
 interface Props {
   postId: number;
-  postTitle: string;
   authorId: string;
 }
 
-export const View = ({ postId, postTitle, authorId }: Props) => {
+export const View = ({ postId, authorId }: Props) => {
   const router = useRouter();
   const { status } = useSession();
   const { isLiked, likeCnt, like, unlike } = useLikePost({ postId, authorId });
   const [url, setUrl] = useState('');
 
   useClipboard({ elementId: 'clipboard' });
+
+  const { data: postRes, error } = useSuspenseQuery({
+    queryKey: queryKey().post().postDetail(postId),
+    queryFn: () => getPost(postId),
+  });
+
+  if (error) throw new Error('Post fetch error');
+
+  const post = postRes.data;
+  const postTitle = post?.postTitle || '';
 
   useEffect(() => {
     if (isClient()) {
