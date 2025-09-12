@@ -24,7 +24,6 @@ export const useInterestOverTime = ({
       const pairs = await Promise.all(
         missingKeywords.map(async keyword => {
           const res = await getInterestOverTime({ keyword, geo });
-          debugger;
           return { keyword, res };
         }),
       );
