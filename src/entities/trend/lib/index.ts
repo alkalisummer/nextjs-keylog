@@ -4,6 +4,7 @@ export {
   parseValidKeywordDataList,
   mergeUniqueImages,
   parseRecentTop5,
+  formatLabel,
 } from './transform';
 export {
   createDailyTrends,

@@ -2,8 +2,8 @@ import { ArticleKey } from '@/entities/article/model';
 
 export interface Trend {
   keyword: string;
-  traffic: string;
-  trafficGrowthRate: string;
+  traffic: number;
+  trafficGrowthRate: number;
   activeTime: string;
   relatedKeywords: string[];
   articleKeys: ArticleKey[];

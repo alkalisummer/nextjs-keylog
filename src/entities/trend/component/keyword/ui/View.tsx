@@ -16,7 +16,7 @@ export const View = () => {
       <div className={css.trend}>
         <span className={css.keyword}>{`# ${trend?.keyword}`}</span>
         <span className={css.traffic}>
-          {`${formatTraffic({ traffic: trend?.traffic || '' })}`}
+          {`${formatTraffic({ traffic: trend?.traffic || 0 })}`}
           <FontAwesomeIcon icon={faArrowUp} className={css.ico} />
           <span className={css.cnt}>(검색량)</span>
         </span>

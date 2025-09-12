@@ -1,8 +1,8 @@
+import { parseRecentTop5 } from './transform';
 import { NaverArticle, Trend } from '../model';
+import type { InterestOverTime } from '../model';
 import { client } from '@/shared/lib/client/fetch';
 import type { EChartsCoreOption, SeriesOption } from 'echarts';
-import type { InterestOverTime } from '../model';
-import { parseRecentTop5 } from './transform';
 
 export const createDailyTrends = (trends: Trend[]) => {
   return trends

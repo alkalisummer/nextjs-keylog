@@ -2,16 +2,16 @@ import { ImageItem, Trend, InterestOverTime, NaverArticle } from '../model';
 import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
-  traffic: string;
+  traffic: number;
   isKor?: boolean;
 }
 
 export const formatTraffic = ({ traffic, isKor = true }: FormatTrafficProps) => {
-  if (traffic.includes('0000')) {
-    return traffic.replace('0000', '') + (isKor ? '만' : 'M');
+  if (traffic >= 10000) {
+    return traffic.toString().replace('0000', '') + (isKor ? '만' : 'M');
   }
-  if (traffic.includes('000')) {
-    return traffic.replace('000', '') + (isKor ? '천' : 'K');
+  if (traffic >= 1000) {
+    return traffic.toString().replace('000', '') + (isKor ? '천' : 'K');
   }
   return traffic;
 };
@@ -105,4 +105,13 @@ export const parseRecentTop5 = (articles: NaverArticle[], cutoff: Date): NaverAr
     })
     .sort((a, b) => parsePubDate(b.pubDate).getTime() - parsePubDate(a.pubDate).getTime())
     .slice(0, 5);
+};
+
+export const formatLabel = (value: string) => {
+  const pad2 = (num: number) => String(num).padStart(2, '0');
+  const formattedDate = new Date(value);
+  if (Number.isNaN(formattedDate.getTime())) return String(value ?? '');
+  return `${pad2(formattedDate.getMonth() + 1)}-${pad2(formattedDate.getDate())} ${pad2(
+    formattedDate.getHours(),
+  )}:${pad2(formattedDate.getMinutes())}`;
 };

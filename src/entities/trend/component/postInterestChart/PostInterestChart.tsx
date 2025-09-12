@@ -5,7 +5,7 @@ import { useInterestOverTime } from '../../hooks';
 import css from './postInterestChart.module.scss';
 import { ECharts } from '@/shared/lib/echarts/ECharts';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createChartOption, isAllReady, parseValidKeywordDataList } from '../../lib';
+import { createChartOption, isAllReady, parseValidKeywordDataList, formatLabel } from '../../lib';
 
 interface PostInterestChartProps {
   keyword: string;
@@ -52,6 +52,9 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
       seriesType: 'line',
       smooth: false,
       xAxisBoundaryGap: false,
+      xAxis: {
+        axisLabel: { formatter: (val: string) => formatLabel(val) },
+      },
     });
   }, [presentDataList, allReady]);
 
