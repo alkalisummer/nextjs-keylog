@@ -18,7 +18,7 @@ export async function GET(req: Request): Promise<Response> {
   }
 
   const upstream = await fetch(parsed.toString(), {
-    headers: { 'user-agent': 'Mozilla/5.0 (compatible; KeylogBot/1.0; +https://keylog.hopto.org)' },
+    headers: { 'user-agent': 'Mozilla/5.0 (compatible; KeylogBot/1.0; +https://keylog.dev)' },
     // Cache on the edge for 1 day
     next: { revalidate: 60 * 60 * 24 },
   });
@@ -33,7 +33,7 @@ export async function GET(req: Request): Promise<Response> {
 
   const headers = new Headers();
   headers.set('Content-Type', contentType);
-  headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=2592000');
+  headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=2592000, immutable');
 
   return new Response(upstream.body, { headers });
 }

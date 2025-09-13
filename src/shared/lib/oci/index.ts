@@ -3,6 +3,7 @@
 import { join } from 'path';
 import { ObjectStorageClient } from 'oci-objectstorage';
 import { ConfigFileAuthenticationDetailsProvider } from 'oci-common';
+import { OCI_OBJECT_CACHE_SECONDS } from '@/shared/lib/constants/number/number.constant';
 
 export const objectStorageClient = async () => {
   const ociConfigFilePath =
@@ -24,9 +25,15 @@ export const objectStorageClient = async () => {
       };
       return await storageClient.getObject(getObjectRequest);
     },
-    put: async (image: File) => {
+    put: async (
+      image: File,
+      options?: { cacheSeconds?: number; cacheControl?: string; contentDisposition?: string },
+    ) => {
       const contentType = image.type || 'application/octet-stream';
       const bodyBuffer = Buffer.from(await image.arrayBuffer());
+
+      const defaultCacheSeconds = options?.cacheSeconds ?? OCI_OBJECT_CACHE_SECONDS;
+      const cacheControl = options?.cacheControl ?? `public, max-age=${defaultCacheSeconds}, immutable`;
 
       const putObjectRequest = {
         namespaceName: namespace,
@@ -35,7 +42,8 @@ export const objectStorageClient = async () => {
         contentLength: bodyBuffer.byteLength,
         putObjectBody: bodyBuffer,
         contentType,
-        contentDisposition: 'inline',
+        contentDisposition: options?.contentDisposition ?? 'inline',
+        cacheControl,
       };
       await storageClient.putObject(putObjectRequest);
     },

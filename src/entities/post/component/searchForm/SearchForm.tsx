@@ -14,11 +14,7 @@ interface SearchFormProps {
 }
 
 export const SearchForm = ({ onSubmit, isSubmitSuccessful, postCnt }: SearchFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SearchFormType>({
+  const { register, handleSubmit } = useForm<SearchFormType>({
     resolver: zodResolver(SearchSchema),
   });
 
@@ -31,7 +27,7 @@ export const SearchForm = ({ onSubmit, isSubmitSuccessful, postCnt }: SearchForm
           placeholder="검색어를 입력하세요"
           {...register('searchWord')}
         ></input>
-        <button className={css.searchBtn} type="submit">
+        <button type="submit" className={css.searchBtn} aria-label="search-post">
           <FontAwesomeIcon icon={faMagnifyingGlass} className={css.icon} />
         </button>
       </form>

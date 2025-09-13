@@ -98,7 +98,7 @@ export const PostImageSearch = ({ keyword = '' }: PostImageSearchProps) => {
                   fill
                   sizes="(max-width: 768px) 33vw, 33vw"
                   onClick={() => setSelectedUrl(img.link)}
-                  onError={handleImageError as any}
+                  onError={handleImageError}
                   className={`${css.image} ${selectedUrl === img.link ? css.active : ''}`}
                 />
               </div>
