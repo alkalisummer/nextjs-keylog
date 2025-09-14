@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { Post } from '../../model';
 import css from './searchPostList.module.scss';
 import { formatDate } from '@/shared/lib/util';
+import { useScrollRestoration } from '@/shared/hooks';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -14,6 +16,12 @@ interface PostListsProps {
 }
 
 export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
+  const { saveScrollPos, restoreScrollPos } = useScrollRestoration({ scrollElementId: 'scaffold' });
+
+  useEffect(() => {
+    restoreScrollPos();
+  }, []);
+
   return (
     <section className={css.module}>
       {posts.map((post, idx) => (
@@ -21,6 +29,7 @@ export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
           key={`${post.postId}-${idx}`}
           href={`/${post.authorId}/${post.postId}`}
           scroll={false}
+          onClick={() => saveScrollPos()}
           className={css.post}
           ref={posts.length - 1 === idx ? setTarget : null}
         >

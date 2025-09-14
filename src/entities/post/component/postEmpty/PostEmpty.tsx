@@ -9,7 +9,7 @@ export const PostEmpty = ({ tempYn }: { tempYn: string }) => {
     <div className={css.module}>
       <h2 className={css.title}>{title}</h2>
       <p className={css.description}>새로운 글을 작성해보세요!</p>
-      <Link href="/write" className={css.ctaButton} scroll={false}>
+      <Link href="/write" className={css.ctaButton}>
         글쓰기
       </Link>
     </div>

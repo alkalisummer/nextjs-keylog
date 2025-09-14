@@ -1,22 +1,44 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import css from './searchForm.module.scss';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { SearchForm as SearchFormType, SearchSchema } from '../../model';
 
 interface SearchFormProps {
-  onSubmit: (data: SearchFormType) => Promise<void>;
-  isSubmitSuccessful: boolean;
   postCnt: number;
 }
 
-export const SearchForm = ({ onSubmit, isSubmitSuccessful, postCnt }: SearchFormProps) => {
-  const { register, handleSubmit } = useForm<SearchFormType>({
+export const SearchForm = ({ postCnt }: SearchFormProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchWord = searchParams?.get('searchWord') || '';
+
+  const { register, handleSubmit, setValue } = useForm<SearchFormType>({
     resolver: zodResolver(SearchSchema),
+    defaultValues: {
+      searchWord: searchWord,
+    },
   });
+
+  const onSubmit = async (data: SearchFormType) => {
+    const keyword = data.searchWord;
+    const params = new URLSearchParams(searchParams?.toString());
+
+    if (keyword) params.set('searchWord', keyword);
+    else params.delete('searchWord');
+
+    router.push(`?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    setValue('searchWord', searchWord);
+  }, [searchWord]);
 
   return (
     <section className={css.module}>
@@ -32,7 +54,7 @@ export const SearchForm = ({ onSubmit, isSubmitSuccessful, postCnt }: SearchForm
         </button>
       </form>
       <div className={css.searchCnt}>
-        {isSubmitSuccessful ? (
+        {searchWord ? (
           <span>
             총 <span>{postCnt}</span>개의 포스트를 찾았습니다.
           </span>

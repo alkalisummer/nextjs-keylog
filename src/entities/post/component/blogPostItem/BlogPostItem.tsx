@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { Post } from '../../model';
 import css from './blogPostItem.module.scss';
 import { formatDate } from '@/shared/lib/util';
 import { usePost } from '@/features/post/hooks';
 import { useSearchParams } from 'next/navigation';
 import { queryKey } from '@/app/provider/query/lib';
+import { useScrollRestoration } from '@/shared/hooks';
 
 interface BlogPostItemProps {
   post: Post;
@@ -16,6 +18,7 @@ interface BlogPostItemProps {
 
 export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   const { postId, postTitle, postCntn, postThmbImgUrl, hashtagName, rgsnDttm } = post || {};
+  const { saveScrollPos, restoreScrollPos } = useScrollRestoration({ scrollElementId: 'article' });
 
   const searchParams = useSearchParams();
   const pageNum = searchParams?.get('pageNum');
@@ -37,10 +40,14 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
     },
   });
 
+  useEffect(() => {
+    restoreScrollPos(searchParams?.toString());
+  }, []);
+
   return (
     <div className={css.module}>
       <div className={css.postTitleContent}>
-        <Link href={routeUrl}>
+        <Link href={routeUrl} onClick={() => saveScrollPos()}>
           {postThmbImgUrl ? (
             <div className={css.postThumb}>
               <div className={css.thumbContent}>

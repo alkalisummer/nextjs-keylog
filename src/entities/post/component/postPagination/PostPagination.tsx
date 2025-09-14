@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import css from './postPagination.module.scss';
+import { useScrollRestoration } from '@/shared/hooks';
 import { calculateTotalPage } from '@/entities/post/lib';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
@@ -9,6 +11,10 @@ interface PostPaginationProps {
 }
 
 export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
+  const { saveScrollPos, restoreScrollPos } = useScrollRestoration({
+    scrollElementId: 'article',
+    extendQueryParams: true,
+  });
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -19,10 +25,15 @@ export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
   const pageNavigationNumArr = calculateTotalPage(totalPageNum);
 
   const handlePagination = (pageNum: number | null, totalPageNum: number) => {
+    saveScrollPos();
     if (pageNum && pageNum > 0 && pageNum <= totalPageNum) {
-      router.push(`/${userId}?pageNum=${pageNum}${tempYn ? `&tempYn=${tempYn}` : ''}`);
+      router.push(`/${userId}?${pageNum !== 1 ? `pageNum=${pageNum}` : ''}${tempYn ? `&tempYn=${tempYn}` : ''}`);
     }
   };
+
+  useEffect(() => {
+    restoreScrollPos(searchParams?.toString());
+  }, []);
 
   return (
     <div className={css.module}>
