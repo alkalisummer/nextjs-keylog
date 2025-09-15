@@ -1,11 +1,12 @@
 @use 'variable' as *;
 
 // Variables
-$font-family-main: 'NanumSquareNeo';
+$font-family-main: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo',
+  'Malgun Gothic', Arial, sans-serif;
 
 // Colors
-$color-primary: #333;
-$color-secondary: #868e96;
+$color-primary: $black-1;
+$color-secondary: $gray-1;
 
 // Base styles
 .module {

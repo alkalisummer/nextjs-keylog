@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
-  border-bottom: 1px solid #dadada;
+  border-bottom: 1px solid $gray-4;
   padding-top: 1rem;
   padding-bottom: 1rem;
 
@@ -25,14 +25,14 @@
     white-space: nowrap;
     border-radius: 25px;
     padding: 5px 12px;
-    background-color: #eeeeee;
-    color: #212529;
+    background-color: $gray-9;
+    color: $gray-22;
     font-size: 12px;
     line-height: 1.5;
 
     &.selected {
-      background-color: #6bacce;
-      color: #fff;
+      background-color: $blue-6;
+      color: $white;
     }
   }
 }

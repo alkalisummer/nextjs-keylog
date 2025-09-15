@@ -8,7 +8,7 @@
   width: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  border: 1px solid #d3d3d3;
+  border: 1px solid $gray-3;
   border-radius: 20px;
 }
 
@@ -16,7 +16,7 @@
 .infinite-scroll-wrapper::after {
   content: '';
   position: absolute;
-  background: linear-gradient(var(--dir, to bottom), #ffffff, transparent);
+  background: linear-gradient(var(--dir, to bottom), $white, transparent);
   height: 15%;
   width: 100%;
   z-index: 1;
@@ -66,28 +66,28 @@
     right: 0;
     top: 0;
     z-index: -1; /* 텍스트 뒤에 배치 */
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
+    border-left: 1px solid $black;
+    border-right: 1px solid $black;
   }
 
   &.selected-item {
     &::before {
-      background-color: #2f363c;
+      background-color: $slate-4;
     }
     &:hover {
       &::before {
-        background-color: #37383c;
+        background-color: $slate-5;
       }
     }
     span {
-      color: #fff !important;
+      color: $white !important;
     }
   }
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: $gray-14;
     &::before {
-      background-color: #f0f0f0;
+      background-color: $gray-14;
     }
   }
 }
@@ -103,7 +103,7 @@
 
   .icon {
     cursor: pointer;
-    color: #333;
+    color: $black-1;
     width: 12px;
     height: 12px;
   }

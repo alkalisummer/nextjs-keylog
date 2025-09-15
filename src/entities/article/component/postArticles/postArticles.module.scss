@@ -1,11 +1,11 @@
 @use 'variable' as *;
 
-$color-text-primary: #333;
-$color-text-secondary: #1f1f1f;
-$color-text-meta: #525252;
-$color-background-hover: #e3e3e3;
-$color-background-card: white;
-$color-border: #e9ecef;
+$color-text-primary: $black-1;
+$color-text-secondary: $gray-1f;
+$color-text-meta: $gray-2;
+$color-background-hover: $gray-11;
+$color-background-card: $white;
+$color-border: $gray-5;
 
 // Shadows and transitions
 $card-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;

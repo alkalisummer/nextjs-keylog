@@ -1,11 +1,11 @@
 @use 'variable' as *;
 
 // Color variables only
-$colorBorder: #dddddd;
-$colorPrimaryText: #333;
-$colorGrayText: gray;
-$colorAccent: #009bf2;
-$colorAccentHover: #4ebeff;
+$colorBorder: $gray-35;
+$colorPrimaryText: $black-1;
+$colorGrayText: $named-gray;
+$colorAccent: $blue-1;
+$colorAccentHover: $blue-2;
 
 .module {
   width: 100%;
@@ -63,12 +63,12 @@ $colorAccentHover: #4ebeff;
     padding-left: 10px;
     width: 80%;
     margin-bottom: 0;
-    font-family: 'Spoqa Han Sans Neo';
+    @include font-sans();
   }
 
   .profileBtn {
     background-color: $colorAccent;
-    font-family: 'Spoqa Han Sans Neo';
+    @include font-sans($font-weight-medium);
     color: white;
     border: none;
     width: 50px;

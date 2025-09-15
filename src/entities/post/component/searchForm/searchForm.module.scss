@@ -14,13 +14,13 @@
     .searchInput {
       width: 30%;
       min-width: 200px;
-      font-family: 'Spoqa Han Sans Neo', sans-serif;
+      @include font-sans();
       font-size: 30px;
       font-weight: 400;
-      background-color: #f8f9fa;
-      color: #333;
+      background-color: $gray-6;
+      color: $black-1;
       border: none;
-      border-bottom: 3px solid #333;
+      border-bottom: 3px solid $black-1;
       margin-bottom: 5px;
       padding-bottom: 3px;
       margin-right: 0px !important;
@@ -36,11 +36,11 @@
       font-size: 25px;
       border: none;
       cursor: pointer;
-      background-color: #f8f9fa;
-      border-bottom: 3px solid #333;
+      background-color: $gray-6;
+      border-bottom: 3px solid $black-1;
       margin-bottom: 5px;
       padding-bottom: 5px;
-      color: #333;
+      color: $black-1;
       margin-left: 0px;
 
       .icon {
@@ -57,9 +57,9 @@
     margin-bottom: 15px;
     font-size: 15px;
     font-weight: 300;
-    color: #525252;
+    color: $gray-2;
     span {
-      color: #333;
+      color: $black-1;
       font-weight: 500;
     }
   }
@@ -70,14 +70,14 @@
     width: 40% !important;
     font-size: 22px !important;
     padding-bottom: 2px !important;
-    border-bottom: 2px solid #333 !important;
+    border-bottom: 2px solid $black-1 !important;
     &::placeholder {
       font-size: 22px !important;
     }
   }
 
   .searchBtn {
-    border-bottom: 2px solid #333 !important;
+    border-bottom: 2px solid $black-1 !important;
     .icon {
       width: 17px !important;
       height: 17px !important;
@@ -92,7 +92,7 @@
     .searchInput {
       font-size: 18px !important;
       padding-bottom: 3px !important;
-      border-bottom: 1.5px solid #333 !important;
+      border-bottom: 1.5px solid $black-1 !important;
       &::placeholder {
         font-size: 18px !important;
       }
@@ -101,7 +101,7 @@
     .searchBtn {
       font-size: 20px !important;
       padding-bottom: 2px !important;
-      border-bottom: 1.5px solid #333 !important;
+      border-bottom: 1.5px solid $black-1 !important;
       .icon {
         width: 15px !important;
         height: 15px !important;

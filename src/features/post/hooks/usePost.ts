@@ -31,6 +31,10 @@ export function usePost(options?: UsePostOptions) {
           queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
         });
 
+        queryClient.invalidateQueries({
+          queryKey: queryKey().post().postList({ currPageNum: 1 }),
+        });
+
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
         if (variables.tempYn === 'N') {
@@ -67,7 +71,10 @@ export function usePost(options?: UsePostOptions) {
           queryClient.invalidateQueries({ queryKey: queryKey().hashtag().postHashtags(postId) }),
         ]);
 
-        alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
+        queryClient.invalidateQueries({
+          queryKey: queryKey().post().postList({ currPageNum: 1 }),
+        }),
+          alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
         if (variables.tempYn === 'N') {
           router.push(`/${authorId}/${postId}`);

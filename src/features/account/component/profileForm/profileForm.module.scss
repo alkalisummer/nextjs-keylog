@@ -1,12 +1,12 @@
 @use 'variable' as *;
 
 // Color variables (only colors)
-$color-text-primary: #333;
-$color-border: #dddddd;
-$color-link-primary: #009bf2;
-$color-link-primary-hover: #4ebeff;
-$color-warning: hsl(35, 100%, 57%);
-$color-warning-hover: hsl(35, 93%, 68%);
+$color-text-primary: $black-1;
+$color-border: $gray-35;
+$color-link-primary: $blue-1;
+$color-link-primary-hover: $blue-2;
+$color-warning: $warning-1;
+$color-warning-hover: $warning-1-hover;
 $color-gray: gray;
 
 .module {
@@ -63,13 +63,13 @@ $color-gray: gray;
     border-radius: 5px;
     height: 30px;
     padding-left: 10px;
-    font-family: 'Spoqa Han Sans Neo';
+    @include font-sans();
     margin-bottom: 10px;
   }
 
   .modalProfileBtn {
     background-color: $color-link-primary;
-    font-family: 'Spoqa Han Sans Neo';
+    @include font-sans($font-weight-medium);
     color: white;
     border: none;
     width: 50px;

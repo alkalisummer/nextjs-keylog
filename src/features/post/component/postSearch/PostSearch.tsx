@@ -4,7 +4,8 @@ import { View } from './ui/View';
 import { getPosts } from '@/entities/post/api';
 import { queryKey } from '@/app/provider/query/lib';
 import { QueryClient } from '@tanstack/react-query';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
+import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
 interface Props {
   tagId: string;
@@ -28,8 +29,8 @@ export const PostSearch = async ({ tagId }: Props) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient state={dehydratedState}>
       <View initPosts={initPosts} initPostsTotalCnt={initPostsTotalCnt} />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 };

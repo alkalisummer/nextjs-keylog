@@ -4,7 +4,8 @@ import { View } from './ui/View';
 import { Post } from '@/entities/post/model';
 import { ApiResponse } from '@/shared/lib/client';
 import { queryKey } from '@/app/provider/query/lib';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
 interface Props {
   promise: {
@@ -31,8 +32,8 @@ export const BlogPostList = async ({ promise, userId, pageNum, tagId, tempYn }: 
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient state={dehydratedState}>
       <View userId={userId} />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 };

@@ -1,19 +1,20 @@
 @use 'variable' as *;
 
 // Colors
-$color-primary: #525252;
-$color-secondary: #7f7f7f;
-$color-tertiary: #c7c7c7;
-$color-text-primary: #000;
-$color-text-secondary: gray;
-$color-text-link: #009bf2;
+$color-primary: $gray-2;
+$color-secondary: $gray-32;
+$color-tertiary: $gray-27;
+$color-text-primary: $black;
+$color-text-secondary: $named-gray;
+$color-text-link: $blue-1;
 $color-text-error: red;
-$color-background: white;
-$color-background-input: #fff;
+$color-background: $white;
+$color-background-input: $white;
 
 // Font families
-$font-family-logo: 'Fira Mono', monospace;
-$font-family-main: 'Spoqa Han Sans Neo';
+$font-family-logo: var(--font-fira-mono), ui-monospace, Menlo, Monaco, Consolas, monospace;
+$font-family-main: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo',
+  'Malgun Gothic', Arial, sans-serif;
 
 // Base styles
 .module {
@@ -133,7 +134,7 @@ $font-family-main: 'Spoqa Han Sans Neo';
           margin-right: 4px;
           width: 15px;
           height: 15px;
-          border: 1px solid hsl(0, 0%, 82%);
+          border: 1px solid $gray-hsl-82;
           border-radius: 4px;
           outline: none;
           cursor: pointer;

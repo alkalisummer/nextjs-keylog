@@ -17,8 +17,8 @@
     position: relative;
 
     .logo {
-      font-family: 'Fira Mono';
-      color: #333;
+      @include font-mono();
+      color: $black-1;
       font-size: 1.2rem;
       cursor: pointer;
     }
@@ -28,8 +28,8 @@
     }
 
     .loginBtn {
-      color: white;
-      background-color: #525252;
+      color: $white;
+      background-color: $gray-2;
       border-radius: 30px;
       font-size: 12px;
       font-weight: 100;
@@ -39,7 +39,7 @@
       padding-right: 15px;
 
       &:hover {
-        background-color: #8f8f8f;
+        background-color: $gray-26;
       }
     }
 
@@ -48,10 +48,10 @@
       align-items: center;
 
       .writeBtn {
-        color: #f8f9fa;
-        background-color: #525252;
+        color: $gray-6;
+        background-color: $gray-2;
         border-radius: 30px;
-        font-family: 'Spoqa Han Sans Neo', sans-serif;
+        @include font-sans($font-weight-light);
         font-size: 12px;
         font-weight: 300;
         padding-top: 6px;
@@ -61,8 +61,8 @@
         border: none;
 
         &:hover {
-          background-color: #8f8f8f;
-          color: white;
+          background-color: $gray-26;
+          color: $white;
         }
       }
     }
@@ -95,7 +95,7 @@
 @media (max-width: $post-breakpoint-large) {
   .module {
     .blogHeader {
-      border-bottom: 1px solid #dadada !important;
+      border-bottom: 1px solid $gray-4 !important;
     }
 
     .authorId {
@@ -105,7 +105,7 @@
       transform: translateX(-50%);
       font-size: 1.2rem;
       font-weight: 300;
-      color: #525252;
+      color: $gray-2;
       cursor: pointer;
     }
   }

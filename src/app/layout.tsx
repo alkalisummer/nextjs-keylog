@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { spoqa, figtree, firaMono } from '@/styles/fonts/fonts';
 import { Viewport } from 'next';
 import { Scaffold } from '@/shared/ui/layout';
 import { getCustomSession } from '@/shared/lib/util';
@@ -8,7 +9,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getCustomSession();
 
   return (
-    <html lang="kr">
+    <html lang="kr" className={`${spoqa.variable} ${figtree.variable} ${firaMono.variable}`}>
       <body>
         <QueryProvider>
           <SessionProvider session={session}>

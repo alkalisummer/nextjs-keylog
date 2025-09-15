@@ -8,7 +8,7 @@
 
   .searchTagName {
     font-size: 30px;
-    font-family: 'NanumSquareNeo';
+    @include font-sans($font-weight-medium);
     font-weight: 500;
     margin-top: 1rem;
     margin-bottom: 3rem;
@@ -21,9 +21,9 @@
     margin-bottom: 15px;
     font-size: 15px;
     font-weight: 300;
-    color: #525252;
+    color: $gray-2;
     .searchTagCnt {
-      color: #333;
+      color: $black-1;
       font-weight: 500;
     }
   }

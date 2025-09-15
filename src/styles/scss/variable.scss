@@ -1,5 +1,7 @@
 @use './layout.scss';
 @use './color.scss';
+@use './font.scss';
 
 @forward './layout.scss';
 @forward './color.scss';
+@forward './font.scss';

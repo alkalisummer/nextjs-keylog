@@ -1,11 +1,11 @@
 @use 'variable' as *;
 
-$color-primary-light: #e4f5ff;
-$color-text: #0c7eff;
-$color-primary: #0c7eff;
-$color-white: #ffffff;
-$color-secondary: #333;
-$color-border: #e3e3e3;
+$color-primary-light: $blue-4;
+$color-text: $blue-3;
+$color-primary: $blue-3;
+$color-white: $white;
+$color-secondary: $black-1;
+$color-border: $gray-11;
 
 .module {
   display: flex;
@@ -72,7 +72,7 @@ $color-border: #e3e3e3;
   border: 1px solid $color-border;
   border-radius: 8px;
   padding: 6px 8px;
-  font-family: 'Spoqa Han Sans Neo';
+  @include font-sans();
   font-size: 12px;
 
   &:focus {

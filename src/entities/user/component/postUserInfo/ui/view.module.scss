@@ -20,12 +20,12 @@
   font-size: 30px;
   margin-top: 0.5rem;
   margin-bottom: 0.3rem;
-  color: #5c5c5c;
+  color: $gray-18;
 }
 
 .headerTitle {
   font-size: 20px;
-  color: #98a1a9;
+  color: $gray-17;
 }
 
 @media (max-width: $post-breakpoint-large) {

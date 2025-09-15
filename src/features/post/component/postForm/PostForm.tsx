@@ -5,7 +5,8 @@ import { QueryClient } from '@tanstack/react-query';
 import { getCustomSession } from '@/shared/lib/util';
 import { notFound, redirect } from 'next/navigation';
 import { getPostHashtags } from '@/entities/hashtag/api';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
+import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
 interface Props {
   postId: number;
@@ -52,8 +53,8 @@ export const PostForm = async ({ postId }: Props) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient state={dehydratedState}>
       <View hashtags={hashtags} post={post} authorId={session.user.id} />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 };

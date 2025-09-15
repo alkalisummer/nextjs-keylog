@@ -1,6 +1,6 @@
 @use 'variable' as *;
 
-$color-primary: #0c7eff;
+$color-primary: $blue-3;
 $card-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;
 $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
 
@@ -21,10 +21,10 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
     .input {
       flex: 1;
       padding: 5px 10px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid $gray-12;
       border-radius: 6px;
       font-size: 12px;
-      font-family: 'Spoqa Han Sans Neo';
+      @include font-sans();
       width: 50%;
 
       &:focus {
@@ -35,10 +35,10 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
     .button {
       padding: 5px 10px;
       border-radius: 6px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
+      border: 1px solid $gray-12;
+      background: $gray-13;
       font-size: 12px;
-      color: #333;
+      color: $black-1;
       font-weight: 400;
     }
   }
@@ -48,7 +48,7 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    border: 1px solid #dfe2e6;
+    border: 1px solid $gray-31;
     border-radius: 10px;
     padding: 5px;
 

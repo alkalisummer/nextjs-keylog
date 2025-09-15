@@ -2,17 +2,18 @@
 
 // Colors
 $color-title: $gray-2; // #525252
-$color-border: #c7c7c7;
-$color-border-hover: #c7c7c7;
-$color-button-primary: #7f7f7f;
-$color-icon: #7f7f7f;
-$color-background: white;
-$color-text: #000;
+$color-border: $gray-27;
+$color-border-hover: $gray-27;
+$color-button-primary: $gray-32;
+$color-icon: $gray-32;
+$color-background: $white;
+$color-text: $black;
 $color-error: red;
 
 // Fonts
-$font-family-title: 'Fira Mono', monospace;
-$font-family-base: 'Spoqa Han Sans Neo';
+$font-family-title: var(--font-fira-mono), ui-monospace, Menlo, Monaco, Consolas, monospace;
+$font-family-base: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo',
+  'Malgun Gothic', Arial, sans-serif;
 
 .module {
   width: 100%;

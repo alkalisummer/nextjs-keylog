@@ -1,9 +1,9 @@
 @use 'variable' as *;
 
-$color-white: #ffffff;
-$color-border: #e9ecef;
-$color-primary: #959595;
-$color-primary-light: #f8f9fa;
+$color-white: $white;
+$color-border: $gray-5;
+$color-primary: $gray-30;
+$color-primary-light: $gray-6;
 
 .module {
   padding: 0px 16px 0px 16px;
@@ -20,7 +20,7 @@ $color-primary-light: #f8f9fa;
       border: none;
       font-size: 14px;
       outline: none;
-      font-family: 'Spoqa Han Sans Neo';
+      @include font-sans();
     }
     .hashtagChip {
       display: inline-flex;

@@ -1,16 +1,16 @@
 @use 'variable' as *;
 
 // Variables
-$color-background: #f8f9fa;
-$color-background-hover: #f1f3f5;
-$color-white: #ffffff;
-$color-border: #dadada;
-$color-text: #212529;
-$color-text-secondary: #868e96;
-$color-primary: #12b886;
-$color-primary-dark: #0ca678;
-$color-primary-light: #e3fcef;
-$color-error: #ff5644;
+$color-background: $gray-6;
+$color-background-hover: $gray-7;
+$color-white: $white;
+$color-border: $gray-4;
+$color-text: $gray-22;
+$color-text-secondary: $gray-1;
+$color-primary: $green-1;
+$color-primary-dark: $green-2;
+$color-primary-light: $green-3;
+$color-error: $red-1;
 
 .module {
   width: 100%;
@@ -31,7 +31,7 @@ $color-error: #ff5644;
       border-bottom: 1px solid $color-border;
       font-size: 30px;
       padding-bottom: 10px;
-      font-family: 'Spoqa Han Sans Neo';
+      @include font-sans($font-weight-light);
       outline: none;
       font-weight: 300;
     }
@@ -55,20 +55,20 @@ $color-error: #ff5644;
     .cancelButton {
       padding: 6px 15px;
       border-radius: 30px;
-      border: 1px solid #dee2e6;
+      border: 1px solid $gray-29;
       background-color: $color-white;
-      color: #495057;
+      color: $gray-20;
       font-size: 12px;
       font-weight: 300;
       cursor: pointer;
       transition: background-color 0.15s ease, border-color 0.15s ease;
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: $gray-6;
       }
 
       &:active {
-        background-color: #f1f3f5;
+        background-color: $gray-7;
       }
     }
 
@@ -86,7 +86,7 @@ $color-error: #ff5644;
       border-radius: 30px;
       border: none;
       background-color: $color-white;
-      color: #343a40;
+      color: $gray-21;
       font-size: 12px;
       font-weight: 300;
       cursor: pointer;
@@ -95,12 +95,12 @@ $color-error: #ff5644;
 
     // The last button (저장) as primary black pill
     > button:last-child {
-      background-color: #000000;
-      color: #ffffff;
+      background-color: $black;
+      color: $white;
       border-color: transparent;
 
       &:hover {
-        background-color: #111111;
+        background-color: $gray-0;
       }
     }
   }

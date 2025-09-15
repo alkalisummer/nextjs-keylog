@@ -1,0 +1,26 @@
+$font-family-sans: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo',
+  'Malgun Gothic', Arial, sans-serif;
+$font-family-mono: var(--font-fira-mono), ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+  'Courier New', monospace;
+$font-family-display: var(--font-figtree), $font-family-sans;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+@mixin font-sans($weight: $font-weight-regular) {
+  font-family: $font-family-sans !important;
+  font-weight: $weight;
+}
+
+@mixin font-mono($weight: $font-weight-regular) {
+  font-family: $font-family-mono !important;
+  font-weight: $weight;
+}
+
+@mixin font-display($weight: $font-weight-semibold) {
+  font-family: $font-family-display !important;
+  font-weight: $weight;
+}

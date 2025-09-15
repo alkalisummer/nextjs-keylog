@@ -3,7 +3,7 @@
 .module {
   width: 100%;
   height: 450px;
-  font-family: 'NanumSquareNeo';
+  @include font-sans($font-weight-regular);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +16,7 @@
     .traffic {
       font-size: 12px;
       margin-left: 5px;
-      color: #868e96;
+      color: $gray-1;
     }
   }
 }

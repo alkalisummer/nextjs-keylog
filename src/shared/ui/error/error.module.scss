@@ -1,9 +1,9 @@
 @use 'variable' as *;
 
-$error-bg: #343541;
-$error-text: #d1d5db;
-$error-button-bg: #545562;
-$error-button-hover-bg: #5e5f6b;
+$error-bg: $slate-1;
+$error-text: $neutral-1;
+$error-button-bg: $slate-2;
+$error-button-hover-bg: $slate-3;
 
 .module {
   width: 100%;
@@ -23,7 +23,7 @@ $error-button-hover-bg: #5e5f6b;
     margin-bottom: 3rem;
     color: $error-text;
     font-size: 40px;
-    font-family: 'Fira Mono', monospace;
+    @include font-mono($font-weight-bold);
     font-weight: bolder;
   }
 
@@ -31,7 +31,7 @@ $error-button-hover-bg: #5e5f6b;
     padding: 10px;
     border-radius: 10px;
     border: none;
-    font-family: 'Fira Mono', monospace;
+    @include font-mono();
     font-size: 15px;
     background-color: $error-button-bg;
     color: $error-text;

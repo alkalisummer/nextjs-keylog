@@ -6,7 +6,8 @@ import { Trend } from '@/entities/trend/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { getArticlesServer } from '@/entities/article/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
 interface ArticleListProps {
   trends: Trend[];
@@ -31,8 +32,8 @@ export const ArticleList = async ({ trends }: ArticleListProps) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient state={dehydratedState}>
       <View baseDate={baseDate} />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 };

@@ -10,7 +10,7 @@
 
   .tab {
     font-size: 14px;
-    color: #727272;
+    color: $gray-19;
     width: fit-content;
     text-align: center;
     font-weight: 400;
@@ -20,9 +20,9 @@
   }
 
   .activeTab {
-    color: #333;
+    color: $black-1;
     font-weight: 600;
-    border-bottom: 2px solid #333;
+    border-bottom: 2px solid $black-1;
     padding-bottom: 5px;
   }
 
@@ -60,7 +60,7 @@
     }
 
     .activeTab {
-      border-bottom: 1.5px solid #333;
+      border-bottom: 1.5px solid $black-1;
     }
   }
 }

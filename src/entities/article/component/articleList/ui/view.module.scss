@@ -1,12 +1,12 @@
 @use 'variable' as *;
 
 // Variables
-$color-text-primary: #333;
-$color-text-secondary: #5f6368;
-$color-text-title: #525252;
-$color-background-hover: #f5f5f5;
-$color-background-card: white;
-$color-icon: #4486f4;
+$color-text-primary: $black-1;
+$color-text-secondary: $gray-24;
+$color-text-title: $gray-2;
+$color-background-hover: $gray-34;
+$color-background-card: $white;
+$color-icon: $blue-5;
 
 // Shadows and transitions
 $card-shadow: rgba(0, 0, 0, 0.04) 0px 4px 16px 0px;

@@ -6,10 +6,10 @@
 }
 
 .textarea {
-  font-family: 'Spoqa Han Sans Neo';
+  @include font-sans();
   height: 100px;
   resize: none;
-  border: 1px solid #efefef;
+  border: 1px solid $gray-8;
   border-radius: 5px;
   font-size: 16px;
   padding: 10px;
@@ -17,11 +17,11 @@
 
   &:focus {
     outline: none;
-    border-color: #009bf2;
+    border-color: $blue-1;
   }
 
   &::placeholder {
-    color: #98a1a9;
+    color: $gray-17;
   }
 }
 
@@ -33,7 +33,7 @@
 
 .submitButton {
   padding: 10px 15px;
-  background-color: #009bf2;
+  background-color: $blue-1;
   font-size: 15px;
   border: none;
   border-radius: 5px;
@@ -43,11 +43,11 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #4ebeff;
+    background-color: $blue-2;
   }
 
   &:disabled {
-    background-color: #cccccc;
+    background-color: $gray-cc;
     cursor: not-allowed;
   }
 }
@@ -56,9 +56,9 @@
   padding: 10px 15px;
   background-color: white;
   font-size: 15px;
-  border: 1px solid #009bf2;
+  border: 1px solid $blue-1;
   border-radius: 5px;
-  color: #009bf2;
+  color: $blue-1;
   cursor: pointer;
   transition: all 0.2s;
 

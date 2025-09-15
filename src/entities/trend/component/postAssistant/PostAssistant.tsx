@@ -4,7 +4,8 @@ import { queryKey } from '@/app/provider/query/lib';
 import { getDailyTrends } from '@/entities/trend/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 import { getArticlesServer } from '@/entities/article/api';
-import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
 export const PostAssistant = async () => {
   const queryClient = new QueryClient();
@@ -36,8 +37,8 @@ export const PostAssistant = async () => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
+    <HydrateClient state={dehydratedState}>
       <View trends={trends} baseDate={baseDate} />
-    </HydrationBoundary>
+    </HydrateClient>
   );
 };
