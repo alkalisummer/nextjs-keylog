@@ -17,6 +17,11 @@ $color-shadow: rgba(0, 0, 0, 0.086);
     &:hover {
       color: $color-hover;
     }
+
+    .ico {
+      width: 14px;
+      height: 14px;
+    }
   }
 
   .userImg {

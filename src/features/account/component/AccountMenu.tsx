@@ -12,7 +12,14 @@ import { logout } from '@/features/logout/api';
 import { AccountModal } from './accountModal/AccountModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKickstarter } from '@fortawesome/free-brands-svg-icons';
-import { faFileSignature, faUser, faRightFromBracket, faPen } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileSignature,
+  faUser,
+  faRightFromBracket,
+  faPen,
+  faCaretUp,
+  faCaretDown,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const AccountMenu = () => {
   const { data: session, status } = useSession();
@@ -42,7 +49,13 @@ export const AccountMenu = () => {
               quality={100}
               onError={e => (e.currentTarget.src = '/icon/person.png')}
             />
-            <div>▾</div>
+            <div>
+              {toggleOpen ? (
+                <FontAwesomeIcon icon={faCaretUp} className={css.ico} />
+              ) : (
+                <FontAwesomeIcon icon={faCaretDown} className={css.ico} />
+              )}
+            </div>
           </div>
           <Menu
             id="accountMenu"
