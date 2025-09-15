@@ -14,6 +14,7 @@ export const getArticlesClient = async ({ articleKeys, articleCount }: GetArticl
         articleKeys,
         articleCount,
       },
+      isPublic: true,
     },
   });
 

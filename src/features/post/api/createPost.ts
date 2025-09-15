@@ -2,7 +2,7 @@
 
 import { client } from '@/shared/lib/client';
 import { getCustomSession } from '@/shared/lib/util';
-import { CreatePostInput, PostResponse } from '../model';
+import { CreatePostInput, PostResponse } from '../../../entities/post/model';
 
 export const createPost = async (data: CreatePostInput) => {
   const session = await getCustomSession();

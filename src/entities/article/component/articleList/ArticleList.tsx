@@ -4,8 +4,8 @@ import { View } from './ui/View';
 import { formatDate } from '@/shared/lib/util';
 import { Trend } from '@/entities/trend/model';
 import { queryKey } from '@/app/provider/query/lib';
-import { getArticlesServer } from '@/entities/article/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+import { getArticlesServer } from '@/entities/article/api';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HydrateClient } from '@/app/provider/query/lib/HydrateClient';
 
