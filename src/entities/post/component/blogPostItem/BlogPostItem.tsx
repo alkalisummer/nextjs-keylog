@@ -59,7 +59,14 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
                 <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
               </div>
               <div className={css.thumbImgDiv}>
-                <Image width={160} height={160} className={css.thumbImg} src={postThmbImgUrl} alt="thumbImg" />
+                <Image
+                  width={160}
+                  height={160}
+                  className={css.thumbImg}
+                  src={postThmbImgUrl}
+                  quality={100}
+                  alt="thumbImg"
+                />
               </div>
             </div>
           ) : (

@@ -1,6 +1,7 @@
 'use server';
 
 import { View } from './ui/View';
+import { formatDate } from '@/shared/lib/util';
 import { Trend } from '@/entities/trend/model';
 import { queryKey } from '@/app/provider/query/lib';
 import { getArticlesServer } from '@/entities/article/api';
@@ -25,12 +26,13 @@ export const ArticleList = async ({ trends }: ArticleListProps) => {
       }),
   };
   await queryClient.prefetchQuery(articlesQueryOptions);
+  const baseDate = formatDate({ date: new Date(), seperator: '.' });
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <View />
+      <View baseDate={baseDate} />
     </HydrationBoundary>
   );
 };

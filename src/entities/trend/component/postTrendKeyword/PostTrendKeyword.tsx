@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { Trend } from '../../model';
 import { useEffect, useState } from 'react';
-import { formatDate } from '@/shared/lib/util';
 import css from './postTrendKeyword.module.scss';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -12,13 +11,13 @@ import { formatTraffic, createSearchGoogleKeyword } from '../../lib';
 
 interface PostTrendKeywordProps {
   trends: Trend[];
+  baseDate: string;
   setSelectTrend: (trend: Trend) => void;
 }
 
-export const PostTrendKeyword = ({ trends, setSelectTrend }: PostTrendKeywordProps) => {
+export const PostTrendKeyword = ({ trends, baseDate, setSelectTrend }: PostTrendKeywordProps) => {
   const [trend, setTrend] = useState<Trend>(trends[0]);
   const [relatedKeywords, setRelatedKeywords] = useState<string[]>(trend.relatedKeywords);
-  const baseDate = `: ${formatDate({ date: new Date(), seperator: '.' })}`;
 
   const onSelect = (trend: Trend) => {
     setTrend(trend);
@@ -34,7 +33,7 @@ export const PostTrendKeyword = ({ trends, setSelectTrend }: PostTrendKeywordPro
       <div className={css.baseDate}>
         <FontAwesomeIcon icon={faGoogle} className={css.icon} />
         <span className={css.trends}>Trends</span>
-        <span className={css.date}>{baseDate}</span>
+        <span className={css.date}>{`: ${baseDate}`}</span>
       </div>
       <div className={css.keywordList}>
         {trends.map((trendItem, index) => (

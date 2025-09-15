@@ -1,4 +1,5 @@
 import { View } from './ui/View';
+import { formatDate } from '@/shared/lib/util';
 import { queryKey } from '@/app/provider/query/lib';
 import { getDailyTrends } from '@/entities/trend/api';
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
@@ -29,13 +30,14 @@ export const PostAssistant = async () => {
       }),
   };
 
+  const baseDate = formatDate({ date: new Date(), seperator: '.' });
   await queryClient.prefetchQuery(articlesQueryOptions);
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <View trends={trends} />
+      <View trends={trends} baseDate={baseDate} />
     </HydrationBoundary>
   );
 };

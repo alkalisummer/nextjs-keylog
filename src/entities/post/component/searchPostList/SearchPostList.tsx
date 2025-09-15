@@ -42,7 +42,7 @@ export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
                   alt="postImg"
                   width={100}
                   height={100}
-                  priority={false}
+                  quality={100}
                 ></Image>
               </div>
             ) : (

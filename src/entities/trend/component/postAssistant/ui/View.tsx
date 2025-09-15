@@ -13,9 +13,10 @@ import { PostImageSearch, PostAssistantSection, PostInterestChart, PostTrendKeyw
 
 interface Props {
   trends: Trend[];
+  baseDate: string;
 }
 
-export const View = ({ trends }: Props) => {
+export const View = ({ trends, baseDate }: Props) => {
   const [selectedTrend, setSelectedTrend] = useState<Trend>(trends[0]);
   const [keywordExpanded, setKeywordExpanded] = useState(true);
   const [articlesExpanded, setArticlesExpanded] = useState(false);
@@ -39,7 +40,7 @@ export const View = ({ trends }: Props) => {
         expanded={keywordExpanded}
         onToggle={() => setKeywordExpanded(!keywordExpanded)}
       >
-        <PostTrendKeyword trends={trends} setSelectTrend={handleTrendSelect} />
+        <PostTrendKeyword trends={trends} baseDate={baseDate} setSelectTrend={handleTrendSelect} />
       </PostAssistantSection>
       <PostAssistantSection
         title="관심도 차트"

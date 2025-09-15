@@ -3,14 +3,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import css from './view.module.scss';
-import { formatDate } from '@/shared/lib/util';
 import { useHome } from '@/app/home/container';
 import { useArticlesQuery } from '../../../query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
-export const View = () => {
-  const baseDate = `인기 검색어 기준일: ${formatDate({ date: new Date(), seperator: '.' })}`;
+interface Props {
+  baseDate: string;
+}
+
+export const View = ({ baseDate }: Props) => {
   const { trend, selectedTab } = useHome();
   const { data: articles = [] } = useArticlesQuery({ selectedTrend: trend });
 
@@ -31,7 +33,7 @@ export const View = () => {
         />
         <span className={css.trends}>Trends</span>
         <FontAwesomeIcon icon={faArrowTrendUp} className={css.icon} />
-        <span>{baseDate}</span>
+        <span>{`인기 검색어 기준일: ${baseDate}`}</span>
         <span>)</span>
       </div>
       <div className={css.articleList}>
