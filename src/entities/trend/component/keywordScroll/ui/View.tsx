@@ -37,7 +37,7 @@ export const View = ({ trends }: Props) => {
     if (Array.isArray(next)) setData(next);
   }, [refresh]);
 
-  if (selectedTab === 'post') return;
+  if (selectedTab === 'post') return null;
 
   return (
     <section className={css.module}>

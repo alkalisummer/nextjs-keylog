@@ -55,7 +55,7 @@ export const View = ({ initPosts, initPostsTotalCnt }: Props) => {
     }
   }, [data, posts.length]);
 
-  if (selectedTab === 'keyword') return;
+  if (selectedTab === 'keyword') return null;
 
   return (
     <Fragment>

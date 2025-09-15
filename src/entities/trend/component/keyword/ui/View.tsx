@@ -9,7 +9,7 @@ import { useHome } from '@/app/home/container';
 export const View = () => {
   const { trend, selectedTab } = useHome();
 
-  if (selectedTab === 'post') return;
+  if (selectedTab === 'post') return null;
 
   return (
     <section className={css.module}>

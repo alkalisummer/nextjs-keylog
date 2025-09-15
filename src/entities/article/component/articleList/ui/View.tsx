@@ -16,7 +16,7 @@ export const View = ({ baseDate }: Props) => {
   const { trend, selectedTab } = useHome();
   const { data: articles = [] } = useArticlesQuery({ selectedTrend: trend });
 
-  if (selectedTab === 'post') return;
+  if (selectedTab === 'post') return null;
 
   return (
     <section className={css.module}>
