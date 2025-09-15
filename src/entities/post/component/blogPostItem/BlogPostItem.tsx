@@ -18,7 +18,10 @@ interface BlogPostItemProps {
 
 export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   const { postId, postTitle, postCntn, postThmbImgUrl, hashtagName, rgsnDttm } = post || {};
-  const { saveScrollPos, restoreScrollPos } = useScrollRestoration({ scrollElementId: 'article' });
+  const { saveScrollPos, restoreScrollPos } = useScrollRestoration({
+    scrollElementId: 'article',
+    extendQueryParams: true,
+  });
 
   const searchParams = useSearchParams();
   const pageNum = searchParams?.get('pageNum');
@@ -41,7 +44,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
   });
 
   useEffect(() => {
-    restoreScrollPos(searchParams?.toString());
+    restoreScrollPos();
   }, []);
 
   return (

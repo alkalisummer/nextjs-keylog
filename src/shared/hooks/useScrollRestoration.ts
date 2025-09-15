@@ -23,11 +23,13 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
     sessionStorage.setItem(path, el.scrollTop.toString());
   };
 
-  const restoreScrollPos = (searchParams?: string) => {
+  const restoreScrollPos = () => {
     const el = document.getElementById(scrollElementId);
-    const scrollKey = `${path}${searchParams ? `_${searchParams}` : ''}`;
+    const scrollKey = `${path}`;
     const scrollTop = sessionStorage.getItem(scrollKey);
 
+    console.log('scrollKey', scrollKey);
+    console.log('scrollTop', scrollTop);
     if (!el || !scrollTop) return;
 
     requestAnimationFrame(() => {

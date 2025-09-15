@@ -32,7 +32,7 @@ export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
   };
 
   useEffect(() => {
-    restoreScrollPos(searchParams?.toString());
+    restoreScrollPos();
   }, []);
 
   return (
