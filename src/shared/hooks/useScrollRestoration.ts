@@ -30,9 +30,8 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
 
     if (!el || !scrollTop) return;
 
-    el.scrollTo({
-      top: parseInt(scrollTop),
-      behavior: 'smooth',
+    requestAnimationFrame(() => {
+      el.scrollTop = parseInt(scrollTop);
     });
     sessionStorage.removeItem(scrollKey);
   };
