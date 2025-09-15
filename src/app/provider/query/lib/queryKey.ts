@@ -1,3 +1,5 @@
+import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+
 export const queryKey = () => ({
   trend: () => ({
     all: () => ['trend'],
@@ -10,12 +12,12 @@ export const queryKey = () => ({
   post: () => ({
     all: () => ['post'],
     postList: ({
-      searchWord,
-      tagId,
-      authorId,
-      currPageNum,
-      perPage,
-      tempYn,
+      searchWord = '',
+      tagId = '',
+      authorId = '',
+      currPageNum = 1,
+      perPage = NUMBER_CONSTANTS.BLOG_POST_PER_PAGE,
+      tempYn = 'N',
     }: {
       searchWord?: string;
       tagId?: string;
@@ -23,16 +25,18 @@ export const queryKey = () => ({
       currPageNum?: number;
       perPage?: number;
       tempYn?: string;
-    }) => [
-      ...queryKey().post().all(),
-      'postList',
-      searchWord || '',
-      tagId || '',
-      authorId || '',
-      currPageNum || 1,
-      perPage || 10,
-      tempYn || '',
-    ],
+    }) => [...queryKey().post().all(), 'postList', searchWord, tagId, authorId, currPageNum, perPage, tempYn],
+    postSearch: ({
+      searchWord = '',
+      tagId = '',
+      currPageNum,
+      perPage = NUMBER_CONSTANTS.BLOG_POST_PER_PAGE,
+    }: {
+      searchWord?: string;
+      tagId?: string;
+      currPageNum?: number;
+      perPage?: number;
+    }) => [...queryKey().post().all(), 'postSearch', searchWord, tagId, currPageNum, perPage],
     postDetail: (postId: number) => [...queryKey().post().all(), 'postDetail', postId],
     recentPost: (userId: string) => [...queryKey().post().all(), 'recentPost', userId],
     popularPost: (userId: string) => [...queryKey().post().all(), 'popularPost', userId],

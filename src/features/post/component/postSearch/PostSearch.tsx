@@ -16,21 +16,21 @@ export const PostSearch = async ({ tagId }: Props) => {
 
   //posts init data
   const postsQueryOptions = {
-    queryKey: queryKey().post().postList({ currPageNum: 1, tagId }),
+    queryKey: queryKey().post().postSearch({ currPageNum: 1, tagId }),
     queryFn: () => getPosts({ currPageNum: 1, tagId }),
   };
   const postsRes = await queryClient.ensureQueryData(postsQueryOptions);
 
   if (!postsRes.ok) throw new Error('posts fetch error');
 
-  const initPosts = postsRes.data;
-  const initPostsTotalCnt = postsRes.data.length;
+  const posts = postsRes.data;
+  const initPostsTotalCnt = posts.length;
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <HydrateClient state={dehydratedState}>
-      <View initPosts={initPosts} initPostsTotalCnt={initPostsTotalCnt} />
+      <View initPosts={posts} initPostsTotalCnt={initPostsTotalCnt} />
     </HydrateClient>
   );
 };

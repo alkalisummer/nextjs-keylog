@@ -27,13 +27,14 @@ export function usePost(options?: UsePostOptions) {
       if (response.ok) {
         const { authorId, postId } = response.data;
 
-        await queryClient.invalidateQueries({
-          queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: queryKey().post().postList({ currPageNum: 1 }),
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: [...queryKey().post().all(), 'postSearch'],
+          }),
+        ]);
 
         alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
@@ -69,12 +70,10 @@ export function usePost(options?: UsePostOptions) {
             queryKey: queryKey().post().postList({ authorId, tempYn: variables.tempYn }),
           }),
           queryClient.invalidateQueries({ queryKey: queryKey().hashtag().postHashtags(postId) }),
+          queryClient.invalidateQueries({ queryKey: [...queryKey().post().all(), 'postSearch'] }),
         ]);
 
-        queryClient.invalidateQueries({
-          queryKey: queryKey().post().postList({ currPageNum: 1 }),
-        }),
-          alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
+        alert(variables.tempYn === 'Y' ? '임시 저장이 완료되었습니다.' : '게시물이 발행되었습니다.');
 
         if (variables.tempYn === 'N') {
           router.push(`/${authorId}/${postId}`);
@@ -139,9 +138,12 @@ export function usePost(options?: UsePostOptions) {
 
       const isTemp = searchParams?.get('tempYn') === 'Y';
 
-      queryClient.invalidateQueries({ queryKey: listKey });
-      queryClient.invalidateQueries({ queryKey: queryKey().post().recentPost(userId) });
-      queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: listKey }),
+        queryClient.invalidateQueries({ queryKey: [...queryKey().post().all(), 'postSearch'] }),
+        queryClient.invalidateQueries({ queryKey: queryKey().post().recentPost(userId) }),
+        queryClient.invalidateQueries({ queryKey: queryKey().post().popularPost(userId) }),
+      ]);
 
       !isTemp && router.push(`/${userId}`);
     },

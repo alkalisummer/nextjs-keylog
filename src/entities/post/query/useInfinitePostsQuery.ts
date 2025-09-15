@@ -1,42 +1,28 @@
 import { Post } from '../model';
 import { getPosts } from '../api';
 import { queryKey } from '@/app/provider/query/lib';
-import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
 import type { ApiResponse } from '@/shared/lib/client';
-import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { useInfiniteQuery, InfiniteData, QueryKey } from '@tanstack/react-query';
 
 interface UseInfinitePostsQueryProps {
   searchWord?: string;
   tagId?: string;
-  authorId?: string;
-  perPage?: number;
-  tempYn?: string;
   initialPage?: Post[];
 }
 
-export const useInfinitePostsQuery = ({
-  searchWord = '',
-  tagId,
-  authorId,
-  perPage = NUMBER_CONSTANTS.BLOG_POST_PER_PAGE,
-  tempYn = 'N',
-  initialPage,
-}: UseInfinitePostsQueryProps) => {
+export const useInfinitePostsQuery = ({ searchWord = '', tagId, initialPage }: UseInfinitePostsQueryProps) => {
   const initialData: InfiniteData<Post[], number> | undefined = initialPage
     ? { pages: [initialPage], pageParams: [1] }
     : undefined;
 
-  return useInfiniteQuery<Post[], Error, InfiniteData<Post[], number>, (string | number)[], number>({
-    queryKey: queryKey().post().postList({ searchWord, tagId, authorId, currPageNum: 1, perPage, tempYn }),
+  return useInfiniteQuery<Post[], Error, InfiniteData<Post[], number>, QueryKey, number>({
+    queryKey: queryKey().post().postSearch({ searchWord, tagId }),
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
       const res: ApiResponse<Post[]> = await getPosts({
         searchWord,
         tagId,
-        authorId,
         currPageNum: pageParam,
-        perPage,
-        tempYn,
       });
       if (!res.ok) {
         throw new Error(res.error);
