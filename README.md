@@ -138,54 +138,74 @@ AI Posting 기능은 최근 기사 내용을 분석해 블로그 포스트를 �
 
 ## 📁 아키텍쳐
 
-#### 프로젝트 구조
+#### Frontend (Next.js)
 
 ```
-nextjs-keylog
- ┣ public
- ┃ ┣ font/
- ┃ ┣ icon/
- ┃ ┣ favicon.ico
- ┃ ┣ logo.png
- ┃ ┗ logo.svg
- ┣ src
- ┃ ┣ app
- ┃ ┃ ┣ [userId]
- ┃ ┃ ┃ ┣ [postId]/page.tsx
- ┃ ┃ ┃ ┣ layout.tsx
- ┃ ┃ ┃ ┗ page.tsx
- ┃ ┃ ┣ api
- ┃ ┃ ┃ ┣ ai/route.ts
- ┃ ┃ ┃ ┣ articles/route.ts
- ┃ ┃ ┃ ┣ auth/[...nextauth]/*.ts
- ┃ ┃ ┃ ┣ auth/refreshToken/*.ts
- ┃ ┃ ┃ ┣ image-proxy/route.ts
- ┃ ┃ ┃ ┣ naverArticles/route.ts
- ┃ ┃ ┃ ┗ trend/(dailyTrends|interestOverTime|searchImage)/route.ts
- ┃ ┃ ┣ findPassword/
- ┃ ┃ ┣ resetPassword/[token]/
- ┃ ┃ ┣ login/
- ┃ ┃ ┣ signup/
- ┃ ┃ ┣ write/
- ┃ ┃ ┣ home/
- ┃ ┃ ┣ provider/(query|session)/
- ┃ ┃ ┣ error.tsx, global-error.tsx, not-found.tsx
- ┃ ┃ ┗ layout.tsx
- ┃ ┣ entities (도메인 엔티티 모듈)
- ┃ ┃ ┣ article/ comment/ hashtag/ like/ post/ trend/
- ┃ ┣ features (사용자 기능 모듈)
- ┃ ┃ ┣ account/ comment/ like/ login/ logout/ post/ signup/
- ┃ ┣ shared (공용 컴포넌트/유틸)
- ┃ ┃ ┣ boundary/ hooks/ lib/ ui/
- ┃ ┣ styles
- ┃ ┃ ┣ fonts/ globals.css scss/
- ┃ ┗ widgets
- ┃   ┣ article/ footer/ header/ sidebar/
- ┣ eslint.config.cjs
- ┣ next.config.mjs
- ┣ next-sitemap.config.js
- ┣ middleware.ts
- ┣ next-env.d.ts
- ┣ package.json
- ┗ tsconfig.json
+src/
+├── app/                         # App Router 영역
+│   ├── [userId]/                # 사용자 블로그
+│   │   ├── [postId]/page.tsx    # 게시글 상세
+│   │   ├── layout.tsx
+│   │   └── page.tsx             # 사용자 블로그 메인
+│   ├── api/                     # API Route
+│   │   ├── ai/route.ts
+│   │   ├── articles/route.ts
+│   │   ├── auth/
+│   │   │   ├── [...nextauth]/*.ts
+│   │   │   └── refreshToken/*.ts
+│   │   ├── image-proxy/route.ts
+│   │   ├── naverArticles/route.ts
+│   │   └── trend/
+│   │       ├── dailyTrends/*.ts
+│   │       ├── interestOverTime/*.ts
+│   │       └── searchImage/*.ts
+│   ├── findPassword/            # 비밀번호 찾기
+│   ├── resetPassword/[token]/   # 비밀번호 재설정
+│   ├── login/                   # 로그인
+│   ├── signup/                  # 회원가입
+│   ├── write/                   # 글쓰기
+│   ├── home/                    # 메인 홈
+│   ├── provider/                # Providers
+│   │   ├── query/
+│   │   └── session/
+│   ├── error.tsx
+│   ├── global-error.tsx
+│   ├── not-found.tsx
+│   └── layout.tsx
+├── entities/                    # 비지니스 엔티티 계층
+│   ├── article/
+│   ├── comment/
+│   ├── hashtag/
+│   ├── like/
+│   ├── post/
+│   └── trend/
+├── features/                    # 기능 계층
+│   ├── account/
+│   ├── comment/
+│   ├── like/
+│   ├── login/
+│   ├── logout/
+│   ├── post/
+│   └── signup/
+├── shared/                      # 공용 레이어
+│   ├── boundary/
+│   ├── hooks/
+│   ├── lib/
+│   │   ├── client/
+│   │   ├── constants/
+│   │   ├── dompurify/
+│   │   ├── echarts/
+│   │   ├── oci/
+│   │   ├── reactBits/
+│   │   └── toastEditor/
+│   └── ui/
+├── styles/
+│   ├── fonts/
+│   ├── globals.css
+│   └── scss/
+└── widgets/                     # 페이지 위젯
+    ├── article/
+    ├── footer/
+    ├── header/
+    └── sidebar/
 ```
