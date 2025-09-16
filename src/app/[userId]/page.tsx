@@ -50,9 +50,10 @@ export const generateMetadata = async ({ params }: { params: Promise<{ userId: s
 
   if (userRes.data) {
     const userInfo = userRes.data;
+
     return {
-      title: `${userInfo.userNickname} - ${userInfo.userBlogName}`,
-      description: userInfo.userBlogName,
+      title: `${userInfo.userBlogName} | keylog`,
+      description: `${userInfo.userNickname} | ${userInfo.userBlogName}`,
       icons: {
         icon: [
           {

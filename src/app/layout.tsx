@@ -48,6 +48,7 @@ export const generateMetadata = async () => {
         },
       ],
       title: 'Keylog',
+      description: '인기 키워드를 활용한 블로그 포스팅',
     },
     alternates: {
       canonical: `${process.env.BASE_URL}`,

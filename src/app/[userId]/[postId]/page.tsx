@@ -57,9 +57,13 @@ export async function generateMetadata({ params }: { params: Promise<{ userId: s
   if (postRes.data && userRes.data) {
     const post = postRes.data;
     const user = userRes.data;
+
+    const title = `${post.postTitle} | keylog`;
+    const description = `${user.userNickname} | ${user.userBlogName}`;
+
     return {
-      title: post.postTitle,
-      description: post.postCntn,
+      title: title,
+      description: description,
       icons: {
         icon: [
           {
@@ -77,14 +81,14 @@ export async function generateMetadata({ params }: { params: Promise<{ userId: s
       openGraph: {
         type: 'article',
         url: url,
-        title: post.postTitle,
-        description: `${user.userNickname} - ${user.userBlogName}`,
+        title: title,
+        description: description,
         images: [
           {
             url: post.postThmbImgUrl || '/favicon.ico',
             width: 250,
             height: 250,
-            alt: post.postTitle,
+            alt: title,
           },
         ],
       },
