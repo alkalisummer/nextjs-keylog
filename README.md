@@ -1,29 +1,38 @@
 <div align="center">
-<img width="300" alt="Intro" src="https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnytihm1smd/b/kihoon-bucket/o/keylog_logo.png"/><br>
-next.js 기반의 수익형 블로그 사이트입니다.<br/>
-실시간으로 가장 많은 사람들이 검색하는 인기 키워드 및 관련기사 정보와 해당 키워드의 일자별 관심도 정보를 차트로 제공합니다.<br/>
-AutoPosting 기능으로 해당 키워드로 작성된 최근 기사들의 내용을 요약하여 자동으로 포스트를 생성하고 관련 이미지를 검색하여 포스트에 추가할 수 있습니다.
+<img width="300" alt="Intro" src="https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axnytihm1smd/b/keylog-bucket/o/IMG20250916161042.webp"/><br>
+next.js 기반의 인기 키워드를 활용한 블로그 포스트 사이트입니다.<br/> 
+Google Trends 실시간 인기 트렌드를 기반으로 현재 가장 많은 사람들이 검색하는 인기 키워드 및 관련기사 정보와 해당 키워드의 일자별 관심도 정보를 차트로 제공합니다.<br/>
+AI Posting 기능으로 해당 키워드로 작성된 최근 기사들의 내용을 분석하여 블로그 포스트를 자동으로 생성하고 관련 이미지를 검색하여 포스트에 추가할 수 있습니다.
 </div>
 <br/>
 
 ## 👀  keylog 구경하기
-- 📎 [https://keylog.hopto.org](https://keylog.hopto.org)
+- 📎 [https://keylog.dev](https://keylog.dev)
 
 <br/>
 <br/>
 
 ## 📅 개발 기간
 - 1차 : 2023.07.02 ~ 2023.10.08
-- 리팩토링 : 2023.10.22 ~ 진행중
+- 리팩토링 : 2025.07.01 ~ 2025.08.31
+  - next.js version upgrade : 13.4.5 -> 15.3.3
+  - pages rotuer -> app router migration
+  - FSD 아키텍처 기반으로 기능 단위 분할 설계를 통해 전반적인 구조를 재설계
+  - React Query를 활용한 서버상태관리 및 mutation을 활용한 optimistic update 도입
+  - 백엔드 분리: 서버 컴포넌트에서 DB에 직접 접근하던 구조를 Nest.js(Fastify) + TypeORM + MySQL 기반 백엔드 서버로 전환([Nestjs Backend Repo](https://github.com/alkalisummer/nestjs-keylog))
+  - Google Trends API 변경에 대응하기 위해 Deprecated 된 npm 패키지를 fork하여 수정 및 신규 기능을 추가, 신규 버전으로 배포([@alkalisummer/google-trends-js](https://www.npmjs.com/package/@alkalisummer/google-trends-js))
 <br/>
 <br/>
 
 ## 🧑🏻‍💻 기술스택
-- <img src="https://img.shields.io/badge/React-v18.2.0-61DAFB?logo=React"/> <img src="https://img.shields.io/badge/TypeScript-v5.1.3-3178C6?logo=TypeScript"/> <img src="https://img.shields.io/badge/Next.js-v13.4.5-000000?logo=Next.js"/> 
-- <img src="https://img.shields.io/badge/React--Redux-v8.1.3-764ABC?logo=Redux"/> <img src="https://img.shields.io/badge/Redux--Saga-v1.2.3-999999?logo=Redux-Saga"/> <img src="https://img.shields.io/badge/Axios-v1.40-5A29E4?logo=Axios"/>
-- <img src="https://img.shields.io/badge/MUI-v5.14.5-007FFF?logo=MUI"/> <img src="https://img.shields.io/badge/Echarts-v5.4.3-AA344D?logo=Apache Echarts"/> <img src="https://img.shields.io/badge/TOAST UI Editor-v3.2.3-515ce6"/>
-- <img src="https://img.shields.io/badge/Node.js-v18.15.0-339933?logo=Node.js"/> <img src="https://img.shields.io/badge/MySQL-v8.0.34-4479A1?logo=MySQL"/>
-- <img src="https://img.shields.io/badge/Oracle Cloud-F80000?logo=Oracle"/>
+- <img src="https://img.shields.io/badge/React-v19.1.0-61DAFB?logo=React"/> <img src="https://img.shields.io/badge/TypeScript-v5.8.3-3178C6?logo=TypeScript"/> <img src="https://img.shields.io/badge/Next.js-v15.3.3-000000?logo=Next.js"/> 
+- <img src="https://img.shields.io/badge/React Query-v5.80.10-FF4154?logo=reactquery"/>
+- <img src="https://img.shields.io/badge/Next Auth-v4.24.11-666666?logo=nextdotjs"/>
+- <img src="https://img.shields.io/badge/React Hook Form-v7.59.0-EC5990?logo=reacthookform"/> <img src="https://img.shields.io/badge/Zod-v3.25.67-408AFF?logo=zod"/>
+- <img src="https://img.shields.io/badge/Sass-v1.89.2-CC6699?logo=sass"/> <img src="https://img.shields.io/badge/MUI-v7.1.1-007FFF?logo=MUI"/> <img src="https://img.shields.io/badge/Echarts-v5.6.0-AA344D?logo=apacheecharts"/> <img src="https://img.shields.io/badge/TOAST UI Editor-v3.2.3-515ce6"/>
+- <img src="https://img.shields.io/badge/Node.js-v24.1.0-339933?logo=Node.js"/> 
+- <img src="https://img.shields.io/badge/Oracle Cloud Instance--545454?logo=databricks"/> <img src="https://img.shields.io/badge/Oracle Cloud Bucket(S3)--545454?logo=databricks"/>
+- <img src="https://img.shields.io/badge/OpenAI-v5.19.0-412991?logo=openai"/> 
 
 <br/>
 <br/>
@@ -38,9 +47,9 @@ AutoPosting 기능으로 해당 키워드로 작성된 최근 기사들의 내�
 
 | 메인 페이지 | 게시물 검색페이지 |
 | :-------: | :-------: | 
-|<img width="500" alt="스크린샷 2023-11-10 14 56 59" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/b68f52ec-5cac-47b8-b9cb-6b70e7c012d5">| <img width="500" alt="search" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/626b853a-7156-4440-b6b5-44b6691df372">|
+| <img width="500" alt="image" src="https://github.com/user-attachments/assets/832c52af-dc6b-48db-863b-3272fdac52b7" /> | <img width="500" alt="image" src="https://github.com/user-attachments/assets/4be874b8-960e-479b-96c2-8462de28d9e3" /> |
 | 블로그 메인페이지 | 블로그 게시글 상세페이지 |
-|<img width="500" alt="blogIndex" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/d83a0a3f-2d1b-4061-9780-4d37cde94507">|<img width="500" alt="blogDetail" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/0f4569eb-ae68-4243-a4c4-12148f27fd88">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/5f4ce146-362d-4c9e-8570-aabe8dbbc43a" />|<img width="500" alt="blogDetail" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/0f4569eb-ae68-4243-a4c4-12148f27fd88">|
 | 게시글 작성 페이지 | 계정 관리 |
 |<img width="500" alt="write" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/d81523ab-9a15-4e5a-9dc8-9f6d9cad6f2e">|<img width="500" alt="account" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/db06a6a2-27d6-4eed-b8d0-0fcea0fa6f85">|
 |로그인 페이지|회원가입 페이지|
