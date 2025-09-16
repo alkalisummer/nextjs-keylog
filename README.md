@@ -45,15 +45,15 @@ AI Posting 기능으로 해당 키워드로 작성된 최근 기사들의 내용
 
 ## 📌 화면 구성
 
-| 메인 페이지 | 게시물 검색페이지 |
+| 메인 페이지 - 급상승 키워드 | 메인 - 포스팅 검색|
 | :-------: | :-------: | 
 | <img width="500" alt="image" src="https://github.com/user-attachments/assets/832c52af-dc6b-48db-863b-3272fdac52b7" /> | <img width="500" alt="image" src="https://github.com/user-attachments/assets/4be874b8-960e-479b-96c2-8462de28d9e3" /> |
 | 블로그 메인페이지 | 블로그 게시글 상세페이지 |
-|<img width="500" alt="image" src="https://github.com/user-attachments/assets/5f4ce146-362d-4c9e-8570-aabe8dbbc43a" />|<img width="500" alt="blogDetail" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/0f4569eb-ae68-4243-a4c4-12148f27fd88">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/5f4ce146-362d-4c9e-8570-aabe8dbbc43a" />|<img width="500" alt="image" src="https://github.com/user-attachments/assets/dc250f02-1126-4a40-9bb7-3c848daa6a16" />|
 | 게시글 작성 페이지 | 계정 관리 |
-|<img width="500" alt="write" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/d81523ab-9a15-4e5a-9dc8-9f6d9cad6f2e">|<img width="500" alt="account" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/db06a6a2-27d6-4eed-b8d0-0fcea0fa6f85">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/0c93c905-178f-4b36-b55a-2333d89adf47" />|<img width="500" alt="image" src="https://github.com/user-attachments/assets/926b0f88-9933-4f17-8cf7-63a7099cae42" />|
 |로그인 페이지|회원가입 페이지|
-|<img width="500" alt="login" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/ad133215-428f-4fa9-8ad2-c1116e723ecb">|<img width="500" alt="signup" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/5234b5a3-859e-4438-b21d-98d6d7a61426">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/c047cacf-4820-4155-85cf-f1501fb03381" />|<img width="500" alt="image" src="https://github.com/user-attachments/assets/9d7a063e-65f1-483f-acbf-b95fb6110f29" />|
 
 <br/>
 <br/>
@@ -65,7 +65,7 @@ AI Posting 기능으로 해당 키워드로 작성된 최근 기사들의 내용
 
 | 블로그 개설 | 댓글, 좋아요, 퍼가기 기능 |
 | :-------: | :-------: | 
-|<img width="500" alt="블로그 개설" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/c6f6f29f-b8d5-42c9-a985-82f04605d49a">| <img width="500" alt="댓글, 좋아요" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/9d6d011d-b533-4fd4-9935-8c3a5fffedb5">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/5f4ce146-362d-4c9e-8570-aabe8dbbc43a" />| <img width="500" alt="image" src="https://github.com/user-attachments/assets/5f84208a-01f2-4f96-a03e-ac771f2db23c" />|
 
 - 키로그에 가입하여 자신만의 블로그를 개설할 수 있습니다. 블로그에 글을 포스팅하고 다른 회원들과 댓글로 해당 포스트에 대한 의견을 나눌 수 있습니다. 
 
@@ -75,33 +75,32 @@ AI Posting 기능으로 해당 키워드로 작성된 최근 기사들의 내용
 
 | 메인 페이지 인기 검색어 | 게시글 작성 인기검색어 및 연관검색어 |
 | :-------: | :-------: | 
-|<img width="500" alt="스크린샷 2023-11-10 16 54 29" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/87d97ad6-e1fb-4b2c-aea6-1d9c5ede1b23">|<img width="500" alt="스크린샷 2023-11-10 16 49 36" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/ba72b96e-6d63-4783-a67a-7e5fecc61220">|
-| 관심도 변화 그래프 | 관련 뉴스 기사 |
-| <img width="500" alt="스크린샷 2023-11-10 16 49 49" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/15d4958e-f8bf-40a6-81e5-df2ec1fbb3b9"> | <img width="500" alt="스크린샷 2023-11-10 16 50 13" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/04fdffd0-0fd8-4f27-bbd5-7eaee6baf508"> |
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/832c52af-dc6b-48db-863b-3272fdac52b7" />|<img width="300" alt="image" src="https://github.com/user-attachments/assets/32d1c8d8-87a0-481f-8e73-1b238b5da5ec" />|
+| 관심도 차트 | 관련 뉴스 정보 |
+| <img width="300" alt="image" src="https://github.com/user-attachments/assets/1a38e3a4-e54e-4c2d-b9a0-4c7458f159ec" />| <img width="300" alt="image" src="https://github.com/user-attachments/assets/5b1c7257-60f3-4911-9930-ad55d11fcf52" />|
 
-- 인기검색어 및 연관검색어 : 구글 트렌드 API와 네이버 데이터랩 API를 활용하여 실시간 인기 검색어 키워드를 검색량이 많은 순으로 제공하고 키워드 선택시 해당 키워드의 연관 검색어를 제공합니다.<br>
-- 관심도 변화 그래프 : 관심도 변화 그래프에서는 네이버 데이터랩 API에서 산정한 해당키워드 관심도 지수(100점 만점)의 1년 추이를 제공합니다. 다른 키워드와의 관심도 비교도 가능합니다.<br>
-- 관련 기사 정보 : 선택한 키워드로 작성된 최근 기사 데이터를 제공합니다. 기사를 클릭시 해당 기사 URL로 새 창이 열립니다.<br>
+- 인기검색어 및 연관검색어 : 구글 트렌드 API를 활용하여 실시간 인기 검색어 키워드를 검색량이 많은 순으로 제공하고 키워드 선택시 해당 키워드의 연관 검색어를 제공합니다.<br>
+- 관심도 차트 : 관심도 차트에서는 현재 시각 기준 시간대별 해당키워드 관심도 지수(100점 만점)를 라인 그래프로 제공합니다. 다른 키워드와의 관심도 비교도 5개까지 가능합니다.<br>
+- 관련 뉴스 정보 : 선택한 키워드와 관련된 최신 뉴스 데이터를 제공합니다. 기사를 클릭시 해당 기사 URL로 새 창이 열립니다.<br>
 
 <br><br>
 
 #### 3. AutoPosting 및 이미지 검색
-
-| AutoPosting | 이미지 검색 |
+| AI 포스팅 | 이미지 검색 |
 | :-------: | :-------: | 
-|![ezgif com-gif-maker](https://github.com/alkalisummer/nextjs-keylog/assets/47405224/1fb3aa96-6e99-4fa4-9a86-5e4d80a219c5)|<img width="500" alt="스크린샷 2023-11-10 17 54 13" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/29bebd21-f707-4989-9666-96c03bcc2bec">|
+|<img width="300" alt="autoposting" src="https://github.com/user-attachments/assets/3303bd63-174e-4f32-b0c8-969d09e00d22">|<img width="500" alt="image" src="https://github.com/user-attachments/assets/c3e4b30e-13fb-4c8f-839f-6793449ccca5" />|
 
-- AutoPosting : 네이버 뉴스 API를 사용하여 해당 키워드로 작성된 최근 기사의 정보를 가져온 후 기사 정보를 크롤링하고 ChatGPT를 활용하여 해당 키워드로 블로그 게시글을 자동으로 생성합니다. 클립보드 복사 기능을 제공하여 텍스트 에디터에 바로 붙여 넣을 수 있습니다.<br>
-- 이미지 검색 : 네이버 이미지 검색 API를 사용하여 키워드로 검색한 이미지를 30개씩 표출합니다. 무한 스크롤로 구현하여 스크롤이 최하단까지 도달하였을경우 새로운 이미지 30개를 표출합니다. URL 클립보드 복사 기능으로 이미지 url 을 복사하여 에디터에 삽입할 수 있습니다.<br>
+- AI 포스팅 : 네이버 뉴스 API를 통해 특정 키워드 관련 최근 2일 이내의 최신 기사를 수집한 뒤, OpenAI API 및 전문 블로거용 프롬프트를 활용하여 자동으로 블로그 게시글을 생성합니다. 클립보드 복사 기능을 제공하여 텍스트 에디터에 바로 붙여 넣을 수 있습니다.<br>
+- 이미지 검색 : 네이버 이미지 검색 API를 사용하여 특정 키워드로 검색한 이미지를 10개씩 표출합니다. 무한 스크롤로 구현하여 마지막 이미지가 viewport에 노출될 경우 새로운 이미지 10개를 불러와서 표출합니다. URL 클립보드 복사 기능으로 이미지 url 을 복사하여 에디터에 삽입할 수 있습니다.<br>
 
 <br><br>
 
 #### 4. 해시태그
 | 새 글 작성 - 해시태그 저장 | 상세페이지 - 해시태그|
 | :-------: | :-------: | 
-|<img width="1288" alt="스크린샷 2023-11-10 21 48 48" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/10fbf0fd-49a5-4089-8c8f-4cdcc0fa2a86">|<img width="1221" alt="스크린샷 2023-11-10 21 51 06" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/af98f980-a98b-45d4-9040-ea59d2634a3b">|
+|<img width="1700" alt="image" src="https://github.com/user-attachments/assets/a9621db5-8921-43fb-8456-d23e04e47ee4" />|<img width="1231" alt="image" src="https://github.com/user-attachments/assets/c9d8ead7-d4c0-4483-8200-942a89c85169" />|
 | 블로그 해시태그 목록 | 해시태그 검색 |
-|<img width="500" alt="스크린샷 2023-11-10 18 11 13" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/1a43486c-ced8-40bd-8342-8f185f59edf7">|<img width="500" alt="스크린샷 2023-11-10 18 11 26" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/03f91866-5832-4676-b770-075bbfc4ddd9">|
+|<img width="300" alt="image" src="https://github.com/user-attachments/assets/0e6350c5-c3e8-4ea9-99c9-be543cc79bfd" />|<img width="1000" alt="image" src="https://github.com/user-attachments/assets/5133fa62-78c8-44bd-8a33-82876719e532" />|
 
 - 글 저장시 해시태그를 저장하고 블로그에서 좌측 하단영역에서 태그 목록별로 조회할 수 있습니다.<br>
 - 게시글 상세페이지의 해시태그를 클릭시 해당 해시태그로 조회된 모든 게시글을 검색합니다.<br>
@@ -110,29 +109,29 @@ AI Posting 기능으로 해당 키워드로 작성된 최근 기사들의 내용
 
 #### 5. 임시저장
 
-|임시저장 불러오기|임시글 목록|
-| :-------: | :-------: | 
-|<img width="500" alt="임시저장" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/5e6b8e6b-2fc3-4a29-bbb1-235b02d06614">|<img width="500" alt="임시글목록" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/45d4fa8b-afd2-4c37-b393-92c36316ae9a">|
+|임시글 목록|
+| :-------: | 
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/e5608523-569b-4e66-84dd-456262eead4c" />|
 
 - 게시글 임시저장기능을 제공합니다. 임시저장 글은 브라우저의 로컬 스토리지에 저장하는 것이 아닌 DB에 저장하기 때문에 작성하던 기기에 상관없이 어디서든 불러올 수 있습니다.<br>
-- 신규 작성 중 임시저장한 글은 임시글 목록에서 확인이 가능하고 기존 게시글 수정 중 임시저장한 글은 기존 게시글을 다시 수정할 때 임시저장글을 불러올 수 있습니다.<br>
+- 신규작성중인 임시글은 임시글 목록에서 확인이 가능합니다.<br>
 
 <br><br>
 
 #### 6. 비밀번호 찾기
 |비밀번호 찾기| 메일 발송 | 비밀번호 변경|
 | :-------: | :-------: | :-------: |
-|<img width="500" alt="스크린샷 2023-11-10 22 23 32" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/5f76f521-0302-4163-858d-571e7d5978e2">|<img width="500" alt="스크린샷 2023-11-10 22 25 41" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/d852615d-2797-4dd9-b630-837c64884c4e">|<img width="500" alt="스크린샷 2023-11-10 22 25 56" src="https://github.com/alkalisummer/nextjs-keylog/assets/47405224/87b25596-955d-498f-adc5-67d3fc73c6f6">|
+|<img width="500" alt="image" src="https://github.com/user-attachments/assets/3f90319d-814d-4762-bba9-d5124409eb70" />|<img width="500" alt="image" src="https://github.com/user-attachments/assets/e343b7a5-9828-4ba3-870e-be1cbbde4d41" />|<img width="500" alt="image" src="https://github.com/user-attachments/assets/8a23b873-c1b6-4edc-b88f-fdc9b139f38c" />|
 
 - ID와 회원가입시 사전에 인증한 이메일로 일치하는 회원이 존재하는지 확인 후 비밀번호를 변경할 수 있는 링크를 메일로 전송합니다.<br>
-- 메일은 발송시간을 기준으로 30분동안 유효하며 토큰을 같이 실어서 전달합니다.<br>
-- 링크를 클릭하면 비밀번호를 변경할 수 있는 화면으로 이동하고 토큰, 만료시간이 유효한지 확인 후 비밀번호가 변경됩니다.<br>
+- 메일은 발송 시점 기준으로 30분 동안만 유효하며, crypto.randomBytes를 통해 생성한 보안 난수 기반 토큰을 함께 전달합니다.<br>
+- 사용자가 링크를 클릭하면 비밀번호 변경 화면으로 이동하며, 이때 전달된 토큰과 만료 시간이 유효한지 검증한 뒤 비밀번호를 변경할 수 있습니다.<br>
 
 
 
 <br><br>
 ## 📁 아키텍쳐
-#### 디렉토리 구조
+#### 프로젝트 구조
 
 ```
 nextjs-keylog
