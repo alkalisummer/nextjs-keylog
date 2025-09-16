@@ -6,6 +6,7 @@ import css from './view.module.scss';
 import { useHome } from '@/app/home/container';
 import { useArticlesQuery } from '../../../query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EmptyArticles } from '../../emptyArticles/EmptyAritcles';
 import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
@@ -36,13 +37,16 @@ export const View = ({ baseDate }: Props) => {
         <span>{`인기 검색어 기준일: ${baseDate}`}</span>
         <span>)</span>
       </div>
-      <div className={css.articleList}>
-        {articles.map(
-          (article, idx) =>
-            article.link && (
+      {articles.length === 0 ? (
+        <EmptyArticles />
+      ) : (
+        <div className={css.articleList}>
+          {articles
+            .filter(article => Boolean(article.link))
+            .map((article, idx) => (
               <Link key={idx} href={article.link} target="_blank">
                 <div className={css.article}>
-                  {article.image ? <img src={article.image} alt="articleImg"></img> : <></>}
+                  {article.image ? <img src={article.image} alt="articleImg" /> : <></>}
                   <div className={`${css.articleInfo} ${article.image ? '' : css.noImg}`}>
                     <span className={css.articleTitle}>{article.title}</span>
                     <div className={css.articleBottom}>
@@ -51,9 +55,9 @@ export const View = ({ baseDate }: Props) => {
                   </div>
                 </div>
               </Link>
-            ),
-        )}
-      </div>
+            ))}
+        </div>
+      )}
     </section>
   );
 };

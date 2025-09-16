@@ -1,0 +1,43 @@
+@use 'variable' as *;
+
+// Tokens
+$empty-radius: 14px;
+$empty-title-size: 16px;
+
+$empty-border: 1px solid $gray-29;
+$empty-bg: $gray-34;
+$empty-title-color: $gray-2;
+
+.module {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  width: 100%;
+  height: 120px;
+  gap: 15px;
+  background: $empty-bg;
+  border: $empty-border;
+  border-radius: $empty-radius;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}
+
+.title {
+  font-size: $empty-title-size;
+  color: $empty-title-color;
+  font-weight: 500;
+}
+
+@media (max-width: $breakpoint-small) {
+  .module {
+    height: 120px;
+  }
+  .title {
+    font-size: 13px;
+  }
+}
