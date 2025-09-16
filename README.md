@@ -22,7 +22,7 @@ AI Posting 기능은 최근 기사 내용을 분석해 블로그 포스트를 �
   - FSD 아키텍처 기반 기능 단위 분할로 전반적 구조 재설계
   - React Query 기반 서버 상태 관리 및 Optimistic Update 도입
   - 백엔드 분리: 서버 컴포넌트의 직접 DB 접근을 NestJS(Fastify) + TypeORM + MySQL 기반 백엔드로 전환([NestJS Backend Repo](https://github.com/alkalisummer/nestjs-keylog))
-  - Google Trends API 변경 대응: Deprecated된 npm 패키지를 포크해 수정·기능 추가 후 신규 버전 배포([@alkalisummer/google-trends-js](https://www.npmjs.com/package/@alkalisummer/google-trends-js))
+  - Google Trends API 변경 대응: Deprecated된 npm 패키지를 fork하여 수정·기능 추가 후 신규 버전 배포([@alkalisummer/google-trends-js](https://www.npmjs.com/package/@alkalisummer/google-trends-js))
     <br/>
     <br/>
 
@@ -95,7 +95,7 @@ AI Posting 기능은 최근 기사 내용을 분석해 블로그 포스트를 �
 | :-----------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |
 | <img width="300" alt="autoposting" src="https://github.com/user-attachments/assets/3303bd63-174e-4f32-b0c8-969d09e00d22"> | <img width="500" alt="image" src="https://github.com/user-attachments/assets/c3e4b30e-13fb-4c8f-839f-6793449ccca5" /> |
 
-- AI 포스팅: 네이버 뉴스 API로 특정 키워드의 최근 기사들을 수집하고, OpenAI와 전문 블로거용 프롬프트를 활용해 자동으로 블로그 게시글을 생성합니다. 클립보드 복사 기능으로 에디터에 바로 붙여넣을 수 있습니다.<br>
+- AI 포스팅: 네이버 뉴스 API로 특정 키워드의 최근 이틀 내의 기사들을 수집하고, OpenAI API와 전문 블로거용 프롬프트를 활용해 자동으로 블로그 게시글을 생성합니다. 클립보드 복사 기능으로 에디터에 바로 붙여넣을 수 있습니다.<br>
 - 이미지 검색: 네이버 이미지 검색 API로 특정 키워드의 이미지를 10개씩 표시합니다. 무한 스크롤을 적용해 마지막 이미지가 뷰포트에 노출되면 다음 10개를 불러옵니다. URL 클립보드 복사 기능으로 이미지 URL을 복사해 에디터에 삽입할 수 있습니다.<br>
 
 <br><br>
