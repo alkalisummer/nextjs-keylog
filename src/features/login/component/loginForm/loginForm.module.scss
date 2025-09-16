@@ -12,7 +12,6 @@ $color-background: $white;
 $color-background-input: $white;
 
 // Font families
-$font-family-logo: var(--font-fira-mono), ui-monospace, Menlo, Monaco, Consolas, monospace;
 $font-family-main: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo',
   'Malgun Gothic', Arial, sans-serif;
 
@@ -27,7 +26,7 @@ $font-family-main: var(--font-spoqa), system-ui, -apple-system, 'Segoe UI', 'Not
   margin-top: 6rem;
 
   .title {
-    font-family: $font-family-logo;
+    @include font-mono($font-weight-medium);
     font-size: 35px;
     margin-bottom: 30px;
     color: $color-primary;
