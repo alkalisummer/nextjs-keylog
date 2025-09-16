@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "mkdir -p .next/standalone/.next .next/standalone/public && rsync -a .next/static/ .next/standalone/.next/static/ && rsync -a public/ .next/standalone/public/",
+    "postbuild": "next-sitemap && mkdir -p .next/standalone/.next .next/standalone/public && rsync -a .next/static/ .next/standalone/.next/static/ && rsync -a public/ .next/standalone/public/",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "pnpm build && pm2 restart keylog-web --update-env"
+    "deploy": "pm2 restart keylog-web --update-env",
+    "sitemap": "next-sitemap"
   },
   "dependencies": {
     "@alkalisummer/google-trends-js": "^0.2.9",
@@ -63,7 +64,8 @@
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
-    "eslint-plugin-react-compiler": "^19.1.0-rc.2"
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+    "next-sitemap": "^4.2.3"
   },
   "overrides": {
     "uuid": "7.0.3",
