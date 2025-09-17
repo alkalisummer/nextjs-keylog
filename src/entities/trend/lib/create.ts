@@ -1,7 +1,7 @@
 import { parseRecentTop5 } from './transform';
-import { NaverArticle, Trend } from '../model';
 import type { InterestOverTime } from '../model';
 import { client } from '@/shared/lib/client/fetch';
+import { NaverArticle, NaverBlogPost, Trend } from '../model';
 import type { EChartsCoreOption, SeriesOption } from 'echarts';
 
 export const createDailyTrends = (trends: Trend[]) => {
@@ -129,7 +129,15 @@ export const createChartOption = (params: CreateChartOptionParams): EChartsCoreO
   return deepMerge(base, overrides);
 };
 
-export const createAiPostPrompt = ({ keyword, naverArticles }: { keyword: string; naverArticles: NaverArticle[] }) => {
+export const createAiPostPrompt = ({
+  keyword,
+  naverArticles,
+  naverBlogPosts,
+}: {
+  keyword: string;
+  naverArticles: NaverArticle[];
+  naverBlogPosts: NaverBlogPost[];
+}) => {
   const now = new Date();
   const sevenDaysAgo = new Date(now);
   sevenDaysAgo.setDate(now.getDate() - 7);
@@ -142,7 +150,17 @@ export const createAiPostPrompt = ({ keyword, naverArticles }: { keyword: string
     pubDate: a.pubDate,
   }));
 
+  const recentTop5BlogPosts = parseRecentTop5(naverBlogPosts || [], sevenDaysAgo).map(b => ({
+    title: b.title,
+    description: b.description,
+    link: b.link,
+    bloggername: b.bloggername,
+    bloggerlink: b.bloggerlink,
+    postdate: b.postdate,
+  }));
+
   const articlesJson = JSON.stringify(recentTop5Articles).replace(/\n|\t/g, ' ');
+  const blogPostsJson = JSON.stringify(recentTop5BlogPosts).replace(/\n|\t/g, ' ');
 
   const system = [
     // Role & primary evidence
@@ -170,12 +188,15 @@ export const createAiPostPrompt = ({ keyword, naverArticles }: { keyword: string
     `Keyword: ${keyword}`,
     'Provided news articles (JSON):',
     articlesJson,
+    'Provided blog posts (JSON):',
+    blogPostsJson,
     '',
     'Objective:',
     '- Produce an engaging, trustworthy Korean blog post that synthesizes the provided NEWS articles, with cross-verification using live web-search.',
     '',
     'Data Use Rules:',
-    '- FACTS/NUMBERS/DATES must be supported by either (a) the provided articles OR (b) fresh web results from the last 2 days (KST) when the provided set is unrelated/insufficient for the keyword.',
+    '- FACTS/NUMBERS/DATES must be supported by either (a) the provided articles, (b) the provided blog posts if they are relevant to the keyword, OR (c) fresh web results from the last 2 days (KST) when the provided set is unrelated/insufficient for the keyword.',
+    '- When articlesJson or blogPostsJson include links, you MUST also access those links directly and incorporate their content into the synthesis if relevant.',
     '- ALWAYS cross-verify critical figures via web-search (last 2 days, KST). If conflicts arise, prefer the freshest well-corroborated detail and state the disagreement neutrally WITHOUT naming sources.',
     '- Do NOT use sources older than 2 days for new claims unless needed as brief background; if used, clearly mark as background and keep minimal.',
     '- Do NOT mention or hint at any sources/outlets; present the synthesis directly without attribution phrases or links.',
@@ -262,17 +283,23 @@ export const createAIPost = async ({ keyword, setHtml, setLoading, clear, isLoad
       options: { searchParams: { keyword } },
     });
 
-    if (!naverArticlesRes.ok) {
+    const naverBlogPostsRes = await client.route().get<NaverBlogPost[]>({
+      endpoint: '/naverBlogPosts',
+      options: { searchParams: { keyword } },
+    });
+
+    if (!naverArticlesRes.ok || !naverBlogPostsRes.ok) {
       throw new Error('Failed to get naver articles');
     }
 
     const naverArticles = naverArticlesRes.data;
+    const naverBlogPosts = naverBlogPostsRes.data;
 
     const res = await client.route().post<ReadableStreamDefaultReader<Uint8Array>>({
       endpoint: '/ai',
       options: {
         headers: { 'Content-Type': 'application/json' },
-        body: { messages: createAiPostPrompt({ keyword, naverArticles }) },
+        body: { messages: createAiPostPrompt({ keyword, naverArticles, naverBlogPosts }) },
         stream: true,
       },
     });

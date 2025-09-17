@@ -37,3 +37,12 @@ export interface NaverArticle {
   description: string;
   pubDate: string;
 }
+
+export interface NaverBlogPost {
+  title: string;
+  link: string;
+  description: string;
+  bloggername: string;
+  bloggerlink: string;
+  postdate: string;
+}

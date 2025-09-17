@@ -28,4 +28,6 @@ export const POST_IMAGE_SEARCH_PER_PAGE = 10;
 
 export const NAVER_ARTICLES_PER_PAGE = 15;
 
+export const NAVER_BLOG_POSTS_PER_PAGE = 15;
+
 export const OCI_OBJECT_CACHE_SECONDS = 86400;

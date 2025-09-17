@@ -28,8 +28,6 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
     const scrollKey = `${path}`;
     const scrollTop = sessionStorage.getItem(scrollKey);
 
-    console.log('scrollKey', scrollKey);
-    console.log('scrollTop', scrollTop);
     if (!el || !scrollTop) return;
 
     requestAnimationFrame(() => {

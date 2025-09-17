@@ -1,4 +1,4 @@
-import { ImageItem, Trend, InterestOverTime, NaverArticle } from '../model';
+import { ImageItem, Trend, InterestOverTime, NaverArticle, NaverBlogPost } from '../model';
 import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
@@ -97,13 +97,27 @@ export const parsePubDate = (value: string): Date => {
   return new Date(utcMs);
 };
 
-export const parseRecentTop5 = (articles: NaverArticle[], cutoff: Date): NaverArticle[] => {
+const getNaverItemDate = (item: NaverArticle | NaverBlogPost): Date => {
+  if ('pubDate' in item) return parsePubDate(item.pubDate);
+  if ('postdate' in item) {
+    const m = item.postdate.match(/^(\d{4})(\d{2})(\d{2})$/);
+    if (m) {
+      const year = Number(m[1]);
+      const month = Number(m[2]);
+      const day = Number(m[3]);
+      return new Date(year, month, day);
+    }
+  }
+  return new Date(NaN);
+};
+
+export const parseRecentTop5 = <T extends NaverArticle | NaverBlogPost>(articles: T[], cutoff: Date): T[] => {
   return (articles || [])
     .filter(a => {
-      const t = parsePubDate(a.pubDate);
+      const t = getNaverItemDate(a);
       return !Number.isNaN(t.getTime()) && t >= cutoff;
     })
-    .sort((a, b) => parsePubDate(b.pubDate).getTime() - parsePubDate(a.pubDate).getTime())
+    .sort((a, b) => getNaverItemDate(b).getTime() - getNaverItemDate(a).getTime())
     .slice(0, 5);
 };
 

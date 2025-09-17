@@ -15,7 +15,6 @@ export default function Page() {
       callbackUrl = url.pathname + url.search + url.hash;
     }
   } catch {}
-  console.log('custom logout page, callbackUrl:', callbackUrl);
   (async () => {
     await signOut({ redirect: true, callbackUrl });
   })();
