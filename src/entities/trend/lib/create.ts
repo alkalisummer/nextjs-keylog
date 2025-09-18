@@ -172,6 +172,7 @@ export const createAiPostPrompt = ({
     'When conflicts arise between the provided material and recent results, prefer the freshest and best-corroborated details, and neutrally note the disagreement without mentioning sources.',
     // Attribution suppression
     'Do NOT name or allude to any sources/outlets. Strictly avoid phrases like “according to reports,” “according to data,” “multiple outlets,” “news reports,” “source,” and any outlet names (e.g., KBS, Yonhap, Reuters, AP).',
+    'Do NOT include URLs, hyperlinks, domains, citation brackets, or any external references in the text under any circumstances.',
     // Tone and style
     'Write in a friendly, approachable, and active tone, as if you are explaining to a friend.',
     'Include occasional questions and metaphors so readers can relate and feel engaged.',
@@ -199,8 +200,10 @@ export const createAiPostPrompt = ({
     'Data Use Rules:',
     '- Facts/numbers/dates MUST be supported by (a) the provided news articles, (b) the provided blog posts (if relevant to the keyword), or (c) web search results from the last 2 days (KST).',
     '- If articlesJson or blogPostsJson include links, you MUST directly access those links and incorporate their content if relevant.',
+    '- You MUST directly access and review at least FIVE of the provided news article links and at least TWO of the provided blog post links, and incorporate their content into the synthesis if relevant.',
     '- Critical figures must be cross-verified with fresh web results (last 2 days). In case of conflicts, prefer the freshest, most reliable detail and describe neutrally without source mentions.',
     '- Do NOT mention sources or outlets; synthesize directly.',
+    '- Do NOT insert URLs, hyperlinks, domain names, or citation-style references anywhere in the output. Never leave text like ([example.com](http://example.com)) or similar.',
     '- The writing must not appear AI-generated. Make it flow naturally, with a human-like voice and style.',
     '',
     'Typography (MANDATORY):',
@@ -233,7 +236,7 @@ export const createAiPostPrompt = ({
     '   <p>Close with a natural perspective, addressing the reader directly in a conversational but respectful tone (no labels).</p>',
     '',
     'Quality Gates (self-check BEFORE output):',
-    '- (1) No source/outlet names or attribution phrases appear anywhere.',
+    '- (1) No source/outlet names, URLs, hyperlinks, domains, or citation brackets appear anywhere.',
     '- (2) All facts MUST be backed by provided articles, provided blog posts, or last-2-days web results.',
     '- (3) Dates unified to YYYY-MM-DD (KST); numbers keep units; no unnecessary rounding.',
     '- (4) At least 2 explicit agreements/disagreements across evidence when applicable.',

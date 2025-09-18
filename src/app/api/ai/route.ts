@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       temperature: 1.0,
       stream: true,
       tools: [{ type: 'web_search' }],
-      tool_choice: 'auto',
+      tool_choice: 'required',
     });
 
     const encoder = new TextEncoder();
