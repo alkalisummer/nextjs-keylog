@@ -81,10 +81,10 @@ AI Posting 기능은 최근 기사 내용을 분석하여 블로그 포스트를
 | :-------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: |
 | <img width="500" alt="image" src="https://github.com/user-attachments/assets/832c52af-dc6b-48db-863b-3272fdac52b7" /> | <img width="300" alt="image" src="https://github.com/user-attachments/assets/32d1c8d8-87a0-481f-8e73-1b238b5da5ec" /> |
 |                                                      관심도 차트                                                      |                                                    관련 뉴스 정보                                                     |
-| <img width="300" alt="image" src="https://github.com/user-attachments/assets/1a38e3a4-e54e-4c2d-b9a0-4c7458f159ec" /> | <img width="300" alt="image" src="https://github.com/user-attachments/assets/5b1c7257-60f3-4911-9930-ad55d11fcf52" /> |
+| <img width="400" alt="image" src="https://github.com/user-attachments/assets/6801d4f9-1694-4717-8456-ad515fb3c4f2" />| <img width="300" alt="image" src="https://github.com/user-attachments/assets/5b1c7257-60f3-4911-9930-ad55d11fcf52" /> |
 
 - 인기검색어 및 연관검색어: 구글 트렌드 API로 실시간 인기 키워드를 검색량 순으로 제공하며, 키워드 선택 시 연관 검색어를 함께 보여줍니다.<br>
-- 관심도 차트: 현재 시각 기준 시간대별 해당 키워드의 관심도 지수(100점 만점)를 라인 그래프로 제공합니다. 최대 5개 키워드까지 비교할 수 있습니다.<br>
+- 관심도 차트: 현재 시각 기준 시간대별 해당 키워드의 관심도 지수(100점 만점)를 라인 그래프로 제공합니다. 최대 5개 키워드까지 같은 시간대에 상대적인 관심도 지표를 비교할 수 있습니다.<br>
 - 관련 뉴스 정보: 선택한 키워드와 관련된 최신 뉴스 데이터를 제공합니다. 기사 클릭 시 원문이 새 창으로 열립니다.<br>
 
 <br><br>
