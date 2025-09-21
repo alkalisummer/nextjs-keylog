@@ -1,11 +1,11 @@
 'use client';
 
-import { InterestOverTime } from '../../model';
 import { useInterestOverTime } from '../../hooks';
 import css from './postInterestChart.module.scss';
 import { ECharts } from '@/shared/lib/echarts/ECharts';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createChartOption, isAllReady, parseValidKeywordDataList, formatLabel } from '../../lib';
+import { InterestOverTime, GoogleTrendsTimeOptions } from '../../model';
+import { createChartOption, isAllReady, parseValidKeywordDataList, formatLabel, chartTimePeriodMap } from '../../lib';
 
 interface PostInterestChartProps {
   keyword: string;
@@ -18,6 +18,7 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
   const [keywordToDataMap, setKeywordToDataMap] = useState<Record<string, InterestOverTime>>({});
   const [isAdding, setIsAdding] = useState(false);
   const [addValue, setAddValue] = useState('');
+  const [period, setPeriod] = useState<GoogleTrendsTimeOptions>('now 1-d');
 
   useEffect(() => {
     setSeriesKeywords([keyword]);
@@ -34,7 +35,15 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
     keywordToDataMap,
     setKeywordToDataMap,
     geo: 'KR',
+    hl: 'ko',
+    period,
   });
+
+  const onChangePeriod = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const next = e.target.value as GoogleTrendsTimeOptions;
+    setPeriod(next);
+    setKeywordToDataMap({});
+  };
 
   const presentDataList = useMemo(() => {
     return parseValidKeywordDataList(keywordToDataMap, seriesKeywords);
@@ -50,10 +59,20 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
       dataList: presentDataList,
       allReady,
       seriesType: 'line',
-      smooth: false,
+      smooth: true,
       xAxisBoundaryGap: false,
+      tooltip: {
+        show: true,
+      },
       xAxis: {
         axisLabel: { formatter: (val: string) => formatLabel(val) },
+        axisPointer: {
+          label: {
+            formatter: (obj: { value: string }) => {
+              return formatLabel(String(obj.value ?? ''));
+            },
+          },
+        },
       },
     });
   }, [presentDataList, allReady]);
@@ -95,6 +114,15 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
 
   return (
     <div className={css.module}>
+      <div className={css.periodDropdown}>
+        <select value={period} onChange={onChangePeriod}>
+          {Object.entries(chartTimePeriodMap).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className={css.header}>
         <div className={css.controls}>
           {seriesKeywords.map(k => (

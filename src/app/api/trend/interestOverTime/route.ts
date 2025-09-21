@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import GoogleTrendsApi from '@alkalisummer/google-trends-js';
+import GoogleTrendsApi, { GoogleTrendsTimeOptions } from '@alkalisummer/google-trends-js';
 
 export const dynamic = 'force-dynamic';
 
-export const POST = async (req: NextRequest) => {
-  const body = await req.json();
-  const { keyword, geo = 'KR' } = body as { keyword: string; geo?: string };
+export const GET = async (req: NextRequest) => {
+  const { searchParams } = new URL(req.url);
+  const keyword = searchParams.get('keyword');
+  const geo = searchParams.get('geo') || 'KR';
+  const hl = searchParams.get('hl') || 'ko';
+  const period = (searchParams.get('period') as GoogleTrendsTimeOptions) || 'now 1-d';
 
   if (!keyword || typeof keyword !== 'string') {
     return NextResponse.json({ message: 'keyword is required' }, { status: 400 });
   }
 
-  const interestRes = await GoogleTrendsApi.interestOverTime({ keyword, geo });
+  const interestRes = await GoogleTrendsApi.interestOverTime({ keyword, geo, hl, period });
   return NextResponse.json(interestRes?.data ?? null);
 };

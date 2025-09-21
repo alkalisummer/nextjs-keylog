@@ -1,4 +1,4 @@
-import { ImageItem, Trend, InterestOverTime, NaverArticle, NaverBlogPost } from '../model';
+import { ImageItem, Trend, InterestOverTime, NaverArticle, NaverBlogPost, GoogleTrendsTimeOptions } from '../model';
 import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
@@ -56,6 +56,21 @@ export const mergeUniqueImages = (base: ImageItem[], incoming: ImageItem[]) => {
   return merged;
 };
 
+const monthMap: Record<string, number> = {
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11,
+};
+
 export const parsePubDate = (value: string): Date => {
   const native = new Date(value);
   if (!Number.isNaN(native.getTime())) return native;
@@ -71,20 +86,6 @@ export const parsePubDate = (value: string): Date => {
   const second = parseInt(m[6], 10);
   const tz = m[7];
 
-  const monthMap: Record<string, number> = {
-    jan: 0,
-    feb: 1,
-    mar: 2,
-    apr: 3,
-    may: 4,
-    jun: 5,
-    jul: 6,
-    aug: 7,
-    sep: 8,
-    oct: 9,
-    nov: 10,
-    dec: 11,
-  };
   const month = monthMap[monthStr];
   if (month === undefined) return new Date(NaN);
 
@@ -121,11 +122,22 @@ export const parseRecentTop5 = <T extends NaverArticle | NaverBlogPost>(articles
     .slice(0, 5);
 };
 
+const pad2 = (num: number) => String(num).padStart(2, '0');
+
 export const formatLabel = (value: string) => {
-  const pad2 = (num: number) => String(num).padStart(2, '0');
   const formattedDate = new Date(value);
   if (Number.isNaN(formattedDate.getTime())) return String(value ?? '');
   return `${pad2(formattedDate.getMonth() + 1)}-${pad2(formattedDate.getDate())} ${pad2(
     formattedDate.getHours(),
   )}:${pad2(formattedDate.getMinutes())}`;
+};
+
+export const chartTimePeriodMap: Record<GoogleTrendsTimeOptions, string> = {
+  'now 1-h': '지난 1시간',
+  'now 4-h': '지난 4시간',
+  'now 1-d': '지난 1일',
+  'now 7-d': '지난 7일',
+  'today 1-m': '지난 1개월',
+  'today 3-m': '지난 3개월',
+  'today 12-m': '지난 12개월',
 };

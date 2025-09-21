@@ -1,4 +1,4 @@
-import { InterestOverTime } from '../model';
+import { InterestOverTime, GoogleTrendsTimeOptions } from '../model';
 import { useEffect, Dispatch, SetStateAction } from 'react';
 import { getInterestOverTime } from '@/entities/trend/api/getInterestOverTime';
 
@@ -7,6 +7,8 @@ interface UseInterestOverTimeParams {
   keywordToDataMap: Record<string, InterestOverTime>;
   setKeywordToDataMap: Dispatch<SetStateAction<Record<string, InterestOverTime>>>;
   geo?: string;
+  hl?: string;
+  period?: GoogleTrendsTimeOptions;
 }
 
 export const useInterestOverTime = ({
@@ -14,6 +16,8 @@ export const useInterestOverTime = ({
   keywordToDataMap,
   setKeywordToDataMap,
   geo = 'KR',
+  hl = 'ko',
+  period = 'now 1-d',
 }: UseInterestOverTimeParams) => {
   useEffect(() => {
     const missingKeywords = seriesKeywords.filter(k => !keywordToDataMap[k]);
@@ -23,7 +27,7 @@ export const useInterestOverTime = ({
     (async () => {
       const pairs = await Promise.all(
         missingKeywords.map(async keyword => {
-          const res = await getInterestOverTime({ keyword, geo });
+          const res = await getInterestOverTime({ keyword, geo, hl, period });
           return { keyword, res };
         }),
       );
@@ -42,5 +46,5 @@ export const useInterestOverTime = ({
     return () => {
       cancelled = true;
     };
-  }, [seriesKeywords, geo]);
+  }, [seriesKeywords, geo, hl, period]);
 };

@@ -79,3 +79,21 @@ $color-border: $gray-11;
     outline: none;
   }
 }
+
+.periodDropdown {
+  display: flex;
+  justify-content: flex-end;
+  select {
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    padding: 5px 8px;
+    @include font-sans();
+    font-size: 12px;
+    background: $color-white;
+    color: $color-secondary;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

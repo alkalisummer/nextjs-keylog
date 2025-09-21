@@ -5,6 +5,7 @@ export {
   mergeUniqueImages,
   parseRecentTop5,
   formatLabel,
+  chartTimePeriodMap,
 } from './transform';
 export {
   createDailyTrends,
