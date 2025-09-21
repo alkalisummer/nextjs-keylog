@@ -133,8 +133,8 @@ export const formatLabel = (value: string) => {
 };
 
 export const chartTimePeriodMap: Record<GoogleTrendsTimeOptions, string> = {
-  'now 1-h': '지난 1시간',
-  'now 4-h': '지난 4시간',
+  'now 1-H': '지난 1시간',
+  'now 4-H': '지난 4시간',
   'now 1-d': '지난 1일',
   'now 7-d': '지난 7일',
   'today 1-m': '지난 1개월',
