@@ -12,7 +12,6 @@
     "sitemap": "next-sitemap"
   },
   "dependencies": {
-    "@alkalisummer/google-trends-js": "^0.3.4",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",

@@ -10,18 +10,29 @@ interface EchartProps {
 
 export const ECharts = ({ option, className }: EchartProps) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const instanceRef = useRef<echarts.EChartsType | null>(null);
 
+  // Initialize once on mount
   useEffect(() => {
     if (!chartRef.current) return;
     let chart = echarts.getInstanceByDom(chartRef.current);
     if (!chart) chart = echarts.init(chartRef.current);
-    if (option) chart.setOption(option, true);
+    instanceRef.current = chart;
     const onResize = () => chart && chart.resize();
     window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('resize', onResize);
-      chart && chart.dispose();
+      if (instanceRef.current) {
+        instanceRef.current.dispose();
+        instanceRef.current = null;
+      }
     };
+  }, []);
+
+  // Update options when changed
+  useEffect(() => {
+    if (!instanceRef.current || !option) return;
+    instanceRef.current.setOption(option, true);
   }, [option]);
 
   return <div ref={chartRef} className={className} />;

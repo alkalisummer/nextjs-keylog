@@ -1,4 +1,12 @@
-import { ImageItem, Trend, InterestOverTime, NaverArticle, NaverBlogPost, GoogleTrendsTimeOptions } from '../model';
+import {
+  ImageItem,
+  Trend,
+  InterestOverTimeRaw,
+  InterestOverTime,
+  NaverArticle,
+  NaverBlogPost,
+  GoogleTrendsTimeOptions,
+} from '../model';
 import css from '../component/keywordScroll/ui/view.module.scss';
 
 interface FormatTrafficProps {
@@ -32,13 +40,22 @@ export const parseKeywordsArray = (trends: Trend[]) => {
   }));
 };
 
-export const parseValidKeywordDataList = (
-  keywordToDataMap: Record<string, InterestOverTime>,
-  seriesKeywords: string[],
-): InterestOverTime[] => {
-  return seriesKeywords
-    .map(keyword => keywordToDataMap[keyword])
-    .filter(keywordData => !!keywordData && Array.isArray(keywordData.values) && keywordData.values.length > 0);
+export const parseValidKeywordDataList = ({
+  interestOverTimeData,
+  keywords,
+}: {
+  interestOverTimeData: InterestOverTimeRaw;
+  keywords: string[];
+}): InterestOverTime[] => {
+  const result: InterestOverTime[] = [];
+  keywords.forEach((keyword, idx) => {
+    result.push({
+      keyword,
+      dates: interestOverTimeData.dates,
+      values: interestOverTimeData.values.map(value => value[idx]),
+    });
+  });
+  return result;
 };
 
 export const normalizeUrl = (url: string) => url.replace(/^http:\/\//i, 'https://');

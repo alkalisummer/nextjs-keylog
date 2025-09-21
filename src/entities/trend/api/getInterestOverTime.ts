@@ -1,8 +1,8 @@
 import { client } from '@/shared/lib/client';
-import { InterestOverTime, GoogleTrendsTimeOptions } from '../model';
+import { InterestOverTimeRaw, GoogleTrendsTimeOptions } from '../model';
 
 export interface InterestOverTimeProps {
-  keyword: string;
+  keyword: string | string[];
   geo: string;
   hl: string;
   period: GoogleTrendsTimeOptions;
@@ -14,10 +14,11 @@ export const getInterestOverTime = async ({
   hl = 'ko',
   period = 'now 1-d',
 }: InterestOverTimeProps) => {
-  return await client.route().get<InterestOverTime>({
+  const normalizedKeyword = Array.isArray(keyword) ? keyword.join(',') : keyword;
+  return await client.route().get<InterestOverTimeRaw>({
     endpoint: '/trend/interestOverTime',
     options: {
-      searchParams: { keyword, geo, hl, period },
+      searchParams: { keyword: normalizedKeyword, geo, hl, period },
       isPublic: true,
     },
   });

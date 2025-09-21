@@ -30,6 +30,12 @@ export interface InterestOverTime {
   values: number[];
 }
 
+export interface InterestOverTimeRaw {
+  keyword: string;
+  dates: string[];
+  values: number[][];
+}
+
 export type GoogleTrendsTimeOptions =
   | 'now 1-H'
   | 'now 4-H'

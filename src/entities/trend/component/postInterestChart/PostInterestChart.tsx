@@ -1,11 +1,13 @@
 'use client';
 
-import { useInterestOverTime } from '../../hooks';
 import css from './postInterestChart.module.scss';
+import { GoogleTrendsTimeOptions } from '../../model';
+import { useInterestOvertimeQuery } from '../../query';
 import { ECharts } from '@/shared/lib/echarts/ECharts';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { InterestOverTime, GoogleTrendsTimeOptions } from '../../model';
-import { createChartOption, isAllReady, parseValidKeywordDataList, formatLabel, chartTimePeriodMap } from '../../lib';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
+import { useMemo, useRef, useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createChartOption, parseValidKeywordDataList, formatLabel, chartTimePeriodMap } from '../../lib';
 
 interface PostInterestChartProps {
   keyword: string;
@@ -13,51 +15,40 @@ interface PostInterestChartProps {
 
 export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
   const addInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [seriesKeywords, setSeriesKeywords] = useState<string[]>([keyword]);
-  const [keywordToDataMap, setKeywordToDataMap] = useState<Record<string, InterestOverTime>>({});
+  const [keywords, setKeywords] = useState<string[]>([keyword]);
   const [isAdding, setIsAdding] = useState(false);
-  const [addValue, setAddValue] = useState('');
   const [period, setPeriod] = useState<GoogleTrendsTimeOptions>('now 1-d');
 
   useEffect(() => {
-    setSeriesKeywords([keyword]);
+    setKeywords([keyword]);
   }, [keyword]);
 
-  useEffect(() => {
-    if (!isAdding) return;
-    const id = window.setTimeout(() => addInputRef.current?.focus(), 0);
-    return () => window.clearTimeout(id);
-  }, [isAdding]);
-
-  useInterestOverTime({
-    seriesKeywords,
-    keywordToDataMap,
-    setKeywordToDataMap,
+  const { data: interestOverTimeRes, isError } = useInterestOvertimeQuery({
+    keywords,
     geo: 'KR',
     hl: 'ko',
     period,
   });
 
+  if (isError) {
+    throw new Error('Interest over time data fetch error');
+  }
+
+  const interestOverTimeData = interestOverTimeRes.data;
+
+  const presentDataList = useMemo(() => {
+    if (!interestOverTimeData || interestOverTimeData?.values?.length === 0) return [];
+    return parseValidKeywordDataList({ interestOverTimeData, keywords });
+  }, [keywords, interestOverTimeData]);
+
   const onChangePeriod = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const next = e.target.value as GoogleTrendsTimeOptions;
     setPeriod(next);
-    setKeywordToDataMap({});
   };
-
-  const presentDataList = useMemo(() => {
-    return parseValidKeywordDataList(keywordToDataMap, seriesKeywords);
-  }, [seriesKeywords, keywordToDataMap]);
-
-  const allReady = useMemo(() => {
-    if (seriesKeywords.length === 0) return false;
-    return isAllReady(seriesKeywords, keywordToDataMap);
-  }, [seriesKeywords, keywordToDataMap]);
 
   const option = useMemo(() => {
     return createChartOption({
       dataList: presentDataList,
-      allReady,
       seriesType: 'line',
       smooth: true,
       xAxisBoundaryGap: false,
@@ -75,25 +66,21 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
         },
       },
     });
-  }, [presentDataList, allReady]);
+  }, [presentDataList]);
 
   const onDeleteKeyword = (target: string) => {
-    setSeriesKeywords(prev => prev.filter(k => k !== target));
-  };
-
-  const onAddClick = () => {
-    setIsAdding(true);
+    setKeywords(prev => prev.filter(k => k !== target));
   };
 
   const addComplete = () => {
     setIsAdding(false);
-    setAddValue('');
   };
 
-  const addKeyword = (value: string) => {
+  const onAddKeyword = (value: string) => {
+    setIsAdding(true);
     const trimmed = value.trim();
     if (!trimmed) return addComplete();
-    setSeriesKeywords(prev => {
+    setKeywords(prev => {
       const exists = prev.some(v => v.toLowerCase() === trimmed.toLowerCase());
 
       if (exists) {
@@ -125,13 +112,13 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
       </div>
       <div className={css.header}>
         <div className={css.controls}>
-          {seriesKeywords.map(k => (
+          {keywords.map(k => (
             <span key={k} className={css.keywordItem} title={k} onClick={() => onDeleteKeyword(k)}>
               <span className={css.keyword}>{k}</span>
             </span>
           ))}
-          {!isAdding && seriesKeywords.length < 5 ? (
-            <button className={css.addButton} onClick={onAddClick}>
+          {!isAdding && keywords.length < 5 ? (
+            <button className={css.addButton} onClick={() => setIsAdding(true)}>
               + 비교 추가
             </button>
           ) : null}
@@ -140,10 +127,9 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
               ref={addInputRef}
               className={css.addInput}
               placeholder="검색어 추가"
-              value={addValue}
-              onChange={e => setAddValue(e.target.value)}
               onKeyDown={e => {
-                if (e.key === 'Enter') addKeyword(addValue);
+                const value = addInputRef.current?.value ?? '';
+                if (e.key === 'Enter') onAddKeyword(value);
                 if (e.key === 'Escape') addComplete();
               }}
               onBlur={() => addComplete()}
@@ -151,7 +137,15 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
           ) : null}
         </div>
       </div>
-      <ECharts option={option} className={css.chart} />
+      {presentDataList.length > 0 ? (
+        <ECharts option={option} className={css.chart} />
+      ) : (
+        <div className={css.empty}>
+          <FontAwesomeIcon icon={faBan} className={css.icon} />
+          <span>표시할 데이터가 없습니다.</span>
+          <span className={css.desc}>너무 많은 요청으로 인한 원인일 수 있습니다. 잠시후 다시 시도해주세요.</span>
+        </div>
+      )}
     </div>
   );
 };

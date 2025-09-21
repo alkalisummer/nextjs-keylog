@@ -3,6 +3,7 @@ export type {
   SpeedBreakpoints,
   ImageItem,
   InterestOverTime,
+  InterestOverTimeRaw,
   NaverArticle,
   NaverBlogPost,
   GoogleTrendsTimeOptions,

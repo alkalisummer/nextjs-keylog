@@ -1,9 +1,21 @@
 import { NUMBER_CONSTANTS } from '@/shared/lib/constants';
+import { GoogleTrendsTimeOptions } from '@/entities/trend/model';
 
 export const queryKey = () => ({
   trend: () => ({
     all: () => ['trend'],
     trendsList: () => [...queryKey().trend().all(), 'trendList'],
+    interestOverTime: ({
+      keywords,
+      geo,
+      hl,
+      period,
+    }: {
+      keywords: string[];
+      geo?: string;
+      hl?: string;
+      period?: GoogleTrendsTimeOptions;
+    }) => [...queryKey().trend().all(), 'interestOverTime', keywords, geo, hl, period],
   }),
   article: () => ({
     all: () => ['article'],

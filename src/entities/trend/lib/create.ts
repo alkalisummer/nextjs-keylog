@@ -66,7 +66,6 @@ function deepMerge(base: any, override?: any): any {
 
 export interface CreateChartOptionParams {
   dataList: InterestOverTime[];
-  allReady?: boolean;
   seriesType?: string; // e.g., 'line', 'bar'
   smooth?: boolean;
   colorFactory?: (name: string, index: number) => string;
@@ -82,7 +81,6 @@ export interface CreateChartOptionParams {
 export const createChartOption = (params: CreateChartOptionParams): EChartsCoreOption | null => {
   const {
     dataList,
-    allReady = true,
     seriesType = 'line',
     smooth = false,
     colorFactory = (name: string) => createRgbToString(name),
@@ -95,7 +93,7 @@ export const createChartOption = (params: CreateChartOptionParams): EChartsCoreO
     overrides,
   } = params;
 
-  if (!allReady || !Array.isArray(dataList) || dataList.length === 0) return null;
+  if (!Array.isArray(dataList) || dataList.length === 0) return null;
 
   const series: SeriesOption[] = dataList.map((d, i) => {
     const common = {
