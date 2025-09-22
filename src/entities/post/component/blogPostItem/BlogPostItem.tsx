@@ -57,7 +57,12 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
                 <span className={css.postTitle}>{postTitle}</span>
                 <span className={css.postCreated}>
                   {formatDate({ date: rgsnDttm, seperator: '.', isExtendTime: true })}
-                  <span>{hashtagName ? `• ${hashtagName}` : ''}</span>
+                  {hashtagName && (
+                    <>
+                      <span className={css.separator}>{`•`}</span>
+                      <span>{hashtagName}</span>
+                    </>
+                  )}
                 </span>
                 <p className={css.postContent}>{postCntn ?? '작성된 내용이 없습니다.'}</p>
               </div>

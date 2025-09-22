@@ -38,7 +38,8 @@ export const View = ({ userId, postId }: Props) => {
     <div className={css.module}>
       <span className={css.postTitle}>{post?.postTitle}</span>
       <div className={css.postCreated}>
-        <span>{`${post?.authorId} • `}</span>
+        <span>{`${post?.userNickname}`}</span>
+        <span className={css.separator}>{` • `}</span>
         <span className={`${css.marginRight} ${css.pointer}`}>
           {formatDate({ date: post?.amntDttm ?? '', seperator: '.', isExtendTime: true })}
         </span>

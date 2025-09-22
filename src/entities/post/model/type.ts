@@ -21,6 +21,7 @@ export interface PostDetail {
   postCntn: string;
   postHtmlCntn: string;
   authorId: string;
+  userNickname: string;
   tempYn: string;
   amntDttm: string;
   rgsnDttm: string;

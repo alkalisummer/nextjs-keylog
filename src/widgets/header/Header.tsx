@@ -4,15 +4,15 @@ import Link from 'next/link';
 import css from './header.module.scss';
 import { useAuthenticated } from '@/shared/lib/util';
 import { AccountMenu } from '../../features/account/component';
-import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface HeaderProps {
   type: 'home' | 'blog';
+  authorId: string;
+  userNickname?: string;
 }
 
-export const Header = ({ type = 'home' }: HeaderProps) => {
-  const params = useParams();
-  const authorId = params?.userId;
+export const Header = ({ type = 'home', authorId, userNickname }: HeaderProps) => {
   const isLoggedIn = useAuthenticated();
   const pathname = usePathname();
   const isWritePage = pathname?.includes('/write') ?? false;
@@ -27,9 +27,9 @@ export const Header = ({ type = 'home' }: HeaderProps) => {
         <Link className={css.logo} href={`/home?tab=${tab}`}>
           keylog
         </Link>
-        {authorId && (
+        {userNickname && (
           <Link className={css.authorId} href={`/${authorId}`}>
-            {authorId}
+            {userNickname}
           </Link>
         )}
         {isLoggedIn ? (

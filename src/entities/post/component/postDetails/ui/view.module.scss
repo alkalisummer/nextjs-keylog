@@ -42,6 +42,12 @@ $margin-small: 10px;
     border-bottom: 1px solid $color-border-light;
     padding-bottom: 15px;
     margin-bottom: 15px;
+
+    .separator {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
     a {
       text-decoration: none;
       color: $color-text-secondary;

@@ -108,6 +108,11 @@ $card-transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
         font-size: 0.75rem;
         color: $color-text-secondary;
         font-weight: 400;
+
+        .separator {
+          margin-right: 5px;
+          margin-left: 5px;
+        }
       }
     }
 

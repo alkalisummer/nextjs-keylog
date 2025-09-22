@@ -54,7 +54,8 @@ export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
                 <p className={post.postThmbImgUrl ? css.postContentClamp : css.postContentWrapper}>{post.postCntn}</p>
               </div>
               <div className={css.postBottom}>
-                <span>{formatDate({ date: post.rgsnDttm, seperator: '.' })}&nbsp;•&nbsp;</span>
+                <span>{formatDate({ date: post.rgsnDttm, seperator: '.' })}</span>
+                <span className={css.separator}>{`•`}</span>
                 <span>{`${post.commentCnt}개의 댓글`}</span>
               </div>
             </div>

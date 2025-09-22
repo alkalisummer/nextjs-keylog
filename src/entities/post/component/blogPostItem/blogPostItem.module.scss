@@ -81,6 +81,11 @@ $font-size-created: 12px;
   .postCreated {
     font-size: $font-size-created;
     color: $color-tertiary;
+
+    .separator {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
   }
 
   .thumbImgDiv {
