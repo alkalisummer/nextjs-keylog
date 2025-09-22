@@ -15,12 +15,9 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
   const query = searchParams.toString();
   const key = createScrollKey(pathname, query, extendQueryParams);
 
-  const saveScrollPos = () => saveScrollPosImpl(scrollElementId, key);
-  const restoreScrollPos = () => restoreScrollPosImpl(scrollElementId, key);
-
   return {
-    saveScrollPos,
-    restoreScrollPos,
+    saveScrollPos: () => saveScrollPos(scrollElementId, key),
+    restoreScrollPos: () => restoreScrollPos(scrollElementId, key),
   };
 };
 
@@ -28,13 +25,13 @@ const createScrollKey = (pathname: string, query: string, extendQueryParams?: bo
   return `scrollPos_${pathname}${extendQueryParams && query ? `_${query}` : ''}`;
 };
 
-const saveScrollPosImpl = (scrollElementId: string, key: string) => {
+const saveScrollPos = (scrollElementId: string, key: string) => {
   const el = document.getElementById(scrollElementId);
   if (!el) return;
   sessionStorage.setItem(key, el.scrollTop.toString());
 };
 
-const restoreScrollPosImpl = (scrollElementId: string, key: string) => {
+const restoreScrollPos = (scrollElementId: string, key: string) => {
   const el = document.getElementById(scrollElementId);
   const scrollTop = sessionStorage.getItem(key);
   if (!el || !scrollTop) return;
