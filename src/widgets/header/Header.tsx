@@ -8,7 +8,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 interface HeaderProps {
   type: 'home' | 'blog';
-  authorId: string;
+  authorId?: string;
   userNickname?: string;
 }
 
