@@ -19,7 +19,6 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
     const el = document.getElementById(scrollElementId);
 
     if (!el) return;
-    sessionStorage.clear();
     sessionStorage.setItem(path, el.scrollTop.toString());
   };
 
