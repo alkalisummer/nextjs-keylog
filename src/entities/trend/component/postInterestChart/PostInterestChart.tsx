@@ -23,16 +23,12 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
     setKeywords([keyword]);
   }, [keyword]);
 
-  const { data: interestOverTimeRes, isError } = useInterestOvertimeQuery({
+  const { data: interestOverTimeRes } = useInterestOvertimeQuery({
     keywords,
     geo: 'KR',
     hl: 'ko',
     period,
   });
-
-  if (isError) {
-    throw new Error('Interest over time data fetch error');
-  }
 
   const interestOverTimeData = interestOverTimeRes.data;
 

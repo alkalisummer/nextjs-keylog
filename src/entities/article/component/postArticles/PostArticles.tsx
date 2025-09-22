@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { Trend } from '../../../trend/model';
 import css from './postArticles.module.scss';
-import { Article } from '@/entities/article/model';
 import { formatTraffic } from '@/entities/trend/lib';
+import { useArticlesQuery } from '@/entities/article/query';
 
 interface PostArticlesProps {
   trend: Trend;
-  articles: Article[];
 }
 
-export function PostArticles({ trend, articles }: PostArticlesProps) {
+export function PostArticles({ trend }: PostArticlesProps) {
+  const { data: articles } = useArticlesQuery({ selectedTrend: trend });
+
   return (
     <div className={css.module}>
       <div className={css.selected}>
@@ -19,7 +20,7 @@ export function PostArticles({ trend, articles }: PostArticlesProps) {
         <span className={css.traffic}>{`(${formatTraffic({ traffic: trend.traffic })}+)`}</span>
       </div>
       <div className={css.list}>
-        {articles.map(
+        {articles?.map(
           (article, idx) =>
             article.link && (
               <Link key={idx} href={article.link} target="_blank" className={css.item}>

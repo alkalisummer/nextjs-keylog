@@ -16,12 +16,10 @@ interface Props {
 }
 
 export const View = ({ userId, postId }: Props) => {
-  const { data: postRes, isError: postError } = useSuspenseQuery({
+  const { data: postRes } = useSuspenseQuery({
     queryKey: queryKey().post().postDetail(postId),
     queryFn: () => getPost(postId),
   });
-
-  if (postError) throw new Error('Post fetch error');
 
   const post = postRes.data;
 

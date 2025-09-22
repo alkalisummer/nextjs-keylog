@@ -20,14 +20,10 @@ export const CommentList = ({ postId, authorId }: CommentListProps) => {
   const targetCommentId = commentId ? Number(commentId) : null;
   const [replyFormCommentId, setReplyFormCommentId] = useState<number | null>(null);
 
-  const { data: commentRes, isError } = useSuspenseQuery({
+  const { data: commentRes } = useSuspenseQuery({
     queryKey: queryKey().comment().commentList(postId),
     queryFn: () => getCommentList(postId),
   });
-
-  if (isError) {
-    throw new Error('Failed to fetch comment list');
-  }
 
   const comments = commentRes?.data?.items;
   const totalComments = commentRes?.data?.totalItems;

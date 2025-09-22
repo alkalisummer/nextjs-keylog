@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Trend } from '../../../model';
 import css from './view.module.scss';
-import { useArticlesQuery } from '@/entities/article/query';
+import { Trend } from '../../../model';
 import { PostArticles } from '../../../../article/component';
 import { faOpenai } from '@fortawesome/free-brands-svg-icons';
 import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
-import { faChartLine, faArrowUpLong, faImage } from '@fortawesome/free-solid-svg-icons';
 import { PostAutoPosting } from '../../postAutoPosting/PostAutoPosting';
+import { faChartLine, faArrowUpLong, faImage } from '@fortawesome/free-solid-svg-icons';
 import { PostImageSearch, PostAssistantSection, PostInterestChart, PostTrendKeyword } from '../..';
 
 interface Props {
@@ -24,10 +23,6 @@ export const View = ({ trends, baseDate }: Props) => {
   const [imageExpanded, setImageExpanded] = useState(false);
   const [autoPostExpanded, setAutoPostExpanded] = useState(false);
 
-  const { data: articles } = useArticlesQuery({
-    selectedTrend: selectedTrend,
-  });
-
   const handleTrendSelect = (trend: Trend) => {
     setSelectedTrend(trend);
   };
@@ -39,6 +34,7 @@ export const View = ({ trends, baseDate }: Props) => {
         icon={faArrowUpLong}
         expanded={keywordExpanded}
         onToggle={() => setKeywordExpanded(!keywordExpanded)}
+        height={618}
       >
         <PostTrendKeyword trends={trends} baseDate={baseDate} setSelectTrend={handleTrendSelect} />
       </PostAssistantSection>
@@ -47,6 +43,7 @@ export const View = ({ trends, baseDate }: Props) => {
         icon={faChartLine}
         expanded={chartExpanded}
         onToggle={() => setChartExpanded(!chartExpanded)}
+        height={400}
       >
         <PostInterestChart keyword={selectedTrend.keyword} />
       </PostAssistantSection>
@@ -55,14 +52,16 @@ export const View = ({ trends, baseDate }: Props) => {
         icon={faNewspaper}
         expanded={articlesExpanded}
         onToggle={() => setArticlesExpanded(!articlesExpanded)}
+        height={360}
       >
-        <PostArticles trend={selectedTrend} articles={articles || []} />
+        <PostArticles trend={selectedTrend} />
       </PostAssistantSection>
       <PostAssistantSection
         title="이미지 검색"
         icon={faImage}
         expanded={imageExpanded}
         onToggle={() => setImageExpanded(!imageExpanded)}
+        height={480}
       >
         <PostImageSearch keyword={selectedTrend.keyword} />
       </PostAssistantSection>
@@ -71,6 +70,7 @@ export const View = ({ trends, baseDate }: Props) => {
         icon={faOpenai}
         expanded={autoPostExpanded}
         onToggle={() => setAutoPostExpanded(!autoPostExpanded)}
+        height={440}
       >
         <PostAutoPosting selectedKeyword={selectedTrend.keyword} />
       </PostAssistantSection>
