@@ -13,27 +13,10 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
   const searchParams = useSearchParams();
 
   const query = searchParams.toString();
-  const path = createScrollKey({ pathname, query, extendQueryParams });
+  const key = createScrollKey(pathname, query, extendQueryParams);
 
-  const saveScrollPos = () => {
-    const el = document.getElementById(scrollElementId);
-
-    if (!el) return;
-    sessionStorage.setItem(path, el.scrollTop.toString());
-  };
-
-  const restoreScrollPos = () => {
-    const el = document.getElementById(scrollElementId);
-    const scrollKey = `${path}`;
-    const scrollTop = sessionStorage.getItem(scrollKey);
-
-    if (!el || !scrollTop) return;
-
-    requestAnimationFrame(() => {
-      el.scrollTop = parseInt(scrollTop);
-    });
-    sessionStorage.removeItem(scrollKey);
-  };
+  const saveScrollPos = () => saveScrollPosImpl(scrollElementId, key);
+  const restoreScrollPos = () => restoreScrollPosImpl(scrollElementId, key);
 
   return {
     saveScrollPos,
@@ -41,14 +24,22 @@ export const useScrollRestoration = ({ scrollElementId, extendQueryParams = fals
   };
 };
 
-const createScrollKey = ({
-  pathname,
-  query,
-  extendQueryParams,
-}: {
-  pathname: string;
-  query: string;
-  extendQueryParams?: boolean;
-}) => {
+const createScrollKey = (pathname: string, query: string, extendQueryParams?: boolean) => {
   return `scrollPos_${pathname}${extendQueryParams && query ? `_${query}` : ''}`;
+};
+
+const saveScrollPosImpl = (scrollElementId: string, key: string) => {
+  const el = document.getElementById(scrollElementId);
+  if (!el) return;
+  sessionStorage.setItem(key, el.scrollTop.toString());
+};
+
+const restoreScrollPosImpl = (scrollElementId: string, key: string) => {
+  const el = document.getElementById(scrollElementId);
+  const scrollTop = sessionStorage.getItem(key);
+  if (!el || !scrollTop) return;
+  requestAnimationFrame(() => {
+    el.scrollTop = parseInt(scrollTop, 10);
+  });
+  sessionStorage.removeItem(key);
 };
