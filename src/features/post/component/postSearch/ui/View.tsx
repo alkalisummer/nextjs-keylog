@@ -1,7 +1,6 @@
 'use client';
 
 import { Post } from '@/entities/post/model';
-import { useHome } from '@/app/home/container';
 import { useSearchParams } from 'next/navigation';
 import { Fragment, useState, useEffect, useMemo } from 'react';
 import { useIntersectionObserver } from '@/shared/hooks';
@@ -15,7 +14,6 @@ interface Props {
 }
 
 export const View = ({ initPosts, initPostsTotalCnt }: Props) => {
-  const { selectedTab } = useHome();
   const [postCnt, setPostCnt] = useState(initPostsTotalCnt);
 
   const searchParams = useSearchParams();
@@ -54,8 +52,6 @@ export const View = ({ initPosts, initPostsTotalCnt }: Props) => {
       setPostCnt(totalItems || posts.length);
     }
   }, [data, posts.length]);
-
-  if (selectedTab === 'keyword') return null;
 
   return (
     <Fragment>

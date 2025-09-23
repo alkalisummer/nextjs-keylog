@@ -17,14 +17,13 @@ export const Header = ({ type = 'home', authorId, userNickname }: HeaderProps) =
   const pathname = usePathname();
   const isWritePage = pathname?.includes('/write') ?? false;
   const searchParams = useSearchParams();
-  const tab = searchParams?.get('tab') ?? 'keyword';
   const search = searchParams?.toString();
   const redirectPath = search ? `${pathname}?${search}` : pathname;
 
   return (
     <header className={css.module}>
       <div className={`${css.header} ${type === 'blog' ? css.blogHeader : ''}`}>
-        <Link className={css.logo} href={`/home?tab=${tab}`}>
+        <Link className={css.logo} href={`/home`}>
           keylog
         </Link>
         {userNickname && (

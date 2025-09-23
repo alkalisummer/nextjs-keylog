@@ -6,29 +6,16 @@ import { createContext, useContext, useState } from 'react';
 interface HomeContextType {
   trend: Trend;
   setTrend: (trend: Trend) => void;
-  selectedTab: string;
-  setSelectedTab: (tab: string) => void;
 }
 
 const HomeContext = createContext<HomeContextType | null>(null);
 
-export const HomeContainer = ({
-  children,
-  initTrend,
-  initTab,
-}: {
-  children: React.ReactNode;
-  initTrend: Trend;
-  initTab: string;
-}) => {
+export const HomeContainer = ({ children, initTrend }: { children: React.ReactNode; initTrend: Trend }) => {
   const [trend, setTrend] = useState<Trend>(initTrend);
-  const [selectedTab, setSelectedTab] = useState<string>(initTab);
 
   const value = {
     trend,
     setTrend,
-    selectedTab,
-    setSelectedTab,
   };
 
   return <HomeContext.Provider value={value}>{children}</HomeContext.Provider>;

@@ -1,32 +1,28 @@
 'use server';
 
 import { BoxError } from '@/shared/ui';
-import { HomeContainer } from './container';
-import { HomeTabs } from './ui/homeTabs/HomeTabs';
+import { HomeContainer } from '../container';
+import { HomeTabs } from '../ui/homeTabs/HomeTabs';
 import { AsyncBoundary } from '@/shared/boundary';
-import { Keyword } from '@/entities/trend/component';
 import { getDailyTrends } from '@/entities/trend/api';
-import { KeywordScroll } from '@/entities/trend/component';
-import { ArticleList } from '@/entities/article/component';
-import { ArticleListSkeleton } from '@/entities/article/component';
+import { PostSearch, PostSearchSkeleton } from '@/features/post/component';
 
-export default async function Page() {
-  const dailyTrends = getDailyTrends({ geo: 'KR', hl: 'ko' });
+interface Props {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
 
-  const dailyTrendsRes = await dailyTrends;
-
+export default async function Page({ searchParams }: Props) {
+  const { tagId = '' } = await searchParams;
+  const dailyTrendsRes = await getDailyTrends({ geo: 'KR', hl: 'ko' });
   if (!dailyTrendsRes.ok) throw new Error('dailyTrends fetch error');
-
-  const trends = dailyTrendsRes.data;
   const initTrend = dailyTrendsRes.data[0];
+
   return (
     <HomeContainer initTrend={initTrend}>
       <HomeTabs />
       <main>
-        <Keyword />
-        <KeywordScroll trends={trends} />
-        <AsyncBoundary pending={<ArticleListSkeleton />} error={<BoxError height={450} />}>
-          <ArticleList trends={trends} />
+        <AsyncBoundary pending={<PostSearchSkeleton />} error={<BoxError height={150} />}>
+          <PostSearch tagId={tagId} />
         </AsyncBoundary>
       </main>
     </HomeContainer>
@@ -36,7 +32,7 @@ export default async function Page() {
 export const generateMetadata = async () => {
   return {
     title: 'keylog',
-    description: '인기 키워드를 활용한 블로그 포스팅',
+    description: '게시물 검색',
     icons: {
       icon: [
         {
@@ -53,9 +49,9 @@ export const generateMetadata = async () => {
     },
     openGraph: {
       type: 'website',
-      url: `${process.env.BASE_URL}/home`,
+      url: `${process.env.BASE_URL}/home/searchPosts`,
       title: 'keylog',
-      description: '인기 키워드를 활용한 블로그 포스팅',
+      description: '게시물 검색',
       images: [
         {
           url: '/logo.png',
@@ -65,7 +61,7 @@ export const generateMetadata = async () => {
       ],
     },
     alternates: {
-      canonical: `${process.env.BASE_URL}/home`,
+      canonical: `${process.env.BASE_URL}/home/searchPosts`,
     },
   };
 };

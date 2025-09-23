@@ -29,7 +29,7 @@ export const View = ({ postId }: Props) => {
           <Link
             className={css.hashtag}
             key={tag.hashtagId}
-            href={`/home?tab=post&tagId=${tag.hashtagId}&tagName=${tag.hashtagName}`}
+            href={`/home/searchPosts?tagId=${tag.hashtagId}&tagName=${tag.hashtagName}`}
           >
             {`# ${tag.hashtagName}`}
           </Link>

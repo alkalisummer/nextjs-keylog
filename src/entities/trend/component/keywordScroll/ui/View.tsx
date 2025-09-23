@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const View = ({ trends }: Props) => {
-  const { trend, setTrend, selectedTab } = useHome();
+  const { trend, setTrend } = useHome();
   const autoplaySpeed = useAutoplaySpeed();
   const [data, setData] = useState<Trend[]>(trends);
 
@@ -36,8 +36,6 @@ export const View = ({ trends }: Props) => {
     const next = await refresh();
     if (Array.isArray(next)) setData(next);
   }, [refresh]);
-
-  if (selectedTab === 'post') return null;
 
   return (
     <section className={css.module}>
