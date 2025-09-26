@@ -131,6 +131,10 @@ $color-error: $red-1;
   .module {
     height: 800px;
 
+    .header {
+      padding: 17px 16px 0px 16px;
+    }
+
     .editorWrapper {
       padding: 24px 16px 24px 16px;
     }
