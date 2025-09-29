@@ -23,5 +23,6 @@ export const useInterestOvertimeQuery = ({
     queryFn: () => getInterestOverTime({ keyword: keywords, geo, hl, period }),
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    staleTime: 1000 * 60 * 60,
   });
 };
