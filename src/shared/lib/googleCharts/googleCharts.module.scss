@@ -1,0 +1,12 @@
+.module {
+  .chart {
+    width: 100%;
+    min-height: 300px;
+    position: relative;
+
+    iframe {
+      height: 300px !important;
+      box-shadow: none !important;
+    }
+  }
+}

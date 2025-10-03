@@ -48,6 +48,10 @@ const nextConfig = {
     MAIL_SERVICE: process.env.MAIL_SERVICE,
     MAIL_ADDRESS: process.env.MAIL_ADDRESS,
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+
+    //Google Trends Charts
+    NEXT_PUBLIC_GOOGLE_TRENDS_CHARTS: process.env.NEXT_PUBLIC_GOOGLE_TRENDS_CHARTS,
+    NEXT_PUBLIC_GOOGLE_GUEST_PATH: process.env.NEXT_PUBLIC_GOOGLE_GUEST_PATH,
   },
   reactStrictMode: false,
   images: {
