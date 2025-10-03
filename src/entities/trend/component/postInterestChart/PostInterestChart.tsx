@@ -1,12 +1,13 @@
 'use client';
 
-import { chartTimePeriodMap } from '../../lib';
 import css from './postInterestChart.module.scss';
-import { useRef, useState, useEffect } from 'react';
 import { GoogleTrendsTimeOptions } from '../../model';
+import { useInterestOvertimeQuery } from '../../query';
+import { ECharts } from '@/shared/lib/echarts/ECharts';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GoogleCharts } from '@/shared/lib/googleCharts/GoogleCharts';
+import { createChartOption, parseValidKeywordDataList, formatLabel, chartTimePeriodMap } from '../../lib';
 
 interface PostInterestChartProps {
   keyword: string;
@@ -22,10 +23,46 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
     setKeywords([keyword]);
   }, [keyword]);
 
+  const { data: interestOverTimeRes } = useInterestOvertimeQuery({
+    keywords,
+    geo: 'KR',
+    hl: 'ko',
+    period,
+  });
+
+  const interestOverTimeData = interestOverTimeRes.data;
+
+  const presentDataList = useMemo(() => {
+    if (!interestOverTimeData || interestOverTimeData?.values?.length === 0) return [];
+    return parseValidKeywordDataList({ interestOverTimeData, keywords });
+  }, [keywords, interestOverTimeData]);
+
   const onChangePeriod = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const next = e.target.value as GoogleTrendsTimeOptions;
     setPeriod(next);
   };
+
+  const option = useMemo(() => {
+    return createChartOption({
+      dataList: presentDataList,
+      seriesType: 'line',
+      smooth: true,
+      xAxisBoundaryGap: false,
+      tooltip: {
+        show: true,
+      },
+      xAxis: {
+        axisLabel: { formatter: (val: string) => formatLabel(val) },
+        axisPointer: {
+          label: {
+            formatter: (obj: { value: string }) => {
+              return formatLabel(String(obj.value ?? ''));
+            },
+          },
+        },
+      },
+    });
+  }, [presentDataList]);
 
   const onDeleteKeyword = (target: string) => {
     setKeywords(prev => prev.filter(k => k !== target));
@@ -96,7 +133,15 @@ export const PostInterestChart = ({ keyword }: PostInterestChartProps) => {
           ) : null}
         </div>
       </div>
-      <GoogleCharts keywords={keywords} period={period} />
+      {presentDataList.length > 0 ? (
+        <ECharts option={option} className={css.chart} />
+      ) : (
+        <div className={css.empty}>
+          <FontAwesomeIcon icon={faBan} className={css.icon} />
+          <span>표시할 데이터가 없습니다.</span>
+          <span className={css.desc}>너무 많은 요청으로 인한 원인일 수 있습니다. 잠시후 다시 시도해주세요.</span>
+        </div>
+      )}
     </div>
   );
 };
