@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 const secret = process.env.NEXTAUTH_SECRET;
 const baseUrl = process.env.BASE_URL;
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   //로그인이 되어 있을 경우 토큰이 존재
   const token = await getToken({ req, secret });

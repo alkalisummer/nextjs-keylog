@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap && mkdir -p .next/standalone/.next .next/standalone/public && rsync -a .next/static/ .next/standalone/.next/static/ && rsync -a public/ .next/standalone/public/",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
+    "start:next": "next start",
     "lint": "next lint",
     "deploy": "pm2 restart keylog-web --update-env",
     "sitemap": "next-sitemap"

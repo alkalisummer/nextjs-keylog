@@ -83,7 +83,6 @@ const nextConfig = {
       dynamic: 0,
       static: 180,
     },
-    reactCompiler: true,
     taint: true,
     scrollRestoration: true,
     serverSourceMaps: process.env.NODE_ENV === 'production' ? false : true,
