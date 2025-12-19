@@ -12,11 +12,12 @@ import {
   updateNextAuthSession,
 } from '@/shared/lib/util';
 
-const BASE_URL = process.env.BASE_URL ?? '';
+const DEFAULT_LOCAL_BASE_URL = 'http://localhost:3000';
+const INTERNAL_WEB_BASE_URL = isServer() ? process.env.BASE_URL ?? DEFAULT_LOCAL_BASE_URL : '';
 const KEYLOG_API_URL = process.env.NEXT_PUBLIC_KEYLOG_API_URL ?? '';
 
 export const client = {
-  route: () => createFetchInstance(`${BASE_URL}/api`),
+  route: () => createFetchInstance(`${INTERNAL_WEB_BASE_URL}/api`),
   post: () => createFetchInstance(`${KEYLOG_API_URL}/post`),
   article: () => createFetchInstance(`${KEYLOG_API_URL}/article`),
   trend: () => createFetchInstance(`${KEYLOG_API_URL}/trend`),

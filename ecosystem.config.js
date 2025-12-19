@@ -12,8 +12,9 @@ module.exports = {
     },
     {
       name: 'keylog-web',
-      cwd: '/home/opc/nextjs-keylog/.next/standalone',
-      script: 'server.js',
+      // Run from project root so Next can resolve paths and load `.env*` consistently.
+      cwd: '/home/opc/nextjs-keylog',
+      script: '.next/standalone/server.js',
       instances: 'max',
       exec_mode: 'cluster',
       env: {

@@ -9,5 +9,6 @@ export const parseImgfileArr = (htmlCntn: string) => {
 };
 
 export const getImageProxyUrl = (url: string) => {
-  return `${process.env.BASE_URL}/api/image-proxy?url=${encodeURIComponent(url)}`;
+  const base = (process.env.NEXT_PUBLIC_IMAGE_PROXY_URL ?? '').replace(/\/$/, '');
+  return `${base}/api/image-proxy?url=${encodeURIComponent(url)}`;
 };
