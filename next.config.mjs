@@ -69,6 +69,7 @@ const nextConfig = {
   },
 
   sassOptions: {
+    loadPaths: [path.join(__dirname, 'src/styles/scss')],
     includePaths: [path.join(__dirname, 'src/styles/scss')],
     silenceDeprecations: ['legacy-js-api'],
   },

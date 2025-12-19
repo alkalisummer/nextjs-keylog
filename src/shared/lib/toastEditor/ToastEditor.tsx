@@ -3,7 +3,7 @@
 import 'prismjs/themes/prism.css';
 import dynamic from 'next/dynamic';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import 'tui-color-picker/dist/tui-color-picker.css';
+import './vendor/tui-color-picker.css';
 import { useEffect, useState, forwardRef } from 'react';
 import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 import type { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
