@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import css from './postPagination.module.scss';
 import { useScrollRestoration } from '@/shared/hooks';
 import { calculateTotalPage } from '@/entities/post/lib';
@@ -31,7 +31,7 @@ export const PostPagination = ({ totalPageNum }: PostPaginationProps) => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     restoreScrollPos();
   }, []);
 

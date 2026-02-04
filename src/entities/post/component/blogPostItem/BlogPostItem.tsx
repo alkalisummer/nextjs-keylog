@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { Post } from '../../model';
 import css from './blogPostItem.module.scss';
 import { formatDate } from '@/shared/lib/util';
@@ -43,7 +43,7 @@ export const BlogPostItem = ({ post, userId }: BlogPostItemProps) => {
     },
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     restoreScrollPos();
   }, []);
 

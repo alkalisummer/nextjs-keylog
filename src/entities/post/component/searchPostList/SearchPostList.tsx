@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { Post } from '../../model';
 import css from './searchPostList.module.scss';
 import { formatDate } from '@/shared/lib/util';
@@ -18,7 +18,7 @@ interface PostListsProps {
 export const SearchPostList = ({ posts, setTarget }: PostListsProps) => {
   const { saveScrollPos, restoreScrollPos } = useScrollRestoration({ scrollElementId: 'scaffold' });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     restoreScrollPos();
   }, []);
 
